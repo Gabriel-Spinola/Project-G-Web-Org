@@ -1,6 +1,9 @@
+import { UserProfile } from '@/common.types'
 import React from 'react'
 
-type Props = {}
+type Props = {
+    user: UserProfile;
+}
 
 export default function ProfilePage({}: Props) {
   return (

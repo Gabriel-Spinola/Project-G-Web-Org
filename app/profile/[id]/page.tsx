@@ -1,17 +1,18 @@
+import ProfilePage from "@/pages/profilePage"
+import { UserProfile } from '@/common.types'
+
 type Props = {
     params: {
         id: string,
     },
 }
 
-const UserProfile = async ({ params }: Props) => {
-    const result = await getUserProjects(params.id, 100) as { user: UserProfile }
+const Profile = async ({ params }: Props) => {
+    // return <ProfilePage user={new UserProfile} />
 
-    if (!result?.user) return (
-        <p className="no-result-text">Failed to fetch user info</p>
+    return (
+        <h1>{ params.id }</h1>
     )
-
-    return <ProfilePage user={result?.user}  />
 }
 
-export default UserProfile
+export default Profile
