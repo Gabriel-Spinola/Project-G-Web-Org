@@ -1,6 +1,8 @@
 import { NavLinks } from '@/constants'
 import Link from 'next/link'
-import React from 'react'
+import React from "react"
+
+console.log("first")
 
 function Navbar() {
   return (

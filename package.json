@@ -14,7 +14,6 @@
     "@types/react": "18.2.19",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
-    "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
     "graphql": "^16.7.1",
     "graphql-request": "^6.1.0",
@@ -25,11 +24,19 @@
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.1.6"
+    "tailwindcss": "3.3.3"
   },
   "devDependencies": {
     "@grafbase/sdk": "^0.4.0",
-    "sass": "^1.64.2"
+    "@rocketseat/eslint-config": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "eslint": "^8.47.0",
+    "eslint-config-standard-with-typescript": "^37.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "sass": "^1.64.2",
+    "typescript": "^5.1.6"
   }
 }
