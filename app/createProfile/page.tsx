@@ -23,6 +23,11 @@ export default function CreateProfile() {
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    const formData = new FormData(event.target as HTMLFormElement)
+    console.log(Object.fromEntries(formData))
+
+    // setForm(event.target)
+
     setSubmitting(true)
   }
 
@@ -42,28 +47,34 @@ export default function CreateProfile() {
           type="email"
           name="email"
           id="email"
-          onChange={(value) => handleStateChange('email', value)}
+          onChange={(value) => handleStateChange('email', value.target.value)}
         />
 
         <input
           type="text"
           name="description"
           id="description"
-          onChange={(value) => handleStateChange('description', value)}
+          onChange={(value) =>
+            handleStateChange('description', value.target.value)
+          }
         />
 
         <input
           type="text"
           name="avatarUrl"
           id="avatarUrl"
-          onChange={(value) => handleStateChange('avatarUrl', value)}
+          onChange={(value) =>
+            handleStateChange('avatarUrl', value.target.value)
+          }
         />
 
         <input
           type="text"
           name="linkedinUrl"
           id="linkedinUrl"
-          onChange={(value) => handleStateChange('linkedinUrl', value)}
+          onChange={(value) =>
+            handleStateChange('linkedinUrl', value.target.value)
+          }
         />
       </form>
     </main>
