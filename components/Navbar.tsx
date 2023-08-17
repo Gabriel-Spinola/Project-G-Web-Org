@@ -7,12 +7,12 @@ console.log("first")
 
 function Navbar() {
   return (
-    <nav>
+    <nav className='header-nav'>
       <ul>
         {
           NavLinks.map((link) => (
             // eslint-disable-next-line react/jsx-key
-            <li id='teste'>
+            <li>
               <Link href={link.href} key={link.key}>{link.text}</Link>
             </li>
           ))

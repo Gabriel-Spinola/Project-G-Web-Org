@@ -1,8 +1,8 @@
 export const NavLinks = [
-  { href: '/explore', key: 'Explore', text: 'Explore' },
-  { href: '/projetos', key: 'Projetos', text: 'Projetos' },
+  { href: '/explore', key: 'Explore', text: 'EXPLORAR' },
+  { href: '/projetos', key: 'Projetos', text: 'PROJETOS' },
   { href: '/', key: 'Home', text: 'Home' },
-  { href: '/architects', key: 'Architects', text: 'Arquitetos' },
-  { href: '/profile?id=1', key: 'Profile', text: 'Perfil' },
-  { href: '/login', key: 'Login', text: 'Login' }
+  { href: '/architects', key: 'Architects', text: 'ARQUITETOS' },
+  { href: '/profile?id=1', key: 'Profile', text: 'PERFIL' },
+  { href: '/login', key: 'Login', text: 'LOGIN' }
 ]
