@@ -23,6 +23,11 @@ export default function CreateProfile() {
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    const formData = new FormData(event.target as HTMLFormElement)
+    console.log(Object.fromEntries(formData))
+
+    // setForm(event.target)
+
     setSubmitting(true)
   }
 
