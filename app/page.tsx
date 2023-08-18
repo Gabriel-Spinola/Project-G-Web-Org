@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import scssVariables from './styles/variables.module.scss'
-import prisma from '@/lib/prisma'
+import prisma from '@/lib/database/prisma'
+import { Post } from '@/lib/database/table.types'
 
-console.log(scssVariables.primaryColor)
-
-const getStaticProps = async () => {
-  const feed = await prisma.post.findMany({
+export default async function Home() {
+  const feedData: Post[] = await prisma.post.findMany({
     where: { published: true },
     include: {
       author: {
@@ -14,16 +13,14 @@ const getStaticProps = async () => {
     },
   })
 
-  return feed
-}
-
-export default async function Home() {
-  const data = await getStaticProps()
+  const userData = await prisma.user.findMany({
+    where: { name: 'a' },
+  })
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1>Hello, World!</h1>
-      <h1>{data.map((e) => e.title)}</h1>
+      {feedData.map((e) => e.author?.name)}
     </main>
   )
 }
