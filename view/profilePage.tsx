@@ -5,6 +5,6 @@ type Props = {
   user: UserProfile
 }
 
-export default function ProfilePage({}: Props) {
+export default function ProfilePage({ user }: Props) {
   return <div>profilePage</div>
 }

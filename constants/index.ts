@@ -1,3 +1,5 @@
+// In order to pass a parameter into the URL use the `/pageName/idValue` syntax
+
 export const NavLinks = [
   { href: '/explore', key: 'Explore', text: 'EXPLORAR' },
   { href: '/projetos', key: 'Projetos', text: 'PROJETOS' },

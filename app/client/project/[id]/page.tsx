@@ -3,7 +3,9 @@ import { ProjectInterface } from '@/common.types'
 
 const Project = ({ params: { id } }: { params: { id: string } }) => {
   return (
-    <div>Project</div>
+    <main>
+      <h1>Project {id}</h1>
+    </main>
   )
 }
 
