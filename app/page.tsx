@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import scssVariables from './styles/variables.module.scss'
+import prisma from '@/lib/database/prisma'
+import { Post } from '@/lib/database/table.types'
 
 export default async function Home() {
   const feedData: Post[] = await prisma.post.findMany({
