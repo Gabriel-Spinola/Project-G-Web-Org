@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.1.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "20.4.9",
     "@types/react": "18.2.19",
     "@types/react-dom": "18.2.7",
+    "@vercel/postgres": "^0.4.1",
     "autoprefixer": "10.4.14",
     "eslint-config-next": "13.4.13",
     "graphql": "^16.7.1",
@@ -27,7 +29,6 @@
     "tailwindcss": "3.3.3"
   },
   "devDependencies": {
-    "@grafbase/sdk": "^0.4.0",
     "@rocketseat/eslint-config": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.47.0",
@@ -36,6 +37,7 @@
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "prisma": "^5.1.1",
     "sass": "^1.64.2",
     "typescript": "^5.1.6"
   }
