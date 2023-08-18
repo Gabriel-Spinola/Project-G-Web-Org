@@ -2,7 +2,7 @@
 
 export const NavLinks = [
   { href: '/', key: 'Home', text: 'Home' },
-  { href: '/explore', key: 'Explore', text: 'Explore' },
-  { href: '/architects', key: 'Architects', text: 'Arquitetos' },
-  { href: '/profile?id=1', key: 'Profile', text: 'Perfil' },
+  { href: '/client/explore', key: 'Explore', text: 'Explore' },
+  { href: '/client/architects', key: 'Architects', text: 'Arquitetos' },
+  { href: '/client/profile?id=1', key: 'Profile', text: 'Perfil' },
 ]
