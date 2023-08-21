@@ -2,23 +2,14 @@ import { NavLinks } from '@/constants'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
-import AuthProvider from './AuthProvider'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
-
-console.log('first')
 
 async function Navbar() {
   const session = await getServerSession(AuthOptions)
 
-  console.log(session)
-
   return (
     <nav>
-      {/* {session?.user ? <>{session?.user}</> : <></>} */}
-
-      {/* <AuthProvider /> */}
-
       {session ? (
         <h1>session?.user</h1>
       ) : (
