@@ -3,15 +3,27 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import AuthProvider from './AuthProvider'
+import { getServerSession } from 'next-auth'
+import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
 
 console.log('first')
 
-function Navbar() {
+async function Navbar() {
+  const session = await getServerSession(AuthOptions)
+
+  console.log(session)
+
   return (
     <nav>
       {/* {session?.user ? <>{session?.user}</> : <></>} */}
 
-      <AuthProvider />
+      {/* <AuthProvider /> */}
+
+      {session ? (
+        <h1>session?.user</h1>
+      ) : (
+        <h1 className="text-5xl">You&apos;re not logged in</h1>
+      )}
 
       <ul>
         {NavLinks.map((link) => (
@@ -22,6 +34,11 @@ function Navbar() {
             </Link>
           </li>
         ))}
+
+        <li>
+          <Link href="/api/auth/signin">sign In</Link>
+          <Link href="/api/auth/signout">Sign Out</Link>
+        </li>
       </ul>
     </nav>
   )
