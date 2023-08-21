@@ -8,6 +8,8 @@ import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
 async function Navbar() {
   const session = await getServerSession(AuthOptions)
 
+  console.log(session)
+
   return (
     <nav>
       {session ? (

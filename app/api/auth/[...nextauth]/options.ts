@@ -23,7 +23,7 @@ export const AuthOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         const allUsers: User[] = await prisma.user.findMany()
 
-        const userFound = allUsers.some(function (user: User): User | null {
+        const userFound = allUsers.find(function (user: User): User | null {
           // TODO: Add Cryptography
           return credentials?.username === user.name ? user : null
         })
