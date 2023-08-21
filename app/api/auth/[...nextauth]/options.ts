@@ -21,7 +21,7 @@ export const AuthOptions: NextAuthOptions = {
           placeholder: 'Your Username',
         },
       },
-      // Might be sending the wrong data
+      // Might be sending the wrong data ):
       async authorize(credentials, req) {
         const allUsers: User[] = await prisma.user.findMany()
 
