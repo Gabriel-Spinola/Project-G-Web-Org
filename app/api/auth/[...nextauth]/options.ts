@@ -4,8 +4,9 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { User } from '@/lib/database/table.types'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
+// https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
+
 export const AuthOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(global.prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -20,6 +21,7 @@ export const AuthOptions: NextAuthOptions = {
           placeholder: 'Your Username',
         },
       },
+      // Might be sending the wrong data
       async authorize(credentials, req) {
         const allUsers: User[] = await prisma.user.findMany()
 
@@ -32,6 +34,7 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
   ],
+  adapter: PrismaAdapter(global.prisma),
   secret: process.env.NEXTAUTH_SECRET,
   //   Only for custom signin/login pages
   //   pages: {
