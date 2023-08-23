@@ -12,6 +12,10 @@ async function handler(req: Request) {
     const title = formData.get('title')
     const projectDescription = formData.get('project-description')
 
+    await prisma.post.create({
+      data: { title: title?.toString() || 'deu errado', published: true },
+    })
+
     return NextResponse.json({
       message: title,
     })

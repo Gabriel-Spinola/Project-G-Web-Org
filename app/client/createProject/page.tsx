@@ -23,18 +23,25 @@ export default function CreateProject() {
   }
 
   return (
-    <form onSubmit={submitForm} method="POST">
-      <label htmlFor="title">Title</label>
-      <input type="text" id="title" name="title" /> <br /> <br />
-      <label htmlFor="project-description">project-description</label>
-      <textarea
-        id="project-description"
-        name="project-description"
-      ></textarea>{' '}
-      <br /> <br />
-      <label htmlFor="project-img">project-description</label>
-      <input type="file" id="project-img" name="project-img" />
-      <button type="submit">Submit</button>
-    </form>
+    <>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <form onSubmit={submitForm} method="POST">
+        <label htmlFor="title">Title</label>
+        <input type="text" id="title" name="title" /> <br /> <br />
+        <label htmlFor="project-description">project-description</label>
+        <textarea
+          id="project-description"
+          name="project-description"
+        ></textarea>{' '}
+        <br /> <br />
+        <label htmlFor="project-img">project-description</label>
+        <input type="file" id="project-img" name="project-img" />
+        <button type="submit">Submit</button>
+      </form>
+    </>
   )
 }
