@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
+import '@/app/styles/navbar.scss'
 
 async function Navbar() {
   const session = await getServerSession(AuthOptions)
@@ -17,13 +18,14 @@ async function Navbar() {
       ) : (
         <h1 className="text-5xl">You&apos;re not logged in</h1>
       )}
-
+      
       <ul>
         {NavLinks.map((link) => (
           // eslint-disable-next-line react/jsx-key
           <li>
             <Link href={link.href} key={link.key}>
               {link.text}
+              {link.key == "Home" && <img src='/app/assets/logo.png'></img>}
             </Link>
           </li>
         ))}
