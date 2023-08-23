@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
 
 function createProjectVoidFunction(): null {
@@ -19,16 +19,5 @@ export default function CreateProjectForm() {
     router.push('/')
   }
 
-  return (
-    <>
-      <form onSubmit={handleFormSubmit}>
-        <input type="text" id="title" name="title" />
-        <textarea
-          id="project-description"
-          name="project-description"
-        ></textarea>
-        <input type="file" id="project-img" name="project-img" />
-      </form>
-    </>
-  )
+  return <></>
 }
