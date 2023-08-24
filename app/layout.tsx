@@ -26,9 +26,8 @@ export default async function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <Navbar />
-
+          
           <h1>API data retrieve: {data.id}</h1>
-
           {children}
           <Footer />
         </AuthProvider>

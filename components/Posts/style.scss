@@ -1,0 +1,56 @@
+@import '/app/styles/variables.module.scss';
+.postado{
+    display: flex;
+    flex-direction: column;
+    width: 809px;
+    background-color: $pure-white;
+    padding: 0;
+    border-radius: 12px;
+    padding: 16px;
+    color: $darker-gray;
+    margin-bottom: 32px;
+    .autor{
+        display: flex;
+        flex-direction: row;
+        font-family: $nav-font;
+        margin-bottom: 16px;
+        .foto{
+            background-color: lightblue;
+            border-radius: 50%;
+            height: 48px;
+            width: 48px;
+        }
+        .nome-localizacao{
+            display: flex;
+            flex-direction: column;
+            margin-left: 16px;
+            .nome{
+                color: $light-primary;
+                font-size: 32px;
+                font-weight: 400;
+            }
+            .localizacao{
+                color: #000;
+                font-size: 24px;
+                font-weight: 400px;
+                margin-top: -24px;
+            }
+        }
+    }
+    .paragrafo{
+        color: #242424;
+        font-family: Dongle;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
+    }
+    .one-img{
+        border-radius: 8px;
+        width: 776px;
+        height: 365px;
+        Image{
+            position: relative;
+        }
+    }
+}

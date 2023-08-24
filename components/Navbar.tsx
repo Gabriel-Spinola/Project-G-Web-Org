@@ -13,12 +13,12 @@ async function Navbar() {
 
   return (
     <nav>
-      {session ? (
+      {/* {session ? (
         <h1>session?.user</h1>
       ) : (
         <h1 className="text-5xl">You&apos;re not logged in</h1>
       )}
-      
+       */}
       <ul>
         {NavLinks.map((link) => (
           // eslint-disable-next-line react/jsx-key
