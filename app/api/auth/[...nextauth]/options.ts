@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { User } from '@/lib/database/table.types'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
+// NOTE
 // https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
 
 export const AuthOptions: NextAuthOptions = {
