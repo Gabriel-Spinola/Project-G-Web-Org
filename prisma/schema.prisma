@@ -29,6 +29,15 @@ model Post {
   authorId  String?
 }
 
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  images      String[]
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    String?
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String  @map("user_id")
@@ -67,6 +76,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  projects      Project[]
 
   @@map(name: "users")
 }
