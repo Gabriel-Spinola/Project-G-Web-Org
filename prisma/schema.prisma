@@ -21,12 +21,33 @@ datasource db {
 }
 
 model Post {
-  id        String  @id @default(cuid())
+  id        String     @id @default(cuid())
   title     String
   content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
+  published Boolean    @default(false)
+  author    User?      @relation(fields: [authorId], references: [id])
   authorId  String?
+  comments  Comments[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  images      String[]
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    String?
+}
+
+model Comments {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime 
+  isEdited  Boolean  @default(false)
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
 }
 
 model Account {
@@ -58,15 +79,29 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Positions {
+  DefaultUser
+  Architect
+  Office
+  Admin
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?   @unique
+  description   String?
+  position      Positions?
+  linkedinUrl   String?
+  siteUrl       String?
+  contactPhone  Int
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  projects      Project[]
+  comments      Comments[]
 
   @@map(name: "users")
 }

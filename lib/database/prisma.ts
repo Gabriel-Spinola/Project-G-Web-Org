@@ -5,6 +5,8 @@ declare global {
   var prisma: PrismaClient
 }
 
+export var prismaExport = new PrismaClient()
+
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else {
