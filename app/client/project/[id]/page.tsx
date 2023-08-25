@@ -11,15 +11,7 @@ type Props = {
 }
 // NOTE: Rule::Sensitive Info receive from API, other data from client
 const Project = ({ params }: Props) => {
-  const [data, setData] = useState<{
-    id: string;
-    title: string;
-    description: string | null;
-    images: string[];
-    createdAt: Date;
-    updatedAt: Date;
-    authorId: string | null;
-  } | null>(null);
+  const [data, setData] = useState<any>(null);
 
   useEffect(function () {
     async function fetchData() {
