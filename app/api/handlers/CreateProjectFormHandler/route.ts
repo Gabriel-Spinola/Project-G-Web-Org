@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/database/prisma'
 import { File } from 'buffer'
 import { NextResponse } from 'next/server'
 

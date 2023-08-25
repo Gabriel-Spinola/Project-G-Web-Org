@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { User } from '@/lib/database/table.types'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
 // NOTE
@@ -24,9 +23,9 @@ export const AuthOptions: NextAuthOptions = {
       },
       // Might be sending the wrong data ):
       async authorize(credentials, req) {
-        const allUsers: User[] = await prisma.user.findMany()
+        const allUsers = await prisma.user.findMany()
 
-        const userFound = allUsers.find(function (user: User): User | null {
+        const userFound = allUsers.find(function (user) {
           // TODO: Add Cryptography
           return credentials?.username === user.name ? user : null
         })
