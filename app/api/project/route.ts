@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/database/prisma'
-import { NextApiRequest } from 'next'
 import { NextResponse } from 'next/server'
 
 async function handler(req: Request) {
@@ -11,7 +10,7 @@ async function handler(req: Request) {
   if (req.method === 'POST') {
     try {
       const data = await prisma.project.findUnique({ where: { id: id as string } })
-			
+
       return NextResponse.json({ data })
     } catch (e: any) {
       // NOTE: Not going to production, may expose sensible data

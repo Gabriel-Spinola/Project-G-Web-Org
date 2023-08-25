@@ -1,5 +1,5 @@
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Next-Auth Adapters: https://authjs.dev/reference/adapters#models
+// LINK: learn more about it in the docs: https://pris.ly/d/prisma-schema
+// LINK: Next-Auth Adapters: https://authjs.dev/reference/adapters#models
 
 // `npx prisma init`
 // `npx prisma studio`

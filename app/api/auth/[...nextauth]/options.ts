@@ -2,9 +2,9 @@ import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { prisma } from '@/lib/database/prisma'
 
-// NOTE
-// https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
+// LINK: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
 
 export const AuthOptions: NextAuthOptions = {
   providers: [
@@ -34,7 +34,7 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
   ],
-  adapter: PrismaAdapter(global.prisma),
+  adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   //   Only for custom signin/login pages
   //   pages: {
