@@ -5,6 +5,26 @@
 import { ModelsApiCode } from "@/lib/database/table.types"
 import { NextResponse } from "next/server"
 
+// Reading
+async function handleGet() {
+  
+}
+
+// Creating
+async function handlePost() {
+  
+}
+
+// Updating
+async function handlePut() {
+  
+}
+
+// Deleting
+async function handleDelete() {
+
+}
+
 export async function servicesHandler(req: Request, getData: any) {
   const url = new URL(req.url) // Create a URL object from the request URL
   const queryParams = url.searchParams // Access the query parameters
