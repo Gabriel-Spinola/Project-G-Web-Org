@@ -21,6 +21,7 @@ export default async function Home() {
       <Postbyuser />
       <Postbyuser2 />
       <Postbyuser3 />
+
       {feedData.map((e) => e.author?.name)}
     </main>
   )
