@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
 import { ModelsApiCode } from '@/lib/database/table.types';
-import { NextResponse } from 'next/server'
 import { servicesHandler } from '../services-handler';
 
 async function getData(id: string, modelCode: ModelsApiCode) {
