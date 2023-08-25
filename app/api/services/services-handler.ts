@@ -1,23 +1,7 @@
-import { prisma } from '@/lib/database/prisma'
-import { ModelsApiCode } from '@/lib/database/table.types';
-import { NextResponse } from 'next/server'
+import { ModelsApiCode } from "@/lib/database/table.types"
+import { NextResponse } from "next/server"
 
-async function getData(id: string, modelCode: ModelsApiCode) {
-  switch (modelCode) {
-    case ModelsApiCode.Project:
-      return await prisma.project.findUnique({ where: { id: id as string } })
-
-    case ModelsApiCode.Post:
-      return await prisma.post.findUnique({ where: { id: id as string } })
-
-    case ModelsApiCode.Comment:
-      return await prisma.comment.findUnique({ where: { id: id as string } })
-
-    default: throw new Error(`Bad Request: Invalid Model Code`)
-  }
-}
-
-async function handler(req: Request) {
+export async function servicesHandler(req: Request, getData: any) {
   const url = new URL(req.url) // Create a URL object from the request URL
   const queryParams = url.searchParams // Access the query parameters
 
@@ -43,5 +27,3 @@ async function handler(req: Request) {
 
   return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
 }
-
-export { handler as GET, handler as POST }

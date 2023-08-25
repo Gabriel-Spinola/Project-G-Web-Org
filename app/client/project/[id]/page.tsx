@@ -15,7 +15,7 @@ const Project = ({ params }: Props) => {
 
   useEffect(function () {
     async function fetchData() {
-      const response = await fetch(`/api/project/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
+      const response = await fetch(`/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
         method: 'POST',
       });
 
