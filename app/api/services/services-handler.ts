@@ -1,3 +1,7 @@
+// REVIEW: Only working with Find Unique & Delete function
+// Function overloading or rest parameters may solve it
+// LINK: https://github.com/benwhut/nextjs-prisma-CRUD/blob/main/pages/api/note/%5Bid%5D.ts
+
 import { ModelsApiCode } from "@/lib/database/table.types"
 import { NextResponse } from "next/server"
 
