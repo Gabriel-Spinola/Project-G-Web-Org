@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { ProjectInterface } from '@/common.types'
-import { prisma } from '@/lib/database/prisma'
 
 type Props = {
   params: {
