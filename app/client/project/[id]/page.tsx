@@ -4,6 +4,7 @@
 
 import DisplayProject from '@/components/projects/DisplayProject'
 import { ModelsApiCode } from '@/lib/database/table.types'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 type Props = {
@@ -14,12 +15,21 @@ type Props = {
 
 // NOTE: Rule::Sensitive Info receive from API, other data from client
 const Project = ({ params }: Props) => {
+	const router = useRouter()
+
   async function deleteProjectButtonHandler(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
 
     const response = await fetch(`/api/services/delete/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
       method: 'DELETE',
     });
+
+		if (response.ok) {
+			router.push('/')
+		}
+		else {
+			console.log('Deletion Failed')
+		}
   }
 
   return (
