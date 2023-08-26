@@ -1,4 +1,7 @@
 @import '/app/styles/variables.module.scss';
+body{
+    background-color: $darker-white;
+}
 .postado{
     display: flex;
     flex-direction: column;
