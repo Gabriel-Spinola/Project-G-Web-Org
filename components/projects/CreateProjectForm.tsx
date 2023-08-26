@@ -15,9 +15,8 @@ export default function CreateProjectForm() {
 
     if (response.ok) {
       const data = await response.json()
-
       // TODO: Client Response
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(data));
     } else {
       // TODO: Client Response
       console.log('Error submitting form data')
