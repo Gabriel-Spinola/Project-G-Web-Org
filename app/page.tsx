@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
-import Postbyuser from '@/components/posts/Post'
-import Postbyuser2 from '@/components/posts/Post2'
-import Postbyuser3 from '@/components/posts/Post3x'
+import Postbyuser from '@/components/Posts/Post'
+import Postbyuser2 from '@/components/Posts/Post2'
+import Postbyuser3 from '@/components/Posts/Post3x'
 import scssVariables from './styles/variables.module.scss'
 import {prisma} from '@/lib/database/prisma'
 
