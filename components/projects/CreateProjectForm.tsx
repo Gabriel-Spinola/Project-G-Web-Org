@@ -1,3 +1,5 @@
+// REVIEW: find unique api running twice
+
 'use client'
 
 import { ProjectFormState } from '@/common.types'
@@ -12,20 +14,22 @@ export default function CreateProjectForm({ params }: Props) {
   const [data, setData] = useState<ProjectModelProps | null>(null)
   const [form, setForm] = useState<ProjectFormState | null>(null)
 
-  if (params.id != null) {
-    useEffect(function () {
-      async function fetchData() {
-        const response = await fetch(`/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
-          method: 'POST',
-        });
 
-        if (response.ok) {
-          const { data } = await response.json()
+  useEffect(function () {
+    async function fetchData() {
+      const response = await fetch(
+        `/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`,
+        { method: 'POST', }
+      )
 
-          setData(data)
-        }
+      if (response.ok) {
+        const { data } = await response.json()
+
+        setData(data)
       }
+    }
 
+    if (params.id) {
       fetchData().then(() => {
         setForm({
           title: data?.title || '',
@@ -33,52 +37,48 @@ export default function CreateProjectForm({ params }: Props) {
           image: data?.images[0] || ''
         })
       });
-
-      console.log('runing')
-    }, [params.id, data?.id])
-  }
+    }
+  }, [params.id, data?.id])
 
   function handleStateChange(fieldName: keyof ProjectFormState, value: string): void {
     setForm((prevForm) => {
       if (prevForm != null) return { ...prevForm, [fieldName]: value }
-      
+
       return null
     })
   }
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
 
-    if (!file) return;
+    if (!file) return
 
     if (!file.type.includes('image')) {
-      alert('Please upload an image!');
+      alert('Please upload an image!')
 
-      return;
+      return
     }
 
-    const reader = new FileReader();
+    const reader = new FileReader()
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file)
 
     reader.onload = () => {
-      const result = reader.result as string;
-      console.log(result)
+      const result = reader.result as string
 
       handleStateChange("image", result)
-    };
-  };
+    }
+  }
 
   async function APICall(id: string | null, formData: FormData): Promise<Response> {
-    if (id != null) return await fetch(`/api/handlers/CreateProjectFormHandler/?id=${id}`, {
-      method: 'PUT',
-      body: formData,
-    })
+    const url = id
+      ? `/api/handlers/CreateProjectFormHandler/?id=${id}`
+      : '/api/handlers/CreateProjectFormHandler/'
 
-    return await fetch('/api/handlers/CreateProjectFormHandler/', {
-      method: 'POST',
+    return await fetch(url, {
+      method: id ? 'PUT' : 'POST',
       body: formData,
     })
   }
@@ -87,12 +87,12 @@ export default function CreateProjectForm({ params }: Props) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const response = await APICall(data!.id, formData)
+    const response = await APICall(data?.id || null, formData)
 
     if (response.ok) {
       const data = await response.json()
       // TODO: Client Response
-      console.log(JSON.stringify(data));
+      console.log("Stringfying data:" + JSON.stringify(data));
     } else {
       // TODO: Client Response
       console.log('Error submitting form data')
