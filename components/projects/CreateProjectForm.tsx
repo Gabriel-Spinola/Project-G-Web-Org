@@ -38,7 +38,7 @@ export default function CreateProjectForm({ params }: Props) {
         })
       });
     }
-  }, [params.id, data?.id])
+  }, [data?.id])
 
   function handleStateChange(fieldName: keyof ProjectFormState, value: string): void {
     setForm((prevForm) => {
