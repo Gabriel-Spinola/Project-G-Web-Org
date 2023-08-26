@@ -1,7 +1,4 @@
 @import '/app/styles/variables.module.scss';
-body{
-    background-color: $darker-white;
-}
 .postado{
     display: flex;
     flex-direction: column;
@@ -29,27 +26,40 @@ body{
             margin-left: 16px;
             .nome{
                 color: $light-primary;
-                font-size: 32px;
+                font-size: 24px;
                 font-weight: 400;
             }
             .localizacao{
                 color: #000;
-                font-size: 24px;
+                font-size: 16px;
                 font-weight: 400px;
-                margin-top: -24px;
+                margin-top: -8px;
             }
         }
     }
     .p-1{
         color: #242424;
-        font-family: Dongle;
-        font-size: 26px;
+        font-family: $nav-font;
+        font-size: 16px;
         font-style: normal;
         font-weight: 300;
-        line-height: normal;
+        line-height: 30px;
     }
     .one-img{
         border-radius: 8px;
-        width: 776px;
+        width: 100%;
+    }
+}
+
+#postar{
+    width: 809px;
+    height: 64px;
+    border-radius: 12px;
+    background-color: $medium-gray;
+    padding: 16px;
+    p{
+        font-family: $nav-font;
+        font-size: 16px;
+        color: $darker-white;
     }
 }

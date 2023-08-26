@@ -1,5 +1,6 @@
 import { NavLinks } from '@/constants'
 import Link from 'next/link'
+import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import { getServerSession } from 'next-auth'
@@ -25,15 +26,16 @@ async function Navbar() {
           <li>
             <Link href={link.href} key={link.key}>
               {link.text}
-              {link.key == "Home" && <img src='/app/assets/logo.png'></img>}
+              {link.key == "Home" &&
+              <Image
+                src='/assets/logo.png'
+                alt='Logo'
+                width={220}
+                height={31}
+              />}
             </Link>
           </li>
         ))}
-
-        <li>
-          <Link href="/api/auth/signin">sign In</Link>
-          <Link href="/api/auth/signout">Sign Out</Link>
-        </li>
       </ul>
     </nav>
   )
