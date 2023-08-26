@@ -33,13 +33,15 @@ export default function CreateProjectForm({ params }: Props) {
           image: data?.images[0] || ''
         })
       });
-    }, [params.id])
+
+      console.log('runing')
+    }, [params.id, data?.id])
   }
 
   function handleStateChange(fieldName: keyof ProjectFormState, value: string): void {
     setForm((prevForm) => {
       if (prevForm != null) return { ...prevForm, [fieldName]: value }
-
+      
       return null
     })
   }
@@ -63,6 +65,7 @@ export default function CreateProjectForm({ params }: Props) {
 
     reader.onload = () => {
       const result = reader.result as string;
+      console.log(result)
 
       handleStateChange("image", result)
     };
@@ -84,7 +87,7 @@ export default function CreateProjectForm({ params }: Props) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const response = await APICall(params?.id, formData)
+    const response = await APICall(data!.id, formData)
 
     if (response.ok) {
       const data = await response.json()
