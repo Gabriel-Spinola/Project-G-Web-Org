@@ -1,21 +1,14 @@
 'use client'
 
-import { ModelsApiCode } from "@/lib/database/table.types";
+import { ModelsApiCode, ProjectModelProps } from "@/lib/database/table.types";
 import { useEffect, useState } from 'react'
 
 type Props = {
   id: string
 }
 
-type ProjectData = {
-  title: string;
-  createdAt: string;
-  description: string;
-  images: string[];
-}
-
 export default function DisplayProject({ id }: Props) {
-  const [data, setData] = useState<ProjectData | null>(null);
+  const [data, setData] = useState<ProjectModelProps | null>(null);
   console.log(id)
 
   useEffect(function () {
@@ -48,11 +41,11 @@ export default function DisplayProject({ id }: Props) {
         }
 
         <br />
-      </div>
+      </div >
     )
   }
 
   return (
-    <div className="project-container">Project not Found</div>
+    <div className="project-container"></div>
   )
 }

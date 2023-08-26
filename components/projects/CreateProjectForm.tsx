@@ -1,17 +1,90 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { ProjectFormState } from '@/common.types'
+import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-export default function CreateProjectForm() {
+type Props = {
+  params: { id: string | null }
+}
+
+export default function CreateProjectForm({ params }: Props) {
+  const [data, setData] = useState<ProjectModelProps | null>(null)
+  const [form, setForm] = useState<ProjectFormState | null>(null)
+
+  if (params.id != null) {
+    useEffect(function () {
+      async function fetchData() {
+        const response = await fetch(`/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
+          method: 'POST',
+        });
+
+        if (response.ok) {
+          const { data } = await response.json()
+
+          setData(data)
+        }
+      }
+
+      fetchData().then(() => {
+        setForm({
+          title: data?.title || '',
+          description: data?.description || '',
+          image: data?.images[0] || ''
+        })
+      });
+    }, [params.id])
+  }
+
+  function handleStateChange(fieldName: keyof ProjectFormState, value: string): void {
+    setForm((prevForm) => {
+      if (prevForm != null) return { ...prevForm, [fieldName]: value }
+
+      return null
+    })
+  }
+
+  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.includes('image')) {
+      alert('Please upload an image!');
+
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      const result = reader.result as string;
+
+      handleStateChange("image", result)
+    };
+  };
+
+  async function APICall(id: string | null, formData: FormData): Promise<Response> {
+    if (id != null) return await fetch(`/api/handlers/CreateProjectFormHandler/?id=${id}`, {
+      method: 'PUT',
+      body: formData,
+    })
+
+    return await fetch('/api/handlers/CreateProjectFormHandler/', {
+      method: 'POST',
+      body: formData,
+    })
+  }
+
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const response = await fetch('/api/handlers/CreateProjectFormHandler/', {
-      method: 'POST',
-      body: formData,
-    })
+    const response = await APICall(params?.id, formData)
 
     if (response.ok) {
       const data = await response.json()
@@ -26,18 +99,35 @@ export default function CreateProjectForm() {
   return (
     <>
       <form onSubmit={submitForm} method="POST">
-          <label htmlFor="title">Title</label>
-          <input type="text" id="title" name="title" /> <br /> <br />
-          <label htmlFor="project-description">project-description</label>
-          <textarea
-            id="project-description"
-            name="project-description"
-          ></textarea>{' '}
-          <br /> <br />
-          <label htmlFor="project-img">project-description</label>
-          <input type="file" id="project-img" name="project-img" />
-          <button type="submit">Submit</button>
-        </form>
-    </>  
+        <label htmlFor="title">Title</label>
+
+        <input
+          type="text"
+          id="title"
+          name="title"
+          color='black'
+          value={form?.title ?? ''}
+          onChange={(e) => handleStateChange('title', e.target.value)}
+          required
+        />
+
+        <br /> <br />
+
+        <label htmlFor="project-description">project-description</label>
+        <textarea
+          id="project-description"
+          name="project-description"
+          value={form?.description ?? ''}
+          onChange={(e) => handleStateChange('description', e.target.value)}
+        ></textarea>{' '}
+
+        <br /> <br />
+
+        <label htmlFor="project-img">project-description</label>
+        <input type="file" id="project-img" name="project-img" onChange={(e) => handleChangeImage(e)} />
+
+        <button type="submit">Submit</button>
+      </form>
+    </>
   )
 }
