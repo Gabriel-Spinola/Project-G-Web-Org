@@ -1,11 +1,10 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { User } from '@/lib/database/table.types'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { prisma } from '@/lib/database/prisma'
 
-// NOTE
-// https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
+// LINK: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
 
 export const AuthOptions: NextAuthOptions = {
   providers: [
@@ -24,9 +23,9 @@ export const AuthOptions: NextAuthOptions = {
       },
       // Might be sending the wrong data ):
       async authorize(credentials, req) {
-        const allUsers: User[] = await prisma.user.findMany()
+        const allUsers = await prisma.user.findMany()
 
-        const userFound = allUsers.find(function (user: User): User | null {
+        const userFound = allUsers.find(function (user) {
           // TODO: Add Cryptography
           return credentials?.username === user.name ? user : null
         })
@@ -35,7 +34,7 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
   ],
-  adapter: PrismaAdapter(global.prisma),
+  adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   //   Only for custom signin/login pages
   //   pages: {
