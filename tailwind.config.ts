@@ -8,7 +8,8 @@ const config: Config = {
   ],
   theme: {
     colors: {
-
+      transparent: 'transparent',
+      black: '#000',
     },
     screens: {
       'sm': '640px',
