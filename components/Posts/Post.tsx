@@ -17,7 +17,7 @@ export default function Postbyuser() {
             </div>
             <div className='image-container'>
                 <Image
-                    className='one-img'
+                    className='one-img '
                     src="/test-img/imgtest.jpg"
                     alt="imgtest"
                     width={776}
