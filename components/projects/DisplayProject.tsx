@@ -9,7 +9,6 @@ type Props = {
 
 export default function DisplayProject({ id }: Props) {
   const [data, setData] = useState<ProjectModelProps | null>(null);
-  console.log(id)
 
   useEffect(function () {
     async function fetchData() {
