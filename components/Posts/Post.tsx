@@ -12,17 +12,16 @@ export default function Postbyuser() {
                     <span className='localizacao'>Belo Horizonte, MG</span>
                 </div>
             </div>
-            <div className='paragrafo'>
+            <div className='p-1'>
             Exercitationem maxime officia cupiditate accusantium eveniet maxime ut nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti vero. Odio quia quos illo.
             </div>
-            <div className='one-img'>
+            <div className='image-container'>
                 <Image
-
+                    className='one-img'
                     src="/test-img/imgtest.jpg"
                     alt="imgtest"
                     width={776}
-                    height={365}
-                    style={{objectFit: "cover"}}
+                    height={1000}
                     priority
                 />
             </div>
