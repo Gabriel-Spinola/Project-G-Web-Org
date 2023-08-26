@@ -4,12 +4,9 @@ import { NextResponse } from 'next/server'
 
 async function handler(req: Request) {
   // Parse the form data
-  const url = new URL(req.url) // Create a URL object from the request URL
-  const queryParams = url.searchParams // Access the query parameters
   const formData = await req.formData()
 
   // Access form field values
-  const id = queryParams.get('id')
   const title = formData.get('title')
   const projectDescription = formData.get('project-description')
   const projectImgFile = formData.get('project-img'); // This will be a File object
@@ -33,6 +30,11 @@ async function handler(req: Request) {
   }
 
   if (req.method === 'PUT') {
+    const url = new URL(req.url) // Create a URL object from the request URL
+    const queryParams = url.searchParams // Access the query parameters
+
+    const id = queryParams.get('id')
+
     if (id == null) return NextResponse.json({ message: `Id can't be null` }, { status: 400 })
 
     try {
