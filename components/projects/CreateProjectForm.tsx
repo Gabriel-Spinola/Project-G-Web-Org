@@ -13,7 +13,7 @@ type Props = {
 export default function CreateProjectForm({ params }: Props) {
   const [data, setData] = useState<ProjectModelProps | null>(null)
   const [form, setForm] = useState<ProjectFormState | null>(null)
-
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(function () {
     async function fetchData() {
@@ -23,9 +23,10 @@ export default function CreateProjectForm({ params }: Props) {
       )
 
       if (response.ok) {
-        const { data } = await response.json()
+        const { responseData } = await response.json()
 
-        setData(data)
+        setData(responseData)
+        setIsLoading(false)
       }
     }
 
@@ -101,36 +102,41 @@ export default function CreateProjectForm({ params }: Props) {
 
   return (
     <>
-      <form onSubmit={submitForm} method="POST">
-        <label htmlFor="title">Title</label>
+      {isLoading
+        ? (<p>Loading...</p>)
+        : (
+          <form onSubmit={submitForm} method="POST">
+            <label htmlFor="title">Title</label>
 
-        <input
-          type="text"
-          id="title"
-          name="title"
-          color='black'
-          value={form?.title ?? ''}
-          onChange={(e) => handleStateChange('title', e.target.value)}
-          required
-        />
+            <input
+              type="text"
+              id="title"
+              name="title"
+              color='black'
+              value={form?.title ?? ''}
+              onChange={(e) => handleStateChange('title', e.target.value)}
+              required
+            />
 
-        <br /> <br />
+            <br /> <br />
 
-        <label htmlFor="project-description">project-description</label>
-        <textarea
-          id="project-description"
-          name="project-description"
-          value={form?.description ?? ''}
-          onChange={(e) => handleStateChange('description', e.target.value)}
-        ></textarea>{' '}
+            <label htmlFor="project-description">project-description</label>
+            <textarea
+              id="project-description"
+              name="project-description"
+              value={form?.description ?? ''}
+              onChange={(e) => handleStateChange('description', e.target.value)}
+            ></textarea>{' '}
 
-        <br /> <br />
+            <br /> <br />
 
-        <label htmlFor="project-img">project-description</label>
-        <input type="file" id="project-img" name="project-img" onChange={(e) => handleChangeImage(e)} />
+            <label htmlFor="project-img">project-description</label>
+            <input type="file" id="project-img" name="project-img" onChange={(e) => handleChangeImage(e)} />
 
-        <button type="submit">Submit</button>
-      </form>
+            <button type="submit">Submit</button>
+          </form>
+        )
+      }
     </>
   )
 }

@@ -5,7 +5,7 @@ type Props = {
 }
 
 export default function CreateProject({ params }: Props) {
-  const id = params.id ? params.id[0] : null; // Safely extract the first element
+  const id: string | null = params.id ? params.id[0] : null; // Safely extract the first element
 
   return (
     <>
