@@ -17,28 +17,37 @@ export default function CreateProjectForm({ params }: Props) {
 
   useEffect(function () {
     async function fetchData() {
-      const response = await fetch(
-        `/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`,
-        { method: 'POST', }
-      )
+      try {
+        const response = await fetch(
+          `/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`,
+          {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }
+        )
 
-      if (response.ok) {
-        const { responseData } = await response.json()
+        if (!response.ok)
+          throw new Error("Network response was not OK");
 
-        setData(responseData)
+        const { data } = await response.json()
+
+        setData(data)
         setIsLoading(false)
+      }
+      catch (e: any) {
+        console.log(`error: ${e}`)
       }
     }
 
-    if (params.id) {
-      fetchData().then(() => {
-        setForm({
-          title: data?.title || '',
-          description: data?.description || '',
-          image: data?.images[0] || ''
-        })
-      });
-    }
+    fetchData().then(() => {
+      setForm({
+        title: data?.title || '',
+        description: data?.description || '',
+        image: data?.images[0] || ''
+      })
+    })
   }, [data?.id])
 
   function handleStateChange(fieldName: keyof ProjectFormState, value: string): void {
@@ -132,6 +141,9 @@ export default function CreateProjectForm({ params }: Props) {
 
             <label htmlFor="project-img">project-description</label>
             <input type="file" id="project-img" name="project-img" onChange={(e) => handleChangeImage(e)} />
+
+            {/* Multiple files */}
+            {/* <input type="file" multiple /> */}
 
             <button type="submit">Submit</button>
           </form>

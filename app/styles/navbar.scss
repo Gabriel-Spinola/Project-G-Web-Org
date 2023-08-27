@@ -1,18 +1,21 @@
 @import 'variables.module';
 
-nav{
+nav {
     z-index: 1;
-    ul{
+
+    ul {
         height: 100%;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        li{
+
+        li {
             color: $medium-white;
             padding: 0 100px 0 100px;
         }
     }
+
     width: 100%;
     height: 9.3vh;
     position: fixed;
@@ -26,7 +29,7 @@ header {
     height: 9.3vh;
 }
 
-/*body {
+body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -34,8 +37,8 @@ header {
 
 main {
     transform: translateY(9.4vh);
-}*/
+}
 
-footer{
+footer {
     margin-top: auto;
 }
