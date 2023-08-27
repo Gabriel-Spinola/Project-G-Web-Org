@@ -43,7 +43,7 @@ async function handleCreateOrUpdate(
 
 async function handler(req: Request): Promise<NextResponse> {
   if (req.method === 'POST') {
-    return await handleCreateOrUpdate(req, null, 'Successfully added')
+    return handleCreateOrUpdate(req, null, 'Successfully added')
   }
 
   if (req.method === 'PUT') {
@@ -54,7 +54,7 @@ async function handler(req: Request): Promise<NextResponse> {
     if (!id)
       return NextResponse.json({ message: `Id can't be null` }, { status: 400 })
 
-    return await handleCreateOrUpdate(req, id, 'Successfully updated', true)
+    return handleCreateOrUpdate(req, id, 'Successfully updated', true)
   }
 
   return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
