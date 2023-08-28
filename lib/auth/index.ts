@@ -5,30 +5,29 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
 
 export const AuthOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
     CredentialsProvider({
-      name: 'Credentials',
+      name: 'Sign in',
       credentials: {
-        username: {
-          label: 'Username',
-          type: 'text',
-          placeholder: 'Your Username',
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'exemplo@exemplo.com',
         },
+        password: { label: 'Senha', type: 'password' }
       },
       // Might be sending the wrong data ):
-      async authorize(credentials, req) {
-        const allUsers = await prisma.user.findMany()
+      async authorize(credentials) {
+        const user = { id: "1", name: "Admin", email: "admin@admin.com" }
 
-        const userFound = allUsers.find(function (user) {
-          // TODO: Add Cryptography
-          return credentials?.username === user.name ? user : null
-        })
-
-        return userFound
+        return user
       },
     }),
   ],
