@@ -4,8 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
 
-// LINK: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
-
 export const AuthOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
