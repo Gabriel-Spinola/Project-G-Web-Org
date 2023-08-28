@@ -1,8 +1,10 @@
-// REVIEW: find unique api running twice
+// FIXME: find unique api running twice::SOLVED
+// FIXME: LCP: 3743ms. Fetching the information with server components may solve it. 
 
 'use client'
 
 import { ProjectFormState } from '@/common.types'
+import { createNewProjectApiCall, getRowDataFromAPI } from '@/lib/database/actions'
 import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
@@ -10,6 +12,7 @@ type Props = {
   params: { id: string | null }
 }
 
+// REVIEW: this components is too big
 export default function CreateProjectForm({ params }: Props) {
   const [data, setData] = useState<ProjectModelProps | null>(null)
   const [form, setForm] = useState<ProjectFormState | null>(null)
@@ -18,15 +21,7 @@ export default function CreateProjectForm({ params }: Props) {
   useEffect(function () {
     async function fetchData() {
       try {
-        const response = await fetch(
-          `/api/services/find-unique/?id=${params.id}&modelCode=${ModelsApiCode.Project}`,
-          {
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            }
-          }
-        )
+        const response = await getRowDataFromAPI(params.id!, ModelsApiCode.Project)
 
         if (!response.ok)
           throw new Error("Network response was not OK");
@@ -37,16 +32,22 @@ export default function CreateProjectForm({ params }: Props) {
         setIsLoading(false)
       }
       catch (e: any) {
+        // TODO: Client Response
         console.log(`error: ${e}`)
       }
     }
 
-    fetchData().then(() => {
-      setForm({
-        title: data?.title || '',
-        description: data?.description || '',
-        image: data?.images[0] || ''
-      })
+    if (params.id) {
+      fetchData()
+    }
+    else {
+      setIsLoading(false)
+    }
+
+    setForm({
+      title: data?.title || '',
+      description: data?.description || '',
+      image: data?.images[0] || ''
     })
   }, [data?.id])
 
@@ -66,6 +67,7 @@ export default function CreateProjectForm({ params }: Props) {
     if (!file) return
 
     if (!file.type.includes('image')) {
+      // TODO: Client Response
       alert('Please upload an image!')
 
       return
@@ -82,27 +84,17 @@ export default function CreateProjectForm({ params }: Props) {
     }
   }
 
-  async function APICall(id: string | null, formData: FormData): Promise<Response> {
-    const url = id
-      ? `/api/handlers/CreateProjectFormHandler/?id=${id}`
-      : '/api/handlers/CreateProjectFormHandler/'
-
-    return await fetch(url, {
-      method: id ? 'PUT' : 'POST',
-      body: formData,
-    })
-  }
-
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const response = await APICall(data?.id || null, formData)
+    const response = await createNewProjectApiCall(data?.id || null, formData)
 
     if (response.ok) {
       const data = await response.json()
+
       // TODO: Client Response
-      console.log("Stringfying data:" + JSON.stringify(data));
+      console.log("Response is Ok: data retrieved:  " + JSON.stringify(data));
     } else {
       // TODO: Client Response
       console.log('Error submitting form data')
