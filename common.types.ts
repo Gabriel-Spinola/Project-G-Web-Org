@@ -1,3 +1,11 @@
+export type ProjectFormState = {
+  id?: string 
+  title: string
+  description: string
+  image: string
+}
+
+
 export interface ProjectInterface {
   title: string
   description: string
