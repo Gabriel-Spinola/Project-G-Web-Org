@@ -5,7 +5,7 @@ import '@/components/Posts/style.scss'
 export default function Postbyuser() {
     return (
         <div id="postar">
-            <p>FAÇA UMA PUBLICAÇÃO</p>
+            <p>Faça uma publicação</p>
             <span></span>
         </div>
     )
