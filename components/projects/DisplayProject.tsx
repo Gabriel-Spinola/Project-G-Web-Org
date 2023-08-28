@@ -1,22 +1,31 @@
 'use client'
 
-import { ModelsApiCode } from "@/lib/database/table.types";
+import { ModelsApiCode, ProjectModelProps } from "@/lib/database/table.types";
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   id: string
 }
 
-type ProjectData = {
-  title: string;
-  createdAt: string;
-  description: string;
-  images: string[];
-}
-
 export default function DisplayProject({ id }: Props) {
-  const [data, setData] = useState<ProjectData | null>(null);
-  console.log(id)
+  const router = useRouter()
+  const [data, setData] = useState<ProjectModelProps | null>(null);
+
+  async function deleteProjectButtonHandler(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault()
+
+    const response = await fetch(`/api/services/delete/?id=${id}&modelCode=${ModelsApiCode.Project}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      router.push('/')
+    }
+    else {
+      console.log('Deletion Failed')
+    }
+  }
 
   useEffect(function () {
     async function fetchData() {
@@ -48,11 +57,16 @@ export default function DisplayProject({ id }: Props) {
         }
 
         <br />
-      </div>
+        <br />
+
+        <button>edit</button>
+        <br />
+        <button onClick={deleteProjectButtonHandler}>delete</button>
+      </div >
     )
   }
 
   return (
-    <div className="project-container">Project not Found</div>
+    <div className="project-container"></div>
   )
 }

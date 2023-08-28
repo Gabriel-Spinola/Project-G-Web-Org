@@ -1,47 +1,77 @@
-// REVIEW this page should be a server component.
-// It should get the data from database check it, and then display the components accordingly
+// import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
+// import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types';
 
-'use client'
+// type Props = {
+// 	data: ProjectModelProps | null;
+// };
 
-import DisplayProject from '@/components/projects/DisplayProject'
-import { ModelsApiCode } from '@/lib/database/table.types'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+// export const getStaticProps: GetStaticProps<{ data: ProjectModelProps }> = async ({ params }) => {
+// 	const { id } = params || {};
 
-type Props = {
-	params: {
-		id: string
-	}
-}
+// 	console.log('Server side props')
 
-// NOTE: Rule::Sensitive Info receive from API, other data from client
-const Project = ({ params }: Props) => {
-	const router = useRouter()
+// 	if (id && typeof id === 'string') {
+// 		try {
+// 			const response = await fetch(
+// 				`/api/services/find-unique/?id=${id}&modelCode=${ModelsApiCode.Project}`,
+// 				{
+// 					method: 'POST',
+// 				}
+// 			);
 
-	async function deleteProjectButtonHandler(event: React.MouseEvent<HTMLButtonElement>) {
-		event.preventDefault()
+// 			console.log('trying')
 
-		const response = await fetch(`/api/services/delete/?id=${params.id}&modelCode=${ModelsApiCode.Project}`, {
-			method: 'DELETE',
-		});
+// 			if (response.ok) {
+// 				const { data } = await response.json();
 
-		if (response.ok) {
-			router.push('/')
-		}
-		else {
-			console.log('Deletion Failed')
-		}
-	}
+// 				return {
+// 					props: {
+// 						data,
+// 					},
+// 				};
+// 			} else {
+// 				throw new Error('Failed to fetch data');
+// 			}
+// 		} catch (error) {
+// 			console.error('Error fetching data:', error);
+// 		}
+// 	}
 
-	return (
-		<main>
-			<DisplayProject id={params.id} />
+// 	return {
+// 		props: {
+// 			data: null,
+// 		},
+// 	};
+// };
 
-			<button>edit</button>
-			<br />
-			<button onClick={deleteProjectButtonHandler}>delete</button>
-		</main>
-	)
-}
+// const Project: NextPage<Props> = ({ data }): => {
+// 	if (data) {
+// 		return (
+// 			<div className="project-container">
+// 				<br />
+// 				<br />
+// 				<br />
+// 				<br />
 
-export default Project
+// 				<h1>{data.title}</h1>
+// 				<span>{data.createdAt}</span>
+// 				<p>{data.description}</p>
+
+// 				{data.images.map((image: string) => (
+// 					<span key={image}>Image Names: {image}</span>
+// 				))}
+
+// 				<br />
+// 				<br />
+
+// 				<button>edit</button>
+// 				<br />
+// 				<button>delete</button>
+// 			</div>
+// 		);
+// 	}
+
+// 	return <div className="project-container"></div>;
+// };
+
+// export default Project;

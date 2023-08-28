@@ -5,13 +5,13 @@ import { NextResponse } from 'next/server';
 async function getData(id: string, modelCode: ModelsApiCode) {
 	switch (modelCode) {
 		case ModelsApiCode.Project:
-			return await prisma.project.delete({ where: { id: id as string } })
+			return await prisma.project.delete({ where: { id: id } })
 
 		case ModelsApiCode.Post:
-			return await prisma.post.delete({ where: { id: id as string } })
+			return await prisma.post.delete({ where: { id: id } })
 
 		case ModelsApiCode.Comment:
-			return await prisma.comment.delete({ where: { id: id as string } })
+			return await prisma.comment.delete({ where: { id: id } })
 
 		default: throw new Error(`Bad Request: Invalid Model Code`)
 	}
@@ -25,7 +25,7 @@ const handler = async (req: Request) => {
 	const modelCode = queryParams.get('modelCode')
 
 	if (req.method === 'DELETE') {
-		if (id == null || modelCode == null) {
+		if (!id || !modelCode) {
 			return NextResponse.json(
 				{ message: 'Method not allowed? Id or ModelCode Can`t be null' },
 				{ status: 405 }
