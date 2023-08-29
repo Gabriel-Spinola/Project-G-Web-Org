@@ -11,7 +11,7 @@ export async function GET(req: Request): Promise<SessionResponse> {
 		return new NextResponse(
 			JSON.stringify({ status: "fail", message: "You are not logged in" }),
 			{ status: 401 }
-		);
+		)
 	}
 
 	return NextResponse.json({
