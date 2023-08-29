@@ -2,4 +2,4 @@
 export { default } from 'next-auth/middleware'
 
 // Applies next-auth only to specific pages
-export const config = { matcher: ['/client/explore'] }
+export const config = { matcher: ['/auth/session/'] }

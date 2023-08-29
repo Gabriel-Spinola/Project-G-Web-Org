@@ -2,6 +2,7 @@ import {
   LoginButton, LogoutButton,
   ProfileButton, RegisterButton
 } from '@/components/debug/AuthButtons'
+import AuthUsers from '@/components/debug/AuthUsers'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 
@@ -12,25 +13,18 @@ export default async function AuthTestingPage() {
   console.log(session)
 
   return (
-    <main
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "70vh",
-      }}
-    >
-      <div>
+    <main>
+      <>
         <LoginButton />
         <RegisterButton />
         <LogoutButton />
         <ProfileButton />
 
-        <br />
-
         <h1>Server session: </h1>
         <pre>{JSON.stringify(session)}</pre>
-      </div>
+
+        <AuthUsers />
+      </>
     </main>
   )
 }
