@@ -4,14 +4,9 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import { getServerSession } from 'next-auth'
-import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
 import '@/app/styles/navbar.scss'
 
 async function Navbar() {
-  const session = await getServerSession(AuthOptions)
-
-  console.log(session)
-
   return (
     <nav>
       {/* {session ? (
@@ -27,12 +22,12 @@ async function Navbar() {
             <Link href={link.href} key={link.key}>
               {link.text}
               {link.key == "Home" &&
-              <Image
-                src='/assets/logo.png'
-                alt='Logo'
-                width={220}
-                height={31}
-              />}
+                <Image
+                  src='/assets/logo.png'
+                  alt='Logo'
+                  width={220}
+                  height={31}
+                />}
             </Link>
           </li>
         ))}
