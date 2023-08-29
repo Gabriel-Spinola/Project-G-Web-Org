@@ -5,6 +5,10 @@ import { compare } from "bcryptjs";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
 
+/*NOTE
+I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
+*/
+
 export const AuthOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -15,23 +19,18 @@ export const AuthOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
     CredentialsProvider({
-      name: 'Sign in',
+      name: "Sign in",
       credentials: {
-        username: {
-          label: 'Nome de Usuário',
-          type: 'text',
-          placeholder: 'Seu Nome',
-        },
         email: {
-          label: 'E-mail',
-          type: 'email',
-          placeholder: 'exemplo@exemplo.com',
+          label: "Email",
+          type: "email",
+          placeholder: "example@example.com",
         },
-        password: { label: 'Senha', type: 'password' }
+        password: { label: "Password", type: "password" },
       },
       // Might be sending the wrong data ):
       async authorize(credentials) {
-        if (!credentials?.username || !credentials.password || !credentials.email) {
+        if (!credentials?.password || !credentials?.email) {
           return null
         }
 
@@ -62,6 +61,35 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    session: ({ session, token }) => {
+      console.log('Session Callback ' + { session, token })
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          randomKey: token.randomKey,
+        }
+      }
+    },
+    jwt: ({ token, user }) => {
+      console.log("JWT Callback", { token, user });
+
+      if (user) {
+        const $user = user as unknown as any
+
+        return {
+          ...token,
+          id: $user.id,
+          randomKey: $user.randomKey,
+        }
+      }
+
+      return token
+    }
+  },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   //   Only for custom signin/login pages
