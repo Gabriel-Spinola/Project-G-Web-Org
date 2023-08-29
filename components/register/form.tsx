@@ -15,18 +15,16 @@ export default function RegisterForm() {
 		name: '', email: '', password: '',
 	})
 
-	async function onSubmit(event: FormEvent) {
+	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
 
 		setIsLoading(true)
 
 		try {
-			const response = await fetch('api/services/register/', {
+			const formData = new FormData(event.currentTarget)
+			const response = await fetch('/api/services/register/', {
 				method: 'POST',
-				body: JSON.stringify(form),
-				headers: {
-					'Content-Type': 'application/json',
-				}
+				body: formData,
 			})
 
 			setIsLoading(false)
@@ -37,6 +35,7 @@ export default function RegisterForm() {
 				return
 			}
 
+			console.log(JSON.stringify(response.json()))
 			signIn(undefined, { callbackUrl: '/' })
 		} catch (e: any) {
 			setIsLoading(false)
