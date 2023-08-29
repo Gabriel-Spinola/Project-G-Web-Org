@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { compare } from "bcryptjs";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
 
@@ -16,8 +17,13 @@ export const AuthOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Sign in',
       credentials: {
+        username: {
+          label: 'Nome de Usuário',
+          type: 'text',
+          placeholder: 'Seu Nome',
+        },
         email: {
-          label: 'Email',
+          label: 'E-mail',
           type: 'email',
           placeholder: 'exemplo@exemplo.com',
         },
@@ -25,9 +31,34 @@ export const AuthOptions: NextAuthOptions = {
       },
       // Might be sending the wrong data ):
       async authorize(credentials) {
-        const user = { id: "1", name: "Admin", email: "admin@admin.com" }
+        if (!credentials?.username || !credentials.password || !credentials.email) {
+          return null
+        }
 
-        return user
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email }
+        })
+
+        console.log('USER EMAIL: ' + user?.email)
+
+        // using hashed password
+        // if (!user || !(await compare(credentials.password, user.password!))) {
+        //   console.log(`GETTING NULL ${credentials.password} != ${user?.password!}`)
+        //   return null
+        // }
+
+        // No cryptography
+        if (!user || credentials.password != user.password) {
+          console.log(`GETTING NULL ${credentials.password} != ${user?.password!}`)
+          return null
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          randomKey: "Hey cool",
+        }
       },
     }),
   ],

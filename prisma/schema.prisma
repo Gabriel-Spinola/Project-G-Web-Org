@@ -26,7 +26,7 @@ model Post {
   content   String?
   published Boolean   @default(false)
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   author    User?     @relation(fields: [authorId], references: [id])
   authorId  String?
   comments  Comment[]
@@ -38,7 +38,7 @@ model Project {
   description String?
   images      String[]
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   author      User?     @relation(fields: [authorId], references: [id])
   authorId    String?
   comments    Comment[]
@@ -49,7 +49,7 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
   isEdited  Boolean  @default(false)
-  author    User?    @relation(fields: [authorId], references: [id]) 
+  author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
   post      Post?    @relation(fields: [postId], references: [id])
   postId    String?
@@ -96,6 +96,7 @@ enum Positions {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  password      String?
   description   String?
   position      Positions @default(DefaultUser)
   linkedinUrl   String?
@@ -105,7 +106,7 @@ model User {
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
