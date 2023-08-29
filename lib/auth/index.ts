@@ -41,13 +41,7 @@ export const AuthOptions: NextAuthOptions = {
         console.log('USER EMAIL: ' + user?.email)
 
         // using hashed password
-        // if (!user || !(await compare(credentials.password, user.password!))) {
-        //   console.log(`GETTING NULL ${credentials.password} != ${user?.password!}`)
-        //   return null
-        // }
-
-        // No cryptography
-        if (!user || credentials.password != user.password) {
+        if (!user || !(await compare(credentials.password, user.password!))) {
           console.log(`GETTING NULL ${credentials.password} != ${user?.password!}`)
           return null
         }
