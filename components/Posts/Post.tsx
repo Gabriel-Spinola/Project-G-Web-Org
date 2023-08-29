@@ -4,7 +4,7 @@ import '@/components/Posts/style.scss'
 
 export default function Postbyuser() {
     return (
-        <div className="postado">
+        <div className="postado mb-8">
             <div className='autor'>
                 <div className='foto'></div>
                 <div className='nome-localizacao'>
