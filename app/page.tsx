@@ -3,6 +3,7 @@ import Image from 'next/image'
 // https://www.youtube.com/watch?v=PGPGcKBpAk8
 
 import Postbyuser from '@/components/Posts/Post'
+import { ChakraProvider } from '@chakra-ui/react'
 import Poster from '@/components/Poster/Poster'
 import scssVariables from './styles/variables.module.scss'
 import { prisma } from '@/lib/database/prisma'
