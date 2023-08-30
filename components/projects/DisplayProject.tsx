@@ -1,6 +1,6 @@
 'use client'
 
-import { ModelsApiCode, ProjectModelProps } from "@/lib/database/table.types";
+import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -10,38 +10,48 @@ type Props = {
 
 export default function DisplayProject({ id }: Props) {
   const router = useRouter()
-  const [data, setData] = useState<ProjectModelProps | null>(null);
+  const [data, setData] = useState<ProjectModelProps | null>(null)
 
-  async function deleteProjectButtonHandler(event: React.MouseEvent<HTMLButtonElement>) {
+  async function deleteProjectButtonHandler(
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) {
     event.preventDefault()
 
-    const response = await fetch(`/api/services/delete/?id=${id}&modelCode=${ModelsApiCode.Project}`, {
-      method: 'DELETE',
-    });
+    const response = await fetch(
+      `/api/services/delete/?id=${id}&modelCode=${ModelsApiCode.Project}`,
+      {
+        method: 'DELETE',
+      },
+    )
 
     if (response.ok) {
       router.push('/')
-    }
-    else {
+    } else {
       console.log('Deletion Failed')
     }
   }
 
-  useEffect(function () {
-    async function fetchData() {
-      const response = await fetch(`/api/services/find-unique/?id=${id}&modelCode=${ModelsApiCode.Project}`, {
-        method: 'POST',
-      });
+  useEffect(
+    function () {
+      async function fetchData() {
+        const response = await fetch(
+          `/api/services/find-unique/?id=${id}&modelCode=${ModelsApiCode.Project}`,
+          {
+            method: 'POST',
+          },
+        )
 
-      if (response.ok) {
-        const { data } = await response.json()
+        if (response.ok) {
+          const { data } = await response.json()
 
-        setData(data);
+          setData(data)
+        }
       }
-    }
 
-    fetchData();
-  }, [id])
+      fetchData()
+    },
+    [id],
+  )
 
   if (data != null) {
     return (
@@ -50,11 +60,9 @@ export default function DisplayProject({ id }: Props) {
         <span>{data.createdAt}</span>
         <p>{data.description}</p>
 
-        {
-          data.images.map((image: string) => (
-            <span key={image}>Image Names: {image}</span>
-          ))
-        }
+        {data.images.map((image: string) => (
+          <span key={image}>Image Names: {image}</span>
+        ))}
 
         <br />
         <br />
@@ -62,11 +70,9 @@ export default function DisplayProject({ id }: Props) {
         <button>edit</button>
         <br />
         <button onClick={deleteProjectButtonHandler}>delete</button>
-      </div >
+      </div>
     )
   }
 
-  return (
-    <div className="project-container"></div>
-  )
+  return <div className="project-container"></div>
 }

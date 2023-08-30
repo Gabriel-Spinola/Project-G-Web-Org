@@ -1,9 +1,12 @@
 import { prisma } from '@/lib/database/prisma'
-import { ModelsApiCode } from '@/lib/database/table.types';
-import { servicesHandler } from '../services-handler';
-import { PrismaData } from '../../config';
+import { ModelsApiCode } from '@/lib/database/table.types'
+import { servicesHandler } from '../services-handler'
+import { PrismaData } from '../../config'
 
-async function getData(id: string, modelCode: ModelsApiCode): Promise<PrismaData> {
+async function getData(
+  id: string,
+  modelCode: ModelsApiCode,
+): Promise<PrismaData> {
   switch (modelCode) {
     case ModelsApiCode.Project:
       return await prisma.project.findUnique({ where: { id: id as string } })
@@ -14,7 +17,8 @@ async function getData(id: string, modelCode: ModelsApiCode): Promise<PrismaData
     case ModelsApiCode.Comment:
       return await prisma.comment.findUnique({ where: { id: id as string } })
 
-    default: throw new Error(`Bad Request: Invalid Model Code`)
+    default:
+      throw new Error(`Bad Request: Invalid Model Code`)
   }
 }
 

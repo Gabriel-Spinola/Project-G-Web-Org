@@ -1,6 +1,8 @@
 import {
-  LoginButton, LogoutButton,
-  ProfileButton, RegisterButton
+  LoginButton,
+  LogoutButton,
+  ProfileButton,
+  RegisterButton,
 } from '@/components/debug/AuthButtons'
 import AuthUsers from '@/components/debug/AuthUsers'
 import { AuthOptions } from '@/lib/auth'
@@ -15,6 +17,10 @@ export default async function AuthTestingPage() {
   return (
     <main>
       <>
+        <br />
+        <br />
+        <br />
+        <br />
         <LoginButton />
         <RegisterButton />
         <LogoutButton />
