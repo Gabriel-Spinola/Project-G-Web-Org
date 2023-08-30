@@ -13,7 +13,7 @@ const config: Config = {
       'darker-gray': '#202020',
       'medium-gray': '#242424',
       'light-gray': '#262626',
-      
+
       'darker-white': '#ebebeb',
       'medium-white': '#f5f5f5',
       'light-white': '#fafafa',
@@ -32,12 +32,12 @@ const config: Config = {
       'light-tertiary': '#F34DFF',
     },
     screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'x1': '1280px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      x1: '1280px',
       '2x1': '1536px',
-    }
+    },
   },
   plugins: [],
 }
