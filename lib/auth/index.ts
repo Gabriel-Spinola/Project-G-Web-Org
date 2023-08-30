@@ -1,19 +1,18 @@
-import type { LoggerInstance, NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { compare } from "bcryptjs";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, User, validateCredentials } from './actions';
+import { Credentials, User, validateCredentials } from './actions'
 
-/*NOTE
+/* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
 */
 
 export const AuthOptions: NextAuthOptions = {
   debug: true,
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   providers: [
     GoogleProvider({
@@ -21,19 +20,21 @@ export const AuthOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
     CredentialsProvider({
-      name: "Sign in",
+      name: 'Sign in',
       credentials: {
         email: {
-          label: "Email",
-          type: "email",
-          placeholder: "example@example.com",
+          label: 'Email',
+          type: 'email',
+          placeholder: 'example@example.com',
         },
-        password: { label: "Password", type: "password" },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: Credentials) {
-        const user: User | null = validateCredentials(credentials)
+        const user: User | null = await validateCredentials(credentials)
 
         if (!user) {
+          console.log('uai')
+
           return null
         }
 
@@ -41,7 +42,7 @@ export const AuthOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          randomKey: "Hey cool",
+          randomKey: 'Hey cool',
         }
       },
     }),
@@ -57,7 +58,7 @@ export const AuthOptions: NextAuthOptions = {
           ...session.user,
           id: token.id,
           randomKey: token.randomKey,
-        }
+        },
       }
     },
     jwt: ({ token, user }) => {
@@ -75,23 +76,23 @@ export const AuthOptions: NextAuthOptions = {
       }
 
       return token
-    }
+    },
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   logger: {
     error: (code, metadata) => {
-      console.error(code, metadata);
+      console.error(code, metadata)
     },
     warn: (code) => {
-      console.warn(code);
+      console.warn(code)
     },
     debug: (code, metadata) => {
-      console.debug(code, metadata);
+      console.debug(code, metadata)
     },
-  }
+  },
   //   Only for custom signin/login pages
   //   pages: {
   //     signIn: '/auth/signin',
   //   },
-}  
+}
