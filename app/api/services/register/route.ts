@@ -4,13 +4,7 @@ import { NextResponse } from "next/server";
 
 type RegisterResponse = NextResponse<Record<string, any>>
 
-type UserData = {
-	name: string
-	email: string
-	password: string
-}
-
-export async function POST(req: Request): Promise<RegisterResponse> {
+async function handlePost(req: Request): Promise<RegisterResponse> {
 	try {
 		const formData = await req.formData()
 
@@ -44,4 +38,12 @@ export async function POST(req: Request): Promise<RegisterResponse> {
 			{ status: 500 }
 		)
 	}
+}
+
+export async function POST(req: Request): Promise<RegisterResponse> {
+	if (req.method === 'POST') {
+		return await handlePost(req)
+	}
+
+	return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
 }
