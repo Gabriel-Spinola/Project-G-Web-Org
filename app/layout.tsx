@@ -20,11 +20,11 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<head>
-				<meta charSet='UTF-8'/>
+				<meta charSet='UTF-8' />
 			</head>
 			<body className={inter.className}>
 				<AuthProvider>
-					<Navbar />	
+					<Navbar />
 					{children}
 				</AuthProvider>
 			</body>
