@@ -15,4 +15,4 @@ export const config = {
 */
 
 // Applies next-auth only to specific pages
-export const config = { matcher: ['/auth/session/'] }
+export const config = { matcher: ['/auth/session/', '/client/chat/' ] }
