@@ -13,7 +13,7 @@ async function Navbar() {
   console.log(session)
 
   return (
-    <nav>
+    <nav className='shadow-darker-white/40 shadow-2xl'>
       {/* {session ? (
         <h1>session?.user</h1>
       ) : (
