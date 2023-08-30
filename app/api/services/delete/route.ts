@@ -43,7 +43,7 @@ const handler = async (req: Request): Promise<DeletionResponse> => {
       const data = await getData(id, modelCode as ModelsApiCode)
 
       return NextResponse.json({ data: data?.id }, { status: 200 })
-    } catch (e: any) {
+    } catch (e: unknown) {
       return NextResponse.json({ message: `${e}` }, { status: 400 })
     }
   }
