@@ -15,10 +15,10 @@ export default function Postbyuser() {
             height={48}
           />
         </div>
-        <div className='nome-localizacao'>
+        <a className='nome-localizacao' href='/client/profile/cllgwtgbt0000w42oblx1qp27'>
           <span className='nome'>Oscar Alho</span>
-          <span className='localizacao'>Belo Horizonte, MG</span>
-        </div>
+          <span className='localizacao text-darker-white'>Belo Horizonte, MG</span>
+        </a>
       </div>
       <div className='p-1'>
         Exercitationem maxime officia cupiditate accusantium eveniet maxime ut nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti vero. Odio quia quos illo.
