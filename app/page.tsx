@@ -6,7 +6,6 @@ import Postbyuser from '@/components/Posts/Post'
 import Poster from '@/components/Poster/Poster'
 import scssVariables from './styles/variables.module.scss'
 import { prisma } from '@/lib/database/prisma'
-import Component from '@/components/Poster/test'
 
 export default async function Home() {
   const feedData = await prisma.post.findMany({
