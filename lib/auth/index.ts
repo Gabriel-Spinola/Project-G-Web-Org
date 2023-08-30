@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from "bcryptjs";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
+import { Credentials, User, validateCredentials } from './actions';
 
 /*NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
@@ -28,21 +29,10 @@ export const AuthOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      // Might be sending the wrong data ):
-      async authorize(credentials) {
-        if (!credentials?.password || !credentials?.email) {
-          return null
-        }
+      async authorize(credentials: Credentials) {
+        const user: User | null = validateCredentials(credentials)
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        })
-
-        console.log('USER EMAIL: ' + user?.email)
-
-        // using hashed password
-        if (!user || !(await compare(credentials.password, user.password!))) {
-          console.log(`GETTING NULL ${credentials.password} != ${user?.password!}`)
+        if (!user) {
           return null
         }
 
