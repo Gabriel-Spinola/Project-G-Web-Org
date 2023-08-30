@@ -15,7 +15,7 @@ type Props = {
   params: { id: string | null }
 }
 
-// REVIEW: this components is too big
+// REVIEW
 export default function CreateProjectForm({ params }: Props) {
   const [data, setData] = useState<ProjectModelProps | null>(null)
   const [form, setForm] = useState<ProjectFormState | null>(null)
@@ -37,7 +37,7 @@ export default function CreateProjectForm({ params }: Props) {
 
           setData(data)
           setIsLoading(false)
-        } catch (e: any) {
+        } catch (e: unknown) {
           // TODO: Client Response
           console.log(`error: ${e}`)
         }
