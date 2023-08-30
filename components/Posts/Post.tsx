@@ -1,16 +1,15 @@
-import * as React from 'react';
+'use client'
+
+import React from 'react';
 import Image from 'next/image';
-import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
-import { ChakraProvider } from '@chakra-ui/react'
 import '@/components/Posts/style.scss'
+
 
 export default function Postbyuser() {
   return (
-    <ChakraProvider>
       <div className="postado mb-8">
         <div className='autor'>
           <div className='foto overflow-x-auto'>
-            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
           </div>
           <a className='nome-localizacao' href='/client/profile/cllgwtgbt0000w42oblx1qp27'>
             <span className='nome'>Oscar Alho</span>
@@ -42,6 +41,5 @@ export default function Postbyuser() {
         </div>
 
       </div>
-    </ChakraProvider>
   )
 }
