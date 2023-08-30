@@ -1,4 +1,4 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { LoggerInstance, NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from "bcryptjs";
@@ -11,6 +11,7 @@ I added the randomKey to the configuration simply to demonstrate that any additi
 */
 
 export const AuthOptions: NextAuthOptions = {
+  debug: true,
   session: {
     strategy: "jwt",
   },
@@ -76,8 +77,19 @@ export const AuthOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
+  logger: {
+    error: (code, metadata) => {
+      console.error(code, metadata);
+    },
+    warn: (code) => {
+      console.warn(code);
+    },
+    debug: (code, metadata) => {
+      console.debug(code, metadata);
+    },
+  }
   //   Only for custom signin/login pages
   //   pages: {
   //     signIn: '/auth/signin',
   //   },
-}
+}  
