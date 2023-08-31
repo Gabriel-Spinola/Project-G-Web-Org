@@ -1,7 +1,7 @@
 // LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
-import PostItem from '@/components/Posts/Post'
-import PostSubmitFragment from '@/components/Poster/PostSubmitFragment'
+import PostItem from '@/components/posts/Post'
+import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { prisma } from '@/lib/database/prisma'
 
 export default async function Home() {
