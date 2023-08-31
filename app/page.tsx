@@ -1,4 +1,4 @@
-// https://www.youtube.com/watch?v=PGPGcKBpAk8
+// LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
 import Postbyuser from '@/components/Posts/Post'
 import Poster from '@/components/Poster/Poster'
