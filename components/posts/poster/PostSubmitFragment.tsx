@@ -2,7 +2,7 @@
 
 import React, { useState, Fragment } from 'react'
 
-import Modal from '@/components/Poster/Modal'
+import Modal from '@/components/posts/poster/Modal'
 import '@/components/Poster/style.scss'
 
 export default function PostSubmitFragment() {
