@@ -6,13 +6,9 @@ import React, { ChangeEvent, useState } from 'react'
 
 interface ICreateProfileProps {
   session: Session | null
-  reloadSession: () => void
 }
 
-export default function CreateProfile({
-  session,
-  reloadSession,
-}: ICreateProfileProps) {
+export default function CreateProfile({ session }: ICreateProfileProps) {
   const [username, setUsername] = useState<string>(session?.user.name ?? '')
 
   async function onSubmit() {
@@ -26,7 +22,7 @@ export default function CreateProfile({
   }
 
   return (
-    <div className="flex text-center">
+    <div className="flex flex-col text-center">
       {session ? (
         <>
           <h1>Create User</h1>
