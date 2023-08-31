@@ -21,7 +21,6 @@ export async function validateCredentials(
       where: { email: credentials.email },
     })
 
-    // using hashed password
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (!user || !(await compare(credentials.password, user.password!))) {
       console.log(`GETTING NULL ${credentials.password} != ${user?.password}`)
