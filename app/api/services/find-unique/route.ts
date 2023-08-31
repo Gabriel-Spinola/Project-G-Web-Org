@@ -1,8 +1,9 @@
 import { prisma } from '@/lib/database/prisma'
 import { ModelsApiCode } from '@/lib/database/table.types';
 import { servicesHandler } from '../services-handler';
+import { PrismaData } from '../../config';
 
-async function getData(id: string, modelCode: ModelsApiCode) {
+async function getData(id: string, modelCode: ModelsApiCode): Promise<PrismaData> {
   switch (modelCode) {
     case ModelsApiCode.Project:
       return await prisma.project.findUnique({ where: { id: id as string } })

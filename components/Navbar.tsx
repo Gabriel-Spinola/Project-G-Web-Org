@@ -2,24 +2,11 @@ import { NavLinks } from '@/constants'
 import Link from 'next/link'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { AppProps } from 'next/app'
-import { getServerSession } from 'next-auth'
-import { AuthOptions } from '@/app/api/auth/[...nextauth]/options'
 import '@/app/styles/navbar.scss'
 
 async function Navbar() {
-  const session = await getServerSession(AuthOptions)
-
-  console.log(session)
-
   return (
-    <nav>
-      {/* {session ? (
-        <h1>session?.user</h1>
-      ) : (
-        <h1 className="text-5xl">You&apos;re not logged in</h1>
-      )}
-       */}
+    <nav className='shadow-darker-white/40 shadow-2xl'>
       <ul>
         {NavLinks.map((link) => (
           // eslint-disable-next-line react/jsx-key
@@ -36,6 +23,12 @@ async function Navbar() {
             </Link>
           </li>
         ))}
+
+        <div className='right-wing flex flex-row'>
+          {NavLinks.filter(link => link.key === 'Architects' || link.key === 'Profile').map(link => (
+            <li key={link.key}>{link.text}</li>
+          ))}
+        </div>
       </ul>
     </nav>
   )

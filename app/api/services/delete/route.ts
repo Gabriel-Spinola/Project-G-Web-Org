@@ -1,8 +1,11 @@
 import { prisma } from '@/lib/database/prisma'
 import { ModelsApiCode } from '@/lib/database/table.types';
 import { NextResponse } from 'next/server';
+import { PrismaData } from '../../config';
 
-async function getData(id: string, modelCode: ModelsApiCode) {
+type DeletionResponse = NextResponse<Record<string, string>>
+
+async function getData(id: string, modelCode: ModelsApiCode): Promise<PrismaData> {
 	switch (modelCode) {
 		case ModelsApiCode.Project:
 			return await prisma.project.delete({ where: { id: id } })
@@ -17,7 +20,7 @@ async function getData(id: string, modelCode: ModelsApiCode) {
 	}
 }
 
-const handler = async (req: Request) => {
+const handler = async (req: Request): Promise<DeletionResponse> => {
 	const url = new URL(req.url) // Create a URL object from the request URL
 	const queryParams = url.searchParams // Access the query parameters
 
@@ -35,7 +38,7 @@ const handler = async (req: Request) => {
 		try {
 			const data = await getData(id, modelCode as ModelsApiCode)
 
-			return NextResponse.json({ data }, { status: 200 })
+			return NextResponse.json({ data: data?.id }, { status: 200 })
 		} catch (e: any) {
 			return NextResponse.json({ message: `${e}` }, { status: 400 })
 		}
