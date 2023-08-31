@@ -2,13 +2,13 @@ import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
 async function tryResponse(
-  databaseOperation: Promise<any>,
-  successMessage: string
+  databaseOperation: Promise<unknown>,
+  successMessage: string,
 ): Promise<NextResponse> {
   try {
     await databaseOperation
     return NextResponse.json({ message: successMessage }, { status: 200 })
-  } catch (e: any) {
+  } catch (e: unknown) {
     // NOTE: Not going to production, may expose sensitive data
     return NextResponse.json({ message: `${e}` }, { status: 400 })
   }
@@ -18,7 +18,7 @@ async function handleCreateOrUpdate(
   req: Request,
   id: string | null,
   successMessage: string,
-  update = false
+  update = false,
 ): Promise<NextResponse> {
   const formData = await req.formData()
   const title = formData.get('title')
@@ -26,7 +26,8 @@ async function handleCreateOrUpdate(
 
   // LINK: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_multiple_files
   const projectImgFile = formData.get('project-img')
-  const projectImgName = projectImgFile instanceof File ? projectImgFile.name : 'noImage'
+  const projectImgName =
+    projectImgFile instanceof File ? projectImgFile.name : 'noImage'
 
   const data = {
     title: title?.toString() || '',
@@ -34,8 +35,10 @@ async function handleCreateOrUpdate(
     images: [projectImgName],
   }
 
+  // FIXME eslint ):
   const databaseOperation = update
-    ? prisma.project.update({ where: { id: id! }, data })
+    ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      prisma.project.update({ where: { id: id! }, data })
     : prisma.project.create({ data })
 
   return tryResponse(databaseOperation, successMessage)
