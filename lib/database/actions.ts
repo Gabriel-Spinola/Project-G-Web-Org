@@ -56,14 +56,14 @@ export async function createNewProjectApiCall(
   })
 }
 
-type ResponseError = {
+export type ResponseError = {
   data: {
     errorType: string
     error: unknown
   }
 }
 
-type ResponseData = {
+export type ResponseData = {
   data: any
 }
 
@@ -80,7 +80,7 @@ export async function tryGetUserDataFromApi(
         },
       },
     )
-    
+
     if (!response.ok) {
       throw new Error(`Response in not OK ${response.json()}`)
     }
