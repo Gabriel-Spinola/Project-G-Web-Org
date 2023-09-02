@@ -72,7 +72,7 @@ export async function tryGetUserDataFromApi(
 ): Promise<ResponseData | ResponseError> {
   try {
     const response = await fetch(
-      `$http://localhost:3000/${apiEndpoints.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
+      `http://localhost:3000${apiEndpoints.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
       {
         method: 'GET',
         headers: {
@@ -80,7 +80,7 @@ export async function tryGetUserDataFromApi(
         },
       },
     )
-
+    
     if (!response.ok) {
       throw new Error(`Response in not OK ${response.json()}`)
     }
