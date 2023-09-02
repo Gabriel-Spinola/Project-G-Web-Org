@@ -2,17 +2,8 @@
  * Helpful functions for database actions
  */
 
+import { apiEndpoints } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
-
-const apiEndpoints = {
-  services: {
-    findUnique: '/api/services/find-unique/',
-    findMany: '/api/services/',
-  },
-  handlers: {
-    createProject: '/api/handlers/CreateProjectFormHandler/',
-  },
-}
 
 /**
  * @param rowID A String storing the unique cuid of the row

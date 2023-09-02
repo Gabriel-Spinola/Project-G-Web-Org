@@ -1,5 +1,6 @@
 'use client'
 
+import { apiEndpoints } from '@/lib/apiConfig'
 import {
   Modal,
   ModalOverlay,
@@ -47,21 +48,41 @@ export default function DisplayUserInfo({ user }: Params): React.JSX.Element {
       return fieldValue === defaultValue ? '' : fieldValue
     }
 
-    // Define default values
-    const defaultTitle = defaultEditFormValues.title
-    const defaultDescription = defaultEditFormValues.description
-
     // Update form data for 'title' field
-    formData.set('title', getFieldValueOrDefault('title', defaultTitle) ?? '')
+    formData.set(
+      'title',
+      getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
+    )
 
     // Update form data for 'description' field
     formData.set(
       'description',
-      getFieldValueOrDefault('description', defaultDescription) ?? '',
+      getFieldValueOrDefault(
+        'description',
+        defaultEditFormValues.description,
+      ) ?? '',
     )
 
-    console.log(formData.get('title'))
-    console.log(formData.get('description'))
+    try {
+      const response = await fetch(
+        `${apiEndpoints.handlers.updateUser}?id=${user.id}`,
+        {
+          method: 'PUT',
+          body: formData,
+        },
+      )
+
+      if (!response.ok) {
+        console.error('Response not okay')
+      }
+
+      const { message, operation } = await response.json()
+
+      console.log(message)
+      console.log(operation)
+    } catch (error: unknown) {
+      console.error(error)
+    }
   }
 
   return (
