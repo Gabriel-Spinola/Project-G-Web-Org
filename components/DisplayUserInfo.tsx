@@ -1,6 +1,6 @@
 'use client'
 
-import { apiEndpoints } from '@/lib/apiConfig'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import {
   Modal,
   ModalOverlay,
@@ -23,6 +23,11 @@ import React, { FormEvent, useState } from 'react'
 
 interface Params {
   user: User
+}
+
+type TestOfResponseType = {
+  message: string
+  operation: string
 }
 
 const defaultEditFormValues = {
@@ -65,7 +70,7 @@ export default function DisplayUserInfo({ user }: Params): React.JSX.Element {
 
     try {
       const response = await fetch(
-        `${apiEndpoints.handlers.updateUser}?id=${user.id}`,
+        `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${user.id}`,
         {
           method: 'PUT',
           body: formData,
@@ -76,7 +81,8 @@ export default function DisplayUserInfo({ user }: Params): React.JSX.Element {
         console.error('Response not okay')
       }
 
-      const { message, operation } = await response.json()
+      const { message, operation }: Partial<TestOfResponseType> =
+        await response.json()
 
       console.log(message)
       console.log(operation)
