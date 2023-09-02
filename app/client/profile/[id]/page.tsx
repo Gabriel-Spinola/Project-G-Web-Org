@@ -1,3 +1,9 @@
+/** FIXME
+ * - error TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (D:\Xampp\htdocs\Grffiti\projectg\.next\server\webpack-runtime.js:33:43)
+* Also issuing about dehydration
+ */
+
 import DisplayUserInfo from '@/components/DisplayUserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { tryGetUserDataFromApi, ResponseError } from '@/lib/database/actions'
@@ -15,7 +21,7 @@ async function getUserInfo(paramId: string): Promise<User | undefined> {
   if (!isOwner) {
     const { data } = await tryGetUserDataFromApi(paramId)
 
-    if (data?.error != null) {
+    if (data?.error == null) {
       return data
     }
 
