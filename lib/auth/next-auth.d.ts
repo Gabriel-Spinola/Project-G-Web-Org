@@ -4,6 +4,7 @@ import 'next-auth'
 declare module 'next-auth' {
   interface User {
     description?: string
+    title?: string
     siteUrl?: string
     linkedinUrl?: string
     contactPhone?: string

@@ -4,6 +4,16 @@
 
 import { ModelsApiCode } from './table.types'
 
+const apiEndpoints = {
+  services: {
+    findUnique: '/api/services/find-unique/',
+    findMany: '/api/services/',
+  },
+  handlers: {
+    createProject: '/api/handlers/CreateProjectFormHandler/',
+  },
+}
+
 /**
  * @param rowID A String storing the unique cuid of the row
  * @param modelCode A unique string of numbers that store the model "id". i.e. "0": Project Model; "1": Post Model
@@ -15,7 +25,7 @@ export async function getRowDataFromAPI(
   modelCode: ModelsApiCode,
 ): Promise<Response> {
   return await fetch(
-    `/api/services/find-unique/?id=${rowID}&modelCode=${modelCode}`,
+    `${apiEndpoints.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
       method: 'POST',
       headers: {
@@ -35,8 +45,8 @@ export async function createNewProjectApiCall(
 ): Promise<Response> {
   // If id is true then we're updating the project
   const url = id
-    ? `/api/handlers/CreateProjectFormHandler/?id=${id}`
-    : '/api/handlers/CreateProjectFormHandler/'
+    ? `${apiEndpoints.handlers.createProject}?id=${id}`
+    : apiEndpoints.handlers.createProject
 
   // 'Put': Database updating
   // 'Post: Database inserting
@@ -44,4 +54,44 @@ export async function createNewProjectApiCall(
     method: id ? 'PUT' : 'POST',
     body: formData,
   })
+}
+
+type ResponseError = {
+  data: {
+    errorType: string
+    error: unknown
+  }
+}
+
+type ResponseData = {
+  data: any
+}
+
+export async function tryGetUserDataFromApi(
+  id: string,
+): Promise<ResponseData | ResponseError> {
+  try {
+    const response = await fetch(
+      `$http://localhost:3000/${apiEndpoints.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error(`Response in not OK ${response.json()}`)
+    }
+
+    return response.json()
+  } catch (error: unknown) {
+    return {
+      data: {
+        errorType: 'Failed to get response',
+        error,
+      },
+    }
+  }
 }
