@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import '@/components/Posts/style.scss'
 
-export default function Postbyuser() {
+export default function PostItem() {
   return (
     <div className="postado mb-8">
       <div className="autor">

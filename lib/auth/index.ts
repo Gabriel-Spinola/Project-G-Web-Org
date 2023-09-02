@@ -10,7 +10,7 @@ I added the randomKey to the configuration simply to demonstrate that any additi
 */
 
 export const AuthOptions: NextAuthOptions = {
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
   },
