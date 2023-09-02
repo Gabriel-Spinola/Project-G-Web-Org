@@ -13,9 +13,6 @@ import CreateProfile from '@/components/register/CreateProfile'
 
 export default async function AuthTestingPage() {
   const session = await getServerSession(AuthOptions)
-  console.log(session)
-
-  function reloadSession() {}
 
   return (
     <main

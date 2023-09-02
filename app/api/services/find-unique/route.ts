@@ -17,6 +17,31 @@ async function getData(
     case ModelsApiCode.Comment:
       return await prisma.comment.findUnique({ where: { id: id as string } })
 
+    case ModelsApiCode.User:
+      return await prisma.user.findUnique({
+        where: { id: id as string },
+        select: {
+          id: true,
+          name: true,
+          title: true,
+          description: true,
+          position: true,
+          linkedinUrl: true,
+          siteUrl: true,
+          contactPhone: true,
+          email: true,
+          createdAt: true,
+          image: true,
+          posts: true,
+          projects: true,
+          comments: true,
+          // password: false,
+          // updatedAt: false,
+          // accounts: false,
+          // sessions: false,
+        },
+      })
+
     default:
       throw new Error(`Bad Request: Invalid Model Code`)
   }
