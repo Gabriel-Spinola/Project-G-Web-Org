@@ -2,7 +2,7 @@
  * Helpful functions for database actions
  */
 
-import { apiEndpoints } from '../apiConfig'
+import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
 
 /**
@@ -16,7 +16,7 @@ export async function getRowDataFromAPI(
   modelCode: ModelsApiCode,
 ): Promise<Response> {
   return await fetch(
-    `${apiEndpoints.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
+    `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
       method: 'POST',
       headers: {
@@ -36,8 +36,8 @@ export async function createNewProjectApiCall(
 ): Promise<Response> {
   // If id is true then we're updating the project
   const url = id
-    ? `${apiEndpoints.handlers.createProject}?id=${id}`
-    : apiEndpoints.handlers.createProject
+    ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
+    : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
 
   // 'Put': Database updating
   // 'Post: Database inserting
@@ -63,7 +63,7 @@ export async function tryGetUserDataFromApi(
 ): Promise<ResponseData | ResponseError> {
   try {
     const response = await fetch(
-      `http://localhost:3000${apiEndpoints.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
+      `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
       {
         method: 'GET',
         headers: {
