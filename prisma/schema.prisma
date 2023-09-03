@@ -117,7 +117,7 @@ model User {
   @@map(name: "users")
 }
 
-model Verification {
+model VerificationToken {
   id         Int      @id @default(autoincrement())
   identifier String
   token      String   @unique
