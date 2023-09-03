@@ -13,18 +13,20 @@ export default function PostItem() {
           className="nome-localizacao"
           href="/client/profile/cllgwtgbt0000w42oblx1qp27"
         >
-          <span className="nome">Oscar Alho</span>
-          <span className="localizacao text-darker-white">
+          <h1 className="nome">Oscar Alho</h1>
+          <small className="localizacao text-darker-white">
             Belo Horizonte, MG
-          </span>
+          </small>
         </a>
       </div>
-      <span className="p-1">
+
+      <article className="p-1">
         Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
         nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
         doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
         vero. Odio quia quos illo.
-      </span>
+      </article>
+
       <div className="image-container">
         <Image
           className="one-img "
@@ -35,7 +37,8 @@ export default function PostItem() {
           priority
         />
       </div>
-      <div className="reacts w-[100%] h-[48px] mt-4 flex flex-row">
+
+      <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <div className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -50,6 +53,7 @@ export default function PostItem() {
           </svg>
           <span>125</span>
         </div>
+
         <div className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
