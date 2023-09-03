@@ -46,8 +46,10 @@
     "@svgr/webpack": "^8.1.0",
     "@tanstack/eslint-plugin-query": "^4.34.1",
     "@types/bcryptjs": "^2.4.2",
+    "@types/nodemailer": "^6.4.9",
     "@types/react-google-recaptcha": "^2.1.5",
     "eslint": "^8.48.0",
+    "nodemailer": "^6.9.4",
     "prisma": "^5.2.0",
     "sass": "^1.64.2",
     "ts-node": "^10.9.1"

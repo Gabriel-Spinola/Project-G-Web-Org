@@ -1,10 +1,12 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, User, validateCredentials } from './actions'
+import { Credentials, User, html, text, validateCredentials } from './actions'
 import { sign } from 'jsonwebtoken'
+import { createTransport } from 'nodemailer'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
@@ -62,6 +64,41 @@ export const AuthOptions: NextAuthOptions = {
         }
       },
     }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST as string,
+        port: process.env.EMAIL_SERVER_PORT as string,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER as string,
+          pass: process.env.EMAIL_SERVER_PASSWORD as string,
+        },
+      },
+      from: process.env.EMAIL_FROM as string,
+      async sendVerificationRequest(params: {
+        identifier: email
+        url
+        provider: { server; from }
+        theme
+      }) {
+        const { host } = new URL(params.url)
+
+        // NOTE: You are not required to use `nodemailer`, use whatever you want.
+        const transport = createTransport(params.provider.server)
+        const result = await transport.sendMail({
+          to: params.identifier,
+          from: params.provider.from,
+          subject: `Sign in to ${host}`,
+          text: text({ url: params.url, host }),
+          html: html({ url: params.url, host, theme: params.theme }),
+        })
+
+        const failed = result.rejected.concat(result.pending).filter(Boolean)
+
+        if (failed.length) {
+          throw new Error(`Email(s) (${failed.join(', ')}) could not be sent`)
+        }
+      },
+    }),
   ],
   callbacks: {
     session: ({ session, token }) => {
@@ -92,6 +129,18 @@ export const AuthOptions: NextAuthOptions = {
       }
 
       return token
+    },
+    async signIn({ user, account, email }) {
+      console.log(user.email)
+      const userExists = await prisma.user.findUnique({
+        where: { email: user.email },
+      })
+
+      if (userExists) {
+        return true
+      } else {
+        return '/register'
+      }
     },
   },
   adapter: PrismaAdapter(prisma),
