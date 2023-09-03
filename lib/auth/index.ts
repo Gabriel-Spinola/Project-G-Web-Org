@@ -4,10 +4,24 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
 import { Credentials, User, validateCredentials } from './actions'
+import { sign } from 'jsonwebtoken'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
 */
+
+function generateJwtToken(user: User): string {
+  const payload = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+  }
+
+  const token = sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: 30 * 24 * 60 * 60,
+  })
+  return token
+}
 
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
@@ -38,11 +52,13 @@ export const AuthOptions: NextAuthOptions = {
           return null
         }
 
+        const token = generateJwtToken(user)
+
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          randomKey: 'Hey cool',
+          token,
         }
       },
     }),

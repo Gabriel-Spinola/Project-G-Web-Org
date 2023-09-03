@@ -1,3 +1,5 @@
+// TODO: add data sanitization and stop exposing data into response bitch
+
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 

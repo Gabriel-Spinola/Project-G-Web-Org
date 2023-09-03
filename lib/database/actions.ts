@@ -81,7 +81,7 @@ export async function tryGetUserDataFromApi(
     return {
       data: {
         errorType: 'Failed to get response',
-        error,
+        error: process.env.NODE_ENV === 'development' ? error : '',
       },
     }
   }

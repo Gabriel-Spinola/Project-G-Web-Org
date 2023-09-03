@@ -11,5 +11,5 @@ export const API_ENDPOINTS = {
 
 export const API_URL =
   process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
+    ? 'http://localhost:3000/'
     : 'productionurl'
