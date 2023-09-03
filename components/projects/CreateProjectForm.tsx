@@ -60,7 +60,7 @@ export default function CreateProjectForm({ params }: Props) {
         image: data?.images[0] || '',
       })
 
-      // Cleanup funcion
+      // NOTE: Cleanup function
       return function (): void {
         controller.abort()
       }
