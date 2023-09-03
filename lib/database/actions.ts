@@ -2,6 +2,7 @@
  * Helpful functions for database actions
  */
 
+import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
 
 /**
@@ -15,7 +16,7 @@ export async function getRowDataFromAPI(
   modelCode: ModelsApiCode,
 ): Promise<Response> {
   return await fetch(
-    `/api/services/find-unique/?id=${rowID}&modelCode=${modelCode}`,
+    `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
       method: 'POST',
       headers: {
@@ -35,8 +36,8 @@ export async function createNewProjectApiCall(
 ): Promise<Response> {
   // If id is true then we're updating the project
   const url = id
-    ? `/api/handlers/CreateProjectFormHandler/?id=${id}`
-    : '/api/handlers/CreateProjectFormHandler/'
+    ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
+    : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
 
   // 'Put': Database updating
   // 'Post: Database inserting
@@ -44,4 +45,44 @@ export async function createNewProjectApiCall(
     method: id ? 'PUT' : 'POST',
     body: formData,
   })
+}
+
+export type ResponseError = {
+  data: {
+    errorType: string
+    error: unknown
+  }
+}
+
+export type ResponseData = {
+  data: any
+}
+
+export async function tryGetUserDataFromApi(
+  id: string,
+): Promise<ResponseData | ResponseError> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error(`Response in not OK ${response.json()}`)
+    }
+
+    return response.json()
+  } catch (error: unknown) {
+    return {
+      data: {
+        errorType: 'Failed to get response',
+        error: process.env.NODE_ENV === 'development' ? error : '',
+      },
+    }
+  }
 }

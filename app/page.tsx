@@ -1,8 +1,7 @@
 // LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
-import PostItem from '@/components/posts/Post'
-import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
-import { prisma } from '@/lib/database/prisma'
+import PostItem from '@/components/Posts/Post'
+import PostSubmitFragment from '@/components/Posts/poster/PostSubmitFragment'
 
 export default async function Home() {
   return (
@@ -10,7 +9,6 @@ export default async function Home() {
       <div className="feed flex flex-col items-center">
         <PostSubmitFragment></PostSubmitFragment>
         <PostItem></PostItem>
-        {/* {feedData.map((e) => e.author?.name)} */}
       </div>
     </main>
   )
