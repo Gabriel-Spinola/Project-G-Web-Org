@@ -33,7 +33,7 @@ export default function RegisterForm() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    
+
     if (!isVerified) return
 
     setIsLoading(true)
