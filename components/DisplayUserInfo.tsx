@@ -23,6 +23,7 @@ import React, { FormEvent, useState } from 'react'
 
 interface Params {
   user: User
+  isOwner: boolean
 }
 
 type TestOfResponseType = {
@@ -35,7 +36,10 @@ const defaultEditFormValues = {
   description: 'Insira uma descrição',
 }
 
-export default function DisplayUserInfo({ user }: Params): React.JSX.Element {
+export default function DisplayUserInfo({
+  user,
+  isOwner,
+}: Params): React.JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
@@ -106,7 +110,7 @@ export default function DisplayUserInfo({ user }: Params): React.JSX.Element {
       <h1>phone: {user?.contactPhone}</h1>
       <h1>email: {user?.email}</h1>
 
-      <Button onClick={onOpen}>Editar Usuário</Button>
+      {isOwner && <Button onClick={onOpen}>Editar Usuário</Button>}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
