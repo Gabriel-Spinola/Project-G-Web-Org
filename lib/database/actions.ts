@@ -14,14 +14,16 @@ import { ModelsApiCode } from './table.types'
 export async function getRowDataFromAPI(
   rowID: string,
   modelCode: ModelsApiCode,
+  signal: AbortSignal | null | undefined = null,
 ): Promise<Response> {
   return await fetch(
     `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      signal,
     },
   )
 }
