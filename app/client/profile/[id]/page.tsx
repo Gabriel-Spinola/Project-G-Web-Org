@@ -6,7 +6,7 @@
 
 import DisplayUserInfo from '@/components/DisplayUserInfo'
 import { AuthOptions } from '@/lib/auth'
-import { tryGetUserDataFromApi, ResponseError } from '@/lib/database/actions'
+import { tryGetUserDataFromApi } from '@/lib/database/actions'
 import { Session, User, getServerSession } from 'next-auth'
 import React, { Suspense } from 'react'
 
@@ -15,35 +15,34 @@ type Props = {
 }
 
 async function getUserInfo(paramId: string): Promise<User | undefined> {
-  const session: Session | null = await getServerSession(AuthOptions)
-  const isOwner = session?.user.id === paramId
+  const { data } = await tryGetUserDataFromApi(paramId)
 
-  if (!isOwner) {
-    const { data } = await tryGetUserDataFromApi(paramId)
-
-    if (data?.error == null) {
-      return data
-    }
-
-    console.warn('failed to get user info', JSON.stringify(data))
-    return undefined
+  if (data?.error == null) {
+    return data
   }
 
-  return session?.user
+  console.warn('failed to get user info', JSON.stringify(data))
+
+  return undefined
 }
 
 export default async function Profile({
   params,
 }: Props): Promise<React.JSX.Element> {
-  const user: User | undefined = await getUserInfo(params.id)
+  const session: Session | null = await getServerSession(AuthOptions)
+  const isOwner = session?.user.id === params.id
 
+  const user: User | undefined = !isOwner
+    ? await getUserInfo(params.id)
+    : session?.user
+    
   if (user) {
     return (
       <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
         <h1>Profile Page</h1>
 
         <Suspense fallback={<div>Loading</div>}>
-          {user && <DisplayUserInfo user={user} />}
+          {user && <DisplayUserInfo user={user} isOwner={isOwner} />}
         </Suspense>
 
         <hr />
