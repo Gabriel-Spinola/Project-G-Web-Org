@@ -3,8 +3,13 @@
 import React from 'react'
 import Image from 'next/image'
 import '@/components/Posts/style.scss'
+import { Post } from '@prisma/client'
 
-export default function PostItem() {
+interface Params {
+  post: Post
+}
+
+export default function PostItem({ post }: Params) {
   return (
     <div className="postado mb-8">
       <div className="autor">

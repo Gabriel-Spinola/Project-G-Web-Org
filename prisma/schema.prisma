@@ -99,6 +99,8 @@ model User {
   password      String?
   title         String?
   description   String?
+  location      String?
+  graduations   String[]
   position      Positions @default(DefaultUser)
   linkedinUrl   String?
   siteUrl       String?
