@@ -1,7 +1,10 @@
 'use client'
+// TODO: required captcha
 
+import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useRef, useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 type RegisterFormState = {
   name: string
@@ -16,9 +19,22 @@ export default function RegisterForm() {
     email: '',
     password: '',
   })
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const [isVerified, setIsVerified] = useState<boolean>(false)
+
+  console.log(isVerified)
+
+  async function handleCaptchaSubmission(token: string | null) {
+    // Server function to verify captcha
+    await verifyCaptcha(token)
+      .then(() => setIsVerified(true))
+      .catch(() => setIsVerified(false))
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    
+    if (!isVerified) return
 
     setIsLoading(true)
 
@@ -93,6 +109,12 @@ export default function RegisterForm() {
         style={{ padding: '1rem' }}
       />
 
+      <ReCAPTCHA
+        sitekey={process.env.RECAPTCHA_SITE_KEY as string}
+        ref={recaptchaRef}
+        onChange={handleCaptchaSubmission}
+      />
+
       <button
         style={{
           backgroundColor: `${isLoading ? '#ccc' : '#3446eb'}`,
@@ -100,7 +122,7 @@ export default function RegisterForm() {
           padding: '1rem',
           cursor: 'pointer',
         }}
-        disabled={isLoading}
+        disabled={isLoading || !isVerified}
       >
         {isLoading ? 'loading...' : 'Register'}
       </button>
