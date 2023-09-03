@@ -74,30 +74,6 @@ export const AuthOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM as string,
-      async sendVerificationRequest(params: {
-        identifier: email
-        url
-        provider: { server; from }
-        theme
-      }) {
-        const { host } = new URL(params.url)
-
-        // NOTE: You are not required to use `nodemailer`, use whatever you want.
-        const transport = createTransport(params.provider.server)
-        const result = await transport.sendMail({
-          to: params.identifier,
-          from: params.provider.from,
-          subject: `Sign in to ${host}`,
-          text: text({ url: params.url, host }),
-          html: html({ url: params.url, host, theme: params.theme }),
-        })
-
-        const failed = result.rejected.concat(result.pending).filter(Boolean)
-
-        if (failed.length) {
-          throw new Error(`Email(s) (${failed.join(', ')}) could not be sent`)
-        }
-      },
     }),
   ],
   callbacks: {
