@@ -4,7 +4,8 @@
 * Also issuing about dehydration
  */
 
-import DisplayUserInfo from '@/components/DisplayUserInfo'
+import UserPosts from '@/components/profile/UserPosts'
+import DisplayUserInfo from '@/components/profile/ProfileCard'
 import { AuthOptions } from '@/lib/auth'
 import { tryGetUserDataFromApi } from '@/lib/database/actions'
 import { Session, User, getServerSession } from 'next-auth'
@@ -35,16 +36,14 @@ export default async function Profile({
   const user: User | undefined = !isOwner
     ? await getUserInfo(params.id)
     : session?.user
-    
+
   if (user) {
     return (
-      <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
-        <h1>Profile Page</h1>
-
+      <main className="flex flex-col min-h-screen justify-around bg-darker-white">
         <Suspense fallback={<div>Loading</div>}>
           {user && <DisplayUserInfo user={user} isOwner={isOwner} />}
         </Suspense>
-
+        {/* <UserPosts /> */}
         <hr />
 
         <section id="user-activities">

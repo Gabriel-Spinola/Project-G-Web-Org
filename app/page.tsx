@@ -5,7 +5,7 @@ import PostSubmitFragment from '@/components/Posts/poster/PostSubmitFragment'
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
+    <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center">
         <PostSubmitFragment></PostSubmitFragment>
         <PostItem></PostItem>
