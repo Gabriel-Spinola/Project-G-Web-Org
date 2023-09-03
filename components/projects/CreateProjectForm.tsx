@@ -23,12 +23,16 @@ export default function CreateProjectForm({ params }: Props) {
 
   useEffect(
     function () {
+      const controller = new AbortController()
+      const signal = controller.signal
+
       async function fetchData() {
         try {
           const response = await getRowDataFromAPI(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             params.id!,
             ModelsApiCode.Project,
+            signal,
           )
 
           if (!response.ok) throw new Error('Network response was not OK')
@@ -39,6 +43,7 @@ export default function CreateProjectForm({ params }: Props) {
           setIsLoading(false)
         } catch (e: unknown) {
           // TODO: Client Response
+
           console.log(`error: ${e}`)
         }
       }
@@ -54,6 +59,11 @@ export default function CreateProjectForm({ params }: Props) {
         description: data?.description || '',
         image: data?.images[0] || '',
       })
+
+      // NOTE: Cleanup function
+      return function (): void {
+        controller.abort()
+      }
     },
     [data?.id],
   )
