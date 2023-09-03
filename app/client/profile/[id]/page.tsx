@@ -35,7 +35,7 @@ export default async function Profile({
   const user: User | undefined = !isOwner
     ? await getUserInfo(params.id)
     : session?.user
-    
+
   if (user) {
     return (
       <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
