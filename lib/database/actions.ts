@@ -11,6 +11,8 @@
  * Helpful functions for database actions
  */
 
+import { GetServerSideProps } from 'next'
+import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
 
 /**
@@ -22,16 +24,29 @@ import { ModelsApiCode } from './table.types'
 export async function getRowDataFromAPI(
   rowID: string,
   modelCode: ModelsApiCode,
+  signal: AbortSignal | null | undefined = null,
 ): Promise<Response> {
   return await fetch(
-    `/api/services/find-unique/?id=${rowID}&modelCode=${modelCode}`,
+    `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-cache',
     },
   )
+}
+
+export type ResponseError = {
+  data: {
+    errorType: string
+    error: unknown
+  }
+}
+
+export type ResponseData = {
+  data: any
 }
 
 /**
@@ -41,16 +56,56 @@ export async function getRowDataFromAPI(
 export async function createNewProjectApiCall(
   id: string | null,
   formData: FormData,
-): Promise<Response> {
-  // If id is true then we're updating the project
-  const url = id
-    ? `/api/handlers/CreateProjectFormHandler/?id=${id}`
-    : '/api/handlers/CreateProjectFormHandler/'
+): Promise<Response | null> {
+  try {
+    // If id is true then we're updating the project
+    const url = id
+      ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
+      : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
 
-  // 'Put': Database updating
-  // 'Post: Database inserting
-  return await fetch(url, {
-    method: id ? 'PUT' : 'POST',
-    body: formData,
-  })
+    // 'Put': Database updating
+    // 'Post: Database inserting
+    return await fetch(url, {
+      method: id ? 'PUT' : 'POST',
+      body: formData,
+      cache: 'no-cache',
+
+      // headers: {
+      //   'Access-Control-Allow-Origin': '*',
+      //   'Access-Control-Allow-Methods':
+      //     'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+      // },
+    })
+  } catch (error: unknown) {
+    return null
+  }
+}
+
+export async function tryGetUserDataFromApi(
+  id: string,
+): Promise<ResponseData | ResponseError> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error(`Response in not OK ${response.json()}`)
+    }
+
+    return response.json()
+  } catch (error: unknown) {
+    return {
+      data: {
+        errorType: 'Failed to get response',
+        error: process.env.NODE_ENV === 'development' ? error : '',
+      },
+    }
+  }
 }

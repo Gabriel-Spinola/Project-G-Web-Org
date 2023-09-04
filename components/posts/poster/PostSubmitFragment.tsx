@@ -2,8 +2,8 @@
 
 import React, { useState, Fragment } from 'react'
 
-import Modal from '@/components/posts/poster/Modal'
-import '@/components/Poster/style.scss'
+import Modal from '@/components/Posts/poster/Modal'
+import '@/components/posts/poster/style.scss'
 
 export default function PostSubmitFragment() {
   const [showModal, setShowModal] = useState<boolean>(false)

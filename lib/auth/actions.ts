@@ -1,5 +1,7 @@
 import { compare } from 'bcryptjs'
 import { prisma } from '../database/prisma'
+import { createTransport } from 'nodemailer'
+import { Theme } from 'next-auth'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
 export type User = Record<string, any>
@@ -21,7 +23,6 @@ export async function validateCredentials(
       where: { email: credentials.email },
     })
 
-    // using hashed password
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (!user || !(await compare(credentials.password, user.password!))) {
       console.log(`GETTING NULL ${credentials.password} != ${user?.password}`)
