@@ -1,3 +1,12 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 // In order to pass a parameter into the URL use the `/pageName/idValue` syntax
