@@ -9,10 +9,11 @@ import {
   getRowDataFromAPI,
 } from '@/lib/database/actions'
 import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
+import { Project } from '@prisma/client'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
 type Props = {
-  params: { id: string | null }
+  params: { id: string | null; project: Project | null }
 }
 
 // REVIEW
@@ -21,52 +22,37 @@ export default function CreateProjectForm({ params }: Props) {
   const [form, setForm] = useState<ProjectFormState | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  useEffect(
-    function () {
-      const controller = new AbortController()
-      const signal = controller.signal
+  // Mount Component
+  useEffect((): void => {
+    let isCancelled = false
 
-      async function fetchData() {
-        try {
-          const response = await getRowDataFromAPI(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            params.id!,
-            ModelsApiCode.Project,
-            signal,
-          )
-
-          if (!response.ok) throw new Error('Network response was not OK')
-
-          const { data } = await response.json()
-
-          setData(data)
-          setIsLoading(false)
-        } catch (e: unknown) {
-          // TODO: Client Response
-
-          console.log(`error: ${e}`)
-        }
-      }
-
-      if (params.id) {
-        fetchData()
-      } else {
-        setIsLoading(false)
-      }
-
-      setForm({
-        title: data?.title || '',
-        description: data?.description || '',
-        image: data?.images[0] || '',
+    if (!isCancelled && params.project && !data) {
+      setData({
+        id: params.project.id,
+        title: params.project.title,
+        description: params.project.description || '',
+        images: params.project.images,
+        createdAt: 'placeholderDate',
       })
 
-      // NOTE: Cleanup function
-      return function (): void {
-        controller.abort()
-      }
-    },
-    [data?.id],
-  )
+      console.log('setting')
+    }
+
+    setForm({
+      title: data?.title || '',
+      description: data?.description || '',
+      image: data?.images[0] || '',
+    })
+
+    setIsLoading(false)
+
+    console.log('running')
+
+    // eslint-disable-next-line no-unused-expressions
+    ;(): void => {
+      isCancelled = true
+    }
+  }, [data, params.project])
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
@@ -110,7 +96,7 @@ export default function CreateProjectForm({ params }: Props) {
     const formData = new FormData(event.currentTarget)
     const response = await createNewProjectApiCall(data?.id || null, formData)
 
-    if (response.ok) {
+    if (response && response.ok) {
       const data = await response.json()
 
       // TODO: Client Response

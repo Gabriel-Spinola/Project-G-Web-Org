@@ -2,6 +2,7 @@
  * Helpful functions for database actions
  */
 
+import { GetServerSideProps } from 'next'
 import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
 
@@ -23,30 +24,9 @@ export async function getRowDataFromAPI(
       headers: {
         'Content-Type': 'application/json',
       },
-      signal,
+      cache: 'no-cache',
     },
   )
-}
-
-/**
- * @returns A response from a database action (i.e. the new data if response ok), this response contains not only the row data,
- * but also fetch information
- */
-export async function createNewProjectApiCall(
-  id: string | null,
-  formData: FormData,
-): Promise<Response> {
-  // If id is true then we're updating the project
-  const url = id
-    ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
-    : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
-
-  // 'Put': Database updating
-  // 'Post: Database inserting
-  return await fetch(url, {
-    method: id ? 'PUT' : 'POST',
-    body: formData,
-  })
 }
 
 export type ResponseError = {
@@ -58,6 +38,38 @@ export type ResponseError = {
 
 export type ResponseData = {
   data: any
+}
+
+/**
+ * @returns A response from a database action (i.e. the new data if response ok), this response contains not only the row data,
+ * but also fetch information
+ */
+export async function createNewProjectApiCall(
+  id: string | null,
+  formData: FormData,
+): Promise<Response | null> {
+  try {
+    // If id is true then we're updating the project
+    const url = id
+      ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
+      : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
+
+    // 'Put': Database updating
+    // 'Post: Database inserting
+    return await fetch(url, {
+      method: id ? 'PUT' : 'POST',
+      body: formData,
+      cache: 'no-cache',
+
+      // headers: {
+      //   'Access-Control-Allow-Origin': '*',
+      //   'Access-Control-Allow-Methods':
+      //     'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+      // },
+    })
+  } catch (error: unknown) {
+    return null
+  }
 }
 
 export async function tryGetUserDataFromApi(
