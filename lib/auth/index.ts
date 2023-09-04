@@ -1,13 +1,29 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, User, validateCredentials } from './actions'
+import { Credentials, User, html, text, validateCredentials } from './actions'
+import { sign } from 'jsonwebtoken'
+import { createTransport } from 'nodemailer'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
 */
+
+function generateJwtToken(user: User): string {
+  const payload = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+  }
+
+  const token = sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: 30 * 24 * 60 * 60,
+  })
+  return token
+}
 
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
@@ -38,13 +54,26 @@ export const AuthOptions: NextAuthOptions = {
           return null
         }
 
+        const token = generateJwtToken(user)
+
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          randomKey: 'Hey cool',
+          token,
         }
       },
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST as string,
+        port: process.env.EMAIL_SERVER_PORT as string,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER as string,
+          pass: process.env.EMAIL_SERVER_PASSWORD as string,
+        },
+      },
+      from: process.env.EMAIL_FROM as string,
     }),
   ],
   callbacks: {
@@ -76,6 +105,18 @@ export const AuthOptions: NextAuthOptions = {
       }
 
       return token
+    },
+    async signIn({ user, account, email }) {
+      console.log(user.email)
+      const userExists = await prisma.user.findUnique({
+        where: { email: user.email },
+      })
+
+      if (userExists) {
+        return true
+      } else {
+        return '/register'
+      }
     },
   },
   adapter: PrismaAdapter(prisma),

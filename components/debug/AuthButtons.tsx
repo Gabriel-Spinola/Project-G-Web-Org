@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn, signOut } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 export const LoginButton = () => {
@@ -28,5 +28,7 @@ export const LogoutButton = () => {
 }
 
 export const ProfileButton = () => {
-  return <Link href="/profile">Profile</Link>
+  const session = useSession()
+
+  return <Link href={`/client/profile/${session.data?.user.id}`}>Profile</Link>
 }
