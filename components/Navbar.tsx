@@ -1,3 +1,12 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 import { NavLinks } from '@/constants'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -6,20 +15,22 @@ import '@/app/styles/navbar.scss'
 
 async function Navbar() {
   return (
-    <nav className='shadow-darker-white/40 shadow-2xl'>
+    <nav className="shadow-darker-white/40 shadow-2xl">
       <ul>
         {/* //eslint-disable-next-line react/jsx-key */}
-        <div className='left-wing flex flex-row'>
-          {NavLinks.filter(link => link.key === 'Explore' || link.key === 'Projects').map(link => (
+        <div className="left-wing flex flex-row">
+          {NavLinks.filter(
+            (link) => link.key === 'Explore' || link.key === 'Projects',
+          ).map((link) => (
             <Link href={link.href} key={link.key}>
               <li key={link.key}>{link.text}</li>
             </Link>
           ))}
         </div>
 
-        <div className='logo'>
+        <div className="logo">
           <li>
-            {NavLinks.filter(link => link.key === 'Home').map(link => (
+            {NavLinks.filter((link) => link.key === 'Home').map((link) => (
               <Link href={link.href} key={link.key}>
                 {link.text}
                 {link.key === 'Home' && (
@@ -35,13 +46,13 @@ async function Navbar() {
           </li>
         </div>
 
-        <div className='right-wing flex flex-row'>
-          {NavLinks.filter(link => link.key === 'Architects' || link.key === 'Profile').map(link => (
+        <div className="right-wing flex flex-row">
+          {NavLinks.filter(
+            (link) => link.key === 'Architects' || link.key === 'Profile',
+          ).map((link) => (
             <li key={link.key}>{link.text}</li>
           ))}
         </div>
-
-
       </ul>
     </nav>
   )
