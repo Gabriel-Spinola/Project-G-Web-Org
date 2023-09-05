@@ -69,7 +69,10 @@ export async function createNewProjectApiCall(
       method: id ? 'PUT' : 'POST',
       body: formData,
       cache: 'no-cache',
-
+      headers: {
+        'Access-Control-Allow-Headers': 'http://127.0.0.1:3000',
+        'Access-Control-Allow-Credentials': 'true',
+      },
       // headers: {
       //   'Access-Control-Allow-Origin': '*',
       //   'Access-Control-Allow-Methods':
