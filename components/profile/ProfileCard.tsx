@@ -99,7 +99,10 @@ export default function DisplayUserInfo({
   }
 
   return (
-    <section className="flex h-[208px] min-w-full items-center gap-[32px] py-0 px-[64px]">
+    <section
+      id="Wrapper"
+      className="flex h-[208px] min-w-full items-center gap-[32px] py-0 px-[64px]"
+    >
       <Box
         className="absolute w-[100%] h-[208px] overflow-visible ml-[-64px] z-99"
         bgImage={
@@ -114,11 +117,15 @@ export default function DisplayUserInfo({
       </div>
       <div
         id="profile-info-wrapper"
-        className="flex flex-row items-end justify-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
+        className="flex flex-row items-center justify-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
       >
         <div id="info-name-wrapper" className="flex flex-col">
-          <h1 className="text-4xl">{user?.name || ''}</h1>
-          <h2 className="text-xl ">{user?.title || ''}</h2>
+          <h1 className="text-4xl text-medium-primary font-bold">
+            {user?.name || ''}
+          </h1>
+          <h2 className="text-xl font-thin text-light-white">
+            {user?.title || ''}
+          </h2>
         </div>
         <div id="graduations" className="h-[48px]">
           <Image
