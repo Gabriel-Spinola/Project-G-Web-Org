@@ -1,72 +1,59 @@
-import { prisma } from '@/lib/database/prisma'
-import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
+import { handleGet } from './[get]'
+import { handlePost } from './[post]'
+import { handleDelete } from './[delete]'
 
-type FullPost = {
-  author: {
-    name: string | null
-  } | null
-} & Post
-
-async function getPostsFromUser(
-  take: number | null,
-  authorId: string,
-): Promise<FullPost[] | null> {
-  try {
-    const data = await prisma.post.findMany({
-      take: take ?? 3,
-      where: { authorId },
-      include: {
-        author: { select: { name: true, title: true } },
-      },
-    })
-
-    console.log('specific users')
-
-    return data
-  } catch (e: unknown) {
-    console.error(
-      'SERVICES/GET-POSTS::failed to get posts from user (database level): ',
-      e,
-    )
-
-    return null
-  }
-}
-
-async function getOnlyPosts(take: number | null): Promise<FullPost[] | null> {
-  try {
-    const data = await prisma.post.findMany({
-      take: take ?? 3,
-      include: {
-        author: { select: { name: true, title: true } },
-      },
-    })
-
-    return data
-  } catch (e: unknown) {
-    console.error('SERVICES/GET-POSTS::failed to get posts (database level)', e)
-
-    return null
-  }
-}
-
-export async function GET(req: Request) {
+async function handler(req: Request) {
   const url = new URL(req.url)
 
-  const take: string | null = url.searchParams.get('take')
   const authorId: string | null = url.searchParams.get('authorId')
 
-  const data: FullPost[] | null = !authorId
-    ? await getOnlyPosts(take ? parseInt(take) : null)
-    : await getPostsFromUser(take ? parseInt(take) : null, authorId)
+  switch (req.method) {
+    case 'GET': {
+      const take: string | null = url.searchParams.get('take')
 
-  if (data) {
-    return NextResponse.json({ data }, { status: 200 })
+      return handleGet(req, take, authorId)
+    }
+
+    // TODO: Test Post kkkkk
+    case 'POST': {
+      if (!authorId)
+        return NextResponse.json(
+          {
+            data: "FAILED:SERVICES/CREATE-POSTS::failed to create posts (API level): authorId Can't be null",
+          },
+          { status: 400 },
+        )
+
+      const formData = await req.formData()
+
+      return handlePost(req, authorId, formData)
+    }
+
+    case 'PUT':
+      return handleGet(req)
+
+    case 'DELETE': {
+      const postId: string | null = url.searchParams.get('postId')
+
+      if (!postId) {
+        return NextResponse.json(
+          {
+            data: "FAILED:SERVICES/DELETE-POST::failed to delete posts (API level): postId Can't be null",
+          },
+          { status: 400 },
+        )
+      }
+
+      return handleDelete(postId)
+    }
+
+    default:
+      return NextResponse.json(
+        { data: { status: 'fail', message: 'Invalid method' } },
+        { status: 401 },
+      )
   }
-
-  return NextResponse.json(
-    { data: 'FAILED:SERVICES/GET-POSTS::failed to get posts (API level)' },
-    { status: 400 },
-  )
 }
+
+export { handler as GET, handler as POST, handler as PUT, handler as DELETE }
