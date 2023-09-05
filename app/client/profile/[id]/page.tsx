@@ -39,7 +39,7 @@ export default async function Profile({
 
   if (user) {
     return (
-      <main className="flex flex-col min-h-screen justify-around bg-darker-white">
+      <main className="flex flex-col min-h-screen bg-darker-white">
         <Suspense fallback={<div>Loading</div>}>
           {user && <DisplayUserInfo user={user} isOwner={isOwner} />}
         </Suspense>

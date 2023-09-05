@@ -6,42 +6,45 @@ import '@/app/styles/navbar.scss'
 
 async function Navbar() {
   return (
-    <nav className='shadow-darker-white/40 shadow-2xl'>
-      <ul>
-        {/* //eslint-disable-next-line react/jsx-key */}
-        <div className='left-wing flex flex-row'>
-          {NavLinks.filter(link => link.key === 'Explore' || link.key === 'Projects').map(link => (
-            <Link href={link.href} key={link.key}>
-              <li key={link.key}>{link.text}</li>
-            </Link>
-          ))}
-        </div>
-
-        <div className='logo'>
-          <li>
-            {NavLinks.filter(link => link.key === 'Home').map(link => (
-              <Link href={link.href} key={link.key}>
-                {link.text}
-                {link.key === 'Home' && (
-                  <Image
-                    src="/assets/logo.png"
-                    alt="pinto"
-                    width={220}
-                    height={31}
-                  />
-                )}
-              </Link>
-            ))}
-          </li>
-        </div>
-
-        <div className='right-wing flex flex-row'>
-          {NavLinks.filter(link => link.key === 'Architects' || link.key === 'Profile').map(link => (
-            <li key={link.key}>{link.text}</li>
-          ))}
-        </div>
-
-
+    <nav
+      id="header-nav"
+      className="shadow-darker-white/40 shadow-2xl flex justify-around bg-medium-gray text-darker-white h-[88px] items-center text-xl"
+    >
+      <ul className="flex flex-row">
+        <li>
+          <a href="../app/client/explore">
+            Explorar
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a href="../app/client/project">
+            Projetos
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <Image
+              src="/assets/logo.png"
+              alt="logo-image"
+              width={200}
+              height={50}
+            />
+          </a>
+        </li>
+        <li>
+          <a href="../app/client/architects">
+            Arquitetos
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a href="../app/client/profile/[id]">
+            Perfil
+            <div></div>
+          </a>
+        </li>
       </ul>
     </nav>
   )

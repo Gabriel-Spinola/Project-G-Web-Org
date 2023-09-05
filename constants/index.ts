@@ -4,7 +4,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 export const NavLinks = [
   { href: '/client/explore', key: 'Explore', text: 'Explorar' },
-  { href: '/client/explore', key: 'Projects', text: 'Projetos' },
+  { href: '/client/projects', key: 'Projects', text: 'Projetos' },
   { href: '/', key: 'Home', text: '' },
   { href: '/client/architects', key: 'Architects', text: 'Arquitetos' },
   { href: '/client/profile?id=1', key: 'Profile', text: 'Perfil' },
