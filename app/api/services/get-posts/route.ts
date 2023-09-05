@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { handleGet } from './[get]'
 import { handlePost } from './[post]'
 import { handleDelete } from './[delete]'
+import { handlePut } from './[put]'
 
 async function handler(req: Request) {
   const url = new URL(req.url)
@@ -30,8 +31,9 @@ async function handler(req: Request) {
       return handlePost(req, authorId, formData)
     }
 
+    // TODO: Implement put api
     case 'PUT':
-      return handleGet(req)
+      return handlePut()
 
     case 'DELETE': {
       const postId: string | null = url.searchParams.get('postId')
