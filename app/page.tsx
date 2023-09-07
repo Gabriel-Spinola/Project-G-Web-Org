@@ -9,7 +9,7 @@
 
 // LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
-import PostItem from '@/components/posts/Post'
+import PostItem from '@/components/posts/PostItem'
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { Post, User } from '@prisma/client'
 
