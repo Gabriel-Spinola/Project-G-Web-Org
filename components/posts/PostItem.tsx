@@ -11,7 +11,7 @@
 
 import React from 'react'
 import Image from 'next/image'
-import './style.scss'
+import './PotItem.module.scss'
 import { Post } from '@prisma/client'
 
 interface Params {
