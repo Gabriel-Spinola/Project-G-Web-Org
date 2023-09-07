@@ -16,7 +16,7 @@ async function tryGetPostsFromUser(
   try {
     const data = await prisma.post.findMany({
       take: take ?? 3,
-      where: { authorId },
+      where: { authorId, published: true },
       include: {
         author: { select: { name: true, title: true } },
       },
