@@ -13,9 +13,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, User, html, text, validateCredentials } from './actions'
+import { Credentials, User, validateCredentials } from './actions'
 import { sign } from 'jsonwebtoken'
-import { createTransport } from 'nodemailer'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
@@ -118,7 +117,7 @@ export const AuthOptions: NextAuthOptions = {
     async signIn({ user, account, email }) {
       console.log(user.email)
       const userExists = await prisma.user.findUnique({
-        where: { email: user.email },
+        where: { email: user.email || '' },
       })
 
       if (userExists) {
