@@ -7,8 +7,6 @@
  * @license i.e. MIT
  */
 
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-
 // In order to pass a parameter into the URL use the `/pageName/idValue` syntax
 
 export const NavLinks = [
