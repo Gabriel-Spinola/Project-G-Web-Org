@@ -30,14 +30,14 @@ async function handler(req: Request): Promise<unknown | null> {
       return handleGet(req, take, id)
     }
 
-    // TODO: Test Post kkkkk
+    // REVIEW: (may using json bodies instead of formData works better)
     case 'POST': {
       const formData = await req.formData()
 
       return handlePost(id, formData)
     }
 
-    // TODO: Implement put api (maybe patch?)
+    // REVIEW: (maybe patch?)
     case 'PUT': {
       const bodyData: Partial<Post> = await req.json()
 
