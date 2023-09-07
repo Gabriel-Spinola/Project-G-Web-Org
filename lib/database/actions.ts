@@ -103,3 +103,7 @@ export async function tryGetUserDataFromApi(
     }
   }
 }
+
+export async function tryGetPosst() {
+  return null
+}

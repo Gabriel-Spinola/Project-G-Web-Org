@@ -9,7 +9,7 @@
 export const API_ENDPOINTS = {
   services: {
     findUnique: 'api/services/find-unique/',
-    findMany: 'api/services/',
+    findMany: 'api/services/find-many/',
   },
   handlers: {
     createProject: 'api/handlers/CreateProjectFormHandler/',
