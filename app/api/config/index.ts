@@ -7,4 +7,7 @@
  * @license i.e. MIT
  */
 
+import { NextResponse } from 'next/server'
+
 export type PrismaData = Record<string, any> | null
+export type APIErrorResponse = NextResponse<{ data: { error: string } }>

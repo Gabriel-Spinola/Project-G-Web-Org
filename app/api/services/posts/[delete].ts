@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
-export async function handleDelete(postId: string) {
+export async function handleDelete(postId: string): Promise<NextResponse> {
   try {
     const data = await prisma.post.delete({ where: { id: postId } })
 
@@ -10,7 +10,9 @@ export async function handleDelete(postId: string) {
     }
 
     return NextResponse.json(
-      { data: 'FAILED:SERVICES/DELETE-POST::failed to get posts (API level)' },
+      {
+        data: 'FAILED:SERVICES/DELETE-POST::failed to delete posts (API level)',
+      },
       { status: 400 },
     )
   } catch (e: unknown) {
@@ -19,6 +21,11 @@ export async function handleDelete(postId: string) {
       e,
     )
 
-    return null
+    return NextResponse.json(
+      {
+        data: 'FAILED:SERVICES/DELETE-POST::failed to delete posts (API level)',
+      },
+      { status: 400 },
+    )
   }
 }

@@ -9,8 +9,6 @@
 
 import { compare } from 'bcryptjs'
 import { prisma } from '../database/prisma'
-import { createTransport } from 'nodemailer'
-import { Theme } from 'next-auth'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
 export type User = Record<string, any>
