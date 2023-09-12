@@ -16,7 +16,10 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'http://localhost:3000',
+            value:
+              process.env.NODE_ENV === 'production'
+                ? 'https://projectg2.vercel.app'
+                : 'http://localhost:3000',
           }, // replace this your actual origin
           {
             key: 'Access-Control-Allow-Methods',
