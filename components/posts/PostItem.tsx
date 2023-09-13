@@ -11,30 +11,31 @@
 
 import React from 'react'
 import Image from 'next/image'
-import './PotItem.module.scss'
+import styles from '@/components/posts/PostItem.module.scss'
 import { Post } from '@prisma/client'
 
 interface Params {
-  post: Post
+  post: Post | null
 }
 
 export default function PostItem({ post }: Params) {
   return (
-    <div className="postado mb-8">
-      <div className="autor">
-        <div className="foto overflow-x-auto"></div>
+    <div className={styles.postado}>
+      <div className={styles.autor}>
+        <div className={styles.foto}>
+          <div className="overflow-x-auto"></div>
+        </div>
+
         <a
-          className="nome-localizacao"
+          className={styles.nomeLocalizacao}
           href="/client/profile/cllgwtgbt0000w42oblx1qp27"
         >
-          <h1 className="nome">Oscar Alho</h1>
-          <small className="localizacao text-darker-white">
-            Belo Horizonte, MG
-          </small>
+          <h1 className={styles.nome}>Oscar Alho</h1>
+          <small className={styles.localizacao}>Belo Horizonte, MG</small>
         </a>
       </div>
 
-      <article className="p-1">
+      <article className={styles.p1}>
         Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
         nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
         doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
@@ -43,7 +44,7 @@ export default function PostItem({ post }: Params) {
 
       <div className="image-container">
         <Image
-          className="one-img "
+          className={styles.oneImg}
           src="/test-img/imgtest.jpg"
           alt="imgtest"
           width={776}

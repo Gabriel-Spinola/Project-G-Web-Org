@@ -18,21 +18,17 @@ type PostAuthorData = Pick<User, 'name' | 'image' | 'graduations'>
 
 export type FullPost = Post & PostAuthorData
 
-async function getPosts(): Promise<Array<FullPost> | null> {
-  return null
-}
-
 export default async function Home() {
-  const posts: Post[] | null = await getPosts()
-
   return (
     <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
       <div className="feed flex flex-col items-center">
         <PostSubmitFragment></PostSubmitFragment>
-
-        {posts?.map((post: Post, index: number) => (
+        {/* {posts?.map((post: Post, index: number) => (
           <PostItem post={post} key={index} />
-        ))}
+        ))} */}
+
+        <PostItem post={null} />
+        <PostItem post={null} />
       </div>
     </main>
   )
