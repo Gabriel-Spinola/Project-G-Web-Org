@@ -40,6 +40,8 @@ export default function PostItem({ post }: Params) {
         nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
         doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
         vero. Odio quia quos illo.
+        Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
+        nam. Error reiciendis voluptates.
       </article>
 
       <div className="image-container">
