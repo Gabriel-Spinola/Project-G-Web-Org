@@ -7,8 +7,9 @@
  * @license i.e. MIT
  */
  
-@import '/app/styles/variables.module.scss';
-.postado{
+@import '../../app/styles/variables.module.scss';
+
+.postado {
     display: flex;
     flex-direction: column;
     width: 809px;
@@ -18,27 +19,32 @@
     padding: 16px;
     color: $darker-gray;
     margin-bottom: 32px;
-    .autor{
+
+    .autor {
         display: flex;
         flex-direction: row;
         font-family: $nav-font;
         margin-bottom: 16px;
-        .foto{
+
+        .foto {
             background-color: lightblue;
             border-radius: 50%;
             height: 48px;
             width: 48px;
         }
-        .nome-localizacao{
+
+        .nomeLocalizacao {
             display: flex;
             flex-direction: column;
             margin-left: 16px;
-            .nome{
+
+            .nome {
                 color: $light-primary;
                 font-size: 24px;
                 font-weight: 400;
             }
-            .localizacao{
+            
+            .localizacao {
                 color: #000;
                 font-size: 16px;
                 font-weight: 400px;
@@ -46,7 +52,8 @@
             }
         }
     }
-    .p-1{
+
+    .p1 {
         color: #242424;
         font-family: $nav-font;
         font-size: 16px;
@@ -54,7 +61,8 @@
         font-weight: 300;
         line-height: 30px;
     }
-    .one-img{
+
+    .oneImg {
         border-radius: 8px;
         width: 100%;
     }
