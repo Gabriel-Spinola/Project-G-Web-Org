@@ -18,7 +18,9 @@
     border-radius: 12px;
     padding: 16px;
     color: $darker-gray;
-    margin-bottom: 32px;
+    margin-bottom: 32px;   
+    -webkit-box-shadow: 0 0 8px #00000065;
+            box-shadow: 0 0 8px #00000065;
 
     .autor {
         display: flex;
@@ -43,7 +45,7 @@
                 font-size: 24px;
                 font-weight: 400;
             }
-            
+
             .localizacao {
                 color: #000;
                 font-size: 16px;
