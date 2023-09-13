@@ -13,6 +13,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/utils/Providers'
 import React from 'react'
+import stylingVariables from '@/app/styles/variables.module.scss'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,11 +32,17 @@ export default async function RootLayout({
       <head>
         <meta charSet="UTF-8" />
       </head>
+
       <body className={inter.className}>
         <React.StrictMode>
           <Providers>
             <Navbar />
-            {children}
+            <main
+              className="flex min-h-screen justify-around flex-row pt-24"
+              style={{ backgroundColor: stylingVariables.darkerWhite }}
+            >
+              {children}
+            </main>
           </Providers>
         </React.StrictMode>
       </body>

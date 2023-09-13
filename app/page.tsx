@@ -20,16 +20,14 @@ export type FullPost = Post & PostAuthorData
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
-      <div className="feed flex flex-col items-center">
-        <PostSubmitFragment></PostSubmitFragment>
-        {/* {posts?.map((post: Post, index: number) => (
-          <PostItem post={post} key={index} />
-        ))} */}
+    <div className="feed flex flex-col items-center">
+      <PostSubmitFragment></PostSubmitFragment>
+      {/* {posts?.map((post: Post, index: number) => (
+        <PostItem post={post} key={index} />
+      ))} */}
 
-        <PostItem post={null} />
-        <PostItem post={null} />
-      </div>
-    </main>
+      <PostItem post={null} />
+      <PostItem post={null} />
+    </div>
   )
 }
