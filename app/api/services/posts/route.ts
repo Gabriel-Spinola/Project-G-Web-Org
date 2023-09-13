@@ -4,7 +4,9 @@ import { handlePost } from './[post]'
 import { handleDelete } from './[delete]'
 import { handlePut } from './[put]'
 import { Post } from '@prisma/client'
+import { handlePatch } from './[patch]'
 
+// TODO: add middleware to security
 // REVIEW Read please
 // export const runtime = 'edge';
 
@@ -73,9 +75,16 @@ async function handler(req: Request): Promise<unknown | null> {
       return handlePost(id, formData)
     }
 
-    // REVIEW: (maybe patch?)
-    case 'PUT': {
+    // TODO: (accept partial posts)
+    case 'PATCH': {
       const bodyData: Partial<Post> = await req.json()
+
+      return handlePatch(id, bodyData)
+    }
+
+    // TODO: (accept only full posts)
+    case 'PUT': {
+      const bodyData: Post = await req.json()
 
       return handlePut(id, bodyData)
     }
