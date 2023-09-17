@@ -7,7 +7,7 @@ import { get, set } from 'lodash'
 // NOTE: Not Scalable
 
 // allowed requests per minute
-const rateLimit = 12
+const rateLimit = 40
 const rateLimiter = {}
 
 function rateLimiterMiddleware(ip: string) {
