@@ -6,7 +6,6 @@ async function tryCreatePost(newPost: Partial<Post>): Promise<Post | null> {
   try {
     const data = await prisma.post.create({
       data: {
-        title: newPost.title as string,
         content: newPost.content as string,
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
@@ -48,7 +47,6 @@ export async function handlePost(
 
   if (checkRequiredFields(title, content, [projectImgName])) {
     const data = await tryCreatePost({
-      title,
       content,
       published: true,
       createdAt: new Date(Date.now()),

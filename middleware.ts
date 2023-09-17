@@ -26,19 +26,23 @@ function rateLimiterMiddleware(ip: string) {
 }
 
 async function middleware(req: NextRequestWithAuth) {
-  const ip =
-    req.headers.get('x-forwarded-for') || req.ip || req.headers.get('x-real-ip')
+  if (req.nextUrl.pathname.startsWith('/api/')) {
+    const ip =
+      req.headers.get('x-forwarded-for') ||
+      req.ip ||
+      req.headers.get('x-real-ip')
 
-  const passedRateLimiter = rateLimiterMiddleware(ip as string)
+    const passedRateLimiter = rateLimiterMiddleware(ip as string)
 
-  if (!passedRateLimiter) {
-    return NextResponse.json(
-      { message: 'Rate limit exceeded' },
-      { status: 429 },
-    )
+    if (!passedRateLimiter) {
+      return NextResponse.json(
+        { message: 'Rate limit exceeded' },
+        { status: 429 },
+      )
+    }
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/session')) {
+  if (req.nextUrl.pathname.startsWith('/admin/')) {
     return withAuth(req)
   }
 }

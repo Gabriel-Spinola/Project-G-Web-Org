@@ -6,42 +6,12 @@ import { handlePut } from './[put]'
 import { Post } from '@prisma/client'
 import { handlePatch } from './[patch]'
 
-// TODO: add middleware to security
-// REVIEW Read please
-// export const runtime = 'edge';
-
-// const ratelimiter = new Ratelimit({
-//   redis: Redis.fromEnv(),
-//   limiter: Ratelimit.slidingWindow(5, '10 s'),
-//   analytics: true,
-// });
-
-// export async function GET(req: NextRequest) {
-//   // rate limit requests
-//   const ip = req.headers.get('x-forwarded-for');
-//   const { success } = await ratelimiter.limit(ip || 'api');
-//   if (!success) {
-//     return new NextResponse('Rate limit exceeded', { status: 429 });
-//   }
-
-//   const res = await fetch('https://9f5hpdsv6r8j.statuspage.io/api/v2/summary.json', {
-//     next: { revalidate: 60 }, // Revalidate every 60 seconds
-//     // headers: {
-//     //   'Content-Type': 'application/json',
-//     //   'API-Key': process.env.DATA_API_KEY,
-//     // },
-//   });
-
-//   const data = await res.json();
-
-//   return NextResponse.json({ data });
-// }
-
 /**
  *
- * @param req Requst
- * @param id work as authorID for: GET, POST
- * @returns API Response
+ * @param req Request
+ * @param id works as authorID for: GET, POST, and, as postID for: PUT, DELETE
+ * @returns API Response. Into `{ data: "response data" }` format
+ *
  */
 async function handler(req: Request): Promise<unknown | null> {
   const url = new URL(req.url)
@@ -95,7 +65,7 @@ async function handler(req: Request): Promise<unknown | null> {
 
     default:
       return NextResponse.json(
-        { data: { status: 'fail', message: 'Invalid method' } },
+        { data: { message: 'Invalid method' } },
         { status: 401 },
       )
   }

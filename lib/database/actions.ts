@@ -7,13 +7,23 @@
  * @license i.e. MIT
  */
 
-/** !SECTION
+/** SECTION
  * Helpful functions for database actions
  */
 
-import { GetServerSideProps } from 'next'
 import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
+
+export type ResponseError = {
+  data: {
+    errorType: string
+    error: unknown
+  }
+}
+
+export type ResponseData = {
+  data: unknown
+}
 
 /**
  * @param rowID A String storing the unique cuid of the row
@@ -36,17 +46,6 @@ export async function getRowDataFromAPI(
       cache: 'no-cache',
     },
   )
-}
-
-export type ResponseError = {
-  data: {
-    errorType: string
-    error: unknown
-  }
-}
-
-export type ResponseData = {
-  data: any
 }
 
 /**
@@ -102,8 +101,4 @@ export async function tryGetUserDataFromApi(
       },
     }
   }
-}
-
-export async function tryGetPosst() {
-  return null
 }
