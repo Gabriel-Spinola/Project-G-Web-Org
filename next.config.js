@@ -5,7 +5,7 @@ const nextConfig = {
     serverActions: true,
   },
   env: {
-    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SECRET_KEY,
+    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
   },
   async headers() {
     return [
