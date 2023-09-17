@@ -1,11 +1,10 @@
+// @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+// @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
 
-  // @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
-  // @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
- 
-  // @project Project G
-  // @version main-release
-  // @license i.e. MIT
- 
+// @project Project G
+// @version main-release
+// @license i.e. MIT
+
 // LINK: learn more about it in the docs: https://pris.ly/d/prisma-schema
 // LINK: Next-Auth Adapters: https://authjs.dev/reference/adapters#models
 
@@ -29,34 +28,51 @@ datasource db {
 }
 
 model Post {
-  id        String    @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  String?
-  comments  Comment[]
+  id          String    @id @default(cuid())
+  content     String?
+  images      String?
+  published   Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  author      User?     @relation("Author", fields: [authorId], references: [id])
+  authorId    String?
+  contributor User[]    @relation("Contributor")
+  comments    Comment[]
+  pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
+  pinnedById  String?   @unique
+  likedBy     User?     @relation("LikedPost", fields: [likedById], references: [id])
+  likedById   String?   @unique
 }
 
 model Project {
   id          String    @id @default(cuid())
   title       String
   description String?
-  images      String[]  
+  images      String[]
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt
-  author      User?     @relation(fields: [authorId], references: [id])
+
+  author      User?     @relation("Author", fields: [authorId], references: [id])
   authorId    String?
+  contributor User[]    @relation("Contributor")
   comments    Comment[]
+  pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id])
+  pinnedById  String?   @unique
+  likedBy     User?     @relation("LikedProject", fields: [likedById], references: [id])
+  likedById   String?   @unique
 }
 
 model Comment {
   id        String   @id @default(cuid())
   content   String
-  createdAt DateTime @default(now())
+
   isEdited  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
   post      Post?    @relation(fields: [postId], references: [id])
@@ -102,27 +118,40 @@ enum Positions {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  password      String?
-  title         String?
-  description   String?
-  location      String?
-  graduations   String[]
-  position      Positions @default(DefaultUser)
-  linkedinUrl   String?
-  siteUrl       String?
-  contactPhone  Int?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  projects      Project[]
-  comments      Comment[]
+  id                  String    @id @default(cuid())
+  name                String?
+  password            String?
+
+  title               String?
+  description         String?
+  location            String?
+  graduations         String[]
+  
+  linkedinUrl         String?
+  CREA                String
+  siteUrl             String?
+  contactPhone        Int?
+  profilePic          String?
+
+  email               String?   @unique
+  emailVerified       DateTime?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now()) @updatedAt
+
+  position            Positions @default(DefaultUser)
+  
+  accounts            Account[]
+  sessions            Session[]
+  authoredPosts       Post[]    @relation("Author")
+  contributedPosts    Post[]    @relation("Contributor")
+  authoredProjects    Project[] @relation("Author")
+  contributedProjects Project[] @relation("Contributor")
+  pinnedPosts         Post[]    @relation("PinnedPost")
+  likedPosts          Post[]    @relation("LikedPost")
+  pinnedProjects      Project[] @relation("PinnedProject")
+  likedProjects       Project[] @relation("LikedProject")
+  comments            Comment[]
 
   @@map(name: "users")
 }
