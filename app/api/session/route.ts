@@ -13,7 +13,7 @@ import { NextResponse } from 'next/server'
 
 type SessionResponse = NextResponse<Record<string, any>>
 
-export async function GET(req: Request): Promise<SessionResponse> {
+export async function GET(): Promise<SessionResponse> {
   const session = await getServerSession(AuthOptions)
 
   if (!session) {
