@@ -28,16 +28,16 @@ datasource db {
 }
 
 model Post {
-  id          String    @id @default(cuid())
-  content     String?
-  images      String?
-  published   Boolean   @default(false)
+  id        String  @id @default(cuid())
+  content   String?
+  images    String?
+  published Boolean @default(false)
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   author      User?     @relation("Author", fields: [authorId], references: [id])
-  authorId    String?
+  authorId    String?   @unique
   contributor User[]    @relation("Contributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
@@ -47,13 +47,13 @@ model Post {
 }
 
 model Project {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   description String?
   images      String[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   author      User?     @relation("Author", fields: [authorId], references: [id])
   authorId    String?
@@ -63,22 +63,6 @@ model Project {
   pinnedById  String?   @unique
   likedBy     User?     @relation("LikedProject", fields: [likedById], references: [id])
   likedById   String?   @unique
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-
-  isEdited  Boolean  @default(false)
-
-  createdAt DateTime @default(now())
-
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
-  post      Post?    @relation(fields: [postId], references: [id])
-  postId    String?
-  project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?
 }
 
 model Account {
@@ -118,43 +102,50 @@ enum Positions {
 }
 
 model User {
-  id                  String    @id @default(cuid())
-  name                String?
-  password            String?
+  id       String  @id @default(cuid())
+  name     String?
+  password String?
 
-  title               String?
-  description         String?
-  location            String?
-  graduations         String[]
-  
-  linkedinUrl         String?
-  CREA                String
-  siteUrl             String?
-  contactPhone        Int?
-  profilePic          String?
+  title       String?
+  description String?
+  location    String?
+  graduations String[]
 
-  email               String?   @unique
-  emailVerified       DateTime?
+  linkedinUrl  String?
+  CREA         String? @unique
+  siteUrl      String?
+  contactPhone Int? 
+  profilePic   String?
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @default(now()) @updatedAt
+  email         String?   @unique
+  emailVerified DateTime?
 
-  position            Positions @default(DefaultUser)
-  
-  accounts            Account[]
-  sessions            Session[]
-  authoredPosts       Post[]    @relation("Author")
-  contributedPosts    Post[]    @relation("Contributor")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  position Positions @default(DefaultUser)
+
+  accounts Account[]
+  sessions Session[]
+
+  authoredPosts    Post[] @relation("Author")
+  contributedPosts Post[] @relation("Contributor")
+  likedPosts       Post[] @relation("LikedPost")
+  pinnedPosts      Post[] @relation("PinnedPost")
+
   authoredProjects    Project[] @relation("Author")
   contributedProjects Project[] @relation("Contributor")
-  pinnedPosts         Post[]    @relation("PinnedPost")
-  likedPosts          Post[]    @relation("LikedPost")
   pinnedProjects      Project[] @relation("PinnedProject")
   likedProjects       Project[] @relation("LikedProject")
-  comments            Comment[]
+
+  authoredComments Comment[] @relation("Author")
+  likedComments    Comment[] @relation("LikedComment")
 
   @@map(name: "users")
 }
+
+// TODO:
+// model UserSensitive {}
 
 model VerificationToken {
   id         Int      @id @default(autoincrement())
@@ -163,4 +154,25 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Comment {
+  id BigInt @id @default(autoincrement())
+
+  isEdited Boolean
+  content  String
+
+  createdAt DateTime @default(now())
+
+  likedBy   User?   @relation("LikedComment", fields: [likedById], references: [id])
+  likedById String? @unique
+
+  author   User   @relation("Author", fields: [authorId], references: [id])
+  authorId String @unique
+
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String? @unique
+
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String? @unique
 }
