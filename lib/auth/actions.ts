@@ -1,10 +1,32 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 import { compare } from 'bcryptjs'
 import { prisma } from '../database/prisma'
-import { createTransport } from 'nodemailer'
-import { Theme } from 'next-auth'
+import { sign } from 'jsonwebtoken'
+import { User } from '@prisma/client'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
-export type User = Record<string, any>
+
+export function generateJwtToken(user: User): string {
+  const payload = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+  }
+
+  const token = sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: 30 * 24 * 60 * 60,
+  })
+
+  return token
+}
 
 /**
  *
@@ -23,8 +45,7 @@ export async function validateCredentials(
       where: { email: credentials.email },
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (!user || !(await compare(credentials.password, user.password!))) {
+    if (!user || !(await compare(credentials.password, user.password || ''))) {
       console.log(`GETTING NULL ${credentials.password} != ${user?.password}`)
 
       return null

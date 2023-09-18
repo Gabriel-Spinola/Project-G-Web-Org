@@ -1,9 +1,29 @@
-/** !SECTION
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
+/** SECTION
  * Helpful functions for database actions
  */
 
 import { API_ENDPOINTS, API_URL } from '../apiConfig'
 import { ModelsApiCode } from './table.types'
+
+export type ResponseError = {
+  data: {
+    errorType: string
+    error: unknown
+  }
+}
+
+export type ResponseData = {
+  data: unknown
+}
 
 /**
  * @param rowID A String storing the unique cuid of the row
@@ -14,14 +34,16 @@ import { ModelsApiCode } from './table.types'
 export async function getRowDataFromAPI(
   rowID: string,
   modelCode: ModelsApiCode,
+  signal: AbortSignal | null | undefined = null,
 ): Promise<Response> {
   return await fetch(
     `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-cache',
     },
   )
 }
@@ -33,29 +55,23 @@ export async function getRowDataFromAPI(
 export async function createNewProjectApiCall(
   id: string | null,
   formData: FormData,
-): Promise<Response> {
-  // If id is true then we're updating the project
-  const url = id
-    ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
-    : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
+): Promise<Response | null> {
+  try {
+    // If id is true then we're updating the project
+    const url = id
+      ? `${API_URL}${API_ENDPOINTS.handlers.createProject}?id=${id}`
+      : `${API_URL}${API_ENDPOINTS.handlers.createProject}`
 
-  // 'Put': Database updating
-  // 'Post: Database inserting
-  return await fetch(url, {
-    method: id ? 'PUT' : 'POST',
-    body: formData,
-  })
-}
-
-export type ResponseError = {
-  data: {
-    errorType: string
-    error: unknown
+    // 'Put': Database updating
+    // 'Post: Database inserting
+    return await fetch(url, {
+      method: id ? 'PUT' : 'POST',
+      body: formData,
+      cache: 'no-cache',
+    })
+  } catch (error: unknown) {
+    return null
   }
-}
-
-export type ResponseData = {
-  data: any
 }
 
 export async function tryGetUserDataFromApi(

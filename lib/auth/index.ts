@@ -1,29 +1,24 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, User, html, text, validateCredentials } from './actions'
-import { sign } from 'jsonwebtoken'
-import { createTransport } from 'nodemailer'
+import { Credentials, generateJwtToken, validateCredentials } from './actions'
+import { User } from '@prisma/client'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
 */
-
-function generateJwtToken(user: User): string {
-  const payload = {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-  }
-
-  const token = sign(payload, process.env.JWT_SECRET as string, {
-    expiresIn: 30 * 24 * 60 * 60,
-  })
-  return token
-}
 
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
@@ -49,7 +44,7 @@ export const AuthOptions: NextAuthOptions = {
         const user: User | null = await validateCredentials(credentials)
 
         if (!user) {
-          console.log('uai')
+          console.warn('AUTH_OPTIONS::Authorize: invalid user')
 
           return null
         }
@@ -106,10 +101,10 @@ export const AuthOptions: NextAuthOptions = {
 
       return token
     },
-    async signIn({ user, account, email }) {
+    async signIn({ user }) {
       console.log(user.email)
       const userExists = await prisma.user.findUnique({
-        where: { email: user.email },
+        where: { email: user.email || '' },
       })
 
       if (userExists) {

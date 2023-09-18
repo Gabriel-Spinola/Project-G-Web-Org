@@ -1,9 +1,18 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 'use client'
 
 import React, { useState, Fragment } from 'react'
 
-import Modal from '@/components/Posts/poster/Modal'
-import '@/components/posts/poster/style.scss'
+import Modal from './Modal'
+import './PostSubmitFragment.module.scss'
 
 export default function PostSubmitFragment() {
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -11,7 +20,7 @@ export default function PostSubmitFragment() {
   return (
     <Fragment>
       <button
-        className="poster-button w-[809px] h-[64px] bg-medium-gray text-darker-white text-xl text-left rounded-[8px] pl-8 hover:text-medium-primary mt-8 mb-8"
+        className="poster-button w-[48vw] h-[88px] bg-medium-gray text-darker-white text-xl text-left rounded-[8px] pl-8 hover:text-medium-primary mt-8 mb-8"
         onClick={() => setShowModal(true)}
       >
         Faça uma publicação

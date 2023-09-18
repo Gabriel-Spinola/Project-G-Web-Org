@@ -1,18 +1,50 @@
-// Without a defined Matcher, applies next auth to the entire project
-export { default } from 'next-auth/middleware'
+import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
+import { NextRequest, NextResponse } from 'next/server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+import { get, set } from 'lodash'
 
-/** 
-If you need to protect single or multiple pages, or API routes, you can export a config object with a matcher key. The matcher is an array that can contain the routes you want to protect. In the code below, we added "/((?!register|api|login).*)" to the matcher array. This ensures that any route other than those for the register, login, and api directories will be protected.
+// NOTE: Not Scalable
 
-src/middleware.ts
+// allowed requests per minute
+const rateLimit = 40
+const rateLimiter = {}
 
-```ts
-export const config = {
-  // matcher: ["/profile"],
-  matcher: ["/((?!register|api|login).*)"],
+function rateLimiterMiddleware(ip: string) {
+  const now = Date.now()
+  const windowStart = now - 60 * 1000 // 1 minute ago
+
+  const requestTimestamps: number[] = get(rateLimiter, ip, []).filter(
+    (timestamp) => timestamp > windowStart,
+  )
+
+  requestTimestamps.push(now)
+
+  set(rateLimiter, ip, requestTimestamps)
+
+  return requestTimestamps.length <= rateLimit
 }
-```
-*/
 
-// Applies next-auth only to specific pages
-export const config = { matcher: ['/auth/session/'] }
+async function middleware(req: NextRequestWithAuth) {
+  if (req.nextUrl.pathname.startsWith('/api/')) {
+    const ip =
+      req.headers.get('x-forwarded-for') ||
+      req.ip ||
+      req.headers.get('x-real-ip')
+
+    const passedRateLimiter = rateLimiterMiddleware(ip as string)
+
+    if (!passedRateLimiter) {
+      return NextResponse.json(
+        { message: 'Rate limit exceeded' },
+        { status: 429 },
+      )
+    }
+  }
+
+  if (req.nextUrl.pathname.startsWith('/admin/')) {
+    return withAuth(req)
+  }
+}
+
+export default middleware

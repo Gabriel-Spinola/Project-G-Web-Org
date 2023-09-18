@@ -1,4 +1,15 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 'use server'
+
+// LINK: https://www.google.com/u/1/recaptcha/admin/site/670403759
 
 import axios from 'axios'
 
