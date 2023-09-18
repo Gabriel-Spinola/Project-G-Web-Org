@@ -1,3 +1,12 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 // TODO: add data sanitization and stop exposing data into response bitch
 
 import { prisma } from '@/lib/database/prisma'

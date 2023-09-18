@@ -1,33 +1,51 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 'use client'
 
 import React from 'react'
 import Image from 'next/image'
-import '@/components/Posts/style.scss'
+import styles from '@/components/posts/PostItem.module.scss'
+import { Post } from '@prisma/client'
 
-export default function PostItem() {
+interface Params {
+  post: Post | null
+}
+
+export default function PostItem({ post }: Params) {
   return (
-    <div className="postado mb-8">
-      <div className="autor">
-        <div className="foto overflow-x-auto"></div>
+    <div className={styles.postado}>
+      <div className={styles.autor}>
+        <div className={styles.foto}>
+          <div className="overflow-x-auto"></div>
+        </div>
+
         <a
-          className="nome-localizacao"
+          className={styles.nomeLocalizacao}
           href="/client/profile/cllgwtgbt0000w42oblx1qp27"
         >
-          <span className="nome">Oscar Alho</span>
-          <span className="localizacao text-darker-white">
-            Belo Horizonte, MG
-          </span>
+          <h1 className={styles.nome}>H. Romeu. P</h1>
+          <small className={styles.localizacao}>Belo Horizonte, MG</small>
         </a>
       </div>
-      <span className="p-1">
+
+      <article className={styles.p1}>
         Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
         nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
         doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
-        vero. Odio quia quos illo.
-      </span>
+        vero. Odio quia quos illo. Exercitationem maxime officia cupiditate
+        accusantium eveniet maxime ut nam. Error reiciendis voluptates.
+      </article>
+
       <div className="image-container">
         <Image
-          className="one-img "
+          className={styles.oneImg}
           src="/test-img/imgtest.jpg"
           alt="imgtest"
           width={776}
@@ -35,7 +53,8 @@ export default function PostItem() {
           priority
         />
       </div>
-      <div className="reacts w-[100%] h-[48px] mt-4 flex flex-row">
+
+      <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <div className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -50,6 +69,7 @@ export default function PostItem() {
           </svg>
           <span>125</span>
         </div>
+
         <div className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"

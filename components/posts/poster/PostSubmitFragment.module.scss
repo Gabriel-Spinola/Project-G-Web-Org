@@ -6,15 +6,9 @@
  * @version main-release
  * @license i.e. MIT
  */
+ 
+@import '/app/styles/variables.module.scss';
 
-import RegisterForm from '@/components/register/form'
-import React from 'react'
-
-export default function Register() {
-  return (
-    <main>
-      <h1>Register</h1>
-      <RegisterForm />
-    </main>
-  )
+.poster-button{
+    font-family: $nav-font;
 }

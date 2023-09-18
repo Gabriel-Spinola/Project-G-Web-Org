@@ -37,3 +37,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+setnode.bat
+.env
+.env
