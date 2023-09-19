@@ -24,7 +24,7 @@ async function Navbar() {
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="/">
             <Image
               src="/assets/logo.png"
               alt="logo-image"

@@ -5,16 +5,39 @@
  */
 
 import UserPosts from '@/components/profile/UserPosts'
-import { Box } from '@chakra-ui/react'
 import DisplayUserInfo from '@/components/profile/ProfileCard'
 // import { AuthOptions } from '@/lib/auth'
 // import { tryGetUserDataFromApi } from '@/lib/database/actions'
 // import { Session, User, getServerSession } from 'next-auth'
 import React from 'react'
+import UserInfo from '@/components/profile/UserInfo';
 
 export default async function Profile(): Promise<React.JSX.Element> {
-  const variables: { name: string } = { name: 'Lucas Vinicius' }
+  const variables: { name: string; title: string } = {
+    name: 'Lucas Vinicius',
+    title: 'Estudante de Arquitetura',
+  };
   return (
-    <DisplayUserInfo/>
-  )
+    <>
+      <DisplayUserInfo
+        name={variables.name}
+        title={variables.title}
+        isOwner={true}
+        user={undefined}
+      />
+      <div className="flex justify-around">
+        <div className="flex row gap-[64px]">
+          <UserPosts />
+          <UserInfo
+            followers={0}
+            location={''}
+            graduation={''}
+            from={''}
+            work={''}
+            phone={''}
+          />
+        </div>
+      </div>
+    </>
+  );
 }

@@ -11,6 +11,10 @@
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -29,11 +33,18 @@ import {
   Avatar,
   Box,
   Image,
+  IconButton,
 } from '@chakra-ui/react'
+
+import { HamburgerIcon, EditIcon } from '@chakra-ui/icons'
+
 import { User } from 'next-auth'
 import React, { FormEvent } from 'react'
 
 interface Params {
+  // name and location params are temporary, please delete them later
+  name: string
+  title: string
   user: User
   isOwner: boolean
 }
@@ -49,6 +60,9 @@ const defaultEditFormValues = {
 }
 
 export default function DisplayUserInfo({
+  // name and location params are temporary, please delete them later
+  name,
+  title,
   user,
   isOwner,
 }: Params): React.JSX.Element {
@@ -130,10 +144,12 @@ export default function DisplayUserInfo({
       >
         <div id="info-name-wrapper" className="flex flex-col">
           <h1 className="text-4xl text-medium-primary font-bold">
-            {user?.name || ''}
+            {/* variable name is temporary! Replace it to user?.name */}
+            {name || ''}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
-            {user?.title || ''}
+            {/* variable name is temporary! Replace it to user?.name */}
+            {title || ''}
           </h2>
         </div>
         <div id="graduations" className="h-[48px]">
@@ -154,7 +170,24 @@ export default function DisplayUserInfo({
       <h1>phone: {user?.contactPhone}</h1>
       <h1>email: {user?.email}</h1> */}
 
-      {isOwner && <Button onClick={onOpen}>Editar Usuário</Button>}
+      {isOwner && (
+        <div className="absolute top-[104px] left-[97%]">
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+              className="bg-pure-white absolute hover:bg-darker-white"
+            />
+            <MenuList>
+              <MenuItem icon={<EditIcon color="white" />} onClick={onOpen}>
+                Editar Perfil
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </div>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

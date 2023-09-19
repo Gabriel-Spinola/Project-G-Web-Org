@@ -1,9 +1,12 @@
-import PostItem from '../Posts/Post'
+import PostSubmitFragment from '../Posts/poster/PostSubmitFragment'
+import PostItem from '../posts/PostItem'
 
 export default function UserPosts() {
   return (
-    <section id="PostWrapper" className="flex bg-black w-[50%] h-[600px]">
-      <PostItem />
+    <section id="PostWrapper" className="flex flex-col">
+      <PostSubmitFragment />
+      <PostItem post={null} />
+      <PostItem post={null} />
     </section>
   )
 }
