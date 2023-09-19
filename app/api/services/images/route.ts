@@ -9,22 +9,23 @@ async function handler(req: Request): Promise<unknown | null> {
   )
 
   try {
-    const { data } = await supabase.storage
+    const { data, error } = await supabase.storage
       .from('Vampeta-Images')
-      .getPublicUrl('profilePic/123/456.png')
+      .download('Tela.png')
 
     if (error) {
       throw error
     }
 
-    // const url = URL.createObjectURL(data)
+    const url = URL.createObjectURL(data)
+    const p = supabase.storage.from('Vampeta-Images').getPublicUrl(url)
 
     return NextResponse.json(
-      { data: 'worked ' + data.signedUrl },
+      { data: 'worked ' + p.data.publicUrl },
       { status: 200 },
     )
   } catch (e: unknown) {
-    return NextResponse.json({ data: 'erroro' + e }, { status: 200 })
+    return NextResponse.json({ data: 'erroro' + e }, { status: 300 })
   }
 }
 
