@@ -1,2 +1,6 @@
+async function checkFileExists(bucketName: string, filePath: string) {
+  // const {data, error} = await
+}
+
 const getProfilePicURL = (ownerId: string, imageId: string): string =>
-  `profilePic/${ownerId}/${imageId}.png`
+  `profile-pic/${ownerId}/${imageId}.png`
