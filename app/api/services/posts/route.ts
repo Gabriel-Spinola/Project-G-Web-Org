@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { handleGet } from './[get]'
-import { handlePost } from './[post]'
-import { handleDelete } from './[delete]'
-import { handlePut } from './[put]'
+import { handleGet } from './_get'
+import { handlePost } from './_post'
+import { handleDelete } from './_delete'
+import { handlePut } from './_put'
 import { Post } from '@prisma/client'
-import { handlePatch } from './[patch]'
+import { handlePatch } from './_patch'
 
 /**
  *
