@@ -2,8 +2,8 @@ import { prisma } from '@/lib/database/prisma'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-async function tryUpdatePost(
-  newPost: Post,
+async function tryUpsertPost(
+  newPost: Partial<Post>,
   postId: string,
 ): Promise<Post | null> {
   try {
@@ -24,11 +24,11 @@ async function tryUpdatePost(
   }
 }
 
-export async function handlePut(
+export async function handlePatch(
   postId: string,
-  newPost: Post,
+  newPost: Partial<Post>,
 ): Promise<NextResponse> {
-  const data = await tryUpdatePost(newPost, postId)
+  const data = await tryUpsertPost(newPost, postId)
 
   return NextResponse.json(data)
 }
