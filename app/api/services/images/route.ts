@@ -3,38 +3,33 @@ import { SUPABASE_PRIVATE_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import { getFileIfExistsInStorage } from '../_utils'
+import { handleGet } from './_get'
 
 async function handler(req: Request): Promise<unknown | null> {
-  const { data, error } = await getFileIfExistsInStorage(
-    SUPABASE_PRIVATE_BUCKET_NAME,
-    'Tela.png',
-  )
+  const url = new URL(req.url)
 
-  if (error) {
-    console.log('failed')
+  switch (req.method) {
+    case 'GET': {
+      const { fileName, folderPath } = {
+        fileName: url.searchParams.get('fileName')?.toString(),
+        folderPath: url.searchParams.get('folderPath')?.toString(),
+      }
 
-    return
-  }
+      if (!fileName) {
+        return NextResponse.json(
+          { data: "FileName can't be null" },
+          { status: 400 },
+        )
+      }
 
-  console.log(`worked ${data?.at(0)?.name}`)
-  try {
-    const { data, error } = await supabase.storage
-      .from('Vampeta-Images')
-      .download('Tela.png')
-
-    if (error) {
-      throw error
+      return handleGet(fileName, folderPath ?? '')
     }
 
-    const url = URL.createObjectURL(data)
-    const p = supabase.storage.from('Vampeta-Images').getPublicUrl(url)
-
-    return NextResponse.json(
-      { data: 'worked ' + p.data.publicUrl },
-      { status: 200 },
-    )
-  } catch (e: unknown) {
-    return NextResponse.json({ data: 'erroro' + e }, { status: 300 })
+    default:
+      return NextResponse.json(
+        { data: 'request failed method not allowed' },
+        { status: 401 },
+      )
   }
 }
 
