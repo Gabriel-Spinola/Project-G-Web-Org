@@ -11,13 +11,14 @@ import { NextResponse } from 'next/server'
 
 type StorageResponse = { path: string } | null
 
+// TODO: ADD UUID
 async function storeImages(
   authorId: string,
   images: File,
 ): Promise<StorageResponse> {
   const { data, error } = await supabase.storage
     .from(SUPABASE_PUBLIC_BUCKET_NAME)
-    .upload(getPostUrl(authorId, images.name), images, {
+    .upload(`posts/${authorId}/${images.name}`, images, {
       cacheControl: '3600',
       upsert: false,
     })
@@ -46,10 +47,12 @@ async function tryCreatePost(
       }
     }
 
+    console.log(imagePath?.path)
+
     const userData = await prisma.post.create({
       data: {
         content: newPost.content as string,
-        images: [imagePath?.path ?? 'null'],
+        images: ['bro im text'],
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
         authorId: newPost.authorId as string,
