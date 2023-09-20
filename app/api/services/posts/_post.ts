@@ -9,13 +9,47 @@ import { Post } from '@prisma/client'
 import { random } from 'lodash'
 import { NextResponse } from 'next/server'
 
+type StorageResponse = { path: string } | null
+
+async function storeImages(
+  authorId: string,
+  images: File,
+): Promise<StorageResponse> {
+  const { data, error } = await supabase.storage
+    .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    .upload(getPostUrl(authorId, images.name), images, {
+      cacheControl: '3600',
+      upsert: false,
+    })
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
 // TODO: RECEIVE IMAGE
-async function tryCreatePost(newPost: Partial<Post>): Promise<Post | null> {
+async function tryCreatePost(
+  newPost: Partial<Post>,
+  img: File | null,
+  authorId: string,
+): Promise<Post | null> {
+  let imagePath: StorageResponse = null
+
   try {
-    const data = await prisma.post.create({
+    if (img) {
+      imagePath = await storeImages(authorId, img)
+
+      if (!imagePath) {
+        throw new Error('failed to upload image')
+      }
+    }
+
+    const userData = await prisma.post.create({
       data: {
         content: newPost.content as string,
-        images: newPost.images as string[],
+        images: [imagePath?.path ?? 'null'],
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
         authorId: newPost.authorId as string,
@@ -23,11 +57,7 @@ async function tryCreatePost(newPost: Partial<Post>): Promise<Post | null> {
       },
     })
 
-    supabase.storage
-      .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(getPostUrl(data.id, '00'))
-
-    return data
+    return userData
   } catch (e: unknown) {
     console.error(
       'SERVICES/CREATE-POSTS::failed to create post (database level): ',
@@ -55,19 +85,20 @@ export async function handlePost(
   const content = formData.get('content')?.toString()
 
   const projectImgFile = formData.get('image')
-  const projectImgName =
-    projectImgFile instanceof File ? projectImgFile.name : 'noImage'
-  const imgUrl = getProfilePicURL(authorId, '0')
+  const projectImg = projectImgFile instanceof File ? projectImgFile : null
 
-  if (checkRequiredFields(title, content, [imgUrl])) {
-    const data = await tryCreatePost({
-      content,
-      published: true,
-      createdAt: new Date(Date.now()),
-      images: [imgUrl],
+  if (checkRequiredFields(title, content, [projectImg?.name ?? ''])) {
+    const data = await tryCreatePost(
+      {
+        content,
+        published: true,
+        createdAt: new Date(Date.now()),
+        authorId,
+        updatedAt: new Date(Date.now()),
+      },
+      projectImg,
       authorId,
-      updatedAt: new Date(Date.now()),
-    })
+    )
 
     if (data) {
       return NextResponse.json({ data }, { status: 200 })
