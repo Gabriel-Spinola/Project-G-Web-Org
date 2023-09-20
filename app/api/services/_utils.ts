@@ -11,20 +11,20 @@ interface CustomFileObject {
   metadata: Record<string, unknown>
 }
 
-type CustomError = string
+type ErrorMessage = string
 
 export async function getFileIfExistsInStorage(
   bucketName: string,
   filePath: string,
-  folderPath = '',
+  folderPath: string,
 ): Promise<
   | {
-      data: CustomFileObject[]
+      data: CustomFileObject
       error: null
     }
   | {
       data: null
-      error: CustomError
+      error: ErrorMessage
     }
 > {
   const { data, error } = await supabase.storage
@@ -37,9 +37,9 @@ export async function getFileIfExistsInStorage(
     return { data: null, error: error.message }
   }
 
-  const files = data.filter((item) => item.name === filePath)
+  const files = data.filter((item) => item.name === filePath).at(0)
 
-  return files.length > 0
+  return files !== undefined
     ? { data: files, error: null }
     : { data: null, error: 'File does not exists' }
 }
