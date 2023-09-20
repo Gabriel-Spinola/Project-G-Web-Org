@@ -1,13 +1,22 @@
 import { SUPABASE_STORAGE_URL } from '@/lib/apiConfig'
+import { SUPABASE_PRIVATE_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { getFileIfExistsInStorage } from '../_utils'
 
 async function handler(req: Request): Promise<unknown | null> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+  const { data, error } = await getFileIfExistsInStorage(
+    SUPABASE_PRIVATE_BUCKET_NAME,
+    'Tela.png',
   )
 
+  if (error) {
+    console.log('failed')
+
+    return
+  }
+
+  console.log(`worked ${data?.at(0)?.name}`)
   try {
     const { data, error } = await supabase.storage
       .from('Vampeta-Images')
@@ -29,4 +38,4 @@ async function handler(req: Request): Promise<unknown | null> {
   }
 }
 
-export { handler as POST, handler as PUT }
+export { handler as POST, handler as PUT, handler as GET }
