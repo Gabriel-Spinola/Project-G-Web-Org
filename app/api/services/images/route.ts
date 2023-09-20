@@ -1,8 +1,4 @@
-import { SUPABASE_STORAGE_URL } from '@/lib/apiConfig'
-import { SUPABASE_PRIVATE_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
-import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { getFileIfExistsInStorage } from '../_utils'
 import { handleGet } from './_get'
 
 async function handler(req: Request): Promise<unknown | null> {
