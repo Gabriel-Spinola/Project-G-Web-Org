@@ -7,3 +7,13 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
 )
+
+export const getProfilePicURL = (ownerId: string, imageId: string): string =>
+  supabase.storage
+    .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    .getPublicUrl(`profile-pic/${ownerId}/${imageId}.png`).data.publicUrl
+
+export const getPostUrl = (postId: string, imageId: string): string =>
+  supabase.storage
+    .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    .getPublicUrl(`posts/${postId}/${imageId}.png`).data.publicUrl
