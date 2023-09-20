@@ -1,18 +1,31 @@
 import { prisma } from '@/lib/database/prisma'
+import {
+  SUPABASE_PUBLIC_BUCKET_NAME,
+  getPostUrl,
+  getProfilePicURL,
+  supabase,
+} from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
+import { random } from 'lodash'
 import { NextResponse } from 'next/server'
 
+// TODO: RECEIVE IMAGE
 async function tryCreatePost(newPost: Partial<Post>): Promise<Post | null> {
   try {
     const data = await prisma.post.create({
       data: {
         content: newPost.content as string,
+        images: newPost.images as string[],
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
         authorId: newPost.authorId as string,
         updatedAt: newPost.updatedAt as Date,
       },
     })
+
+    supabase.storage
+      .from(SUPABASE_PUBLIC_BUCKET_NAME)
+      .upload(getPostUrl(data.id, '00'))
 
     return data
   } catch (e: unknown) {
@@ -44,12 +57,14 @@ export async function handlePost(
   const projectImgFile = formData.get('image')
   const projectImgName =
     projectImgFile instanceof File ? projectImgFile.name : 'noImage'
+  const imgUrl = getProfilePicURL(authorId, '0')
 
-  if (checkRequiredFields(title, content, [projectImgName])) {
+  if (checkRequiredFields(title, content, [imgUrl])) {
     const data = await tryCreatePost({
       content,
       published: true,
       createdAt: new Date(Date.now()),
+      images: [imgUrl],
       authorId,
       updatedAt: new Date(Date.now()),
     })

@@ -43,6 +43,3 @@ export async function getFileIfExistsInStorage(
     ? { data: files, error: null }
     : { data: null, error: 'File does not exists' }
 }
-
-const getProfilePicURL = (ownerId: string, imageId: string): string =>
-  `profile-pic/${ownerId}/${imageId}.png`
