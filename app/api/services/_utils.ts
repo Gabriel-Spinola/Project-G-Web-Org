@@ -1,4 +1,4 @@
-import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
+import { supabase } from '@/lib/storage/supabase'
 
 interface CustomFileObject {
   name: string
