@@ -75,7 +75,7 @@ async function tryCreatePost(
 function checkRequiredFields(
   title: string | null | undefined,
   content: string | null | undefined,
-  images: string[] | null | undefined,
+  images: string | null | undefined,
 ): boolean {
   return !!(title && content && images)
 }
@@ -90,7 +90,7 @@ export async function handlePost(
   const projectImgFile = formData.get('image')
   const projectImg = projectImgFile instanceof File ? projectImgFile : null
 
-  if (checkRequiredFields(title, content, [projectImg?.name ?? ''])) {
+  if (checkRequiredFields(title, content, 'aa')) {
     const data = await tryCreatePost(
       {
         content,

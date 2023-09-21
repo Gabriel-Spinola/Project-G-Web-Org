@@ -8,6 +8,7 @@
  */
 export const API_ENDPOINTS = {
   services: {
+    posts: 'api/services/posts/',
     findUnique: 'api/services/find-unique/',
     findMany: 'api/services/find-many/',
   },
