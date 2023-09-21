@@ -36,7 +36,8 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 
-import { HamburgerIcon, EditIcon } from '@chakra-ui/icons'
+import { EditIcon } from '@chakra-ui/icons'
+import { BsFillGearFill } from 'react-icons/bs'
 
 import { User } from 'next-auth'
 import React, { FormEvent } from 'react'
@@ -124,7 +125,7 @@ export default function DisplayUserInfo({
   return (
     <section
       id="Wrapper"
-      className="flex h-[208px] min-w-full items-center gap-[32px] py-0 px-[64px]"
+      className="flex h-[208px] min-w-full max-w-full items-center gap-[32px] py-0 px-[64px]"
     >
       <Box
         className="absolute w-[100%] h-[208px] overflow-visible ml-[-64px] z-99"
@@ -152,14 +153,6 @@ export default function DisplayUserInfo({
             {title || ''}
           </h2>
         </div>
-        <div id="graduations" className="h-[48px]">
-          <Image
-            boxSize="48px"
-            objectFit={'cover'}
-            src="https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Harvard_shield_wreath.svg/1200px-Harvard_shield_wreath.svg.png"
-            alt="Harvard"
-          />
-        </div>
       </div>
 
       {/* <h1>{user?.name}</h1>
@@ -171,14 +164,15 @@ export default function DisplayUserInfo({
       <h1>email: {user?.email}</h1> */}
 
       {isOwner && (
-        <div className="absolute top-[104px] left-[97%]">
+        <div className="max-w-[10%]">
           <Menu>
             <MenuButton
               as={IconButton}
               aria-label="Options"
-              icon={<HamburgerIcon />}
+              icon={<BsFillGearFill />}
               variant="outline"
-              className="bg-pure-white absolute hover:bg-darker-white"
+              color={'white'}
+              className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
             />
             <MenuList>
               <MenuItem icon={<EditIcon color="white" />} onClick={onOpen}>
@@ -193,32 +187,26 @@ export default function DisplayUserInfo({
         <ModalOverlay />
 
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Modifique seu perfil</ModalHeader>
           <ModalCloseButton />
 
           <form onSubmit={handleFormSubmission}>
             <ModalBody>
-              <FormLabel>Name</FormLabel>
-              <Editable defaultValue={user?.name || ''}>
-                <EditablePreview />
-                <EditableInput type="text" name="name" id="name" />
-              </Editable>
-
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Título</FormLabel>
               <Editable
                 defaultValue={user?.title || defaultEditFormValues.title}
                 isPreviewFocusable={true}
               >
                 <EditablePreview />
                 <EditableInput
-                  display="insira um titolu"
+                  display="insira um título"
                   type="text"
                   name="title"
                   id="title"
                 />
               </Editable>
 
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Descrição</FormLabel>
               <Editable
                 defaultValue={
                   user?.description || defaultEditFormValues.description
