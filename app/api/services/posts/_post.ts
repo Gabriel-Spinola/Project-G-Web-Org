@@ -81,7 +81,6 @@ export async function handlePost(
   const title = formData.get('title')?.toString()
   const content = formData.get('content')?.toString()
 
-  console.log('IMAAAAAAAGE')
   const projectImgFile = formData.get('image') as File | null
 
   if (checkRequiredFields(title, content, 'aa')) {
