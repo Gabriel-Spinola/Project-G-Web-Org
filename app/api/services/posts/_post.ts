@@ -1,12 +1,6 @@
 import { prisma } from '@/lib/database/prisma'
-import {
-  SUPABASE_PUBLIC_BUCKET_NAME,
-  getPostUrl,
-  getProfilePicURL,
-  supabase,
-} from '@/lib/storage/supabase'
+import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
-import { random } from 'lodash'
 import { NextResponse } from 'next/server'
 
 type StorageResponse = { path: string } | null
@@ -87,8 +81,8 @@ export async function handlePost(
   const title = formData.get('title')?.toString()
   const content = formData.get('content')?.toString()
 
-  const projectImgFile = formData.get('image')
-  const projectImg = projectImgFile instanceof File ? projectImgFile : null
+  console.log('IMAAAAAAAGE')
+  const projectImgFile = formData.get('image') as File | null
 
   if (checkRequiredFields(title, content, 'aa')) {
     const data = await tryCreatePost(
@@ -99,7 +93,7 @@ export async function handlePost(
         authorId,
         updatedAt: new Date(Date.now()),
       },
-      projectImg,
+      projectImgFile,
       authorId,
     )
 
