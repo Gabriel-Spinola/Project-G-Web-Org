@@ -1,3 +1,12 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 @import "./variables.module.scss";
 
 #header-nav {
@@ -5,8 +14,8 @@
     li {
       margin: 0 88px;
       padding: 8px 16px;
-      a{
-        div{
+      a {
+        div {
           background-color: $darker-white;
           height: 2px;
           width: 16px;
@@ -16,8 +25,8 @@
     li:hover {
       color: $medium-primary;
       cursor: pointer;
-      a{
-        div{
+      a {
+        div {
           background-color: $medium-primary;
           height: 2px;
           width: 100%;
@@ -29,16 +38,55 @@
   }
 }
 
-@media (max-width:1580px){
-  #header-nav{
-    li{
-      margin: 0 16px;
+//navbar responsiveness till 1580px
+@media (max-width: 1580px) {
+  #header-nav {
+    ul {
+      li {
+        margin: 0 64px;
+      }
+    }
+  }
+}
+//navbar responsiveness till 1320px
+@media (max-width: 1320px) {
+  #header-nav {
+    ul {
+      li {
+        margin: 0 48px;
+      }
+    }
+  }
+}
+//navbar responsiveness till 1160px
+@media (max-width: 1160px) {
+  #header-nav {
+    ul {
+      li {
+        margin: 0 32px;
+      }
+    }
+  }
+}
+//navbar responsiveness till 1080px
+@media (max-width: 1080px) {
+  #header-nav {
+    ul {
+      li {
+        margin: 0 16px;
+      }
     }
   }
 }
 
 @keyframes sub-expand {
-  0% {width: 16px;}
-  60% {width: 90%;}
-  100% {width: 100%;}
+  0% {
+    width: 16px;
+  }
+  60% {
+    width: 90%;
+  }
+  100% {
+    width: 100%;
+  }
 }

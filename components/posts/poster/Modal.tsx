@@ -36,7 +36,7 @@ const Modal = ({
 
   return (
     <div className=" fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-20">
-      <div className="w-[809px] h-[192px] flex flex-col mt-[-20%] z-10">
+      <div className="w-[40vw] h-[192px] flex flex-col mt-[-20%] z-10">
         <button
           className="text-medium-gray text-xl place-self-end"
           onClick={onClose}

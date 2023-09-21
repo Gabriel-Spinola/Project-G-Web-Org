@@ -6,11 +6,11 @@
  * @version main-release
  * @license i.e. MIT
  */
- 
-@import '/app/styles/variables.module.scss';
 
-.poster-button{
-    font-family: $nav-font;
-    -webkit-box-shadow: 0 0 8px #00000065;
-    box-shadow: 0 0 8px #00000065;
-}
+**ProjectG Web Design Documentation**
+
+**Introduction**
+
+To Understand the mainly propouse of the design, we need first to understand the propouse of the Project G.
+
+Since we actually doesn't have a 

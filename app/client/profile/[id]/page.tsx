@@ -1,3 +1,12 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
 /** FIXME
  * - error TypeError: Cannot read properties of undefined (reading 'call')
     at __webpack_require__ (D:\Xampp\htdocs\Grffiti\projectg\.next\server\webpack-runtime.js:33:43)
@@ -10,13 +19,13 @@ import DisplayUserInfo from '@/components/profile/ProfileCard'
 // import { tryGetUserDataFromApi } from '@/lib/database/actions'
 // import { Session, User, getServerSession } from 'next-auth'
 import React from 'react'
-import UserInfo from '@/components/profile/UserInfo';
+import UserInfo from '@/components/profile/UserInfo'
 
 export default async function Profile(): Promise<React.JSX.Element> {
   const variables: { name: string; title: string } = {
     name: 'Lucas Vinicius',
     title: 'Estudante de Arquitetura',
-  };
+  }
   return (
     <>
       <DisplayUserInfo
@@ -25,19 +34,23 @@ export default async function Profile(): Promise<React.JSX.Element> {
         isOwner={true}
         user={undefined}
       />
-      <div className="flex justify-around">
-        <div className="flex row gap-[64px]">
+      <div className="flex justify-around bg-darker-white">
+        <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
+          <div>
+            <UserInfo
+              followers={100000}
+              location={'Belo Horizonte'}
+              graduation={'UFMG'}
+              from={'Contagem'}
+              work={'Senai CTTI'}
+              phone={'+55 (31) 98865-4602'}
+              userPrisma={undefined}
+              description={'Estudo arquitetura por causa do minecraft.'}
+            />
+          </div>
           <UserPosts />
-          <UserInfo
-            followers={0}
-            location={''}
-            graduation={''}
-            from={''}
-            work={''}
-            phone={''}
-          />
         </div>
       </div>
     </>
-  );
+  )
 }
