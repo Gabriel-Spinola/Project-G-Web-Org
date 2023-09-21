@@ -141,7 +141,7 @@ export default function DisplayUserInfo({
       </div>
       <div
         id="profile-info-wrapper"
-        className="flex flex-row items-center justify-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
+        className="flex flex-row items-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
       >
         <div id="info-name-wrapper" className="flex flex-col">
           <h1 className="text-4xl text-medium-primary font-bold">

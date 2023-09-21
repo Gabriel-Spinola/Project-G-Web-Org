@@ -20,7 +20,7 @@ export default function PostSubmitFragment() {
   return (
     <Fragment>
       <button
-        className="poster-button w-[100%] lg:w-[40vw] h-[76px] bg-medium-gray text-darker-white text-xl text-left rounded-[8px] pl-8 hover:text-medium-primary mt-8 mb-8"
+        className="poster-button w-[100%] xl:w-[45vw] h-[76px] bg-medium-gray text-darker-white text-xl text-left rounded-[8px] pl-8 hover:text-medium-primary mt-8 mb-8"
         onClick={() => setShowModal(true)}
       >
         Faça uma publicação
