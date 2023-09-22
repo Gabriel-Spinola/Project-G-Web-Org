@@ -37,28 +37,15 @@ async function storeImages(
 }
 
 // TODO: RECEIVE IMAGE
-async function tryCreatePost(
+async function createPost(
   newPost: Partial<Post>,
-  images: FileBody[] | null,
-  authorId: string,
+  imagesPaths: string[] | null = null,
 ): Promise<Post | null> {
-  const storedImages: StorageResponse[] = []
-
   try {
-    if (images) {
-      for (const image of images) {
-        storedImages.push(await storeImages(authorId, image))
-      }
-
-      if (storedImages.length <= 0 || !storedImages) {
-        throw new Error('failed to upload image')
-      }
-    }
-
     const userData = await prisma.post.create({
       data: {
         content: newPost.content as string,
-        images: storedImages.map((image) => image?.path ?? '') ?? [],
+        images: imagesPaths ?? [],
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
         authorId: newPost.authorId as string,
@@ -90,26 +77,55 @@ export async function handlePost(
   authorId: string,
   req: Request,
 ): Promise<NextResponse> {
-  const formData = await req.formData()
-  const title = formData.get('title')?.toString()
-  const content = formData.get('content')?.toString()
+  try {
+    const formData = await req.formData()
 
-  const projectImgFile = formData.getAll('image') as FileBody[] | null
+    const title = formData.get('title')?.toString()
+    const content = formData.get('content')?.toString()
+    const postImages = formData.getAll('image') as FileBody[] | null
 
-  if (checkRequiredFields(title, content, 'aa')) {
-    const data = await tryCreatePost(
-      {
-        content,
-        published: true,
-        createdAt: new Date(Date.now()),
-        authorId,
-        updatedAt: new Date(Date.now()),
-      },
-      projectImgFile,
+    if (!checkRequiredFields(title, content, 'aa')) {
+      return NextResponse.json(
+        {
+          data: 'Failed to create post: missing or invalid request data',
+        },
+        { status: 400 },
+      )
+    }
+
+    const postData: Partial<Post> = {
+      content,
+      published: true,
+      createdAt: new Date(Date.now()),
       authorId,
-    )
+      updatedAt: new Date(Date.now()),
+    }
 
-    // const data = 'test'
+    let data: Post | null = null
+
+    if (postImages) {
+      const storedImages = await Promise.all(
+        postImages?.map((image) => storeImages(authorId, image)),
+      )
+
+      if (storedImages.some((image) => !image)) {
+        return NextResponse.json(
+          { data: 'Failed to upload one or more images' },
+          { status: 500 },
+        )
+      }
+
+      data = await createPost(
+        postData,
+        storedImages.map((image) => {
+          // NOTE - the image value is being checked above
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return image!.path
+        }) ?? null,
+      )
+    } else {
+      data = await createPost(postData)
+    }
 
     if (data) {
       return NextResponse.json({ data }, { status: 200 })
@@ -117,16 +133,12 @@ export async function handlePost(
 
     return NextResponse.json(
       {
-        data: 'FAILED:SERVICES/CREATE-POSTS::failed to create posts (API level): prisma response null',
+        data: 'Failed to create post: missing or invalid request data',
       },
       { status: 400 },
     )
+  } catch (error) {
+    console.error('Error handling post:', error)
+    return NextResponse.json({ data: 'Internal server error' }, { status: 500 })
   }
-
-  return NextResponse.json(
-    {
-      data: 'FAILED:SERVICES/CREATE-POSTS::failed to create post (API level): missing request data',
-    },
-    { status: 400 },
-  )
 }
