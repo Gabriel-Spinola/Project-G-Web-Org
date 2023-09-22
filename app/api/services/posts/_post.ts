@@ -1,14 +1,10 @@
 import { prisma } from '@/lib/database/prisma'
+import { FileBody, StorageResponse } from '@/lib/storage/storage'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
-import { assert } from 'console'
 import { NextResponse } from 'next/server'
 
-type StorageResponse = { path: string } | null
-type FileBody = Blob | File
-
-// TODO: ADD UUID
-async function storeImages(
+async function storeImage(
   authorId: string,
   images: FileBody,
 ): Promise<StorageResponse> {
@@ -101,7 +97,7 @@ export async function handlePost(
 
     if (postImages) {
       const storedImages = await Promise.all(
-        postImages?.map((image) => storeImages(authorId, image)),
+        postImages?.map((image) => storeImage(authorId, image)),
       )
 
       if (storedImages.some((image) => !image)) {

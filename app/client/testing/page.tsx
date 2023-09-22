@@ -1,7 +1,6 @@
 'use client'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { Image } from '@chakra-ui/next-js'
 import React, { ChangeEvent, useState } from 'react'
 
 interface PostFormState {
@@ -26,7 +25,7 @@ function toBase64(file: File): Promise<unknown> {
   })
 }
 
-export default function CreateProject() {
+export default function CreatePost() {
   const [form, setForm] = useState<PostFormState | null>({
     title: '',
     content: '',
