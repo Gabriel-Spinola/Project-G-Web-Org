@@ -68,11 +68,9 @@ export default function CreateProject() {
       const base64 = await toBase64(images as File)
       setBase64(base64 as string)
 
-      console.log(formData.get('image'))
-
       try {
         const response = await fetch(
-          `${API_URL}${API_ENDPOINTS.services.posts}?id=1`,
+          `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
           {
             method: 'POST',
             body: formData,
@@ -81,14 +79,14 @@ export default function CreateProject() {
 
         const { data } = await response.json()
 
-        if (response.ok) {
-          console.log('worked ' + JSON.stringify(data))
-
-          setImages(null)
-          setBase64(null)
+        if (!response.ok) {
+          throw new Error('response not ok' + JSON.stringify(data))
         }
 
-        throw new Error('response not ok' + JSON.stringify(data))
+        console.log('worked ' + JSON.stringify(data))
+
+        setImages(null)
+        setBase64(null)
       } catch (e: unknown) {
         console.error(e)
       }
@@ -97,7 +95,7 @@ export default function CreateProject() {
 
   return (
     <main>
-      <form method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form method="POST" onSubmit={handleSubmit}>
         <input
           type="text"
           name="title"

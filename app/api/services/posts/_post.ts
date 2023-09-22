@@ -1,52 +1,64 @@
 import { prisma } from '@/lib/database/prisma'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
+import { assert } from 'console'
 import { NextResponse } from 'next/server'
 
 type StorageResponse = { path: string } | null
+type FileBody = Blob | File
+
+// function b64toBlob(b64Data: string, contentType='', sliceSize=512): Blob {
+
+// }
 
 // TODO: ADD UUID
 async function storeImages(
   authorId: string,
-  images: File,
+  images: FileBody,
 ): Promise<StorageResponse> {
-  const { data, error } = await supabase.storage
-    .from(SUPABASE_PUBLIC_BUCKET_NAME)
-    .upload(`posts/${authorId}/${images.name}`, images, {
-      cacheControl: '3600',
-      upsert: false,
-    })
+  try {
+    // FIXME - failing at certain types of images
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_PUBLIC_BUCKET_NAME)
+      .upload(`posts/${authorId}/${images.name}`, images, {
+        cacheControl: '3600',
+        upsert: true, // NOTE - TEMP
+      })
 
-  if (error) {
-    throw error
+    if (error) {
+      throw error
+    }
+
+    return data
+  } catch (e: unknown) {
+    console.error('failed at image storage ' + e)
+    throw e
   }
-
-  return data
 }
 
 // TODO: RECEIVE IMAGE
 async function tryCreatePost(
   newPost: Partial<Post>,
-  img: File | null,
+  images: FileBody[] | null,
   authorId: string,
 ): Promise<Post | null> {
-  let imagePath: StorageResponse = null
+  const storedImages: StorageResponse[] = []
 
   try {
-    if (img) {
-      imagePath = await storeImages(authorId, img)
+    if (images) {
+      for (const image of images) {
+        storedImages.push(await storeImages(authorId, image))
+      }
 
-      if (!imagePath) {
+      if (storedImages.length <= 0 || !storedImages) {
         throw new Error('failed to upload image')
       }
     }
 
-    console.log(imagePath?.path)
-
     const userData = await prisma.post.create({
       data: {
         content: newPost.content as string,
-        images: ['bro im text'],
+        images: storedImages.map((image) => image?.path ?? '') ?? [],
         published: newPost.published as boolean,
         createdAt: newPost.createdAt as Date,
         authorId: newPost.authorId as string,
@@ -76,12 +88,13 @@ function checkRequiredFields(
 
 export async function handlePost(
   authorId: string,
-  formData: FormData,
+  req: Request,
 ): Promise<NextResponse> {
+  const formData = await req.formData()
   const title = formData.get('title')?.toString()
   const content = formData.get('content')?.toString()
 
-  const projectImgFile = formData.get('image') as File | null
+  const projectImgFile = formData.getAll('image') as FileBody[] | null
 
   if (checkRequiredFields(title, content, 'aa')) {
     const data = await tryCreatePost(
@@ -95,6 +108,8 @@ export async function handlePost(
       projectImgFile,
       authorId,
     )
+
+    // const data = 'test'
 
     if (data) {
       return NextResponse.json({ data }, { status: 200 })
