@@ -7,10 +7,6 @@ import { NextResponse } from 'next/server'
 type StorageResponse = { path: string } | null
 type FileBody = Blob | File
 
-// function b64toBlob(b64Data: string, contentType='', sliceSize=512): Blob {
-
-// }
-
 // TODO: ADD UUID
 async function storeImages(
   authorId: string,
@@ -42,7 +38,7 @@ async function createPost(
   imagesPaths: string[] | null = null,
 ): Promise<Post | null> {
   try {
-    const userData = await prisma.post.create({
+    const postData: Post = await prisma.post.create({
       data: {
         content: newPost.content as string,
         images: imagesPaths ?? [],
@@ -53,7 +49,7 @@ async function createPost(
       },
     })
 
-    return userData
+    return postData
   } catch (e: unknown) {
     console.error(
       'SERVICES/CREATE-POSTS::failed to create post (database level): ',
@@ -139,6 +135,7 @@ export async function handlePost(
     )
   } catch (error) {
     console.error('Error handling post:', error)
+
     return NextResponse.json({ data: 'Internal server error' }, { status: 500 })
   }
 }
