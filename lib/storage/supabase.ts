@@ -13,7 +13,15 @@ export const getProfilePicURL = (ownerId: string, imageId: string): string =>
     .from(SUPABASE_PUBLIC_BUCKET_NAME)
     .getPublicUrl(`profile-pic/${ownerId}/${imageId}`).data.publicUrl
 
-export const getPostUrl = (postId: string, imageId: string): string =>
+export const getPostImageUrl = (postId: string, imageId: string): string =>
   supabase.storage
     .from(SUPABASE_PUBLIC_BUCKET_NAME)
     .getPublicUrl(`posts/${postId}/${imageId}`).data.publicUrl
+
+export const getProjectImageUrl = (
+  projectId: string,
+  imageId: string,
+): string =>
+  supabase.storage
+    .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    .getPublicUrl(`project/${projectId}/${imageId}`).data.publicUrl
