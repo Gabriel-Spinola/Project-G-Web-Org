@@ -40,9 +40,7 @@ async function handler(req: Request): Promise<unknown | null> {
 
     // REVIEW: (may using json bodies instead of formData works better)
     case 'POST': {
-      const formData = await req.formData()
-
-      return handlePost(id, formData)
+      return handlePost(id, req)
     }
 
     // TODO: (accept partial posts)

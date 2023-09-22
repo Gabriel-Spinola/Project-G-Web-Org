@@ -36,9 +36,9 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  author      User?     @relation("Author", fields: [authorId], references: [id])
-  authorId    String?   @unique
-  contributor User[]    @relation("Contributor")
+  author      User?     @relation("PostAuthor", fields: [authorId], references: [id])
+  authorId    String?   
+  contributor User[]    @relation("PostContributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
@@ -55,9 +55,9 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  author      User?     @relation("Author", fields: [authorId], references: [id])
+  author      User?     @relation("ProjectAuthor", fields: [authorId], references: [id])
   authorId    String?
-  contributor User[]    @relation("Contributor")
+  contributor User[]    @relation("ProjectContributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
@@ -128,17 +128,17 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  authoredPosts    Post[] @relation("Author")
-  contributedPosts Post[] @relation("Contributor")
+  authoredPosts    Post[] @relation("PostAuthor")
+  contributedPosts Post[] @relation("PostContributor")
   likedPosts       Post[] @relation("LikedPost")
   pinnedPosts      Post[] @relation("PinnedPost")
 
-  authoredProjects    Project[] @relation("Author")
-  contributedProjects Project[] @relation("Contributor")
+  authoredProjects    Project[] @relation("ProjectAuthor")
+  contributedProjects Project[] @relation("ProjectContributor")
   pinnedProjects      Project[] @relation("PinnedProject")
   likedProjects       Project[] @relation("LikedProject")
 
-  authoredComments Comment[] @relation("Author")
+  authoredComments Comment[] @relation("CommentAuthor")
   likedComments    Comment[] @relation("LikedComment")
 
   @@map(name: "users")
@@ -167,8 +167,8 @@ model Comment {
   likedBy   User?   @relation("LikedComment", fields: [likedById], references: [id])
   likedById String? @unique
 
-  author   User   @relation("Author", fields: [authorId], references: [id])
-  authorId String @unique
+  author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
+  authorId String
 
   post   Post?   @relation(fields: [postId], references: [id])
   postId String? @unique

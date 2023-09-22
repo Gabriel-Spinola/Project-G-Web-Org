@@ -8,10 +8,6 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
 )
 
-// export const generateProfilePicURL = (): string => {
-
-// }
-
 export const getProfilePicURL = (ownerId: string, imageId: string): string =>
   supabase.storage
     .from(SUPABASE_PUBLIC_BUCKET_NAME)
