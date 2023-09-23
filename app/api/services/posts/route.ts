@@ -35,15 +35,13 @@ async function handler(req: Request): Promise<unknown | null> {
     case 'GET': {
       const take: string | null = url.searchParams.get('take')
 
-      return handleGet(req, take, id)
+      return handleGet(take, id)
     }
 
-    // REVIEW: (may using json bodies instead of formData works better)
     case 'POST': {
       return handlePost(id, req)
     }
 
-    // TODO: (accept partial posts)
     case 'PATCH': {
       const bodyData: Partial<Post> = await req.json()
 
