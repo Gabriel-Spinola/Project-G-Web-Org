@@ -30,10 +30,10 @@ export async function handleDelete(postId: string): Promise<NextResponse> {
       },
       { status: 400 },
     )
-  } catch (e: unknown) {
+  } catch (error: unknown) {
     console.error(
       'SERVICES/DELETE-POST::failed to get posts (database level):',
-      e,
+      error,
     )
 
     return NextResponse.json(
