@@ -56,7 +56,6 @@ async function tryGetOnlyPosts(
 }
 
 export async function handleGet(
-  req: Request,
   take: string | null,
   authorId: string | null,
 ): Promise<NextResponse> {
