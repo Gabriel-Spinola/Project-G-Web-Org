@@ -25,17 +25,6 @@ export type ResponseData = {
   data: unknown
 }
 
-export type APIResponse = Promise<
-  | {
-      data: string
-      error: null
-    }
-  | {
-      data: null
-      error: string
-    }
->
-
 /**
  * @param rowID A String storing the unique cuid of the row
  * @param modelCode A unique string of numbers that store the model "id". i.e. "0": Project Model; "1": Post Model

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
+import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
@@ -7,8 +8,7 @@ async function tryUpdatePost(
   postId: string,
 ): Promise<Post | null> {
   try {
-    // TODO: Make upsert
-    const data = await prisma.post.upsert({
+    const postData = await prisma.post.upsert({
       where: { id: postId },
       update: newPost,
       create: {
@@ -16,10 +16,18 @@ async function tryUpdatePost(
         images: newPost.images,
         published: newPost.published,
         authorId: newPost.authorId,
+        updatedAt: Date.now().toString(),
       },
     })
 
-    return data
+    // TODO - Image stuff
+    // if (postData.images.length > 0) {
+    //   const { data, error } = supabase.storage
+    //     .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    //     .upload()
+    // }
+
+    return postData
   } catch (e: unknown) {
     console.warn(
       'SERVICES/CREATE-POSTS::failed to create post (database level): ',

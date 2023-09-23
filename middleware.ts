@@ -1,7 +1,5 @@
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
-import { NextRequest, NextResponse } from 'next/server'
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
+import { NextResponse } from 'next/server'
 import { get, set } from 'lodash'
 
 // NOTE: Not Scalable
@@ -27,6 +25,7 @@ function rateLimiterMiddleware(ip: string) {
 
 async function middleware(req: NextRequestWithAuth) {
   if (req.nextUrl.pathname.startsWith('/api/')) {
+    // SECTION - Rate Limiter
     const ip =
       req.headers.get('x-forwarded-for') ||
       req.ip ||
@@ -40,6 +39,9 @@ async function middleware(req: NextRequestWithAuth) {
         { status: 429 },
       )
     }
+
+    // SECTION - Storage management
+    // TODO: Storage Cleanup
   }
 
   if (req.nextUrl.pathname.startsWith('/admin/')) {

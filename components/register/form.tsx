@@ -8,7 +8,6 @@
  */
 
 'use client'
-// TODO: required captcha
 
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'

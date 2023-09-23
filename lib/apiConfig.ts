@@ -24,3 +24,14 @@ export const API_URL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
     : 'https://projectg2.vercel.app/'
+
+export type APIResponse = Promise<
+  | {
+      data: string
+      error: null
+    }
+  | {
+      data: null
+      error: string
+    }
+>
