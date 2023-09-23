@@ -28,7 +28,6 @@ async function storeImage(
   }
 }
 
-// TODO: RECEIVE IMAGE
 async function createPost(
   newPost: Partial<Post>,
   imagesPaths: string[] | null = null,
@@ -74,7 +73,7 @@ export async function handlePost(
 
     const title = formData.get('title')?.toString()
     const content = formData.get('content')?.toString()
-    const postImages = formData.getAll('image') as FileBody[] | null
+    const postImages = formData.getAll('images') as FileBody[] | null
 
     if (!checkRequiredFields(title, content, 'aa')) {
       return NextResponse.json(
@@ -97,7 +96,7 @@ export async function handlePost(
 
     if (postImages) {
       const storedImages = await Promise.all(
-        postImages?.map((image) => storeImage(authorId, image)),
+        postImages.map((image) => storeImage(authorId, image)),
       )
 
       if (storedImages.some((image) => !image)) {
@@ -113,7 +112,7 @@ export async function handlePost(
           // NOTE - the image value is being checked above
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           return image!.path
-        }) ?? null,
+        }),
       )
     } else {
       data = await createPost(postData)
