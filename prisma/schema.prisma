@@ -157,7 +157,7 @@ model VerificationToken {
 }
 
 model Comment {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   isEdited Boolean
   content  String

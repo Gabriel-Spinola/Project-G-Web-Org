@@ -73,6 +73,9 @@ export default function CreatePost() {
           {
             method: 'POST',
             body: formData,
+            headers: {
+        'Content-Type': 'application/json',
+      },
           },
         )
 
