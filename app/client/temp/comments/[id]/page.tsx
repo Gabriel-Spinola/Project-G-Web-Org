@@ -1,46 +1,15 @@
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { AuthOptions } from '@/lib/auth'
-import { prisma } from '@/lib/database/prisma'
 import { Comment } from '@prisma/client'
 import { Session, getServerSession } from 'next-auth'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import React from 'react'
-import { handleSubmitComment } from '../actions'
+import { getComments, handleSubmitComment } from '../actions'
 import CreateCommentButton from '../../components/CreateCommentButton'
 
 interface Params {
   params: { id: string }
 }
 
-export const commentsRefetchTag = 'fetch-comments'
-
-async function getComments(): Promise<Comment[] | null> {
-  try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.comments}`,
-      {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        next: { tags: [commentsRefetchTag] },
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error(JSON.stringify(await response.json()))
-    }
-
-    const { data }: { data: Comment[] } = await response.json()
-
-    return data
-  } catch (e: unknown) {
-    console.error(e)
-    return null
-  }
-}
-
+// TODO: Add likes with useOptimistic hook 
 export default async function CommentForm({ params }: Params) {
   const session: Session | null = await getServerSession(AuthOptions)
   const comments: Comment[] | null = await getComments()
