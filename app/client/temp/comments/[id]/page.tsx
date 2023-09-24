@@ -5,12 +5,14 @@ import { Comment } from '@prisma/client'
 import { Session, getServerSession } from 'next-auth'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import React from 'react'
+import { handleSubmitComment } from '../actions'
+import CreateCommentButton from '../../components/CreateCommentButton'
 
 interface Params {
   params: { id: string }
 }
 
-const commentsRefetchTag = 'fetch-comments'
+export const commentsRefetchTag = 'fetch-comments'
 
 async function getComments(): Promise<Comment[] | null> {
   try {
@@ -32,7 +34,6 @@ async function getComments(): Promise<Comment[] | null> {
 
     const { data }: { data: Comment[] } = await response.json()
 
-    console.log(JSON.stringify(data))
     return data
   } catch (e: unknown) {
     console.error(e)
@@ -44,38 +45,14 @@ export default async function CommentForm({ params }: Params) {
   const session: Session | null = await getServerSession(AuthOptions)
   const comments: Comment[] | null = await getComments()
 
-  async function handleSubmitComment(formData: FormData): Promise<void> {
-    'use server'
-
-    const content = formData.get('content')?.toString()
-    const selectedType = formData.get('type')?.toString()
-
-    if (!content || !session || !selectedType) return
-
-    try {
-      const data: Comment = await prisma.comment.create({
-        data: {
-          content,
-          authorId: session?.user.id,
-          postId: selectedType === 'posts' ? params.id : null,
-          projectId: selectedType === 'projects' ? params.id : null,
-          isEdited: false,
-          createdAt: new Date(Date.now()),
-        },
-      })
-
-      console.log('sucess' + JSON.stringify(data))
-      revalidateTag(commentsRefetchTag)
-    } catch (error: unknown) {
-      console.error(error)
-    }
-  }
-
   return (
     <main>
       {session?.user ? (
         <>
           <form method="POST" action={handleSubmitComment}>
+            <input type="hidden" name="author-id" value={session.user.id} />
+            <input type="hidden" name="target-id" value={params.id} />
+
             <select name="type" id="type">
               <option value="posts">Posts</option>
               <option value="projects">Projects</option>
@@ -91,7 +68,8 @@ export default async function CommentForm({ params }: Params) {
               rows={10}
               required
             ></textarea>
-            <input type="submit" value="submit" />
+
+            <CreateCommentButton />
           </form>
 
           <br />
