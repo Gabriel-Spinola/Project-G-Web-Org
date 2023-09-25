@@ -7,7 +7,7 @@ import { RiGraduationCapFill } from 'react-icons/ri'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
-import './profile.scss'
+import styles from '@/components/profile/profile.module.scss'
 
 interface Params {
   userPrisma: Partial<User>
@@ -23,7 +23,7 @@ interface Params {
 export default function UserInfo(params: Params) {
   return (
     <section
-      id="userInfo"
+      id={styles.userInfo}
       className="mt-8 w-80% lg:w-[312px] rounded-[12px] p-4 bg-pure-white text-darker-gray"
     >
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
