@@ -12,7 +12,7 @@ async function Navbar() {
     >
       <ul className="flex flex-row">
         <li>
-          <a href="../app/client/explore">
+          <a href="/client/explore">
             Explorar
             <div></div>
           </a>
