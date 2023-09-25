@@ -30,7 +30,7 @@ export default function PostItem({ post }: Params) {
           className={styles.nomeLocalizacao}
           href="/client/profile/cllgwtgbt0000w42oblx1qp27"
         >
-          <h1 className={styles.nome}>H. Romeu. P</h1>
+          <h1 className={styles.nome}>Lucas Vinicius</h1>
           <small className={styles.localizacao}>Belo Horizonte, MG</small>
         </a>
       </div>
