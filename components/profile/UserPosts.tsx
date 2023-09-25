@@ -1,4 +1,4 @@
-import PostSubmitFragment from '../Posts/poster/PostSubmitFragment'
+import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
 import PostItem from '../posts/PostItem'
 
 export default function UserPosts() {
