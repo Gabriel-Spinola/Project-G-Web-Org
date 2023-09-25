@@ -9,7 +9,7 @@ interface Params {
   params: { id: string }
 }
 
-// TODO: Add likes with useOptimistic hook 
+// TODO: Add likes with useOptimistic hook
 export default async function CommentForm({ params }: Params) {
   const session: Session | null = await getServerSession(AuthOptions)
   const comments: Comment[] | null = await getComments()

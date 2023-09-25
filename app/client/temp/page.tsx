@@ -69,13 +69,10 @@ export default function CreatePost() {
 
       try {
         const response = await fetch(
-          `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
+          `${API_URL}${API_ENDPOINTS.services.posts}?id=clmz40axx0000ecugc38z6mbb`,
           {
             method: 'POST',
             body: formData,
-            headers: {
-        'Content-Type': 'application/json',
-      },
           },
         )
 
@@ -118,9 +115,9 @@ export default function CreatePost() {
 
         <input
           type="file"
-          name="image"
+          name="images"
           accept="image/*"
-          id="image"
+          id="images"
           onChange={onImageChanges}
           multiple
         />
