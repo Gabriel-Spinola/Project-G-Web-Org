@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/database/prisma'
-import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 

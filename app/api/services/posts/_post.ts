@@ -4,6 +4,8 @@ import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
+// export const config = { runtime: 'experimental-edge' }
+
 async function storeImage(
   authorId: string,
   images: FileBody,

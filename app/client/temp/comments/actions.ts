@@ -2,9 +2,10 @@
 
 import { prisma } from '@/lib/database/prisma'
 import { revalidateTag } from 'next/cache'
-import { Comment } from '@prisma/client'
+import { Comment, Post, Prisma, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { commentsRefetchTag } from './contants'
+import { DefaultArgs } from '@prisma/client/runtime/library'
 
 export async function getComments(): Promise<Comment[] | null> {
   try {
@@ -42,7 +43,7 @@ export async function handleSubmitComment(formData: FormData): Promise<void> {
   if (!content || !authorId || !selectedType) return
 
   try {
-    const data: Comment = await prisma.comment.create({
+    const createComment: Comment = await prisma.comment.create({
       data: {
         content,
         authorId,
@@ -53,7 +54,25 @@ export async function handleSubmitComment(formData: FormData): Promise<void> {
       },
     })
 
-    console.log('sucess' + JSON.stringify(data))
+    const updateTarget: Post | Project =
+      selectedType === 'posts'
+        ? await prisma.post.update({
+            where: { id: targetId },
+            // NOTE - Push new comment into post
+            data: { comments: { connect: { id: createComment.id } } },
+          })
+        : await prisma.project.update({
+            where: { id: targetId },
+            // NOTE - Push new comment into post
+            data: { comments: { connect: { id: createComment.id } } },
+          })
+
+    console.log(
+      'sucess' +
+        JSON.stringify(createComment) +
+        '\n' +
+        JSON.stringify(updateTarget),
+    )
     revalidateTag(commentsRefetchTag)
   } catch (error: unknown) {
     console.error(error)

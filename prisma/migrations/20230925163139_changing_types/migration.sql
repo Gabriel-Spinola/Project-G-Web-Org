@@ -96,7 +96,7 @@ CREATE TABLE "VerificationToken" (
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "isEdited" BOOLEAN NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -109,13 +109,16 @@ CREATE TABLE "Comment" (
 );
 
 -- CreateTable
-CREATE TABLE "_Contributor" (
+CREATE TABLE "_PostContributor" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "Post_authorId_key" ON "Post"("authorId");
+-- CreateTable
+CREATE TABLE "_ProjectContributor" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Post_pinnedById_key" ON "Post"("pinnedById");
@@ -151,19 +154,22 @@ CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationTok
 CREATE UNIQUE INDEX "Comment_likedById_key" ON "Comment"("likedById");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Comment_authorId_key" ON "Comment"("authorId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Comment_postId_key" ON "Comment"("postId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Comment_projectId_key" ON "Comment"("projectId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_Contributor_AB_unique" ON "_Contributor"("A", "B");
+CREATE UNIQUE INDEX "_PostContributor_AB_unique" ON "_PostContributor"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_Contributor_B_index" ON "_Contributor"("B");
+CREATE INDEX "_PostContributor_B_index" ON "_PostContributor"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ProjectContributor_AB_unique" ON "_ProjectContributor"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ProjectContributor_B_index" ON "_ProjectContributor"("B");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -202,7 +208,13 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId"
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Contributor" ADD CONSTRAINT "_Contributor_A_fkey" FOREIGN KEY ("A") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PostContributor" ADD CONSTRAINT "_PostContributor_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Contributor" ADD CONSTRAINT "_Contributor_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PostContributor" ADD CONSTRAINT "_PostContributor_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ProjectContributor" ADD CONSTRAINT "_ProjectContributor_A_fkey" FOREIGN KEY ("A") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ProjectContributor" ADD CONSTRAINT "_ProjectContributor_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
