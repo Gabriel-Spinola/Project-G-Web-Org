@@ -25,6 +25,8 @@ function toBase64(file: File): Promise<unknown> {
   })
 }
 
+// LINK - https://youtu.be/9WvJDor5uvo?si=-J2R7Ev2XoxB6eWX
+// REVIEW - Consider usage of Zact
 export default function CreatePost() {
   const [form, setForm] = useState<PostFormState | null>({
     title: '',
