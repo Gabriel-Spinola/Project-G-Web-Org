@@ -6,6 +6,7 @@
  * @version main-release
  * @license i.e. MIT
  */
+
 import UpperSection from '@/components/Explore/UpperSection'
 
 export default async function ExplorePage() {

@@ -16,7 +16,7 @@ import Carousel from './components/carousel'
 export default function UpperSection() {
   return (
     <div className="h-[100vh] w-[100%] flex flex-col items-center">
-      <section className="absolute z-[1] items-center justify-around">
+      <section className="absolute z-[1] flex flex-col gap-32 my-36">
         <ExploreSearchBar />
         <Carousel />
       </section>
