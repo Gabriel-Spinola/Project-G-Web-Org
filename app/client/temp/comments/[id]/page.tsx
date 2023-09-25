@@ -4,6 +4,7 @@ import { Session, getServerSession } from 'next-auth'
 import React from 'react'
 import { getComments, handleSubmitComment } from '../actions'
 import CreateCommentButton from '../../components/CreateCommentButton'
+import LikeButton from '../../components/LikeButton'
 
 interface Params {
   params: { id: string }
@@ -50,7 +51,10 @@ export default async function CommentForm({ params }: Params) {
                 <h1>Comment {comment.id.toString()}</h1>
                 <span>author: {comment.authorId}</span> <br />
                 <span>Content: {comment.content}</span> <br />
-                <button>Likes</button> <br />
+                <LikeButton
+                  params={{ likes: 0, session, targetId: params.id }}
+                />{' '}
+                <br />
                 <br />
                 <br />
                 <hr />

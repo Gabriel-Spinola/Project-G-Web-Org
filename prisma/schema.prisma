@@ -36,6 +36,8 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  likes Like[] @relation("LikedPost")
+
   author      User?     @relation("PostAuthor", fields: [authorId], references: [id])
   authorId    String?
   contributor User[]    @relation("PostContributor")
@@ -51,6 +53,8 @@ model Project {
   title       String
   description String?
   images      String[]
+
+  likes Like[] @relation("LikedProject")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -108,6 +112,8 @@ model User {
 
   followers Follows[] @relation("Follower")
   following Follows[] @relation("Following")
+
+  likes Like[] @relation("LikedBy")
 
   title       String?
   description String?
@@ -177,6 +183,8 @@ model Comment {
 
   createdAt DateTime @default(now())
 
+  likes Like[] @relation("LikedComment")
+
   likedBy   User?   @relation("LikedComment", fields: [likedById], references: [id])
   likedById String? @unique
 
@@ -188,4 +196,20 @@ model Comment {
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String?  @unique
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  user   User   @relation("LikedBy", fields: [userId], references: [id])
+  userId String
+
+  post   Post?   @relation("LikedPost", fields: [postId], references: [id])
+  postId String?
+
+  project   Project? @relation("LikedProject", fields: [projectId], references: [id])
+  projectId String?
+
+  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id])
+  commentId Int?
 }

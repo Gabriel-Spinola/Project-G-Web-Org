@@ -1,9 +1,11 @@
+'use client'
+
 import React, { experimental_useOptimistic as useOptimistic } from 'react'
 import { increaseLikeCount } from '../comments/actions'
 import { Session } from 'next-auth'
 
 type Params = {
-  params: { likes: number; id: string; session: Session }
+  params: { likes: number; targetId: string; session: Session }
 }
 
 export default function LikeButton({ params }: Params) {
@@ -16,7 +18,7 @@ export default function LikeButton({ params }: Params) {
     <button
       onClick={async () => {
         addOptimisticLikes(1)
-        await increaseLikeCount('posts', params.session, params.id)
+        await increaseLikeCount('postId', params.session, params.targetId)
       }}
     >
       LikeButton {optimisticLikes}

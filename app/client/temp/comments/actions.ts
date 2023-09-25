@@ -73,16 +73,29 @@ export async function handleSubmitComment(formData: FormData): Promise<void> {
         '\n' +
         JSON.stringify(updateTarget),
     )
+
     revalidateTag(commentsRefetchTag)
   } catch (error: unknown) {
     console.error(error)
   }
 }
 
+// TODO - get likes directly from posts
 export async function increaseLikeCount(
-  selectedType: 'posts' | 'projects',
+  selectedType: 'postId' | 'projectId' | 'commentId',
   session: Session,
-  id: string,
+  targetId: string,
 ): Promise<void> {
-  return await Promise.resolve((): number => 1)
+  try {
+    const newLike = { likes: { create: { [selectedType]: targetId } } }
+
+    const updateUser = await prisma.user.update({
+      where: { id: session.user.id },
+      data: newLike,
+    })
+
+    console.log('success? ' + JSON.stringify(updateUser))
+  } catch (error: unknown) {
+    console.error('Like Failed')
+  }
 }
