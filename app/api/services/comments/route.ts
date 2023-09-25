@@ -4,8 +4,16 @@ import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
   if (req.method === 'GET') {
-    const data: Comment[] = await prisma.comment.findMany()
+    try {
+      const data: Comment[] = await prisma.comment.findMany()
 
-    return NextResponse.json({ data }, { status: 200 })
+      return NextResponse.json({ data }, { status: 200 })
+    } catch (e: unknown) {
+      console.error(e)
+
+      return NextResponse.json({ data: 'invalid' }, { status: 301 })
+    }
   }
+
+  return NextResponse.json({ data: 'invalid' }, { status: 301 })
 }

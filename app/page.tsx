@@ -1,6 +1,6 @@
 // LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
-import PostSubmitFragment from '@/components/Posts/poster/PostSubmitFragment'
+import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import PostItem from '@/components/posts/PostItem'
 
 export default async function Home() {

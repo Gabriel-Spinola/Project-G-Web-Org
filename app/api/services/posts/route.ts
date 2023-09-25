@@ -13,7 +13,7 @@ import { handlePatch } from './_patch'
  * @returns API Response. Into `{ data: "response data" }` format
  *
  */
-async function handler(req: Request): Promise<unknown | null> {
+async function handler(req: Request): Promise<NextResponse> {
   const url = new URL(req.url)
 
   /**

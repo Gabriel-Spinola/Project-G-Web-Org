@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { handleGet } from './_get'
 
-async function handler(req: Request): Promise<unknown | null> {
+async function handler(req: Request): Promise<NextResponse> {
   const url = new URL(req.url)
 
   switch (req.method) {
