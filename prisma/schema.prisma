@@ -44,8 +44,6 @@ model Post {
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
-  likedBy     User?     @relation("LikedPost", fields: [likedById], references: [id])
-  likedById   String?   @unique
 }
 
 model Project {
@@ -65,8 +63,6 @@ model Project {
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
-  likedBy     User?     @relation("LikedProject", fields: [likedById], references: [id])
-  likedById   String?   @unique
 }
 
 model Account {
@@ -139,16 +135,13 @@ model User {
 
   authoredPosts    Post[] @relation("PostAuthor")
   contributedPosts Post[] @relation("PostContributor")
-  likedPosts       Post[] @relation("LikedPost")
   pinnedPosts      Post[] @relation("PinnedPost")
 
   authoredProjects    Project[] @relation("ProjectAuthor")
   contributedProjects Project[] @relation("ProjectContributor")
   pinnedProjects      Project[] @relation("PinnedProject")
-  likedProjects       Project[] @relation("LikedProject")
 
   authoredComments Comment[] @relation("CommentAuthor")
-  likedComments    Comment[] @relation("LikedComment")
 
   @@map(name: "users")
 }
@@ -184,9 +177,6 @@ model Comment {
   createdAt DateTime @default(now())
 
   likes Like[] @relation("LikedComment")
-
-  likedBy   User?   @relation("LikedComment", fields: [likedById], references: [id])
-  likedById String? @unique
 
   author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
   authorId String
