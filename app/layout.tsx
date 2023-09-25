@@ -1,19 +1,9 @@
-/**
- * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
- * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
- *
- * @project Project G
- * @version main-release
- * @license i.e. MIT
- */
-
 import Navbar from '@/components/Navbar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/utils/Providers'
-import React from 'react'
-import stylingVariables from '@/app/styles/variables.module.scss'
+import './styles/main.scss'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,19 +22,11 @@ export default async function RootLayout({
       <head>
         <meta charSet="UTF-8" />
       </head>
-
       <body className={inter.className}>
-        <React.StrictMode>
-          <Providers>
-            <Navbar />
-            <main
-              className="flex min-h-screen justify-around flex-row pt-24"
-              style={{ backgroundColor: stylingVariables.darkerWhite }}
-            >
-              {children}
-            </main>
-          </Providers>
-        </React.StrictMode>
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   )

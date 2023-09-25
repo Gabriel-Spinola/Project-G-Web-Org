@@ -7,16 +7,10 @@
  * @license i.e. MIT
  */
 
-'use client'
+**ProjectG Web Design Documentation**
 
-import { useSession } from 'next-auth/react'
+**Introduction**
 
-export default function Explore() {
-  const { data: session } = useSession()
+To Understand the mainly propouse of the design, we need first to understand the propouse of the Project G.
 
-  return (
-    <main>
-      <h1>{session?.user?.name}</h1>
-    </main>
-  )
-}
+Since we actually doesn't have a 

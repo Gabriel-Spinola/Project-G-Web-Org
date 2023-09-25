@@ -13,62 +13,44 @@
 * Also issuing about dehydration
  */
 
-import DisplayUserInfo from '@/components/DisplayUserInfo'
-import { AuthOptions } from '@/lib/auth'
-import { tryGetUserDataFromApi } from '@/lib/database/actions'
-import { Session, User, getServerSession } from 'next-auth'
-import React, { Suspense } from 'react'
+import UserPosts from '@/components/profile/UserPosts'
+import DisplayUserInfo from '@/components/profile/ProfileCard'
+// import { AuthOptions } from '@/lib/auth'
+// import { tryGetUserDataFromApi } from '@/lib/database/actions'
+// import { Session, User, getServerSession } from 'next-auth'
+import React from 'react'
+import UserInfo from '@/components/profile/UserInfo'
 
-type Props = {
-  params: { id: string }
-}
-
-async function getUserInfo(paramId: string): Promise<User | undefined> {
-  const { data } = await tryGetUserDataFromApi(paramId)
-
-  if (data?.error == null) {
-    return data
+export default async function Profile(): Promise<React.JSX.Element> {
+  const variables: { name: string; title: string } = {
+    name: 'Lucas Vinicius',
+    title: 'Estudante de Arquitetura',
   }
-
-  console.warn('failed to get user info', JSON.stringify(data))
-
-  return undefined
-}
-
-export default async function Profile({
-  params,
-}: Props): Promise<React.JSX.Element> {
-  const session: Session | null = await getServerSession(AuthOptions)
-  const isOwner = session?.user.id === params.id
-
-  const user: User | undefined = !isOwner
-    ? await getUserInfo(params.id)
-    : session?.user
-
-  if (user) {
-    return (
-      <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
-        <h1>Profile Page</h1>
-
-        <Suspense fallback={<div>Loading</div>}>
-          {user && <DisplayUserInfo user={user} isOwner={isOwner} />}
-        </Suspense>
-
-        <hr />
-
-        <section id="user-activities">
-          <div id="user-projects"></div>
-          <div id="user-posts"></div>
-        </section>
-
-        <div className="profile w-[1400px] h[208px] bg-gradient-to-r from-purple-500 to-pink-500"></div>
-      </main>
-    )
-  }
-
   return (
-    <main className="flex min-h-screen justify-around flex-row pt-24 bg-darker-white">
-      <h1>Usuário não foi encontrado</h1>
-    </main>
+    <>
+      <DisplayUserInfo
+        name={variables.name}
+        title={variables.title}
+        isOwner={true}
+        user={undefined}
+      />
+      <div className="flex justify-around bg-darker-white">
+        <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
+          <div>
+            <UserInfo
+              followers={100000}
+              location={'Belo Horizonte'}
+              graduation={'UFMG'}
+              from={'Contagem'}
+              work={'Senai CTTI'}
+              phone={'+55 (31) 98865-4602'}
+              userPrisma={undefined}
+              description={'Estudo arquitetura por causa do minecraft.'}
+            />
+          </div>
+          <UserPosts />
+        </div>
+      </div>
+    </>
   )
 }
