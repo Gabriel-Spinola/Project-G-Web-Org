@@ -2,10 +2,10 @@
 
 import { prisma } from '@/lib/database/prisma'
 import { revalidateTag } from 'next/cache'
-import { Comment, Post, Prisma, Project } from '@prisma/client'
+import { Comment, Post, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { commentsRefetchTag } from './contants'
-import { DefaultArgs } from '@prisma/client/runtime/library'
+import { Session } from 'next-auth'
 
 export async function getComments(): Promise<Comment[] | null> {
   try {
@@ -79,4 +79,10 @@ export async function handleSubmitComment(formData: FormData): Promise<void> {
   }
 }
 
-// export async function increaseLikeCount()
+export async function increaseLikeCount(
+  selectedType: 'posts' | 'projects',
+  session: Session,
+  id: string,
+): Promise<void> {
+  return await Promise.resolve((): number => 1)
+}

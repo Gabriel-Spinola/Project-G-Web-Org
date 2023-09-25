@@ -51,7 +51,6 @@ export default async function CommentForm({ params }: Params) {
                 <span>author: {comment.authorId}</span> <br />
                 <span>Content: {comment.content}</span> <br />
                 <button>Likes</button> <br />
-                <button>Dislike</button>
                 <br />
                 <br />
                 <hr />
