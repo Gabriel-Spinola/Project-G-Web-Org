@@ -1,6 +1,22 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
+import styles from './explore.module.scss'
+
 export default function ExploreSearchBar() {
   return (
-    <div className="flex w-full justify-around">
+    <div className="flex flex-col items-center w-full justify-around gap-24">
+      <h1 className="text-4xl text-darker-white tracking-wide font-semibold">
+        PROCURE POR SEUS
+        <span className={styles.highlightText}> ARQUITETOS</span> E
+        <span className={styles.highlightText}> ARTISTAS</span> PREFERIDOS
+      </h1>
       <form className="w-[800px]">
         <label
           htmlFor="default-search"
@@ -29,7 +45,7 @@ export default function ExploreSearchBar() {
           <input
             type="search"
             id="default-search"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block w-full p-4 pl-10 text-base text-light-gray border border-medium-primary rounded-lg bg-darker-white focus:ring-medium-primary focus:border-medium-primary no-spinner"
             placeholder="Procure por artistas e projetos"
             required
           ></input>
