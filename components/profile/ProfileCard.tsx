@@ -40,6 +40,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 interface Params {
   user: Partial<User>
@@ -80,7 +81,7 @@ export default function DisplayUserInfo({
     // Update form data for 'title' field
     formData.set(
       'title',
-      getFieldValueOrDefault('title', user.title) ?? '',
+      getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
     )
 
     // Update form data for 'description' field
@@ -110,6 +111,9 @@ export default function DisplayUserInfo({
 
       console.log(message)
       console.log(operation)
+
+      // FIXME - revalidate tag doesnot work make it all server component
+      revalidateTag('user-data')
     } catch (error: unknown) {
       console.error(error)
     }
@@ -143,7 +147,7 @@ export default function DisplayUserInfo({
           </h1>
           <h2 className="text-xl font-thin text-light-white">
             {/* variable name is temporary! Replace it to user?.name */}
-            {user.title ?? ''}
+            {user.title ?? 'aa'}
           </h2>
         </div>
       </div>
