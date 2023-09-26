@@ -16,15 +16,15 @@ import Carousel from './components/carousel'
 export default function UpperSection() {
   return (
     <div className="h-[100vh] w-[100%] flex flex-col items-center">
-      <section className="absolute z-[1] flex flex-col gap-32 my-36">
+      <section className="absolute z-[1] flex flex-col gap-32 my-24">
         <ExploreSearchBar />
         <Carousel />
       </section>
 
-      <div className="absolute h-[100vh] w-[100%] bg-black/50" />
+      <div className="absolute h-[100vh] w-[100%] bg-black/75" />
       <Image
-        className="h-full w-full object-cover"
-        src="https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/kirill-mikhaylyuk-bX23L46B1m4-unsplash.jpg"
+        className="h-full w-full object-cover object-center"
+        src="https://images.unsplash.com/photo-1619615713569-fe374aad7185?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
         alt="fundo"
       />
     </div>

@@ -7,13 +7,15 @@
  * @license i.e. MIT
  */
 
+import BottomSection from '@/components/Explore/BottomSection'
 import UpperSection from '@/components/Explore/UpperSection'
 
 export default async function ExplorePage() {
   return (
-    <main className="flex min-h-screen max-h-screen justify-around flex-col bg-darker-white">
+    <main className="flex min-h-screen justify-around flex-col bg-darker-white">
       <section className="flex flex-col">
         <UpperSection />
+        <BottomSection />
       </section>
     </main>
   )
