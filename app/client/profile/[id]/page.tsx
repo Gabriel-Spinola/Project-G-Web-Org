@@ -20,37 +20,88 @@ import DisplayUserInfo from '@/components/profile/ProfileCard'
 // import { Session, User, getServerSession } from 'next-auth'
 import React from 'react'
 import UserInfo from '@/components/profile/UserInfo'
+import { User } from '@prisma/client'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { AuthOptions } from '@/lib/auth'
+import { getServerSession } from 'next-auth'
 
-export default async function Profile(): Promise<React.JSX.Element> {
-  const variables: { name: string; title: string } = {
-    name: 'Lucas Vinicius',
-    title: 'Estudante de Arquitetura',
+type UserSelectedData = {
+  [key in keyof Partial<User>]: boolean
+}
+
+async function getUserData(
+  id: string,
+  requestData: UserSelectedData,
+): Promise<User | null> {
+  'use server'
+
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.users}?id=${id}`,
+      {
+        method: 'POST',
+        headers: {
+          'Cotent-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+        next: { tags: ['user-data'] },
+      },
+    )
+
+    if (!response.ok) throw new Error('Response not ok')
+
+    const { data }: { data: User } = await response.json()
+    return data
+  } catch (error: unknown) {
+    console.error(error, 'Failed to fetch users')
+
+    return null
   }
-  return (
-    <>
-      <DisplayUserInfo
-        name={variables.name}
-        title={variables.title}
-        isOwner={true}
-        user={undefined}
-      />
-      <div className="flex justify-around bg-darker-white">
-        <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
-          <div>
+}
+
+type Props = {
+  params: { id: string }
+}
+
+export default async function Profile({
+  params,
+}: Props): Promise<React.JSX.Element> {
+  const user: Partial<User> | null = await getUserData(params.id, {
+    id: true,
+    name: true,
+    title: true,
+    graduations: true,
+    location: true,
+  })
+
+  if (user) {
+    const session = await getServerSession(AuthOptions)
+    const isOwner = session?.user.id === user?.id
+
+    return (
+      <>
+        <DisplayUserInfo user={user} isOwner={isOwner} />
+
+        <div className="flex justify-around bg-darker-white">
+          <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
             <UserInfo
               followers={100000}
-              location={'Belo Horizonte'}
-              graduation={'UFMG'}
-              from={'Contagem'}
+              location={user.location ?? 'Contagem'}
+              graduation={user.graduations?.at(0) ?? 'UFMG'}
+              from={user.location ?? 'Minas Gerais - Brasil'}
               work={'Senai CTTI'}
-              phone={'+55 (31) 98865-4602'}
-              userPrisma={undefined}
-              description={'Estudo arquitetura por causa do minecraft.'}
+              phone={user.contactPhone?.toString() ?? '+55 31 97300-8566'}
+              description={
+                user.description ?? 'Estudo arquitetura por causa do minecraft'
+              }
             />
+
+            <UserPosts />
           </div>
-          <UserPosts />
         </div>
-      </div>
-    </>
-  )
+      </>
+    )
+  }
+
+  return <h1>User not found</h1>
 }

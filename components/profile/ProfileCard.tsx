@@ -32,23 +32,17 @@ import {
   EditableTextarea,
   Avatar,
   Box,
-  Image,
   IconButton,
 } from '@chakra-ui/react'
 
 import { EditIcon } from '@chakra-ui/icons'
 import { BsFillGearFill } from 'react-icons/bs'
 
-import { User } from 'next-auth'
 import React, { FormEvent } from 'react'
+import { User } from '@prisma/client'
 
 interface Params {
-  // name and location params are temporary, please delete them later
-  name: string
-  title: string
-  // TODO - Lucas você não pode passar undefined para uma tipo q pede um valor seu bosta
-  // NOTE - se for pra testar colocar pelo menos o: `| undefined`
-  user: User | undefined
+  user: Partial<User>
   isOwner: boolean
 }
 
@@ -63,9 +57,6 @@ const defaultEditFormValues = {
 }
 
 export default function DisplayUserInfo({
-  // name and location params are temporary, please delete them later
-  name,
-  title,
   user,
   isOwner,
 }: Params): React.JSX.Element {
@@ -89,7 +80,7 @@ export default function DisplayUserInfo({
     // Update form data for 'title' field
     formData.set(
       'title',
-      getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
+      getFieldValueOrDefault('title', user.title) ?? '',
     )
 
     // Update form data for 'description' field
@@ -139,7 +130,7 @@ export default function DisplayUserInfo({
       <Box className="absolute w-[100%] h-[208px] bg-black bg-opacity-75 ml-[-64px]"></Box>
 
       <div id="profile-avatar-wrapper">
-        <Avatar size={'2xl'} src={user?.image || ''}></Avatar>
+        <Avatar size={'2xl'} src={user?.profilePic || ''}></Avatar>
       </div>
       <div
         id="profile-info-wrapper"
@@ -148,22 +139,14 @@ export default function DisplayUserInfo({
         <div id="info-name-wrapper" className="flex flex-col">
           <h1 className="text-4xl text-medium-primary font-bold">
             {/* variable name is temporary! Replace it to user?.name */}
-            {name || ''}
+            {user.name ?? 'aaaaa'}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
             {/* variable name is temporary! Replace it to user?.name */}
-            {title || ''}
+            {user.title ?? ''}
           </h2>
         </div>
       </div>
-
-      {/* <h1>{user?.name}</h1>
-      <h2>{user?.title || ''}</h2>
-      <p>{user?.description || ''}</p>
-      <h1>Linkedin: {user?.linkedinUrl || ''}</h1>
-      <h1>Site: {user?.siteUrl}</h1>
-      <h1>phone: {user?.contactPhone}</h1>
-      <h1>email: {user?.email}</h1> */}
 
       {isOwner && (
         <div className="max-w-[10%]">
@@ -176,6 +159,7 @@ export default function DisplayUserInfo({
               color={'white'}
               className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
             />
+
             <MenuList>
               <MenuItem icon={<EditIcon color="white" />} onClick={onOpen}>
                 Editar Perfil
