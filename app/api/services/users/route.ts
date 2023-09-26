@@ -10,8 +10,6 @@ async function handler(req: Request) {
   const id = url.searchParams.get('id')?.toString()
   const selectedData: SelectedData = await req.json()
 
-  console.log(selectedData)
-
   if (!id) {
     return NextResponse.json({ data: "Id can't be null" }, { status: 400 })
   }

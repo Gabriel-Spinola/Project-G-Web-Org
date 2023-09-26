@@ -25,9 +25,7 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 
-type UserSelectedData = {
-  [key in keyof Partial<User>]: boolean
-}
+type UserSelectedData = { [key in keyof Partial<User>]: boolean }
 
 async function getUserData(
   id: string,
@@ -44,6 +42,7 @@ async function getUserData(
           'Cotent-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
+        cache: 'no-cache', // REVIEW -
         next: { tags: ['user-data'] },
       },
     )
@@ -77,6 +76,8 @@ export default async function Profile({
   if (user) {
     const session = await getServerSession(AuthOptions)
     const isOwner = session?.user.id === user?.id
+
+    console.log(user)
 
     return (
       <>
