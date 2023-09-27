@@ -9,7 +9,6 @@
 
 'use client'
 
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import {
   Menu,
   MenuButton,
@@ -41,10 +40,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import {
-  getFieldValueOrDefault,
-  updateUserPageData,
-} from '@/app/client/profile/actions'
+import { updateUserPageData } from '@/app/client/profile/actions'
 
 interface Params {
   user: Partial<User>
@@ -67,6 +63,18 @@ export default function DisplayUserInfo({
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
+
+    /**
+     * Helper function to get a field's value or default to an empty string
+     */
+    const getFieldValueOrDefault = (
+      fieldName: string,
+      defaultValue: string,
+    ): string | null => {
+      const fieldValue = formData.get(fieldName) as string | null
+
+      return fieldValue === defaultValue ? '' : fieldValue
+    }
 
     // Update form data for 'title' field
     formData.set(
