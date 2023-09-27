@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { handleGet } from './[get]'
-import { handlePost } from './[post]'
-import { handleDelete } from './[delete]'
-import { handlePut } from './[put]'
+import { handleGet } from './_get'
+import { handlePost } from './_post'
+import { handleDelete } from './_delete'
+import { handlePut } from './_put'
 import { Post } from '@prisma/client'
-import { handlePatch } from './[patch]'
+import { handlePatch } from './_patch'
 
 /**
  *
@@ -13,7 +13,7 @@ import { handlePatch } from './[patch]'
  * @returns API Response. Into `{ data: "response data" }` format
  *
  */
-async function handler(req: Request): Promise<unknown | null> {
+async function handler(req: Request): Promise<NextResponse> {
   const url = new URL(req.url)
 
   /**
@@ -35,17 +35,13 @@ async function handler(req: Request): Promise<unknown | null> {
     case 'GET': {
       const take: string | null = url.searchParams.get('take')
 
-      return handleGet(req, take, id)
+      return handleGet(take, id)
     }
 
-    // REVIEW: (may using json bodies instead of formData works better)
     case 'POST': {
-      const formData = await req.formData()
-
-      return handlePost(id, formData)
+      return handlePost(id, req)
     }
 
-    // TODO: (accept partial posts)
     case 'PATCH': {
       const bodyData: Partial<Post> = await req.json()
 

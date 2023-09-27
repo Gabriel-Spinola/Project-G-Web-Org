@@ -19,7 +19,9 @@ import { MdWork } from 'react-icons/md'
 import styles from '@/components/profile/profile.module.scss'
 
 interface Params {
-  userPrisma: Partial<User>
+  // TODO - Lucas você não pode passar undefined para uma tipo q pede um valor seu bosta
+  // NOTE - se for pra testar colocar pelo menos o: `| undefined`
+  userPrisma: Partial<User> | undefined
   followers: number
   location: string
   graduation: string
