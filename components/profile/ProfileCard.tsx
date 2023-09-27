@@ -41,6 +41,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
 import { revalidatePath, revalidateTag } from 'next/cache'
+import { useRouter } from 'next/navigation'
 
 interface Params {
   user: Partial<User>
@@ -62,6 +63,7 @@ export default function DisplayUserInfo({
   isOwner,
 }: Params): React.JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
 
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -112,8 +114,7 @@ export default function DisplayUserInfo({
       console.log(message)
       console.log(operation)
 
-      // FIXME - revalidate tag doesnot work make it all server component
-      revalidateTag('user-data')
+      router.refresh()
     } catch (error: unknown) {
       console.error(error)
     }
