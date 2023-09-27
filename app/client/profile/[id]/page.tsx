@@ -21,42 +21,9 @@ import DisplayUserInfo from '@/components/profile/ProfileCard'
 import React from 'react'
 import UserInfo from '@/components/profile/UserInfo'
 import { User } from '@prisma/client'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
-
-type UserSelectedData = { [key in keyof Partial<User>]: boolean }
-
-async function getUserData(
-  id: string,
-  requestData: UserSelectedData,
-): Promise<User | null> {
-  'use server'
-
-  try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.users}?id=${id}`,
-      {
-        method: 'POST',
-        headers: {
-          'Cotent-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-        cache: 'no-cache', // REVIEW -
-        next: { tags: ['user-data'] },
-      },
-    )
-
-    if (!response.ok) throw new Error('Response not ok')
-
-    const { data }: { data: User } = await response.json()
-    return data
-  } catch (error: unknown) {
-    console.error(error, 'Failed to fetch users')
-
-    return null
-  }
-}
+import { getUserData } from '../server-actions'
 
 type Props = {
   params: { id: string }
@@ -76,8 +43,6 @@ export default async function Profile({
   if (user) {
     const session = await getServerSession(AuthOptions)
     const isOwner = session?.user.id === user?.id
-
-    console.log(user)
 
     return (
       <>
