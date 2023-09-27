@@ -15,7 +15,7 @@ export default async function ExplorePage() {
     <main className="flex min-h-screen justify-around flex-col bg-darker-white">
       <section className="flex flex-col">
         <UpperSection />
-        <BottomSection />
+        {/* <BottomSection /> */}
       </section>
     </main>
   )

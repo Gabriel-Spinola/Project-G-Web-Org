@@ -11,7 +11,7 @@
 
 import { Icon, Image } from '@chakra-ui/react'
 import { MdOutlineKeyboardDoubleArrowDown } from 'react-icons/md'
-import styles from './explore.module.scss'
+import styles from './exploreCarousel.module.scss'
 
 export default function Carousel() {
   return (
@@ -20,12 +20,12 @@ export default function Carousel() {
         <a
           href="/"
           id="item-1"
-          className="w-[492px] h-[260px] flex bg-darker-white rounded-xl"
+          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1562185363-aa9551ce00d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
             className="h-full w-full object-cover rounded-xl"
-            alt="Green double couch with wooden legs"
+            alt="Rounded Building"
           />
           <div className={styles.hoverAnimation}>
             <p>ENGENHARIA</p>
@@ -34,12 +34,12 @@ export default function Carousel() {
         <a
           href="/"
           id="item-1"
-          className="w-[492px] h-[260px] flex bg-darker-white rounded-xl"
+          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1612387290123-34af734b5f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
             className="h-full w-full object-cover rounded-xl"
-            alt="Green double couch with wooden legs"
+            alt="Garden Pool"
           />
           <div className={styles.hoverAnimation}>
             <p>ARQUITETURA</p>
@@ -48,12 +48,12 @@ export default function Carousel() {
         <a
           href="/"
           id="item-1"
-          className="w-[492px] h-[260px] flex bg-darker-white rounded-xl"
+          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1591874204276-1ebd20fb8db6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
             className="h-full w-full object-cover rounded-xl"
-            alt="Green double couch with wooden legs"
+            alt="Kobra Graffiti"
           />
           <div className={styles.hoverAnimation}>
             <p>ARTE URBANA</p>

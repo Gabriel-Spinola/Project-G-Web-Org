@@ -7,12 +7,12 @@
  * @license i.e. MIT
  */
 
-import styles from './explore.module.scss'
+import styles from './exploreCarousel.module.scss'
 
 export default function ExploreSearchBar() {
   return (
     <div className="flex flex-col items-center w-full justify-around gap-24">
-      <h1 className="text-4xl text-darker-white tracking-wide font-semibold">
+      <h1 className="text-4xl text-darker-white tracking-wide font-semibold text-center">
         PROCURE POR SEUS
         <span className={styles.highlightText}> ARQUITETOS</span> E
         <span className={styles.highlightText}> ARTISTAS</span> PREFERIDOS

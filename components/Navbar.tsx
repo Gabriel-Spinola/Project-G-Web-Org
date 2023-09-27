@@ -1,7 +1,5 @@
-import { NavLinks } from '@/constants'
-import Link from 'next/link'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import '@/app/styles/navbar.scss'
 
 async function Navbar() {
