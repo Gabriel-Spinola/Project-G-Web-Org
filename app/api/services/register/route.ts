@@ -11,7 +11,7 @@ import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { NextResponse } from 'next/server'
 
-type RegisterResponse = NextResponse<Record<string, any>>
+type RegisterResponse = NextResponse<unknown>
 
 async function handlePost(req: Request): Promise<RegisterResponse> {
   try {

@@ -28,22 +28,22 @@ datasource db {
 }
 
 model Post {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   content   String?
   images    String[]
-  published Boolean @default(false)
+  published Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  author      User?     @relation("Author", fields: [authorId], references: [id])
-  authorId    String?   @unique
-  contributor User[]    @relation("Contributor")
+  likes Like[] @relation("LikedPost")
+
+  author      User?     @relation("PostAuthor", fields: [authorId], references: [id])
+  authorId    String?
+  contributor User[]    @relation("PostContributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
-  likedBy     User?     @relation("LikedPost", fields: [likedById], references: [id])
-  likedById   String?   @unique
 }
 
 model Project {
@@ -52,17 +52,17 @@ model Project {
   description String?
   images      String[]
 
+  likes Like[] @relation("LikedProject")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  author      User?     @relation("Author", fields: [authorId], references: [id])
+  author      User?     @relation("ProjectAuthor", fields: [authorId], references: [id])
   authorId    String?
-  contributor User[]    @relation("Contributor")
+  contributor User[]    @relation("ProjectContributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id])
   pinnedById  String?   @unique
-  likedBy     User?     @relation("LikedProject", fields: [likedById], references: [id])
-  likedById   String?   @unique
 }
 
 model Account {
@@ -106,6 +106,11 @@ model User {
   name     String?
   password String?
 
+  followers Follows[] @relation("Follower")
+  following Follows[] @relation("Following")
+
+  likes Like[] @relation("LikedBy")
+
   title       String?
   description String?
   location    String?
@@ -128,20 +133,27 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  authoredPosts    Post[] @relation("Author")
-  contributedPosts Post[] @relation("Contributor")
-  likedPosts       Post[] @relation("LikedPost")
+  authoredPosts    Post[] @relation("PostAuthor")
+  contributedPosts Post[] @relation("PostContributor")
   pinnedPosts      Post[] @relation("PinnedPost")
 
-  authoredProjects    Project[] @relation("Author")
-  contributedProjects Project[] @relation("Contributor")
+  authoredProjects    Project[] @relation("ProjectAuthor")
+  contributedProjects Project[] @relation("ProjectContributor")
   pinnedProjects      Project[] @relation("PinnedProject")
-  likedProjects       Project[] @relation("LikedProject")
 
-  authoredComments Comment[] @relation("Author")
-  likedComments    Comment[] @relation("LikedComment")
+  authoredComments Comment[] @relation("CommentAuthor")
 
   @@map(name: "users")
+}
+
+// LINK: https://stackoverflow.com/questions/72330381/prisma-not-liked-posts-from-followed-users
+model Follows {
+  follower    User   @relation("Following", fields: [followerId], references: [id])
+  followerId  String
+  following   User   @relation("Follower", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }
 
 // TODO:
@@ -157,22 +169,37 @@ model VerificationToken {
 }
 
 model Comment {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   isEdited Boolean
   content  String
 
   createdAt DateTime @default(now())
 
-  likedBy   User?   @relation("LikedComment", fields: [likedById], references: [id])
-  likedById String? @unique
+  likes Like[] @relation("LikedComment")
 
-  author   User   @relation("Author", fields: [authorId], references: [id])
-  authorId String @unique
+  author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
+  authorId String
 
   post   Post?   @relation(fields: [postId], references: [id])
   postId String? @unique
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String?  @unique
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  user   User   @relation("LikedBy", fields: [userId], references: [id])
+  userId String
+
+  post   Post?   @relation("LikedPost", fields: [postId], references: [id])
+  postId String?
+
+  project   Project? @relation("LikedProject", fields: [projectId], references: [id])
+  projectId String?
+
+  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id])
+  commentId Int?
 }

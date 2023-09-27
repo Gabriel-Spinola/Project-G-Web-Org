@@ -11,6 +11,7 @@ import { prisma } from '@/lib/database/prisma'
 import { ModelsApiCode } from '@/lib/database/table.types'
 import { servicesHandler } from '../services-handler'
 import { PrismaData } from '../../config'
+import { toInteger } from 'lodash'
 
 async function getData(
   id: string,
@@ -24,7 +25,7 @@ async function getData(
       return await prisma.post.findUnique({ where: { id: id as string } })
 
     case ModelsApiCode.Comment:
-      return await prisma.comment.findUnique({ where: { id: id as string } })
+      return await prisma.comment.findUnique({ where: { id: toInteger(id) } })
 
     case ModelsApiCode.User:
       return await prisma.user.findUnique({
@@ -40,10 +41,10 @@ async function getData(
           contactPhone: true,
           email: true,
           createdAt: true,
-          image: true,
-          posts: true,
-          projects: true,
-          comments: true,
+          profilePic: true,
+          // AU: true,
+          // projects: true,
+          // comments: true,
           // password: false,
           // updatedAt: false,
           // accounts: false,

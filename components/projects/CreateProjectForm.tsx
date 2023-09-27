@@ -7,9 +7,6 @@
  * @license i.e. MIT
  */
 
-// FIXME: find unique api running twice::SOLVED
-// FIXME: LCP: 3743ms. Fetching the information with server components may solve it.
-
 'use client'
 
 import { ProjectFormState } from '@/common.types'

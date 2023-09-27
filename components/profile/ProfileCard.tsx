@@ -46,7 +46,9 @@ interface Params {
   // name and location params are temporary, please delete them later
   name: string
   title: string
-  user: User
+  // TODO - Lucas você não pode passar undefined para uma tipo q pede um valor seu bosta
+  // NOTE - se for pra testar colocar pelo menos o: `| undefined`
+  user: User | undefined
   isOwner: boolean
 }
 
@@ -101,7 +103,7 @@ export default function DisplayUserInfo({
 
     try {
       const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${user.id}`,
+        `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${user?.id}`,
         {
           method: 'PUT',
           body: formData,
