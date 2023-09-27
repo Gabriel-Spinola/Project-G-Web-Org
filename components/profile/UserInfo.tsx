@@ -1,9 +1,24 @@
 'use client'
 
 import React from 'react'
-import { Icon } from '@chakra-ui/react'
-import { BellIcon } from '@chakra-ui/icons'
-import { User } from '@prisma/client'
+import {
+  Button,
+  Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  FormLabel,
+  Icon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { BellIcon, EditIcon } from '@chakra-ui/icons'
 import { RiGraduationCapFill } from 'react-icons/ri'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
@@ -11,6 +26,7 @@ import { MdWork } from 'react-icons/md'
 import styles from '@/components/profile/profile.module.scss'
 
 interface Params {
+  isOwner: boolean
   followers: number
   location: string
   graduation: string
@@ -21,6 +37,8 @@ interface Params {
 }
 
 export default function UserInfo(params: Params) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <section
       id={styles.userInfo}
@@ -32,6 +50,51 @@ export default function UserInfo(params: Params) {
       <hr />
 
       <div className="flex flex-col py-2 gap-2">
+        <Button leftIcon={<EditIcon />} onClick={onOpen}>
+          Edite seus dados
+        </Button>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+
+          <ModalContent>
+            <ModalHeader>Edite seus dados</ModalHeader>
+            <ModalCloseButton />
+
+            <form>
+              <ModalBody>
+                <FormLabel>Título</FormLabel>
+                <Editable defaultValue={'aaa'} isPreviewFocusable={true}>
+                  <EditablePreview />
+                  <EditableInput
+                    display="insira um título"
+                    type="text"
+                    name="title"
+                    id="title"
+                  />
+                </Editable>
+
+                <FormLabel>Descrição</FormLabel>
+                <Editable defaultValue={'test'}>
+                  <EditablePreview />
+                </Editable>
+
+                <Divider />
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variant="ghost" onClick={onClose}>
+                  Cancelar
+                </Button>
+
+                <Button colorScheme="blue" mr={3} type="submit">
+                  Salvar
+                </Button>
+              </ModalFooter>
+            </form>
+          </ModalContent>
+        </Modal>
+
         <span>
           <BellIcon w={6} h={6} /> Seguidores:{' '}
           <span className="font-bold">{params.followers}</span>

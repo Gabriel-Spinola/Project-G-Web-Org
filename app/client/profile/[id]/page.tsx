@@ -51,6 +51,7 @@ export default async function Profile({
         <div className="flex justify-around bg-darker-white">
           <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
             <UserInfo
+              isOwner={isOwner}
               followers={100000}
               location={user.location ?? 'Contagem'}
               graduation={user.graduations?.at(0) ?? 'UFMG'}

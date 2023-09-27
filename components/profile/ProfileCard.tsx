@@ -148,7 +148,7 @@ export default function DisplayUserInfo({
             />
 
             <MenuList>
-              <MenuItem icon={<EditIcon color="white" />} onClick={onOpen}>
+              <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
                 Editar Perfil
               </MenuItem>
             </MenuList>
