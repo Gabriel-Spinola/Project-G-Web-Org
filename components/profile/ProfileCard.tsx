@@ -40,17 +40,15 @@ import { BsFillGearFill } from 'react-icons/bs'
 
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import { useRouter } from 'next/navigation'
+import {
+  getFieldValueOrDefault,
+  updateUserPageData,
+} from '@/app/client/profile/actions'
 
 interface Params {
   user: Partial<User>
   isOwner: boolean
-}
-
-type TestOfResponseType = {
-  message: string
-  operation: string
 }
 
 const defaultEditFormValues = {
@@ -70,16 +68,6 @@ export default function DisplayUserInfo({
 
     const formData = new FormData(event.currentTarget)
 
-    // Helper function to get a field's value or default to an empty string
-    const getFieldValueOrDefault = (
-      fieldName: string,
-      defaultValue: string,
-    ) => {
-      const fieldValue = formData.get(fieldName) as string | null
-
-      return fieldValue === defaultValue ? '' : fieldValue
-    }
-
     // Update form data for 'title' field
     formData.set(
       'title',
@@ -95,29 +83,17 @@ export default function DisplayUserInfo({
       ) ?? '',
     )
 
-    try {
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${user?.id}`,
-        {
-          method: 'PUT',
-          body: formData,
-        },
-      )
+    const { data, error } = await updateUserPageData(
+      formData,
+      user.id as string,
+    )
 
-      if (!response.ok) {
-        console.error('Response not okay')
-      }
-
-      const { message, operation }: Partial<TestOfResponseType> =
-        await response.json()
-
-      console.log(message)
-      console.log(operation)
-
-      router.refresh()
-    } catch (error: unknown) {
-      console.error(error)
+    if (error) {
+      console.error('failed')
     }
+
+    console.log(data)
+    router.refresh()
   }
 
   return (
@@ -143,12 +119,10 @@ export default function DisplayUserInfo({
       >
         <div id="info-name-wrapper" className="flex flex-col">
           <h1 className="text-4xl text-medium-primary font-bold">
-            {/* variable name is temporary! Replace it to user?.name */}
-            {user.name ?? 'aaaaa'}
+            {user.name ?? ''}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
-            {/* variable name is temporary! Replace it to user?.name */}
-            {user.title ?? 'aa'}
+            {user.title ?? ''}
           </h2>
         </div>
       </div>
