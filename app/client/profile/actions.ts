@@ -53,16 +53,3 @@ export async function updateUserPageData(
     return { data: null, error: error as string }
   }
 }
-
-/**
- * Helper function to get a field's value or default to an empty string
- */
-export const getFieldValueOrDefault = (
-  formData: FormData,
-  fieldName: string,
-  defaultValue: string,
-): string | null => {
-  const fieldValue = formData.get(fieldName) as string | null
-
-  return fieldValue === defaultValue ? '' : fieldValue
-}
