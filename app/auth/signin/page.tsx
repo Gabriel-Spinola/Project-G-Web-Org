@@ -1,3 +1,12 @@
+import Image from 'next/image'
+import SigninBox from './components/SigninBox'
+
 export default function Signin() {
-  return <h1>Signin</h1>
+  return (
+    <main>
+      <Image src={''} alt={'bg-img'} />
+
+      <SigninBox />
+    </main>
+  )
 }

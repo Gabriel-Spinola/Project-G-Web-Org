@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 
 const Modal = ({
   isVisible,
@@ -16,8 +16,6 @@ const Modal = ({
   isVisible: boolean
   onClose: () => void
 }) => {
-  const ref = useRef(null)
-
   useEffect(() => {
     const handleOutSideClick = (event: any) => {
       if (!event.target.classList.contains('notClose')) {
