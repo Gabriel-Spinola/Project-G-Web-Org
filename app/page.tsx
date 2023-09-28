@@ -3,6 +3,7 @@
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import PostItem from '@/components/posts/PostItem'
 
+// LINK - https://www.youtube.com/watch?v=IFYFezylQlI
 export default async function Home() {
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
