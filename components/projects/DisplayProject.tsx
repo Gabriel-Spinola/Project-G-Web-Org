@@ -9,9 +9,10 @@
 
 'use client'
 
-import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { ProjectModelProps } from './CreateProjectForm'
+import { ModelsApiCode } from '@/lib/apiConfig'
 
 type Props = {
   id: string

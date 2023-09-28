@@ -9,14 +9,23 @@
 
 'use client'
 
-import { ProjectFormState } from '@/common.types'
-import {
-  createNewProjectApiCall,
-  getRowDataFromAPI,
-} from '@/lib/database/actions'
-import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
+import { createNewProjectApiCall } from '@/lib/database/actions'
 import { Project } from '@prisma/client'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+
+export interface ProjectModelProps {
+  id: string
+  title: string
+  description: string
+  images: string[]
+  createdAt: string
+}
+
+export interface ProjectFormState {
+  title: string
+  description: string
+  image: string
+}
 
 type Props = {
   params: { id: string | null; project: Project | null }
