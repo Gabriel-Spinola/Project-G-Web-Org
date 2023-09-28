@@ -42,3 +42,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 [Next.js deployment documentation](https://nextjs.org/docs/deployment)
+
+## License
+[GPL-3.0 license](https://github.com/Gabriel-Spinola/Project-G-Web/blob/main/LICENSE)
