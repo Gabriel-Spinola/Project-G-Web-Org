@@ -40,3 +40,6 @@ next-env.d.ts
 setnode.bat
 .env
 .env
+
+# VSCode
+/.vscode
