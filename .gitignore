@@ -42,4 +42,4 @@ setnode.bat
 .env
 
 # VSCode
-/.vscode
+.vscode/
