@@ -7,9 +7,6 @@
  * @license i.e. MIT
  */
 
-import {} from 'next'
-import { ModelsApiCode, ProjectModelProps } from '@/lib/database/table.types'
-
 type Props = {
   params: { id: string }
 }

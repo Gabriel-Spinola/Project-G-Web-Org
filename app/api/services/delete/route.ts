@@ -8,10 +8,9 @@
  */
 
 import { prisma } from '@/lib/database/prisma'
-import { ModelsApiCode } from '@/lib/database/table.types'
+import { ModelsApiCode } from '@/lib/apiConfig'
 import { NextResponse } from 'next/server'
 import { PrismaData } from '../../config'
-import { toInteger } from 'lodash'
 
 type DeletionResponse = NextResponse<Record<string, string>>
 

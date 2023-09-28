@@ -11,8 +11,7 @@
  * Helpful functions for database actions
  */
 
-import { API_ENDPOINTS, API_URL } from '../apiConfig'
-import { ModelsApiCode } from './table.types'
+import { API_ENDPOINTS, API_URL, ModelsApiCode } from '../apiConfig'
 
 export type ResponseError = {
   data: {

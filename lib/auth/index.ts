@@ -102,7 +102,6 @@ export const AuthOptions: NextAuthOptions = {
       return token
     },
     async signIn({ user }) {
-      console.log(user.email)
       const userExists = await prisma.user.findUnique({
         where: { email: user.email || '' },
       })
