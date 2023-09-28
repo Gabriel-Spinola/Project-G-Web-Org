@@ -8,7 +8,7 @@
  */
 
 import { prisma } from '@/lib/database/prisma'
-import { ModelsApiCode } from '@/lib/database/table.types'
+import { ModelsApiCode } from '@/lib/apiConfig'
 import { servicesHandler } from '../services-handler'
 import { PrismaData } from '../../config'
 import { toInteger } from 'lodash'
