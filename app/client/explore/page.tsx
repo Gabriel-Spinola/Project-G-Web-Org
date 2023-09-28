@@ -12,10 +12,10 @@ import UpperSection from '@/components/Explore/UpperSection'
 
 export default async function ExplorePage() {
   return (
-    <main className="flex min-h-screen justify-around flex-col bg-darker-white">
-      <section className="flex flex-col">
+    <main className="flex flex-col bg-darker-white">
+      <section className="flex align-top flex-col">
         <UpperSection />
-        {/* <BottomSection /> */}
+        <BottomSection />
       </section>
     </main>
   )

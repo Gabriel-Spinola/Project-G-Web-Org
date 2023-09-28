@@ -16,11 +16,14 @@ import styles from './exploreCarousel.module.scss'
 export default function Carousel() {
   return (
     <div className="flex flex-col gap-32 items-center">
-      <section id="carousel" className="flex gap-4 items-center">
+      <section
+        id="carousel"
+        className="flex flex-col md:flex-row gap-4 items-center"
+      >
         <a
           href="/"
           id="item-1"
-          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
+          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1562185363-aa9551ce00d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
@@ -34,7 +37,7 @@ export default function Carousel() {
         <a
           href="/"
           id="item-1"
-          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
+          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1612387290123-34af734b5f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
@@ -48,7 +51,7 @@ export default function Carousel() {
         <a
           href="/"
           id="item-1"
-          className="h-[260px] flex bg-darker-white rounded-xl md:w-[292px] lg:w-[28vw] 2x1:w-[28vw]"
+          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
           <Image
             src="https://images.unsplash.com/photo-1591874204276-1ebd20fb8db6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
