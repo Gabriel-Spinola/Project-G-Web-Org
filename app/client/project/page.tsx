@@ -10,7 +10,7 @@
 import BottomSection from '@/components/Explore/BottomSection'
 import UpperSection from '@/components/Explore/UpperSection'
 
-export default function Explore() {
+export default function Project() {
   return (
     <main className="flex flex-col bg-darker-white">
       <section className="flex align-top flex-col">

@@ -7,8 +7,6 @@
  * @license i.e. MIT
  */
 
-'use client'
-
 import { Icon, Image } from '@chakra-ui/react'
 import { MdOutlineKeyboardDoubleArrowDown } from 'react-icons/md'
 import styles from './exploreCarousel.module.scss'
