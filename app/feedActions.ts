@@ -4,6 +4,10 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost } from '@/lib/common'
 import { revalidateTag } from 'next/cache'
 
+/**
+ * Helper function to control the feed revalidation in client components.
+ * @returns Feed Revalidation
+ */
 export const revalidateFeed = (): void => revalidateTag('revalidate-feed')
 
 export async function fetchPosts(page = 1): Promise<ESResponse<FullPost[]>> {
