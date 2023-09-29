@@ -29,7 +29,7 @@ export default function PostItem({ post }: Params) {
 
         <a
           className={styles.nomeLocalizacao}
-          href="/client/profile/cllgwtgbt0000w42oblx1qp27"
+          href={`/client/profile/${post.authorId}`}
         >
           <h1 className={styles.nome}>{post.author?.name ?? '):'}</h1>
           <small className={styles.localizacao}>{post.author?.location}</small>

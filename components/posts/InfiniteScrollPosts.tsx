@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchPosts } from '@/app/feedActions'
+import { fetchPosts, revalidateFeed } from '@/app/feedActions'
 import { ESResponse, FullPost } from '@/lib/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -19,9 +19,7 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
   // Memoize all loaded posts
   const loadMorePosts = useCallback(async () => {
     const next = page + 1
-    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next, true)
-
-    console.log(JSON.stringify(data))
+    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next)
 
     // check if had any error if so print it
     if (error) {
@@ -36,8 +34,8 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
       return
     }
 
+    revalidateFeed()
     setPages(next)
-
     setPosts((prevPost: FullPost[] | undefined) => [
       ...(prevPost?.length ? prevPost : []),
       ...data,
