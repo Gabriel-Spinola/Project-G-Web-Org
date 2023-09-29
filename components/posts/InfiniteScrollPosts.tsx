@@ -35,6 +35,7 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
     }
 
     revalidateFeed()
+
     setPages(next)
     setPosts((prevPost: FullPost[] | undefined) => [
       ...(prevPost?.length ? prevPost : []),

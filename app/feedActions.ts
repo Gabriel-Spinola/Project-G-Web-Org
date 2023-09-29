@@ -10,18 +10,22 @@ import { revalidateTag } from 'next/cache'
  */
 export const revalidateFeed = (): void => revalidateTag('revalidate-feed')
 
-export async function fetchPosts(page = 1): Promise<ESResponse<FullPost[]>> {
+export async function fetchPosts(
+  page = 1,
+  authorId: string | null = null,
+): Promise<ESResponse<FullPost[]>> {
   try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        next: { tags: ['revalidate-feed'] },
+    const apiRequestURL = !authorId
+      ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
+      : `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}&id=${authorId}`
+
+    const response = await fetch(apiRequestURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      next: { tags: ['revalidate-feed'] },
+    })
 
     if (!response.ok) {
       throw new Error("Response's not okay")
