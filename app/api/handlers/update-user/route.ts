@@ -8,7 +8,6 @@
  */
 
 // TODO: add data sanitization and stop exposing data into response bitch
-
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
@@ -34,8 +33,10 @@ async function handleUpdate(req: Request, id: string): Promise<NextResponse> {
       },
       { status: 200 },
     )
-  } catch (e: unknown) {
-    return NextResponse.json({ message: e }, { status: 400 })
+  } catch (error: unknown) {
+    console.error(error)
+
+    return NextResponse.json({ data: error }, { status: 400 })
   }
 }
 
@@ -44,7 +45,7 @@ export async function PUT(req: Request): Promise<NextResponse> {
   const id = url.searchParams.get('id')
 
   if (!id)
-    return NextResponse.json({ message: `Id can't be null` }, { status: 400 })
+    return NextResponse.json({ data: `Id can't be null` }, { status: 400 })
 
   return handleUpdate(req, id)
 }

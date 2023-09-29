@@ -1,9 +1,29 @@
+import { Post } from '@prisma/client'
+
 /**
- * @author Gabriel Spinola
+ * @template DataType - The type of data that the response can hold.
  *
- * @summary ES stands for error/success response,
- * meaning that: it either returns an error with data being null
- * or the other way around.
+ * @description
+ * The `ESResponse` type represents a common response pattern, where the response can either indicate success with valid data or failure with an error message. This pattern is denoted by "ES," which stands for Error/Success.
+ *
+ * @example
+ * // Example usage of ESResponse with user data:
+ * const response: ESResponse<UserData> = {
+ *   data: {
+ *     id: 1,
+ *     name: "John Doe",
+ *     email: "john@example.com"
+ *   },
+ *   error: null
+ * };
+ *
+ * // Example usage of ESResponse with an error message:
+ * const errorResponse: ESResponse<UserData> = {
+ *   data: null,
+ *   error: "User not found"
+ * };
+ *
+ * @author Gabriel Spinola
  */
 export type ESResponse<DataType> =
   | {
@@ -14,3 +34,14 @@ export type ESResponse<DataType> =
       data: null
       error: string
     }
+
+/**
+ * @summary Describes the content of a Post including its author data.
+ */
+export type FullPost = {
+  author: {
+    name: string | null
+    title: string | null
+    location: string | null
+  } | null
+} & Post
