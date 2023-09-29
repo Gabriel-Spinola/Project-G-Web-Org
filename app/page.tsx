@@ -1,7 +1,6 @@
 // LINK: https://www.youtube.com/watch?v=ytkG7RT6SvU
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
-import PostItem from '@/components/posts/PostItem'
 import { fetchPosts } from './feedActions'
 import { ESResponse, FullPost } from '@/lib/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
@@ -16,15 +15,9 @@ export default async function Home() {
         <PostSubmitFragment></PostSubmitFragment>
 
         {!error ? (
-          <>
-            <h1>WOrked</h1>
-
-            <InfiniteScrollPosts initialPosts={data || undefined} />
-          </>
+          <InfiniteScrollPosts initialPosts={data || undefined} />
         ) : (
-          <>
-            <h1>Failed</h1>
-          </>
+          <h1>Feed Failed to load</h1>
         )}
       </div>
     </main>

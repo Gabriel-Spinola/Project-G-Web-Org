@@ -16,10 +16,12 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
 
-  // Cache all loaded posts
+  // Memoize all loaded posts
   const loadMorePosts = useCallback(async () => {
     const next = page + 1
-    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next)
+    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next, true)
+
+    console.log(JSON.stringify(data))
 
     // check if had any error if so print it
     if (error) {
@@ -35,6 +37,7 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
     }
 
     setPages(next)
+
     setPosts((prevPost: FullPost[] | undefined) => [
       ...(prevPost?.length ? prevPost : []),
       ...data,

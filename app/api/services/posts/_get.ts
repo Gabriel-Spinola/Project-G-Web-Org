@@ -1,5 +1,6 @@
 import { FullPost } from '@/lib/common'
 import { prisma } from '@/lib/database/prisma'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 async function tryGetPostsFromUser(
@@ -11,7 +12,7 @@ async function tryGetPostsFromUser(
       take: take ?? 3,
       where: { authorId, published: true },
       include: {
-        author: { select: { name: true, title: true } },
+        author: { select: { name: true, title: true, location: true } },
       },
     })
 
@@ -34,7 +35,7 @@ async function tryGetOnlyPosts(page = 1, take = 3): Promise<FullPost[] | null> {
       skip,
       take,
       include: {
-        author: { select: { name: true, title: true } },
+        author: { select: { name: true, title: true, location: true } },
       },
     })
 
