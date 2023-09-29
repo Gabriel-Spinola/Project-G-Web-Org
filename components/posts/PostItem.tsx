@@ -35,13 +35,7 @@ export default function PostItem({ post }: Params) {
         </a>
       </div>
 
-      <article className={styles.p1}>
-        Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
-        nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
-        doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
-        vero. Odio quia quos illo. Exercitationem maxime officia cupiditate
-        accusantium eveniet maxime ut nam. Error reiciendis voluptates.
-      </article>
+      <article className={styles.p1}>{post?.content}</article>
 
       <div className="image-container">
         <Image

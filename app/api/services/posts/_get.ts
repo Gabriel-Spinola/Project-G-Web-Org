@@ -1,13 +1,6 @@
+import { FullPost } from '@/lib/common'
 import { prisma } from '@/lib/database/prisma'
-import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
-
-type FullPost = {
-  author: {
-    name: string | null
-    title: string | null
-  } | null
-} & Post
 
 async function tryGetPostsFromUser(
   take: number | null,
@@ -33,12 +26,13 @@ async function tryGetPostsFromUser(
   }
 }
 
-async function tryGetOnlyPosts(
-  take: number | null,
-): Promise<FullPost[] | null> {
+async function tryGetOnlyPosts(page = 1, take = 3): Promise<FullPost[] | null> {
   try {
+    const skip = (page - 1) * take
+
     const data = await prisma.post.findMany({
-      take: take ?? 3,
+      skip,
+      take,
       include: {
         author: { select: { name: true, title: true } },
       },
@@ -56,15 +50,18 @@ async function tryGetOnlyPosts(
 }
 
 export async function handleGet(
-  take: string | null,
+  page: string | null,
   authorId: string | null,
 ): Promise<NextResponse> {
   const data: FullPost[] | null = !authorId
-    ? await tryGetOnlyPosts(take ? parseInt(take) : null)
-    : await tryGetPostsFromUser(take ? parseInt(take) : null, authorId)
+    ? await tryGetOnlyPosts(page ? parseInt(page) : undefined)
+    : await tryGetPostsFromUser(page ? parseInt(page) : null, authorId)
 
   if (data) {
-    return NextResponse.json({ data }, { status: 200 })
+    return NextResponse.json(
+      { data: JSON.parse(JSON.stringify(data)) },
+      { status: 200 },
+    )
   }
 
   return NextResponse.json(
