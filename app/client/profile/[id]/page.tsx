@@ -63,7 +63,7 @@ export default async function Profile({
               }
             />
 
-            <UserPosts />
+            <UserPosts authorID={params.id} />
           </div>
         </div>
       </>
