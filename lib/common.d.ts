@@ -42,5 +42,6 @@ export type FullPost = {
   author: {
     name: string | null
     title: string | null
+    location: string | null
   } | null
 } & Post
