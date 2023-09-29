@@ -17,7 +17,7 @@ export const getProfilePicURL = (ownerId: string, imageId: string): string =>
 /**
  * @param image the image url thats stored in the database in the `'posts/author-id/image-name_id.png'`
  * @returns The public url for rendering the image
- * 
+ *
  * @example
  * ```jsx
  * <Image src={getPostImageUrl(post.images[index])} alt="img-alt" />
