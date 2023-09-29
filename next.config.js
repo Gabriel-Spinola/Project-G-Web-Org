@@ -7,6 +7,16 @@ const nextConfig = {
   env: {
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ebqqbabyixbmiwalviko.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/Vampeta-Images-Public/**',
+      },
+    ],
+  },
   async headers() {
     return [
       {

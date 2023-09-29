@@ -4,7 +4,7 @@ import { prisma } from '@/lib/database/prisma'
 import { revalidateTag } from 'next/cache'
 import { Comment, Post, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { commentsRefetchTag } from './contants'
+import { LikeOptions, commentsRefetchTag } from './contants'
 import { Session } from 'next-auth'
 
 export async function getComments(): Promise<Comment[] | null> {
@@ -80,9 +80,47 @@ export async function handleSubmitComment(formData: FormData): Promise<void> {
   }
 }
 
-// TODO - get likes directly from posts
+export async function editComment(formData: FormData): Promise<void | null> {
+  const newContent = formData.get('content')?.toString()
+  const commentId = formData.get('id')?.toString()
+
+  if (!newContent && !commentId) throw new Error("content or id can't be null")
+
+  try {
+    const newComment: Comment = await prisma.comment.update({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      where: { id: parseInt(commentId!) },
+      data: {
+        content: newContent,
+        isEdited: true,
+      },
+    })
+
+    console.log(JSON.stringify(newComment))
+  } catch (error: unknown) {
+    console.error('Failed do edit comment')
+
+    return null
+  }
+}
+
+export async function deleteComment(id: number): Promise<void | null> {
+  try {
+    const deletedComment: Comment = await prisma.comment.delete({
+      where: { id },
+    })
+
+    console.log(JSON.stringify(deletedComment))
+  } catch (error: unknown) {
+    console.error('Failed to delete comment')
+
+    return null
+  }
+}
+
+// TODO - Create a new like entity
 export async function increaseLikeCount(
-  selectedType: 'postId' | 'projectId' | 'commentId',
+  selectedType: LikeOptions,
   session: Session,
   targetId: string,
 ): Promise<void> {

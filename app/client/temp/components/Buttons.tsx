@@ -1,14 +1,14 @@
 'use client'
 
 import React, { experimental_useOptimistic as useOptimistic } from 'react'
-import { increaseLikeCount } from '../comments/actions'
+import { deleteComment, increaseLikeCount } from '../comments/actions'
 import { Session } from 'next-auth'
 
-type Params = {
+type LikeButtonParams = {
   params: { likes: number; targetId: string; session: Session }
 }
 
-export default function LikeButton({ params }: Params) {
+export function LikeButton({ params }: LikeButtonParams) {
   const [optimisticLikes, addOptimisticLikes] = useOptimistic(
     params.likes || 0,
     (state, l) => state + 1,
@@ -22,6 +22,22 @@ export default function LikeButton({ params }: Params) {
       }}
     >
       LikeButton {optimisticLikes}
+    </button>
+  )
+}
+
+type DeleteButtonParams = {
+  params: { id: number }
+}
+
+export function DeleteCommentButton({ params }: DeleteButtonParams) {
+  return (
+    <button
+      onClick={async () => {
+        await deleteComment(params.id)
+      }}
+    >
+      Delete Comment
     </button>
   )
 }

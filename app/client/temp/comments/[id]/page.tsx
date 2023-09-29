@@ -4,7 +4,7 @@ import { Session, getServerSession } from 'next-auth'
 import React from 'react'
 import { getComments, handleSubmitComment } from '../actions'
 import CreateCommentButton from '../../components/CreateCommentButton'
-import LikeButton from '../../components/LikeButton'
+import { LikeButton, DeleteCommentButton } from '../../components/Buttons'
 
 interface Params {
   params: { id: string }
@@ -19,16 +19,14 @@ export default async function CommentForm({ params }: Params) {
     <main>
       {session?.user ? (
         <>
-          <form method="POST" action={handleSubmitComment}>
+          <form action={handleSubmitComment}>
             <input type="hidden" name="author-id" value={session.user.id} />
             <input type="hidden" name="target-id" value={params.id} />
 
             <select name="type" id="type">
               <option value="posts">Posts</option>
               <option value="projects">Projects</option>
-              <option value="None" selected>
-                None
-              </option>
+              <option value="None">None</option>
             </select>
 
             <textarea
@@ -54,6 +52,7 @@ export default async function CommentForm({ params }: Params) {
                 <LikeButton
                   params={{ likes: 0, session, targetId: params.id }}
                 />{' '}
+                <DeleteCommentButton params={{ id: comment.id }} />
                 <br />
                 <br />
                 <br />
