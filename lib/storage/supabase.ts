@@ -14,6 +14,15 @@ export const getProfilePicURL = (ownerId: string, imageId: string): string =>
     .from(SUPABASE_PUBLIC_BUCKET_NAME)
     .getPublicUrl(`profile-pic/${ownerId}/${imageId}`).data.publicUrl
 
+/**
+ * @param image the image url thats stored in the database in the `'posts/author-id/image-name_id.png'`
+ * @returns The public url for rendering the image
+ * 
+ * @example
+ * ```jsx
+ * <Image src={getPostImageUrl(post.images[index])} alt="img-alt" />
+ * ```
+ */
 export const getPostImageUrl = (image: string): string =>
   supabase.storage.from(SUPABASE_PUBLIC_BUCKET_NAME).getPublicUrl(image).data
     .publicUrl
