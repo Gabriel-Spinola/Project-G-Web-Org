@@ -1,7 +1,14 @@
 'use client'
 
-import React, { experimental_useOptimistic as useOptimistic } from 'react'
-import { deleteComment, increaseLikeCount } from '../comments/actions'
+import React, {
+  experimental_useOptimistic as useOptimistic,
+  useState,
+} from 'react'
+import {
+  decreaseLikeCount,
+  deleteComment,
+  increaseLikeCount,
+} from '../comments/actions'
 import { signIn } from 'next-auth/react'
 
 type LikeButtonParams = {
@@ -9,9 +16,11 @@ type LikeButtonParams = {
 }
 
 export function LikeButton({ params }: LikeButtonParams) {
+  // REVIEW - this liked state probably should be a cookie
+  const [isLiked, setIsLiked] = useState<boolean>(false)
   const [optimisticLikes, addOptimisticLikes] = useOptimistic(
     params.likes || 0,
-    (state, l) => state + 1,
+    (state: number, l: boolean): number => (l ? state + 1 : state),
   )
 
   return (
@@ -20,12 +29,25 @@ export function LikeButton({ params }: LikeButtonParams) {
         onClick={async () => {
           if (!params.authorId) {
             signIn()
-        
+
             return
           }
 
-          addOptimisticLikes(1)
+          setIsLiked(!isLiked)
+          addOptimisticLikes(true)
+
+          addOptimisticLikes(true)
           await increaseLikeCount('postId', params.authorId, params.targetId)
+          // if (!isLiked) {
+
+          //   await increaseLikeCount('postId', params.authorId, params.targetId)
+          // } else {
+          //   addOptimisticLikes(false)
+
+          //   await decreaseLikeCount(params.authorId, params.targetId)
+
+          //   // addOptimisticLikes(params.likes || 0)
+          // }
         }}
         className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]"
       >
