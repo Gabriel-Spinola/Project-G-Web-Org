@@ -1,4 +1,4 @@
-import { Comment, Like, Post, User } from '@prisma/client'
+import { Post } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response can hold.
@@ -43,6 +43,7 @@ export type FullPost = Post & {
     name: string | null
     title: string | null
     location: string | null
+    profilePic: string | null
   } | null
 
   contributor: {

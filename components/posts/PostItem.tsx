@@ -18,8 +18,6 @@ interface Params {
 }
 
 export default function PostItem({ post }: Params) {
-  console.log(post)
-
   return (
     <div className={styles.postado}>
       <div className={styles.autor}>
@@ -47,7 +45,7 @@ export default function PostItem({ post }: Params) {
               ? getPostImageUrl(post.images[0])
               : '/test-img/imgtest.jpg'
           }
-          alt="imgtest"
+          alt={post.images.length > 0 ? post.images[0] : 'noimg'}
           width={776}
           height={1000}
           priority
