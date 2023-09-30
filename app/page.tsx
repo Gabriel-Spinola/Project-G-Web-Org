@@ -7,8 +7,6 @@ import { AuthOptions } from '@/lib/auth'
 
 export default async function Home() {
   const session: Session | null = await getServerSession(AuthOptions)
-  console.log(session)
-
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts()
 
   return (

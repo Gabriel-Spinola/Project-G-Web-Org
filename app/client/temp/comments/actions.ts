@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/database/prisma'
 import { revalidateTag } from 'next/cache'
-import { Comment, Post, Project } from '@prisma/client'
+import { Comment, Like, Post, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { LikeOptions, commentsRefetchTag } from './contants'
 import { Session } from 'next-auth'
@@ -118,7 +118,6 @@ export async function deleteComment(id: number): Promise<void | null> {
   }
 }
 
-// TODO - Create a new like entity
 export async function increaseLikeCount(
   selectedType: LikeOptions,
   authorId: string,
@@ -132,8 +131,23 @@ export async function increaseLikeCount(
       data: newLike,
     })
 
-    console.log('success? ' + JSON.stringify(updateUser))
+    console.log('POST? ' + JSON.stringify(updateUser))
   } catch (error: unknown) {
-    console.error('Like Failed')
+    console.error('Like Failed ' + error)
+  }
+}
+
+export async function decreaseLikeCount(
+  authorId: string,
+  targetId: string,
+): Promise<void> {
+  try {
+    const deleteLike: Like = await prisma.like.delete({
+      where: { postId: targetId },
+    })
+
+    console.log('DELETE? ' + JSON.stringify(deleteLike))
+  } catch (error: unknown) {
+    console.error('Like Failed ' + error)
   }
 }
