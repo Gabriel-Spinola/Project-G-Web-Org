@@ -3,8 +3,8 @@ import { handleGet } from './_get'
 import { handlePost } from './_post'
 import { handleDelete } from './_delete'
 import { handlePut } from './_put'
-import { Post } from '@prisma/client'
 import { handlePatch } from './_patch'
+import { Post } from '@prisma/client'
 
 /**
  *
@@ -22,9 +22,12 @@ async function handler(req: Request): Promise<NextResponse> {
    */
   const id: string | null = url.searchParams.get('id')
 
-  const idIsNullErrorResponse = NextResponse.json({
-    data: `FAILED:SERVICES/${req.method}-Post::failed: authorId Can't be null`,
-  })
+  const idIsNullErrorResponse = NextResponse.json(
+    {
+      data: `FAILED:SERVICES/${req.method}-Post::failed: authorId Can't be null`,
+    },
+    { status: 400 },
+  )
 
   switch (req.method) {
     case 'GET': {

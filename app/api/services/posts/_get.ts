@@ -2,7 +2,7 @@ import { FullPost } from '@/lib/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
-async function tryGetPostsFromUser(
+async function getPostsFromUser(
   authorId: string,
   page = 1,
   take = 3,
@@ -16,6 +16,9 @@ async function tryGetPostsFromUser(
       where: { authorId, published: true },
       include: {
         author: { select: { name: true, title: true, location: true } },
+        contributor: { select: { name: true } },
+        likes: { select: { id: true } },
+        comments: { select: { id: true } },
       },
     })
 
@@ -30,7 +33,10 @@ async function tryGetPostsFromUser(
   }
 }
 
-async function tryGetOnlyPosts(page = 1, take = 3): Promise<FullPost[] | null> {
+async function getPostsFromAllUsers(
+  page = 1,
+  take = 3,
+): Promise<FullPost[] | null> {
   try {
     const skip = (page - 1) * take
 
@@ -39,6 +45,9 @@ async function tryGetOnlyPosts(page = 1, take = 3): Promise<FullPost[] | null> {
       take,
       include: {
         author: { select: { name: true, title: true, location: true } },
+        contributor: { select: { name: true } },
+        likes: { select: { id: true } },
+        comments: { select: { id: true } },
       },
     })
 
@@ -58,8 +67,8 @@ export async function handleGet(
   authorId: string | null,
 ): Promise<NextResponse> {
   const data: FullPost[] | null = !authorId
-    ? await tryGetOnlyPosts(page ? parseInt(page) : undefined)
-    : await tryGetPostsFromUser(authorId, page ? parseInt(page) : undefined)
+    ? await getPostsFromAllUsers(page ? parseInt(page) : undefined)
+    : await getPostsFromUser(authorId, page ? parseInt(page) : undefined)
 
   if (data) {
     return NextResponse.json(

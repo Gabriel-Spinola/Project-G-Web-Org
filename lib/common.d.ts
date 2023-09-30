@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client'
+import { Comment, Like, Post, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response can hold.
@@ -38,10 +38,22 @@ export type ESResponse<DataType> =
 /**
  * @summary Describes the content of a Post including its author data.
  */
-export type FullPost = {
+export type FullPost = Post & {
   author: {
     name: string | null
     title: string | null
     location: string | null
   } | null
-} & Post
+
+  contributor: {
+    name: string | null
+  }[]
+
+  likes: {
+    id: number
+  }[]
+
+  comments: {
+    id: number
+  }[]
+}
