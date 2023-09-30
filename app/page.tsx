@@ -2,8 +2,13 @@ import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { fetchPosts } from './feedActions'
 import { ESResponse, FullPost } from '@/lib/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
+import { Session, getServerSession } from 'next-auth'
+import { AuthOptions } from '@/lib/auth'
 
 export default async function Home() {
+  const session: Session | null = await getServerSession(AuthOptions)
+  console.log(session)
+
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts()
 
   return (
@@ -12,7 +17,10 @@ export default async function Home() {
         <PostSubmitFragment></PostSubmitFragment>
 
         {!error ? (
-          <InfiniteScrollPosts initialPosts={data || undefined} />
+          <InfiniteScrollPosts
+            initialPosts={data || undefined}
+            currentUserId={session?.user.id}
+          />
         ) : (
           <h1>Feed Failed to load</h1>
         )}

@@ -8,9 +8,13 @@ import PostItem from './PostItem'
 
 type Params = {
   initialPosts: FullPost[] | undefined
+  currentUserId?: string
 }
 
-export default function InfiniteScrollPosts({ initialPosts }: Params) {
+export default function InfiniteScrollPosts({
+  initialPosts,
+  currentUserId,
+}: Params) {
   const [posts, setPosts] = useState<FullPost[] | undefined>(initialPosts)
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
@@ -28,8 +32,6 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
       return
     }
 
-    console.log(data)
-    // revalidateFeed()
     if (!data?.length) {
       setNoPostFound(true)
 
@@ -52,7 +54,9 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
 
   return (
     <>
-      {posts?.map((post) => <PostItem key={post.id} post={post} />)}
+      {posts?.map((post) => (
+        <PostItem key={post.id} post={post} currentUserId={currentUserId} />
+      ))}
 
       {/* loading spinner */}
       {isNoPostFound ? (

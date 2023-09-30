@@ -121,14 +121,14 @@ export async function deleteComment(id: number): Promise<void | null> {
 // TODO - Create a new like entity
 export async function increaseLikeCount(
   selectedType: LikeOptions,
-  session: Session,
+  authorId: string,
   targetId: string,
 ): Promise<void> {
   try {
     const newLike = { likes: { create: { [selectedType]: targetId } } }
 
     const updateUser = await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: authorId },
       data: newLike,
     })
 
