@@ -28,13 +28,13 @@ export default function InfiniteScrollPosts({ initialPosts }: Params) {
       return
     }
 
+    console.log(data)
+    // revalidateFeed()
     if (!data?.length) {
       setNoPostFound(true)
 
       return
     }
-
-    revalidateFeed()
 
     setPages(next)
     setPosts((prevPost: FullPost[] | undefined) => [

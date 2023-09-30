@@ -15,7 +15,9 @@ async function getPostsFromUser(
       take,
       where: { authorId, published: true },
       include: {
-        author: { select: { name: true, title: true, location: true } },
+        author: {
+          select: { name: true, title: true, location: true, profilePic: true },
+        },
         contributor: { select: { name: true } },
         likes: { select: { id: true } },
         comments: { select: { id: true } },
@@ -44,7 +46,9 @@ async function getPostsFromAllUsers(
       skip,
       take,
       include: {
-        author: { select: { name: true, title: true, location: true } },
+        author: {
+          select: { name: true, title: true, location: true, profilePic: true },
+        },
         contributor: { select: { name: true } },
         likes: { select: { id: true } },
         comments: { select: { id: true } },
@@ -69,6 +73,8 @@ export async function handleGet(
   const data: FullPost[] | null = !authorId
     ? await getPostsFromAllUsers(page ? parseInt(page) : undefined)
     : await getPostsFromUser(authorId, page ? parseInt(page) : undefined)
+
+  console.log(data)
 
   if (data) {
     return NextResponse.json(
