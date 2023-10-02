@@ -8,6 +8,8 @@ const nextConfig = {
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
   },
   images: {
+    loader: 'custom',
+    loaderFile: './lib/storage/supabase-image-loader.js',
     remotePatterns: [
       {
         protocol: 'https',

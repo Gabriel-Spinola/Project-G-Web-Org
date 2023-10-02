@@ -4,7 +4,7 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
 import type { NextAuthOptions } from 'next-auth'
