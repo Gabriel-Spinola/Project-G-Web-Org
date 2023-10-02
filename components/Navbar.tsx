@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import '@/app/styles/navbar.scss'
-
-async function Navbar() {
+const Navbar = () => {
   return (
     <nav
       id="header-nav"
@@ -10,13 +9,13 @@ async function Navbar() {
     >
       <ul className="flex flex-row">
         <li>
-          <a href="../app/client/explore">
+          <a href="../client/explore">
             Explorar
             <div></div>
           </a>
         </li>
         <li>
-          <a href="../app/client/project">
+          <a href="../client/projects">
             Projetos
             <div></div>
           </a>
@@ -32,13 +31,13 @@ async function Navbar() {
           </a>
         </li>
         <li>
-          <a href="../app/client/architects">
-            Arquitetos
+          <a href="../client/search">
+            Busca
             <div></div>
           </a>
         </li>
         <li>
-          <a href="../app/client/profile/[id]">
+          <a href="../client/profile/[id]">
             Perfil
             <div></div>
           </a>
@@ -47,5 +46,4 @@ async function Navbar() {
     </nav>
   )
 }
-
 export default Navbar
