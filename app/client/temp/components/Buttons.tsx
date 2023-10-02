@@ -16,37 +16,35 @@ type LikeButtonParams = {
 }
 
 export function LikeButton({ params }: LikeButtonParams) {
-  // REVIEW - this liked state probably should be a cookie
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [optimisticLikes, addOptimisticLikes] = useOptimistic(
     params.likes || 0,
     (state: number, l: boolean): number => (l ? state + 1 : state),
   )
 
+  async function handleLike() {
+    if (!params.authorId) {
+      signIn()
+
+      return
+    }
+
+    setIsLiked(!isLiked)
+
+    // add 1 if liked, or remove 1 if removed like
+    addOptimisticLikes(!isLiked)
+
+    if (!isLiked) {
+      await increaseLikeCount('postId', params.authorId, params.targetId)
+    } else {
+      await decreaseLikeCount(params.targetId)
+    }
+  }
+
   return (
     <>
       <button
-        onClick={async () => {
-          if (!params.authorId) {
-            signIn()
-
-            return
-          }
-
-          setIsLiked(!isLiked)
-
-          // await increaseLikeCount('postId', params.authorId, params.targetId)
-          if (!isLiked) {
-            addOptimisticLikes(true)
-            await increaseLikeCount('postId', params.authorId, params.targetId)
-          } else {
-            addOptimisticLikes(false)
-
-            await decreaseLikeCount(params.authorId, params.targetId)
-
-            // addOptimisticLikes(params.likes || 0)
-          }
-        }}
+        onClick={handleLike}
         className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]"
       >
         <svg
