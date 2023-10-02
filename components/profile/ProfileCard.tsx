@@ -9,7 +9,6 @@
 
 'use client'
 
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import {
   Menu,
   MenuButton,
@@ -32,29 +31,20 @@ import {
   EditableTextarea,
   Avatar,
   Box,
-  Image,
   IconButton,
 } from '@chakra-ui/react'
 
 import { EditIcon } from '@chakra-ui/icons'
 import { BsFillGearFill } from 'react-icons/bs'
 
-import { User } from 'next-auth'
 import React, { FormEvent } from 'react'
+import { User } from '@prisma/client'
+import { useRouter } from 'next/navigation'
+import { updateUserPageData } from '@/app/client/profile/actions'
 
 interface Params {
-  // name and location params are temporary, please delete them later
-  name: string
-  title: string
-  // TODO - Lucas você não pode passar undefined para uma tipo q pede um valor seu bosta
-  // NOTE - se for pra testar colocar pelo menos o: `| undefined`
-  user: User | undefined
+  user: Partial<User>
   isOwner: boolean
-}
-
-type TestOfResponseType = {
-  message: string
-  operation: string
 }
 
 const defaultEditFormValues = {
@@ -63,24 +53,24 @@ const defaultEditFormValues = {
 }
 
 export default function DisplayUserInfo({
-  // name and location params are temporary, please delete them later
-  name,
-  title,
   user,
   isOwner,
 }: Params): React.JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
 
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
 
-    // Helper function to get a field's value or default to an empty string
+    /**
+     * Helper function to get a field's value or default to an empty string
+     */
     const getFieldValueOrDefault = (
       fieldName: string,
       defaultValue: string,
-    ) => {
+    ): string | null => {
       const fieldValue = formData.get(fieldName) as string | null
 
       return fieldValue === defaultValue ? '' : fieldValue
@@ -101,27 +91,17 @@ export default function DisplayUserInfo({
       ) ?? '',
     )
 
-    try {
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${user?.id}`,
-        {
-          method: 'PUT',
-          body: formData,
-        },
-      )
+    const { data, error } = await updateUserPageData(
+      formData,
+      user.id as string,
+    )
 
-      if (!response.ok) {
-        console.error('Response not okay')
-      }
-
-      const { message, operation }: Partial<TestOfResponseType> =
-        await response.json()
-
-      console.log(message)
-      console.log(operation)
-    } catch (error: unknown) {
-      console.error(error)
+    if (error) {
+      console.error('failed')
     }
+
+    console.log(data)
+    router.refresh()
   }
 
   return (
@@ -139,7 +119,7 @@ export default function DisplayUserInfo({
       <Box className="absolute w-[100%] h-[208px] bg-black bg-opacity-75 ml-[-64px]"></Box>
 
       <div id="profile-avatar-wrapper">
-        <Avatar size={'2xl'} src={user?.image || ''}></Avatar>
+        <Avatar size={'2xl'} src={user?.profilePic || ''}></Avatar>
       </div>
       <div
         id="profile-info-wrapper"
@@ -147,23 +127,13 @@ export default function DisplayUserInfo({
       >
         <div id="info-name-wrapper" className="flex flex-col">
           <h1 className="text-4xl text-medium-primary font-bold">
-            {/* variable name is temporary! Replace it to user?.name */}
-            {name || ''}
+            {user.name ?? ''}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
-            {/* variable name is temporary! Replace it to user?.name */}
-            {title || ''}
+            {user.title ?? ''}
           </h2>
         </div>
       </div>
-
-      {/* <h1>{user?.name}</h1>
-      <h2>{user?.title || ''}</h2>
-      <p>{user?.description || ''}</p>
-      <h1>Linkedin: {user?.linkedinUrl || ''}</h1>
-      <h1>Site: {user?.siteUrl}</h1>
-      <h1>phone: {user?.contactPhone}</h1>
-      <h1>email: {user?.email}</h1> */}
 
       {isOwner && (
         <div className="max-w-[10%]">
@@ -176,8 +146,9 @@ export default function DisplayUserInfo({
               color={'white'}
               className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
             />
+
             <MenuList>
-              <MenuItem icon={<EditIcon color="white" />} onClick={onOpen}>
+              <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
                 Editar Perfil
               </MenuItem>
             </MenuList>

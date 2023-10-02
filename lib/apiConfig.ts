@@ -6,9 +6,11 @@
  * @version main-release
  * @license i.e. MIT
  */
+
 export const API_ENDPOINTS = {
   services: {
     posts: 'api/services/posts/',
+    users: 'api/services/users/',
     comments: 'api/services/comments/',
     findUnique: 'api/services/find-unique/',
     findMany: 'api/services/find-many/',
@@ -19,20 +21,17 @@ export const API_ENDPOINTS = {
   },
 }
 
+// STUB - TEMP
+export enum ModelsApiCode {
+  Project = '0',
+  Post = '1',
+  Comment = '2',
+  User = '3',
+}
+
 export const SUPABASE_STORAGE_URL = `https://${process.env.SUPABASE_PROJECT_ID}.supabase.co/storage/v1/upload/resumable`
 
 export const API_URL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
     : 'https://projectg2.vercel.app/'
-
-export type APIResponse = Promise<
-  | {
-      data: string
-      error: null
-    }
-  | {
-      data: null
-      error: string
-    }
->

@@ -22,27 +22,26 @@ async function handler(req: Request): Promise<NextResponse> {
    */
   const id: string | null = url.searchParams.get('id')
 
-  if (!id) {
-    return NextResponse.json(
-      {
-        data: `FAILED:SERVICES/${req.method}-Post::failed: authorId Can't be null`,
-      },
-      { status: 400 },
-    )
-  }
+  const idIsNullErrorResponse = NextResponse.json({
+    data: `FAILED:SERVICES/${req.method}-Post::failed: authorId Can't be null`,
+  })
 
   switch (req.method) {
     case 'GET': {
-      const take: string | null = url.searchParams.get('take')
+      const page: string | null = url.searchParams.get('page')
 
-      return handleGet(take, id)
+      return handleGet(page, id)
     }
 
     case 'POST': {
+      if (!id) return idIsNullErrorResponse
+
       return handlePost(id, req)
     }
 
     case 'PATCH': {
+      if (!id) return idIsNullErrorResponse
+
       const bodyData: Partial<Post> = await req.json()
 
       return handlePatch(id, bodyData)
@@ -50,12 +49,16 @@ async function handler(req: Request): Promise<NextResponse> {
 
     // TODO: (accept only full posts)
     case 'PUT': {
+      if (!id) return idIsNullErrorResponse
+
       const bodyData: Post = await req.json()
 
       return handlePut(id, bodyData)
     }
 
     case 'DELETE': {
+      if (!id) return idIsNullErrorResponse
+
       return handleDelete(id)
     }
 
