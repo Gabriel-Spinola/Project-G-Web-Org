@@ -1,10 +1,6 @@
-'use client'
-
 import Image from 'next/image'
 import React from 'react'
 import '@/app/styles/navbar.scss'
-import Routes from './Router'
-import { Link } from 'react-router-dom'
 const Navbar = () => {
   return (
     <nav
@@ -13,38 +9,38 @@ const Navbar = () => {
     >
       <ul className="flex flex-row">
         <li>
-          <Link to="/explore">
+          <a href="../client/explore">
             Explorar
             <div></div>
-          </Link>
+          </a>
         </li>
         <li>
-          <Link to="/projects">
+          <a href="../client/projects">
             Projetos
             <div></div>
-          </Link>
+          </a>
         </li>
         <li>
-          <Link to="/">
+          <a href="/">
             <Image
               src="/assets/logo.png"
               alt="logo-image"
               width={200}
               height={50}
             />
-          </Link>
+          </a>
         </li>
         <li>
-          <Link to="rchitects">
-            Arquitetos
+          <a href="../client/search">
+            Busca
             <div></div>
-          </Link>
+          </a>
         </li>
         <li>
-          <Link to="profile/">
+          <a href="../client/profile/[id]">
             Perfil
             <div></div>
-          </Link>
+          </a>
         </li>
       </ul>
     </nav>
