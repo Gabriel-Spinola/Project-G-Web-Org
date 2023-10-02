@@ -2,55 +2,49 @@ import { FullPost } from '@/lib/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
-async function tryGetPostsFromUser(
-  authorId: string,
+async function getPosts(
+  where: { authorId?: string; published?: boolean },
   page = 1,
   take = 3,
 ): Promise<FullPost[] | null> {
-  const skip = (page - 1) * take
-
-  try {
-    const data = await prisma.post.findMany({
-      skip,
-      take,
-      where: { authorId, published: true },
-      include: {
-        author: { select: { name: true, title: true, location: true } },
-      },
-    })
-
-    return data
-  } catch (e: unknown) {
-    console.error(
-      'SERVICES/GET-POSTS::failed to get posts from user (database level): ',
-      e,
-    )
-
-    return null
-  }
-}
-
-async function tryGetOnlyPosts(page = 1, take = 3): Promise<FullPost[] | null> {
   try {
     const skip = (page - 1) * take
 
     const data = await prisma.post.findMany({
+      where,
       skip,
       take,
       include: {
-        author: { select: { name: true, title: true, location: true } },
+        author: {
+          select: { name: true, title: true, location: true, profilePic: true },
+        },
+        contributor: { select: { name: true } },
+        likes: { select: { id: true } },
+        comments: { select: { id: true } },
       },
     })
 
     return data
-  } catch (error: unknown) {
-    console.error(
-      'SERVICES/GET-POSTS::failed to get posts (database level):',
-      error,
-    )
+  } catch (error) {
+    console.error('Error occurred:', error)
 
-    return null
+    throw new Error('Failed to fetch posts from the database.')
   }
+}
+
+async function getPostsFromUser(
+  authorId: string,
+  page?: number,
+  take?: number,
+): Promise<FullPost[] | null> {
+  return getPosts({ authorId }, page, take)
+}
+
+async function getPostsFromAllUsers(
+  page?: number,
+  take?: number,
+): Promise<FullPost[] | null> {
+  return getPosts({ published: true }, page, take)
 }
 
 export async function handleGet(
@@ -58,18 +52,18 @@ export async function handleGet(
   authorId: string | null,
 ): Promise<NextResponse> {
   const data: FullPost[] | null = !authorId
-    ? await tryGetOnlyPosts(page ? parseInt(page) : undefined)
-    : await tryGetPostsFromUser(authorId, page ? parseInt(page) : undefined)
+    ? await getPostsFromAllUsers(page ? parseInt(page) : undefined)
+    : await getPostsFromUser(authorId, page ? parseInt(page) : undefined)
 
-  if (data) {
+  if (!data) {
     return NextResponse.json(
-      { data: JSON.parse(JSON.stringify(data)) },
-      { status: 200 },
+      { data: 'FAILED:SERVICES/GET-POSTS::failed to get posts (API level)' },
+      { status: 400 },
     )
   }
 
   return NextResponse.json(
-    { data: 'FAILED:SERVICES/GET-POSTS::failed to get posts (API level)' },
-    { status: 400 },
+    { data: JSON.parse(JSON.stringify(data)) },
+    { status: 200 },
   )
 }

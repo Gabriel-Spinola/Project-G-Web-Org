@@ -50,7 +50,11 @@ export default async function CommentForm({ params }: Params) {
                 <span>author: {comment.authorId}</span> <br />
                 <span>Content: {comment.content}</span> <br />
                 <LikeButton
-                  params={{ likes: 0, session, targetId: params.id }}
+                  params={{
+                    likes: 0,
+                    authorId: session.user.id,
+                    targetId: params.id,
+                  }}
                 />{' '}
                 <DeleteCommentButton params={{ id: comment.id }} />
                 <br />

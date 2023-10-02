@@ -202,15 +202,15 @@ model Comment {
 model Like {
   id Int @id @default(autoincrement())
 
-  user   User   @relation("LikedBy", fields: [userId], references: [id])
-  userId String
+  user   User   @relation("LikedBy", fields: [userId], references: [id], onDelete: Cascade)
+  userId String 
 
-  post   Post?   @relation("LikedPost", fields: [postId], references: [id])
-  postId String?
+  post   Post?   @relation("LikedPost", fields: [postId], references: [id], onDelete: Cascade)
+  postId String? 
 
-  project   Project? @relation("LikedProject", fields: [projectId], references: [id])
-  projectId String?
+  project   Project? @relation("LikedProject", fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String? 
 
-  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id])
-  commentId Int?
+  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int? 
 }
