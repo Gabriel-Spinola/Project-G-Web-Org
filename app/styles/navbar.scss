@@ -38,8 +38,8 @@
   }
 }
 
-//navbar responsiveness till 1580px
-@media (max-width: 1580px) {
+//navbar responsiveness till 1536px
+@media (max-width: 1536px) {
   #header-nav {
     ul {
       li {
@@ -48,8 +48,8 @@
     }
   }
 }
-//navbar responsiveness till 1320px
-@media (max-width: 1320px) {
+//navbar responsiveness till 1280px
+@media (max-width: 1280px) {
   #header-nav {
     ul {
       li {
@@ -58,22 +58,12 @@
     }
   }
 }
-//navbar responsiveness till 1160px
-@media (max-width: 1160px) {
+//navbar responsiveness till 1024px
+@media (max-width: 1024px) {
   #header-nav {
     ul {
       li {
         margin: 0 32px;
-      }
-    }
-  }
-}
-//navbar responsiveness till 1080px
-@media (max-width: 1080px) {
-  #header-nav {
-    ul {
-      li {
-        margin: 0 16px;
       }
     }
   }
