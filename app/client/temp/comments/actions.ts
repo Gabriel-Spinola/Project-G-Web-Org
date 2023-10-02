@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/database/prisma'
 import { revalidateTag } from 'next/cache'
-import { Comment, Post, Project } from '@prisma/client'
+import { Comment, Like, Post, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { LikeOptions, commentsRefetchTag } from './contants'
 import { Session } from 'next-auth'
@@ -118,22 +118,34 @@ export async function deleteComment(id: number): Promise<void | null> {
   }
 }
 
-// TODO - Create a new like entity
 export async function increaseLikeCount(
   selectedType: LikeOptions,
-  session: Session,
+  authorId: string,
   targetId: string,
 ): Promise<void> {
   try {
     const newLike = { likes: { create: { [selectedType]: targetId } } }
 
     const updateUser = await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: authorId },
       data: newLike,
     })
 
-    console.log('success? ' + JSON.stringify(updateUser))
+    console.log('POST? ' + JSON.stringify(updateUser))
   } catch (error: unknown) {
-    console.error('Like Failed')
+    console.error('Like Failed ' + error)
+  }
+}
+
+export async function decreaseLikeCount(targetId: string): Promise<void> {
+  try {
+    // FIXME - Best solution found till now, is to make all Like fields unique
+    const deleteLike = await prisma.like.deleteMany({
+      where: { postId: targetId },
+    })
+
+    console.log('DELETE? ' + JSON.stringify(deleteLike))
+  } catch (error: unknown) {
+    console.error('Like Failed ' + error)
   }
 }
