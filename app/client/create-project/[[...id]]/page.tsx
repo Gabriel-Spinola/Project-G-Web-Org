@@ -9,9 +9,8 @@
 
 import CreateProjectForm from '@/components/projects/CreateProjectForm'
 import { getRowDataFromAPI } from '@/lib/database/actions'
-import { ModelsApiCode } from '@/lib/database/table.types'
+import { ModelsApiCode } from '@/lib/apiConfig'
 import { Project } from '@prisma/client'
-import { GetServerSideProps } from 'next'
 
 type Props = {
   params: { id: string[] | null; project: Project | null }

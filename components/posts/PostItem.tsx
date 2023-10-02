@@ -12,10 +12,11 @@
 import React from 'react'
 import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
-import { Post } from '@prisma/client'
+import { FullPost } from '@/lib/common'
+import { getPostImageUrl } from '@/lib/storage/supabase'
 
 interface Params {
-  post: Post | null
+  post: FullPost
 }
 
 export default function PostItem({ post }: Params) {
@@ -28,25 +29,23 @@ export default function PostItem({ post }: Params) {
 
         <a
           className={styles.nomeLocalizacao}
-          href="/client/profile/cllgwtgbt0000w42oblx1qp27"
+          href={`/client/profile/${post.authorId}`}
         >
-          <h1 className={styles.nome}>Lucas Vinicius</h1>
-          <small className={styles.localizacao}>Belo Horizonte, MG</small>
+          <h1 className={styles.nome}>{post.author?.name ?? '):'}</h1>
+          <small className={styles.localizacao}>{post.author?.location}</small>
         </a>
       </div>
 
-      <article className={styles.p1}>
-        Exercitationem maxime officia cupiditate accusantium eveniet maxime ut
-        nam. Error reiciendis voluptates. Dicta autem velit ex sapiente ipsum
-        doloribus pariatur. Debitis blanditiis fuga corporis impedit corrupti
-        vero. Odio quia quos illo. Exercitationem maxime officia cupiditate
-        accusantium eveniet maxime ut nam. Error reiciendis voluptates.
-      </article>
+      <article className={styles.p1}>{post?.content}</article>
 
       <div className="image-container">
         <Image
           className={styles.oneImg}
-          src="/test-img/imgtest.jpg"
+          src={
+            post.images.length > 0
+              ? getPostImageUrl(post.images[0])
+              : '/test-img/imgtest.jpg'
+          }
           alt="imgtest"
           width={776}
           height={1000}

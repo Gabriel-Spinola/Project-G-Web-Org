@@ -1,12 +1,22 @@
+import { fetchPosts } from '@/app/feedActions'
+import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
-import PostItem from '../posts/PostItem'
+import { ESResponse, FullPost } from '@/lib/common'
 
-export default function UserPosts() {
+type Params = { authorID: string }
+
+export default async function UserPosts({ authorID }: Params) {
+  const { data, error }: ESResponse<FullPost[]> = await fetchPosts(1, authorID)
+
   return (
     <section id="PostWrapper" className="flex flex-col">
       <PostSubmitFragment />
-      <PostItem post={null} />
-      <PostItem post={null} />
+
+      {!error ? (
+        <InfiniteScrollPosts initialPosts={data || undefined} />
+      ) : (
+        <h1>Failed to load feed</h1>
+      )}
     </section>
   )
 }
