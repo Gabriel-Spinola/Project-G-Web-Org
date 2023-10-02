@@ -7,33 +7,33 @@
  * @license i.e. MIT
  */
 
-
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
-// import { get, set } from 'lodash'
 
 // NOTE: Not Scalable
 
 // allowed requests per minute
-const rateLimit = 40
-const rateLimiter = {}
+const rateLimit = 100
+const rateLimiter: Record<string, number[]> = {}
 
-// FIXME - Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
-// LINK - Learn More: https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
-// function rateLimiterMiddleware(ip: string) {
-//   const now = Date.now()
-//   const windowStart = now - 60 * 1000 // 1 minute ago
+function rateLimiterMiddleware(ip: string): boolean {
+  const now = Date.now()
+  const windowStart = now - 60 * 1000 // 1 minute ago
 
-//   const requestTimestamps: number[] = get(rateLimiter, ip, []).filter(
-//     (timestamp) => timestamp > windowStart,
-//   )
+  if (!rateLimiter[ip]) {
+    rateLimiter[ip] = []
+  }
 
-//   requestTimestamps.push(now)
+  const requestTimestamps: number[] = rateLimiter[ip].filter(
+    (timestamp) => timestamp > windowStart,
+  )
 
-//   set(rateLimiter, ip, requestTimestamps)
+  requestTimestamps.push(now)
 
-//   return requestTimestamps.length <= rateLimit
-// }
+  rateLimiter[ip] = requestTimestamps
+
+  return requestTimestamps.length <= rateLimit
+}
 
 async function middleware(req: NextRequestWithAuth) {
   if (req.nextUrl.pathname.startsWith('/api/')) {
@@ -43,9 +43,7 @@ async function middleware(req: NextRequestWithAuth) {
       req.ip ||
       req.headers.get('x-real-ip')
 
-    // FIXME
-    // const passedRateLimiter = rateLimiterMiddleware(ip as string)
-    const passedRateLimiter = true
+    const passedRateLimiter = rateLimiterMiddleware(ip as string)
 
     if (!passedRateLimiter) {
       return NextResponse.json(
