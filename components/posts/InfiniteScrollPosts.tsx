@@ -1,21 +1,22 @@
 'use client'
 
-import { fetchPosts, revalidateFeed } from '@/app/feedActions'
-import { ESResponse, FullPost } from '@/lib/common'
+import { fetchPosts } from '@/app/feedActions'
+import { ESResponse, FullPost, FullProject } from '@/lib/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 
+// TODO: Generalize Feed
 type Params = {
-  initialPosts: FullPost[] | undefined
+  initialPublication: FullPost[] | undefined
   currentUserId?: string
 }
 
 export default function InfiniteScrollPosts({
-  initialPosts,
+  initialPublication,
   currentUserId,
 }: Params) {
-  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPosts)
+  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()

@@ -16,7 +16,7 @@ export default async function Home() {
 
         {!error ? (
           <InfiniteScrollPosts
-            initialPosts={data || undefined}
+            initialPublication={data || undefined}
             currentUserId={session?.user.id}
           />
         ) : (

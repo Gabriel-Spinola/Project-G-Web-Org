@@ -80,6 +80,8 @@ export default function PostItem({ post, currentUserId }: Params) {
 
           <span>{post.comments?.length ?? 0}</span>
         </button>
+
+        <a href={`/client/posts/${post.id}`}>Check Post</a>
       </div>
     </div>
   )
