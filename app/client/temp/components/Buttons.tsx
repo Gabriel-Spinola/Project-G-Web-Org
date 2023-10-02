@@ -34,20 +34,18 @@ export function LikeButton({ params }: LikeButtonParams) {
           }
 
           setIsLiked(!isLiked)
-          addOptimisticLikes(true)
 
-          addOptimisticLikes(true)
-          await increaseLikeCount('postId', params.authorId, params.targetId)
-          // if (!isLiked) {
+          // await increaseLikeCount('postId', params.authorId, params.targetId)
+          if (!isLiked) {
+            addOptimisticLikes(true)
+            await increaseLikeCount('postId', params.authorId, params.targetId)
+          } else {
+            addOptimisticLikes(false)
 
-          //   await increaseLikeCount('postId', params.authorId, params.targetId)
-          // } else {
-          //   addOptimisticLikes(false)
+            await decreaseLikeCount(params.authorId, params.targetId)
 
-          //   await decreaseLikeCount(params.authorId, params.targetId)
-
-          //   // addOptimisticLikes(params.likes || 0)
-          // }
+            // addOptimisticLikes(params.likes || 0)
+          }
         }}
         className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]"
       >
