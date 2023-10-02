@@ -13,7 +13,7 @@ import { NextResponse } from 'next/server'
 // NOTE: Not Scalable
 
 // allowed requests per minute
-const rateLimit = 40
+const rateLimit = 100
 const rateLimiter: Record<string, number[]> = {}
 
 function rateLimiterMiddleware(ip: string): boolean {
