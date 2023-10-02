@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client'
+import { Post, Project } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response can hold.
@@ -36,9 +36,9 @@ export type ESResponse<DataType> =
     }
 
 /**
- * @summary Describes the content of a Post including its author data.
+ * @summary Describes the data that is recurrent in publications
  */
-export type FullPost = Post & {
+export type PublicationsDefaultData = {
   author: {
     name: string | null
     title: string | null
@@ -58,3 +58,13 @@ export type FullPost = Post & {
     id: number
   }[]
 }
+
+/**
+ * @summary Describes the content of a Post including its author generic data.
+ */
+export type FullPost = Post & PublicationsDefaultData
+
+/**
+ * @summary Describes the content of a Project including its author generic data.
+ */
+export type FullProject = Project & PublicationsDefaultData

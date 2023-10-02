@@ -13,7 +13,7 @@ export default async function UserPosts({ authorID }: Params) {
       <PostSubmitFragment />
 
       {!error ? (
-        <InfiniteScrollPosts initialPosts={data || undefined} />
+        <InfiniteScrollPosts initialPublication={data || undefined} />
       ) : (
         <h1>Failed to load feed</h1>
       )}
