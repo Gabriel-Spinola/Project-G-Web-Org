@@ -127,7 +127,10 @@ export async function increaseLikeCount(
     const newLike = { likes: { create: { [selectedType]: targetId } } }
 
     const updateUser = await prisma.user.update({
-      where: { id: authorId },
+      where: {
+        id: authorId,
+        NOT: { likes: { some: { postId: targetId } } },
+      },
       data: newLike,
     })
 
