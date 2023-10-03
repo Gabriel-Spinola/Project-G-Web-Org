@@ -51,13 +51,13 @@ export default async function PostPage({ params }: Props) {
                   <h1>Comment {comment.id.toString()}</h1>
                   <span>author: {comment.authorId}</span> <br />
                   <span>Content: {comment.content}</span> <br />
-                  <LikeButton
+                  {/* <LikeButton
                     params={{
                       likes: 0,
                       authorId: params.currentUserId,
                       targetId: params.id as string,
                     }}
-                  />{' '}
+                  />{' '} */}
                   <DeleteCommentButton params={{ id: comment.id }} />
                   <br />
                   <br />

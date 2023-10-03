@@ -15,13 +15,14 @@ export default function LikeButton({ params }: Params) {
   )
 
   return (
-    <button
-      onClick={async () => {
-        addOptimisticLikes(1)
-        await increaseLikeCount('postId', params.session, params.targetId)
-      }}
-    >
-      LikeButton {optimisticLikes}
-    </button>
+    <h1>AAA</h1>
+    // <button
+    //   onClick={async () => {
+    //     addOptimisticLikes(1)
+    //     await increaseLikeCount('postId', params.session, params.targetId)
+    //   }}
+    // >
+    //   LikeButton {optimisticLikes}
+    // </button>
   )
 }
