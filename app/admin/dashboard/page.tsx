@@ -7,6 +7,13 @@
  * @license i.e. MIT
  */
 
-export default function Dashboard() {
-  return <main>Dashboard</main>
+import { checkIfAuthorized } from '@/lib/auth/actions'
+import { $Enums } from '@prisma/client'
+
+export default async function Dashboard() {
+  if (await checkIfAuthorized($Enums.Positions.Admin)) {
+    return <main>Dashboard</main>
+  }
+
+  return <h1>Not permitted </h1>
 }
