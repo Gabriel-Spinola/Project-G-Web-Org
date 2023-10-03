@@ -10,12 +10,22 @@
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
-// NOTE: Not Scalable
+// TODO - add all paths that need authentication
+const onlyAuthenticatedPages = [
+  '/admin/',
+  '/client/profile/',
+  '/client/temp/',
+  '/api/handlers/',
+  '/api/session/',
+]
+
+const onlyAdminPages = ['/admin/']
 
 // allowed requests per minute
 const rateLimit = 100
 const rateLimiter: Record<string, number[]> = {}
 
+// NOTE: Not Scalable
 function rateLimiterMiddleware(ip: string): boolean {
   const now = Date.now()
   const windowStart = now - 60 * 1000 // 1 minute ago
@@ -56,8 +66,11 @@ async function middleware(req: NextRequestWithAuth) {
     // TODO: Storage Cleanup
   }
 
-  // TODO - add paths that need authentication
-  if (req.nextUrl.pathname.startsWith('/admin/')) {
+  const isEnteringOnAuthPages = onlyAuthenticatedPages.some(
+    (pageUrl: string): boolean => req.nextUrl.pathname.startsWith(pageUrl),
+  )
+
+  if (isEnteringOnAuthPages) {
     return withAuth(req)
   }
 }
