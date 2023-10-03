@@ -26,7 +26,6 @@ export default function InfiniteScrollPosts({
     const next = page + 1
     const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next)
 
-    // check if had any error if so print it
     if (error) {
       console.error(error)
 
