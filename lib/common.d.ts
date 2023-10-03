@@ -52,6 +52,7 @@ export type PublicationsDefaultData = {
 
   likes: {
     id: number
+    userId: string
   }[]
 
   comments: {

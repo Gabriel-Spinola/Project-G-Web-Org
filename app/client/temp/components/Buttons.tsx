@@ -12,14 +12,18 @@ import {
 import { signIn } from 'next-auth/react'
 
 type LikeButtonParams = {
-  params: { likes: number; targetId: string; authorId?: string }
+  params: {
+    likes: number
+    targetId: string
+    authorId?: string
+    isLiked: boolean
+  }
 }
 
 export function LikeButton({ params }: LikeButtonParams) {
-  const [isLiked, setIsLiked] = useState<boolean>(false)
-  const [optimisticLikes, addOptimisticLikes] = useOptimistic(
+  const [isLiked, setIsLiked] = useState<boolean>(params.isLiked)
+  const [optimisticLikes, setOptimisticLikes] = useState<number>(
     params.likes || 0,
-    (state: number, l: boolean): number => (l ? state + 1 : state),
   )
 
   async function handleLike() {
@@ -31,8 +35,8 @@ export function LikeButton({ params }: LikeButtonParams) {
 
     setIsLiked(!isLiked)
 
-    // add 1 if liked, or remove 1 if removed like
-    addOptimisticLikes(!isLiked)
+    // Update optimisticLikes based on the current state and the operation (increase or decrease)
+    setOptimisticLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1))
 
     if (!isLiked) {
       await increaseLikeCount('postId', params.authorId, params.targetId)
