@@ -6,6 +6,7 @@ import { Comment, Like, Post, Project } from '@prisma/client'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { LikeOptions, commentsRefetchTag } from './contants'
 import { Session } from 'next-auth'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export async function getComments(): Promise<Comment[] | null> {
   try {
@@ -136,6 +137,13 @@ export async function increaseLikeCount(
 
     console.log('POST? ' + JSON.stringify(updateUser))
   } catch (error: unknown) {
+    // REVIEW - check of possible optimizations for this solution
+    if (error instanceof PrismaClientKnownRequestError) {
+      console.warn('cannot like the same post twice thrown\n', error)
+
+      return
+    }
+
     console.error('Like Failed ' + error)
   }
 }

@@ -4,7 +4,7 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
 import React from 'react'
@@ -13,6 +13,7 @@ import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
+import { Like } from '@prisma/client'
 
 interface Params {
   post: FullPost
@@ -20,6 +21,12 @@ interface Params {
 }
 
 export default function PostItem({ post, currentUserId }: Params) {
+  const isLiked: boolean = post.likes.some(
+    (like: Partial<Like>) => like.userId === currentUserId,
+  )
+
+  console.log(isLiked)
+
   return (
     <div className={styles.postado}>
       <div className={styles.autor}>
@@ -61,6 +68,7 @@ export default function PostItem({ post, currentUserId }: Params) {
             likes: post.likes?.length ?? 0,
             targetId: post.id,
             authorId: currentUserId,
+            isLiked,
           }}
         />
 

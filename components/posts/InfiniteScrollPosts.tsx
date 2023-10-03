@@ -1,7 +1,7 @@
 'use client'
 
-import { fetchPosts } from '@/app/feedActions'
-import { ESResponse, FullPost, FullProject } from '@/lib/common'
+import { fetchPosts, revalidateFeed } from '@/app/feedActions'
+import { ESResponse, FullPost } from '@/lib/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
@@ -50,6 +50,7 @@ export default function InfiniteScrollPosts({
     // If the spinner is in the client view load more posts.
     if (inView) {
       loadMorePosts()
+      revalidateFeed()
     }
   }, [inView, loadMorePosts])
 
