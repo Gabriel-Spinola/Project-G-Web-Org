@@ -13,7 +13,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import { Credentials, generateJwtToken, validateCredentials } from './actions'
+import { Credentials, validateCredentials } from './actions'
 import { User } from '@prisma/client'
 
 /* NOTE
@@ -49,13 +49,11 @@ export const AuthOptions: NextAuthOptions = {
           return null
         }
 
-        const token = generateJwtToken(user)
-
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          token,
+          position: user.position,
         }
       },
     }),
@@ -81,7 +79,7 @@ export const AuthOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
-          randomKey: token.randomKey,
+          position: token.position,
         },
       }
     },
@@ -95,7 +93,7 @@ export const AuthOptions: NextAuthOptions = {
         return {
           ...token,
           id: $user.id,
-          randomKey: $user.randomKey,
+          position: $user.position,
         }
       }
 
@@ -106,11 +104,7 @@ export const AuthOptions: NextAuthOptions = {
         where: { email: user.email || '' },
       })
 
-      if (userExists) {
-        return true
-      } else {
-        return '/register'
-      }
+      return userExists ? true : '/register'
     },
   },
   adapter: PrismaAdapter(prisma),

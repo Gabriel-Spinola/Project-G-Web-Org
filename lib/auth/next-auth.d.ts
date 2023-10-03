@@ -7,6 +7,7 @@
  * @license i.e. MIT
  */
 
+import { $Enums } from '@prisma/client'
 import 'next-auth'
 
 // ANCHOR Add into the existing interfaces in the next-auth
@@ -17,6 +18,7 @@ declare module 'next-auth' {
     siteUrl?: string
     linkedinUrl?: string
     contactPhone?: string
+    position?: $Enums.Positions
   }
 
   interface Session {
