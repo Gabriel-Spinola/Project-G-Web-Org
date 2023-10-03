@@ -25,8 +25,6 @@ export default function PostItem({ post, currentUserId }: Params) {
     (like: Partial<Like>) => like.userId === currentUserId,
   )
 
-  console.log(isLiked)
-
   return (
     <div className={styles.postado}>
       <div className={styles.autor}>

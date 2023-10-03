@@ -1,9 +1,6 @@
 'use client'
 
-import React, {
-  experimental_useOptimistic as useOptimistic,
-  useState,
-} from 'react'
+import React, { useState } from 'react'
 import {
   decreaseLikeCount,
   deleteComment,
