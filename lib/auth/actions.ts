@@ -10,7 +10,9 @@
 import { compare } from 'bcryptjs'
 import { prisma } from '../database/prisma'
 import { sign } from 'jsonwebtoken'
-import { User } from '@prisma/client'
+import { $Enums, User } from '@prisma/client'
+import { Session, getServerSession } from 'next-auth'
+import { AuthOptions } from '.'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
 
@@ -57,4 +59,14 @@ export async function validateCredentials(
 
     return null
   }
+}
+
+export async function checkIfAuthorized(positionRequired: $Enums.Positions) {
+  const session: Session | null = await getServerSession(AuthOptions)
+
+  if (!session) {
+    return false
+  }
+
+  return session?.user.position === positionRequired
 }

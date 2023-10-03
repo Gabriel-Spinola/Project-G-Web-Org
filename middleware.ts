@@ -19,8 +19,6 @@ const onlyAuthenticatedPages = [
   '/api/session/',
 ]
 
-const onlyAdminPages = ['/admin/']
-
 // allowed requests per minute
 const rateLimit = 100
 const rateLimiter: Record<string, number[]> = {}
@@ -66,11 +64,11 @@ async function middleware(req: NextRequestWithAuth) {
     // TODO: Storage Cleanup
   }
 
-  const isEnteringOnAuthPages = onlyAuthenticatedPages.some(
+  const isEnteringOnAuthPage = onlyAuthenticatedPages.some(
     (pageUrl: string): boolean => req.nextUrl.pathname.startsWith(pageUrl),
   )
 
-  if (isEnteringOnAuthPages) {
+  if (isEnteringOnAuthPage) {
     return withAuth(req)
   }
 }
