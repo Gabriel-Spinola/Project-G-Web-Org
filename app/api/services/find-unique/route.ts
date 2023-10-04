@@ -11,7 +11,6 @@ import { prisma } from '@/lib/database/prisma'
 import { ModelsApiCode } from '@/lib/apiConfig'
 import { servicesHandler } from '../services-handler'
 import { PrismaData } from '../../config'
-import { toInteger } from 'lodash'
 
 async function getData(
   id: string,
@@ -25,7 +24,7 @@ async function getData(
       return await prisma.post.findUnique({ where: { id: id as string } })
 
     case ModelsApiCode.Comment:
-      return await prisma.comment.findUnique({ where: { id: toInteger(id) } })
+      return await prisma.comment.findUnique({ where: { id: Number(id) } })
 
     case ModelsApiCode.User:
       return await prisma.user.findUnique({
