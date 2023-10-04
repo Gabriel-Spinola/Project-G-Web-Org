@@ -10,7 +10,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/database/prisma'
-import CustomProviders from './providers'
+import customProviders from './providers'
 
 /* NOTE
 I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
@@ -21,7 +21,7 @@ export const AuthOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  providers: CustomProviders,
+  providers: customProviders.filter((_, index) => index === 0 || index === 1),
   callbacks: {
     session: ({ session, token }) => {
       // NOTE: Debuggin

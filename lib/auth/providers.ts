@@ -64,9 +64,9 @@ const ForgotEmailProvider = EmailProvider({
   from: process.env.EMAIL_FROM as string,
 })
 
-const CustomProviders = [
-  GoogleAuth,
+const customProviders = [
   CustomCredentialsProvider,
+  GoogleAuth,
   ForgotEmailProvider,
 ]
-export default CustomProviders
+export default customProviders
