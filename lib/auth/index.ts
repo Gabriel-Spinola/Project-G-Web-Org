@@ -4,7 +4,7 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
 import type { NextAuthOptions } from 'next-auth'
@@ -88,7 +88,7 @@ export const AuthOptions: NextAuthOptions = {
       // console.debug("JWT Callback", { token, user });
 
       if (user) {
-        const $user = user as unknown as any
+        const $user = user as unknown as Partial<User>
 
         return {
           ...token,

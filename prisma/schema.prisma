@@ -114,8 +114,8 @@ enum Positions {
 
 model User {
   id       String  @id @default(cuid())
-  name     String?
-  password String?
+  name     String
+  password String
 
   followers Follows[] @relation("Follower")
   following Follows[] @relation("Following")
@@ -133,7 +133,7 @@ model User {
   contactPhone Int?
   profilePic   String?
 
-  email         String?   @unique
+  email         String    @unique
   emailVerified DateTime?
 
   createdAt DateTime @default(now())
@@ -203,14 +203,14 @@ model Like {
   id Int @id @default(autoincrement())
 
   user   User   @relation("LikedBy", fields: [userId], references: [id], onDelete: Cascade)
-  userId String 
+  userId String
 
   post   Post?   @relation("LikedPost", fields: [postId], references: [id], onDelete: Cascade)
-  postId String? 
+  postId String?
 
   project   Project? @relation("LikedProject", fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String? 
+  projectId String?
 
   comment   Comment? @relation("LikedComment", fields: [commentId], references: [id], onDelete: Cascade)
-  commentId Int? 
+  commentId Int?
 }
