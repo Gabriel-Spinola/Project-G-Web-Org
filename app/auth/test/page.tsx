@@ -19,31 +19,20 @@ import { getServerSession } from 'next-auth'
 
 import React from 'react'
 import CreateProfile from '@/components/register/CreateProfile'
+import { BgImage } from '@/components/bgImage'
 
 export default async function AuthTestingPage() {
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2vh',
-      }}
-    >
-      <>
-        <LoginButton />
-        <RegisterButton />
-        <LogoutButton />
-        <ProfileButton />
-
-        <h1>Server session: </h1>
-        <pre>{JSON.stringify(session)}</pre>
-
-        <AuthUsers />
-
-        <CreateProfile session={session} />
-      </>
+    <main className="min-w-full max-w-full h-[calc(100vh-88px)]">
+      <BgImage
+        url={
+          'https://images.unsplash.com/photo-1633354574427-b0dd0697130a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2089&q=80'
+        }
+        alt={'SingInBgImage'}
+      />
+      <section className="absolute w-[90%] h-[35vh] bg-pure-white/75"></section>
     </main>
   )
 }

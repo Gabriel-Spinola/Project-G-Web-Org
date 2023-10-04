@@ -14,7 +14,10 @@ import Link from 'next/link'
 
 export const LoginButton = () => {
   return (
-    <button style={{ marginRight: 10 }} onClick={() => signIn()}>
+    <button
+      className="w-1/5 py-4 bg-darker-primary rounded-xl text-2xl text-darker-white"
+      onClick={() => signIn()}
+    >
       Sign in
     </button>
   )
