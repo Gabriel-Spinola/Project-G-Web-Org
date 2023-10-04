@@ -20,6 +20,7 @@ import { getServerSession } from 'next-auth'
 import React from 'react'
 import CreateProfile from '@/components/register/CreateProfile'
 import { BgImage } from '@/components/bgImage'
+import { StaticImage } from '@/components/Image'
 
 export default async function AuthTestingPage() {
   const session = await getServerSession(AuthOptions)
@@ -32,7 +33,27 @@ export default async function AuthTestingPage() {
         }
         alt={'SingInBgImage'}
       />
-      <section className="absolute w-[90%] h-[35vh] bg-pure-white/75"></section>
+      <section className="absolute flex mx-[5%] my-[calc((100vh-88px-75vh)/2)] w-[90%] lg:w-[65%] lg:mx-[17.5%] h-[75vh] rounded-xl bg-pure-white/75">
+        <section id="login-section" className="w-[50%] h-full">
+          <h1>Login</h1>
+          <p>
+            Precisa criar uma conta?{''}
+            <a href="/">Crie aqui</a> {''}
+          </p>
+        </section>
+        <section
+          id="image-section"
+          className="flex w-[50%] h-[100%] py-[2.5%] rounded-xl ml-[10vh]"
+        >
+          <StaticImage
+            url={
+              'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/singin-image.png'
+            }
+            alt={'Sing-in Image'}
+            className={'w-full h-full object-cover rounded-xl'}
+          />
+        </section>
+      </section>
     </main>
   )
 }

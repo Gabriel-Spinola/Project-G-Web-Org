@@ -16,9 +16,7 @@ export default function SigninBox() {
         </h2>
       </Center>
 
-      <FormControl>
-        F
-      </FormControl>
+      <FormControl></FormControl>
     </main>
   )
 }
