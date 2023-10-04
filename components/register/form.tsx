@@ -9,9 +9,11 @@
 
 'use client'
 
+import { registerNewUser } from '@/app/auth/register/registerActions'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useRef, useState } from 'react'
+import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 type RegisterFormState = {
@@ -20,16 +22,31 @@ type RegisterFormState = {
   password: string
 }
 
+function SubmitButton({ isVerified }: { isVerified: boolean }) {
+  const { pending } = useFormStatus()
+
+  return (
+    <button
+      type="submit"
+      aria-disabled={pending || !isVerified}
+      disabled={pending || !isVerified}
+      style={{
+        backgroundColor: `${pending ? '#ccc' : '#3446eb'}`,
+        color: '#fff',
+        padding: '1rem',
+        cursor: 'pointer',
+      }}
+    >
+      {pending ? 'Carregando' : 'Registrar'}
+    </button>
+  )
+}
+
 export default function RegisterForm() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [form, setForm] = useState<RegisterFormState>({
-    name: '',
-    email: '',
-    password: '',
-  })
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const [isVerified, setIsVerified] = useState<boolean>(false)
 
+  // signIn(undefined, { callbackUrl: '/' })
   console.log(isVerified)
 
   async function handleCaptchaSubmission(token: string | null) {
@@ -39,47 +56,9 @@ export default function RegisterForm() {
       .catch(() => setIsVerified(false))
   }
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    if (!isVerified) return
-
-    setIsLoading(true)
-
-    try {
-      const formData = new FormData(event.currentTarget)
-      const response = await fetch('/api/services/register/', {
-        method: 'POST',
-        body: formData,
-      })
-
-      setIsLoading(false)
-
-      if (!response.ok) {
-        alert((await response.json()).message)
-
-        return
-      }
-
-      console.log(JSON.stringify(response.json()))
-      signIn(undefined, { callbackUrl: '/' })
-    } catch (e: any) {
-      setIsLoading(false)
-
-      console.error(e)
-      alert(e.message)
-    }
-  }
-
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target
-
-    setForm({ ...form, [name]: value })
-  }
-
   return (
     <form
-      onSubmit={onSubmit}
+      action={registerNewUser}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -88,32 +67,16 @@ export default function RegisterForm() {
       }}
     >
       <label htmlFor="name">Name</label>
-      <input
-        required
-        type="text"
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        style={{ padding: '1rem' }}
-      />
+      <input required type="text" name="name" style={{ padding: '1rem' }} />
 
       <label htmlFor="email">Email</label>
-      <input
-        required
-        type="email"
-        name="email"
-        value={form.email}
-        onChange={handleChange}
-        style={{ padding: '1rem' }}
-      />
+      <input required type="email" name="email" style={{ padding: '1rem' }} />
 
       <label htmlFor="password">Password</label>
       <input
         required
         type="password"
         name="password"
-        value={form.password}
-        onChange={handleChange}
         style={{ padding: '1rem' }}
       />
 
@@ -123,17 +86,7 @@ export default function RegisterForm() {
         onChange={handleCaptchaSubmission}
       />
 
-      <button
-        style={{
-          backgroundColor: `${isLoading ? '#ccc' : '#3446eb'}`,
-          color: '#fff',
-          padding: '1rem',
-          cursor: 'pointer',
-        }}
-        disabled={isLoading || !isVerified}
-      >
-        {isLoading ? 'loading...' : 'Register'}
-      </button>
+      <SubmitButton isVerified={isVerified} />
     </form>
   )
 }
