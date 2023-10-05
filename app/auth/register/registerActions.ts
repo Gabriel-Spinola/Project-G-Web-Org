@@ -6,10 +6,15 @@ import { API_URL } from '@/lib/apiConfig'
 import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
+import { ESResponse } from '@/lib/common'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 const schema = zod.object({})
 
-export async function registerNewUser(formData: FormData): Promise<void> {
+export async function registerNewUser(
+  formData: FormData,
+): Promise<ESResponse<string>> {
   try {
     const name = formData.get('name')?.toString()
     const email = formData.get('email')?.toString()
@@ -31,11 +36,24 @@ export async function registerNewUser(formData: FormData): Promise<void> {
     if (!user) {
       console.error('not user')
 
-      return
+      return {
+        data: null,
+        error: "Could'nt create new user",
+      }
     }
 
-    redirect('/client/auth/')
+    return {
+      data: 'Usuário criado',
+      error: null,
+    }
   } catch (error: unknown) {
-    console.error(error)
+    if (!(error instanceof PrismaClientKnownRequestError)) {
+      console.error(error)
+    }
+
+    return {
+      data: null,
+      error: "Could'nt create new user, " + error,
+    }
   }
 }

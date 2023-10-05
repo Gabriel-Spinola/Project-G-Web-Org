@@ -12,15 +12,9 @@
 import { registerNewUser } from '@/app/auth/register/registerActions'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
-import { ChangeEvent, FormEvent, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
-
-type RegisterFormState = {
-  name: string
-  email: string
-  password: string
-}
 
 function SubmitButton({ isVerified }: { isVerified: boolean }) {
   const { pending } = useFormStatus()
@@ -43,22 +37,35 @@ function SubmitButton({ isVerified }: { isVerified: boolean }) {
 }
 
 export default function RegisterForm() {
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
   const [isVerified, setIsVerified] = useState<boolean>(false)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  // signIn(undefined, { callbackUrl: '/' })
-  console.log(isVerified)
-
-  async function handleCaptchaSubmission(token: string | null) {
+  async function handleCaptchaSubmission(token: string | null): Promise<void> {
     // Server function to verify captcha
     await verifyCaptcha(token)
       .then(() => setIsVerified(true))
       .catch(() => setIsVerified(false))
   }
 
+  async function handleFormSubmission(formData: FormData): Promise<void> {
+    const { error } = await registerNewUser(formData)
+
+    if (error) {
+      alert('user creation failed')
+
+      formRef.current?.reset()
+      return
+    }
+
+    formRef.current?.reset()
+    signIn(undefined, { callbackUrl: '/' })
+  }
+
   return (
     <form
-      action={registerNewUser}
+      ref={formRef}
+      action={handleFormSubmission}
       style={{
         display: 'flex',
         flexDirection: 'column',
