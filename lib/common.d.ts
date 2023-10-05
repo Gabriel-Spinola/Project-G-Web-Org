@@ -25,14 +25,19 @@ import { Post, Project } from '@prisma/client'
  *
  * @author Gabriel Spinola
  */
-export type ESResponse<DataType> =
+export type ESResponse<
+  DataType,
+  CustomError = string,
+  ReturnedDataCustomKey extends string = 'data',
+  ReturnedErrorCustomKey extends string = 'error',
+> =
   | {
       data: DataType
       error: null
     }
   | {
       data: null
-      error: string
+      error: CustomError
     }
 
 /**

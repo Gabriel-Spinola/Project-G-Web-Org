@@ -4,19 +4,44 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
 'use client'
 
 import { registerNewUser } from '@/app/auth/register/registerActions'
+import { ESResponse } from '@/lib/common'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
+import { z as zod } from 'zod'
 import ReCAPTCHA from 'react-google-recaptcha'
 
+export type FormExpectedData = {
+  name: string
+  password: string
+  email: string
+}
+
+const formDataSchema = zod.object({
+  name: zod
+    .string({
+      required_error: 'Por favor insira o seu nome',
+      invalid_type_error:
+        'Seu nome somente não deve conter números ou caracteres inválidos',
+    })
+    .min(1)
+    .max(50),
+  email: zod.string({ required_error: 'Por favor insira o seu email' }).email(),
+  password: zod
+    .string({ required_error: 'Por favor insira o seu nome' })
+    .max(64)
+    .min(6),
+})
+
 function SubmitButton({ isVerified }: { isVerified: boolean }) {
+  // NOTE - Gathers the current form status
   const { pending } = useFormStatus()
 
   return (
@@ -38,6 +63,7 @@ function SubmitButton({ isVerified }: { isVerified: boolean }) {
 
 export default function RegisterForm() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
+
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -48,8 +74,39 @@ export default function RegisterForm() {
       .catch(() => setIsVerified(false))
   }
 
+  function validateForm(
+    formData: FormData,
+  ): ESResponse<FormExpectedData, zod.ZodError<FormExpectedData>> {
+    const parsedFormData = formDataSchema.safeParse(
+      Object.fromEntries(formData.entries()),
+    )
+
+    if (!parsedFormData.success) {
+      return { data: null, error: parsedFormData.error }
+    }
+
+    return { data: parsedFormData.data, error: null }
+  }
+
+  /**
+   * @param formData
+   * @returns If something wrong happens: alert the user & reset the form. Otherwise resets the form
+   * and redirect the user tho the signIn page
+   */
   async function handleFormSubmission(formData: FormData): Promise<void> {
-    const { error } = await registerNewUser(formData)
+    // NOTE - 1. Error/Success Pattern for standardized error handling implementation
+    const validatedForm = validateForm(formData)
+
+    if (validatedForm.error) {
+      alert('Algo no fomulário é invalido' + validatedForm.error.message)
+
+      return
+    }
+
+    // NOTE - 2. Error/Success Pattern for standardized error handling implementation
+    const { error }: ESResponse<string> = await registerNewUser(
+      validatedForm.data,
+    )
 
     if (error) {
       alert('user creation failed')
@@ -74,10 +131,10 @@ export default function RegisterForm() {
       }}
     >
       <label htmlFor="name">Name</label>
-      <input required type="text" name="name" style={{ padding: '1rem' }} />
+      <input type="text" name="name" style={{ padding: '1rem' }} required />
 
       <label htmlFor="email">Email</label>
-      <input required type="email" name="email" style={{ padding: '1rem' }} />
+      <input type="email" name="email" style={{ padding: '1rem' }} required />
 
       <label htmlFor="password">Password</label>
       <input

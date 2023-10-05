@@ -41,3 +41,4 @@ setnode.bat
 .env
 .env
 Project-G-Web.code-workspace
+.vscode/settings.json

@@ -1,25 +1,25 @@
 'use server'
 
 import { z as zod } from 'zod'
-import { signIn } from 'next-auth/react'
-import { API_URL } from '@/lib/apiConfig'
 import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
 import { ESResponse } from '@/lib/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { FormExpectedData } from '@/components/register/form'
 
 const schema = zod.object({})
 
-export async function registerNewUser(
-  formData: FormData,
-): Promise<ESResponse<string>> {
+/**
+ * @param formData
+ * @template string error/success message type
+ * @returns either an error message or a success message
+ */
+export async function registerNewUser({
+  name,
+  email,
+  password,
+}: FormExpectedData): Promise<ESResponse<string>> {
   try {
-    const name = formData.get('name')?.toString()
-    const email = formData.get('email')?.toString()
-    const password = formData.get('password')?.toString()
-
     if (!name || !email || !password)
       throw new Error("Form fields can't be null")
 
