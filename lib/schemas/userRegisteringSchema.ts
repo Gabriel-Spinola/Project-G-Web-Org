@@ -1,3 +1,10 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva
+ *
+ * @project Project G
+ * @license GPL 3.0
+ */
+
 import { z as zod } from 'zod'
 import { ESResponse } from '../common'
 
