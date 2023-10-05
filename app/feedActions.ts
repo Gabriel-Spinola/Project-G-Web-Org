@@ -46,3 +46,35 @@ export async function fetchPosts(
     }
   }
 }
+
+// TODO - only need to receive the new post data not the formdata
+export async function handleFormSubimission(newpost: { FormData }) {
+  'use server'
+
+  const images = formData.get('images') as File[] | null
+
+  console.log(images)
+
+  if (images) {
+    try {
+      const response = await fetch(
+        `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+
+      const { data } = await response.json()
+
+      if (!response.ok) {
+        throw new Error('response not ok' + JSON.stringify(data))
+      }
+
+      console.log('worked ' + JSON.stringify(data))
+      // revalidatePath('/client/temp/with-server/')
+    } catch (e: unknown) {
+      console.error(e)
+    }
+  }
+}

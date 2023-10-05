@@ -21,6 +21,7 @@ export default function SendPDFButton() {
         Envie um PDF
         <input
           type="file"
+          name="files"
           accept=".pdf"
           multiple
           className="notClose absolute left-5 top-1 scale-150 scale-y-150 opacity-0"
