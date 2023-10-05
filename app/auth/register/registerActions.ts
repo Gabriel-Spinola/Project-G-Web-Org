@@ -5,7 +5,7 @@ import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { ESResponse } from '@/lib/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { FormExpectedData } from '@/components/register/form'
+import { FormExpectedData, formDataSchema } from '@/components/register/form'
 
 const schema = zod.object({})
 
@@ -28,7 +28,7 @@ export async function registerNewUser({
     const user = await prisma.user.create({
       data: {
         name,
-        email: email.toLowerCase(),
+        email: email,
         password: hashedPassword,
       },
     })

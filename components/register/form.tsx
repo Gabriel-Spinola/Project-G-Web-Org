@@ -24,7 +24,7 @@ export type FormExpectedData = {
   email: string
 }
 
-const formDataSchema = zod.object({
+export const formDataSchema = zod.object({
   name: zod
     .string({
       required_error: 'Por favor insira o seu nome',
@@ -33,7 +33,7 @@ const formDataSchema = zod.object({
     })
     .min(1)
     .max(50),
-  email: zod.string({ required_error: 'Por favor insira o seu email' }).email(),
+  email: zod.string({ required_error: 'Por favor insira o seu email' }).toLowerCase().email(),
   password: zod
     .string({ required_error: 'Por favor insira o seu nome' })
     .max(64)
@@ -74,6 +74,10 @@ export default function RegisterForm() {
       .catch(() => setIsVerified(false))
   }
 
+  /**
+   * @param formData
+   * @returns Either the expected data from the form, or a ZodError object with error info
+   */
   function validateForm(
     formData: FormData,
   ): ESResponse<FormExpectedData, zod.ZodError<FormExpectedData>> {
@@ -89,6 +93,8 @@ export default function RegisterForm() {
   }
 
   /**
+   * TODO - Instead of alerts add customized error messages for the user
+   *
    * @param formData
    * @returns If something wrong happens: alert the user & reset the form. Otherwise resets the form
    * and redirect the user tho the signIn page
@@ -138,10 +144,10 @@ export default function RegisterForm() {
 
       <label htmlFor="password">Password</label>
       <input
-        required
         type="password"
         name="password"
         style={{ padding: '1rem' }}
+        required
       />
 
       <ReCAPTCHA
