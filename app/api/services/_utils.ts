@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/storage/supabase'
-import { ESResponse } from '@/lib/common'
+import { ESResponse } from '@/lib/types/common'
 
 /**
  * @summary Handmade re-creation of the FileObject API from supabase.
