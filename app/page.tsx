@@ -1,4 +1,11 @@
-// FIXME - Prisma's sometimes failing to load feed
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license GPL 3.0
+ */
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { fetchPosts } from './feedActions'
@@ -17,10 +24,16 @@ export default async function Home() {
         <PostSubmitFragment></PostSubmitFragment>
 
         {!error ? (
-          <InfiniteScrollPosts
-            initialPublication={data || undefined}
-            currentUserId={session?.user.id}
-          />
+          <>
+            {data && data?.length > 0 ? (
+              <InfiniteScrollPosts
+                initialPublication={data || undefined}
+                currentUserId={session?.user.id}
+              />
+            ) : (
+              <>Oops você chegou ao fim!</>
+            )}
+          </>
         ) : (
           <h1>Feed Failed to load</h1>
         )}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { DeleteCommentButton, LikeButton } from '../../temp/components/Buttons'
+import { DeleteCommentButton } from '../../temp/components/Buttons'
 import { getComments, handleSubmitComment } from '../../temp/comments/actions'
 import CreateCommentButton from '../../temp/components/CreateCommentButton'
 import { Comment } from '@prisma/client'
