@@ -1,7 +1,7 @@
 import { Post, Project } from '@prisma/client'
 
 /**
- * @template DataType - The type of data that the response can hold.
+ * @template DataType - The type of data that the response holds.
  * @template CustomError - Optional custom implementation for errors. (if not defined = string)
  *
  * @description
