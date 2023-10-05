@@ -9,24 +9,47 @@
 
 'use client'
 
-import React, { useState, Fragment } from 'react'
+import React from 'react'
 
 import './PostSubmitFragment.module.scss'
-import Modal from '@/components/posts/poster/Modal'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Button,
+} from '@chakra-ui/react'
+import { FeedModal } from './Modal'
 
 export default function PostSubmitFragment() {
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Fragment>
-      <button
-        className="poster-button w-[100%] xl:w-[45vw] h-[76px] bg-medium-gray text-darker-white text-xl text-left rounded-[8px] pl-8 hover:text-medium-primary mt-8 mb-8"
-        onClick={() => setShowModal(true)}
-      >
-        Faça uma publicação
-        <span className="w-[14px] h-[2px] bg-darker-white hover:bg-medium-primary hover:grow"></span>
-      </button>
-      <Modal isVisible={showModal} onClose={() => setShowModal(false)}></Modal>
-    </Fragment>
+    <>
+      <Button onClick={onOpen}>Open Modal</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Faça uma publicação</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>
+            <FeedModal />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
