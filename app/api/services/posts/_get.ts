@@ -1,4 +1,4 @@
-import { FullPost } from '@/lib/common'
+import { FullPost } from '@/lib/types/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 

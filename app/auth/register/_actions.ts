@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
-import { ESResponse } from '@/lib/common'
+import { ESResponse } from '@/lib/types/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { RegisterFormExpectedData } from '@/lib/schemas/userRegisteringSchema'
 

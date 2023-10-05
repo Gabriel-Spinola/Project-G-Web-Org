@@ -10,7 +10,7 @@
 import React from 'react'
 import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
-import { FullPost } from '@/lib/common'
+import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'

@@ -1,7 +1,7 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse, FullPost } from '@/lib/common'
+import { ESResponse, FullPost } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
 
 /**

@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse } from '@/lib/common'
+import { ESResponse } from '@/lib/types/common'
 import { User } from '@prisma/client'
 
 export type UserSelectedData = { [key in keyof Partial<User>]: boolean }

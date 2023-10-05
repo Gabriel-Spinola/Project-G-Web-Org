@@ -6,7 +6,7 @@
  */
 
 import { z as zod } from 'zod'
-import { ESResponse } from '../common'
+import { ESResponse } from '../types/common'
 
 export type RegisterFormExpectedData = {
   name: string

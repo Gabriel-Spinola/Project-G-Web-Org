@@ -1,7 +1,7 @@
 'use client'
 
 import { fetchPosts, revalidateFeed } from '@/app/feedActions'
-import { ESResponse, FullPost } from '@/lib/common'
+import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'

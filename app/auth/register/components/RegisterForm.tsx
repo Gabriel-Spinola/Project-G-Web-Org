@@ -10,7 +10,7 @@
 'use client'
 
 import { registerNewUser } from '@/app/auth/register/_actions'
-import { ESResponse } from '@/lib/common'
+import { ESResponse } from '@/lib/types/common'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
