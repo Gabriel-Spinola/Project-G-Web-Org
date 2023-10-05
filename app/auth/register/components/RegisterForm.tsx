@@ -9,14 +9,14 @@
 
 'use client'
 
-import { registerNewUser } from '@/app/auth/register/_action'
+import { registerNewUser } from '@/app/auth/register/_actions'
 import { ESResponse } from '@/lib/common'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
-import { RegisterButton } from './components/RegisterButton'
+import { RegisterButton } from './RegisterButton'
 
 export default function RegisterForm() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
