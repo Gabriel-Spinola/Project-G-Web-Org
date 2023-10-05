@@ -4,7 +4,7 @@ import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { ESResponse } from '@/lib/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { FormExpectedData } from '@/components/register/form'
+import { RegisterFormExpectedData } from '@/lib/schemas/userRegisteringSchema'
 
 /**
  * @param formData
@@ -15,7 +15,7 @@ export async function registerNewUser({
   name,
   email,
   password,
-}: FormExpectedData): Promise<ESResponse<string>> {
+}: RegisterFormExpectedData): Promise<ESResponse<string>> {
   try {
     const hashedPassword = await hash(password, 12)
 
