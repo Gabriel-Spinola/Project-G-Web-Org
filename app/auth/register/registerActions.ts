@@ -20,15 +20,12 @@ export async function registerNewUser({
   password,
 }: FormExpectedData): Promise<ESResponse<string>> {
   try {
-    if (!name || !email || !password)
-      throw new Error("Form fields can't be null")
-
     const hashedPassword = await hash(password, 12)
 
     const user = await prisma.user.create({
       data: {
         name,
-        email: email,
+        email,
         password: hashedPassword,
       },
     })
