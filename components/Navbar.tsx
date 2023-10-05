@@ -1,29 +1,18 @@
 import Image from 'next/image'
 import React from 'react'
-import '@/app/styles/navbar.scss'
+
 const Navbar = () => {
   return (
     <nav
       id="header-nav"
-      className="shadow-darker-white/40 shadow-2xl flex justify-around bg-medium-gray text-darker-white h-[88px] items-center text-xl"
+      className="flex justify-around w-full h-[88px] shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white text-xl"
     >
-      <ul className="flex flex-row">
+      <ul className="flex items-center gap-8 text-xl font-light">
         <li>
-          <a href="../client/explore">
-            Explorar
-            <div></div>
-          </a>
-        </li>
-        <li>
-          <a href="../client/projects">
-            Projetos
-            <div></div>
-          </a>
-        </li>
-        <li>
-          <a href="/">
+          <a href="#" className="">
             <Image
-              src="/assets/logo.png"
+              className=""
+              src="https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/visual-id/LOGO.png"
               alt="logo-image"
               width={200}
               height={50}
@@ -31,16 +20,23 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="../client/search">
-            Busca
-            <div></div>
-          </a>
+          <h1 className="text-2xl font-medium">TRY HACK ME</h1>
         </li>
-        <li>
-          <a href="../client/profile/[id]">
-            Perfil
-            <div></div>
-          </a>
+        <li className="hover:text-pure-white hover:-translate-y-1">
+          <a href="#">Introdução</a>
+          <div className="h-[2px] w-full bg-darker-white" />
+        </li>
+        <li className="hover:text-pure-white hover:-translate-y-1">
+          <a href="#">Funcionalidades</a>
+          <div className="h-[2px] w-full bg-darker-white" />
+        </li>
+        <li className="hover:text-pure-white hover:-translate-y-1">
+          <a href="#">Objetivo</a>
+          <div className="h-[2px] w-full bg-darker-white" />
+        </li>
+        <li className="hover:text-pure-white hover:-translate-y-1">
+          <a href="#">Feedback</a>
+          <div className="h-[2px] w-full bg-darker-white" />
         </li>
       </ul>
     </nav>
