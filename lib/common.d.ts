@@ -2,6 +2,7 @@ import { Post, Project } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response can hold.
+ * @template CustomError - Optional custom implementation for errors. (if not defined = string)
  *
  * @description
  * The `ESResponse` type represents a common response pattern, where the response can either indicate success with valid data or failure with an error message. This pattern is denoted by "ES," which stands for Error/Success.
@@ -22,6 +23,12 @@ import { Post, Project } from '@prisma/client'
  *   data: null,
  *   error: "User not found"
  * };
+ *
+ * // With custom errors:
+ * const customErrorResponse: ESResponse<UserData, CustomError> = {
+ *  data: null,
+ *  error: AnyCustomErrorImplementationYouMadeOrSomeoneMadeOrIDK()
+ * }
  *
  * @author Gabriel Spinola
  */
