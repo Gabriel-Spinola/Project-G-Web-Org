@@ -9,60 +9,14 @@
 
 'use client'
 
-import { registerNewUser } from '@/app/auth/register/registerActions'
+import { registerNewUser } from '@/app/auth/register/_action'
 import { ESResponse } from '@/lib/common'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
-import { experimental_useFormStatus as useFormStatus } from 'react-dom'
-import { z as zod } from 'zod'
 import ReCAPTCHA from 'react-google-recaptcha'
-
-export type FormExpectedData = {
-  name: string
-  password: string
-  email: string
-}
-
-export const formDataSchema = zod.object({
-  name: zod
-    .string({
-      required_error: 'Por favor insira o seu nome',
-      invalid_type_error:
-        'Seu nome somente não deve conter números ou caracteres inválidos',
-    })
-    .min(1)
-    .max(50),
-  email: zod
-    .string({ required_error: 'Por favor insira o seu email' })
-    .toLowerCase()
-    .email(),
-  password: zod
-    .string({ required_error: 'Por favor insira o seu nome' })
-    .max(64)
-    .min(6),
-})
-
-function SubmitButton({ isVerified }: { isVerified: boolean }) {
-  // NOTE - Gathers the current form status
-  const { pending } = useFormStatus()
-
-  return (
-    <button
-      type="submit"
-      aria-disabled={pending || !isVerified}
-      disabled={pending || !isVerified}
-      style={{
-        backgroundColor: `${pending ? '#ccc' : '#3446eb'}`,
-        color: '#fff',
-        padding: '1rem',
-        cursor: 'pointer',
-      }}
-    >
-      {pending ? 'Carregando' : 'Registrar'}
-    </button>
-  )
-}
+import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
+import { RegisterButton } from './components/RegisterButton'
 
 export default function RegisterForm() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
@@ -78,24 +32,6 @@ export default function RegisterForm() {
   }
 
   /**
-   * @param formData
-   * @returns Either the expected data from the form, or a ZodError object with error info
-   */
-  function validateForm(
-    formData: FormData,
-  ): ESResponse<FormExpectedData, zod.ZodError<FormExpectedData>> {
-    const parsedFormData = formDataSchema.safeParse(
-      Object.fromEntries(formData.entries()),
-    )
-
-    if (!parsedFormData.success) {
-      return { data: null, error: parsedFormData.error }
-    }
-
-    return { data: parsedFormData.data, error: null }
-  }
-
-  /**
    * TODO - Instead of alerts add customized error messages for the user
    *
    * @param formData
@@ -104,7 +40,7 @@ export default function RegisterForm() {
    */
   async function handleFormSubmission(formData: FormData): Promise<void> {
     // NOTE - 1. Error/Success Pattern for standardized error handling implementation
-    const validatedForm = validateForm(formData)
+    const validatedForm = validateRegisterForm(formData)
 
     if (validatedForm.error) {
       alert('Algo no fomulário é invalido' + validatedForm.error.message)
@@ -159,7 +95,7 @@ export default function RegisterForm() {
         onChange={handleCaptchaSubmission}
       />
 
-      <SubmitButton isVerified={isVerified} />
+      <RegisterButton isVerified={isVerified} />
     </form>
   )
 }
