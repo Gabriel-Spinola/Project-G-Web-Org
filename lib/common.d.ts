@@ -24,10 +24,18 @@ import { Post, Project } from '@prisma/client'
  *   error: "User not found"
  * };
  *
+ * if (errorResponse.error) {
+ *   return
+ * }
+ *
  * // With custom error implementation:
  * const customErrorResponse: ESResponse<UserData, CustomError> = {
  *  data: null,
  *  error: AnyCustomErrorImplementationYouMadeOrSomeoneMadeOrIDK()
+ * }
+ *
+ * if (errorResponse.error) {
+ *   return
  * }
  *
  * @author Gabriel Spinola
