@@ -33,7 +33,10 @@ export const formDataSchema = zod.object({
     })
     .min(1)
     .max(50),
-  email: zod.string({ required_error: 'Por favor insira o seu email' }).toLowerCase().email(),
+  email: zod
+    .string({ required_error: 'Por favor insira o seu email' })
+    .toLowerCase()
+    .email(),
   password: zod
     .string({ required_error: 'Por favor insira o seu nome' })
     .max(64)

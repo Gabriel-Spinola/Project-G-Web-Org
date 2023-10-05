@@ -1,13 +1,10 @@
 'use server'
 
-import { z as zod } from 'zod'
 import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { ESResponse } from '@/lib/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { FormExpectedData, formDataSchema } from '@/components/register/form'
-
-const schema = zod.object({})
+import { FormExpectedData } from '@/components/register/form'
 
 /**
  * @param formData
