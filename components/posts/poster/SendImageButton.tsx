@@ -18,13 +18,14 @@ export default function SendImageButton() {
             />
           </svg>
         </i>
-        Envie uma imagem
         <input
           type="file"
+          name="images"
           accept=".png, .jpg, .jpeg, .webp"
-          multiple
           className="notClose absolute left-0 top-1 scale-150 scale-y-150 opacity-0"
-        ></input>
+          multiple
+        />
+        Envie uma imagem
       </button>
     </div>
   )

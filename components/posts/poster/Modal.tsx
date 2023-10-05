@@ -10,27 +10,27 @@
 import SendImageButton from './SendImageButton'
 import SendPDFButton from './SendPDFButton'
 import React from 'react'
-import SubmitPostButton from './submitPostButton'
+import SubmitPostButton from './SubmitPostButton'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { handleFormSubimission } from '@/app/feedActions'
 
 export function FeedModal() {
-  async function handleFormSubimission(formData: FormData) {
-    console.log(formData)
-  }
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-20">
-      <div className="w-[40vw] h-[192px] flex flex-col mt-[-20%] z-10">
+      <div className="w-[40vw] h-[260px] flex flex-col mt-[-20%] z-10">
         <div className="notClose z-1 drop-shadow-sm bg-medium-gray text-darker-white text-xl p-8 rounded-[8px]">
           <form action={handleFormSubimission} className="notClose">
-            <div className="notClose max-h-[64px] flex flex-row">
-              <input
-                type="text"
+            {/* Content */}
+            <div className="notClose max-h-[80px] flex flex-row">
+              <textarea
+                name="content"
                 placeholder="Faça uma publicação"
                 className="notClose bg-medium-gray text-darker-white w-full pb-[192px] text-xl margin-none text-start outline-none"
-              />
+              ></textarea>
             </div>
 
-            <div className="flex flex-row">
+            {/* Input Buttons */}
+            <div className=" mt-3 flex flex-row">
               <SendPDFButton />
               <SendImageButton />
 
