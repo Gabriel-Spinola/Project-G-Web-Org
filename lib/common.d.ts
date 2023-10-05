@@ -8,7 +8,7 @@ import { Post, Project } from '@prisma/client'
  * The `ESResponse` type represents a common response pattern, where the response can either indicate success with valid data or failure with an error message. This pattern is denoted by "ES," which stands for Error/Success.
  *
  * @example
- * // Example usage of ESResponse with user data:
+ * // With user data:
  * const response: ESResponse<UserData> = {
  *   data: {
  *     id: 1,
@@ -18,13 +18,13 @@ import { Post, Project } from '@prisma/client'
  *   error: null
  * };
  *
- * // Example usage of ESResponse with an error message:
+ * // With error message:
  * const errorResponse: ESResponse<UserData> = {
  *   data: null,
  *   error: "User not found"
  * };
  *
- * // With custom errors:
+ * // With custom error implementation:
  * const customErrorResponse: ESResponse<UserData, CustomError> = {
  *  data: null,
  *  error: AnyCustomErrorImplementationYouMadeOrSomeoneMadeOrIDK()
