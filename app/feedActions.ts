@@ -2,6 +2,7 @@
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ExpectedData } from '@/lib/schemas/postSchema'
+import { FileBody } from '@/lib/storage/storage'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
 
@@ -48,26 +49,23 @@ export async function fetchPosts(
   }
 }
 
-// TODO - only need to receive the new post data not the formdata
+// TODO - only need to receive the new post data not the formData
 export async function createNewPost(
-  newPost: ExpectedData,
+  formData: FormData,
 ): Promise<ESResponse<string>> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
+      `${API_URL}${API_ENDPOINTS.services.posts}?id=clneuw2o60000w494md2x3u8f`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newPost),
+        body: formData,
       },
     )
 
     const { data } = await response.json()
 
     if (!response.ok) {
-      throw new Error('response not ok' + JSON.stringify(data))
+      throw new Error('response not ok ' + JSON.stringify(data))
     }
 
     console.log('worked ' + JSON.stringify(data))

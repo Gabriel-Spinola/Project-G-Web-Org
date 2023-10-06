@@ -58,7 +58,7 @@ export type UserData = Partial<User> & {
 }
 
 /**
- * REVIEW - usage of pick
+ * REVIEW - usage of _count for comments
  * @summary Describes the data that is recurrent in publications
  */
 export type PublicationsDefaultData = {
@@ -69,16 +69,14 @@ export type PublicationsDefaultData = {
     profilePic: string | null
   } | null
 
-  contributor: Pick<User, 'id'>[]
+  contributor: { name: string }[]
 
   likes: {
     id: number
     userId: string
   }[]
 
-  comments: {
-    id: number
-  }[]
+  comments: { id: number }[]
 }
 
 /**

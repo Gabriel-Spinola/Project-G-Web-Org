@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/database/prisma'
-import { ExpectedData } from '@/lib/schemas/postSchema'
 import { FileBody, StorageResponse } from '@/lib/storage/storage'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
@@ -9,13 +8,14 @@ import { NextResponse } from 'next/server'
 
 async function storeImage(
   authorId: string,
+  fileName: string,
   images: FileBody,
 ): Promise<StorageResponse> {
   try {
     // FIXME - failing at certain types of images
     const { data, error } = await supabase.storage
       .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(`posts/${authorId}/${images.name}`, images, {
+      .upload(`posts/${authorId}/${fileName}`, images, {
         cacheControl: '3600',
         upsert: true, // NOTE - TEMP
       })
@@ -62,7 +62,7 @@ async function createPost(
 function checkRequiredFields(
   title: string | null | undefined,
   content: string | null | undefined,
-  images: FileBody[] | null | undefined,
+  images: string | null | undefined,
 ): boolean {
   return !!(title && content && images)
 }
@@ -72,12 +72,21 @@ export async function handlePost(
   req: Request,
 ): Promise<NextResponse> {
   try {
-    const newPost = (await req.json()) as ExpectedData | null
+    const formData = await req.formData()
 
-    const content = newPost?.content
-    const postImages = newPost?.images as FileBody[] | null | undefined
+    const content = formData.get('content')?.toString()
+    const postImages = formData.getAll('images') as File[] | null
 
-    if (!checkRequiredFields('asdas', content, postImages)) {
+    const bufferImages: Promise<Buffer>[] | undefined = postImages?.map(
+      async (image: File): Promise<Buffer> =>
+        Buffer.from(await image.arrayBuffer()),
+    )
+
+    // const bytes = await postImages?.at(0)?.arrayBuffer()
+    // // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // const buffer = Buffer.from(bytes!)
+
+    if (!checkRequiredFields('asd', content, 'aa') || !bufferImages) {
       return NextResponse.json(
         {
           data: 'Failed to create post: missing or invalid request data',
@@ -85,8 +94,6 @@ export async function handlePost(
         { status: 400 },
       )
     }
-
-    console.log(JSON.stringify(postImages))
 
     const postData: Partial<Post> = {
       content,
@@ -100,7 +107,9 @@ export async function handlePost(
 
     if (postImages) {
       const storedImages = await Promise.all(
-        postImages.map((image) => storeImage(authorId, image)),
+        bufferImages.map(async (image, index) =>
+          storeImage(authorId, postImages[index].name, await image),
+        ),
       )
 
       if (storedImages.some((image) => !image)) {
@@ -123,7 +132,7 @@ export async function handlePost(
     }
 
     if (data) {
-      return NextResponse.json({ data }, { status: 200 })
+      return NextResponse.json({ data: 'sent' }, { status: 200 })
     }
 
     return NextResponse.json(

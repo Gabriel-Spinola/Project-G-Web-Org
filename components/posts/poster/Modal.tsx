@@ -24,7 +24,7 @@ export function FeedModal() {
       return
     }
 
-    const { error } = await createNewPost({ content, images })
+    const { error } = await createNewPost(formData)
 
     if (error) {
       alert('failed to post' + error)

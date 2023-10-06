@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchPosts, revalidateFeed } from '@/app/feedActions'
+import { fetchPosts } from '@/app/feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -9,11 +9,13 @@ import PostItem from './PostItem'
 // TODO: Generalize Feed
 type Params = {
   initialPublication: FullPost[] | undefined
+  revalidate: () => void
   currentUserId?: string
 }
 
 export default function InfiniteScrollPosts({
   initialPublication,
+  revalidate,
   currentUserId,
 }: Params) {
   const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
@@ -49,9 +51,9 @@ export default function InfiniteScrollPosts({
     // If the spinner is in the client view load more posts.
     if (inView) {
       loadMorePosts()
-      revalidateFeed()
+      revalidate()
     }
-  }, [inView, loadMorePosts])
+  }, [inView, loadMorePosts, revalidate])
 
   return (
     <>
