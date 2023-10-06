@@ -18,7 +18,10 @@ async function handler(req: Request) {
   try {
     const data: UserData | null = await prisma.user.findUnique({
       where: { id },
-      select: { ...selectedData, followers: true, following: true },
+      select: {
+        ...selectedData,
+        _count: { select: { followers: true, following: true } },
+      },
     })
 
     if (data) {
