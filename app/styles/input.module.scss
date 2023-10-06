@@ -1,0 +1,13 @@
+@import "./variables.module.scss";
+
+.formInput{
+  display: flex;
+  flex-direction: column;
+  input{
+    padding: 0.25em 1em;
+    font-size: 2em;
+    font-weight: 400;
+    border-bottom: solid 4px $medium-primary;
+    background-color: $darker-white;
+  }
+}

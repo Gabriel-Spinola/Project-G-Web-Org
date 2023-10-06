@@ -13,6 +13,7 @@ import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import styles from '@/app/styles/input.module.scss'
 
 type RegisterFormState = {
   name: string
@@ -78,15 +79,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 500,
-        rowGap: 10,
-      }}
-    >
+    <form className={styles.formInput} onSubmit={onSubmit}>
       <label htmlFor="name">Name</label>
       <input
         required
@@ -94,7 +87,6 @@ export default function RegisterForm() {
         name="name"
         value={form.name}
         onChange={handleChange}
-        style={{ padding: '1rem' }}
       />
 
       <label htmlFor="email">Email</label>
@@ -104,7 +96,6 @@ export default function RegisterForm() {
         name="email"
         value={form.email}
         onChange={handleChange}
-        style={{ padding: '1rem' }}
       />
 
       <label htmlFor="password">Password</label>
@@ -114,7 +105,6 @@ export default function RegisterForm() {
         name="password"
         value={form.password}
         onChange={handleChange}
-        style={{ padding: '1rem' }}
       />
 
       <ReCAPTCHA

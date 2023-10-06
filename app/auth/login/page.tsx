@@ -7,24 +7,13 @@
  * @license i.e. MIT
  */
 
-import {
-  LoginButton,
-  LogoutButton,
-  ProfileButton,
-  RegisterButton,
-} from '@/components/debug/AuthButtons'
-import AuthUsers from '@/components/debug/AuthUsers'
-import { AuthOptions } from '@/lib/auth'
-import { getServerSession } from 'next-auth'
-
 import React from 'react'
-import CreateProfile from '@/components/register/CreateProfile'
 import { BgImage } from '@/components/bgImage'
 import { StaticImage } from '@/components/Image'
+import TextBox from '../components/elements/textBox'
+import Button from '../components/elements/button'
 
-export default async function AuthTestingPage() {
-  const session = await getServerSession(AuthOptions)
-
+const LoginPage = () => {
   return (
     <main className="min-w-full max-w-full h-[calc(100vh-88px)]">
       <BgImage
@@ -36,6 +25,9 @@ export default async function AuthTestingPage() {
       <section className="absolute flex mx-[5%] my-[calc((100vh-88px-75vh)/2)] w-[90%] lg:w-[65%] lg:mx-[17.5%] h-[75vh] rounded-xl bg-pure-white/75">
         <section id="login-section" className="w-[50%] h-full">
           <h1>Login</h1>
+          <TextBox labelText="E-mail" type={'email'} />
+          <TextBox labelText="Senha" type={'password'} />
+          <Button>Logar</Button>
           <p>
             Precisa criar uma conta?{''}
             <a href="/">Crie aqui</a> {''}
@@ -57,3 +49,4 @@ export default async function AuthTestingPage() {
     </main>
   )
 }
+export default LoginPage
