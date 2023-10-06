@@ -51,8 +51,10 @@ export type ESResponse<DataType, CustomError = string> =
     }
 
 export type UserData = Partial<User> & {
-  followers: Follows[]
-  following: Follows[]
+  _count: {
+    followers: number
+    following: number
+  }
 }
 
 /**

@@ -53,7 +53,7 @@ export default async function Profile({
           <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
             <UserInfo
               isOwner={isOwner}
-              followers={user.followers.length}
+              followers={user._count.followers}
               location={user.location ?? 'Contagem'}
               graduation={user.graduations?.at(0) ?? 'UFMG'}
               from={user.location ?? 'Minas Gerais - Brasil'}
