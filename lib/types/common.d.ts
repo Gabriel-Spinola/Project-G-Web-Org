@@ -1,4 +1,4 @@
-import { Post, Project } from '@prisma/client'
+import { Follows, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -50,7 +50,13 @@ export type ESResponse<DataType, CustomError = string> =
       error: CustomError
     }
 
+export type UserData = Partial<User> & {
+  followers: Follows[]
+  following: Follows[]
+}
+
 /**
+ * REVIEW - usage of pick
  * @summary Describes the data that is recurrent in publications
  */
 export type PublicationsDefaultData = {
@@ -61,9 +67,7 @@ export type PublicationsDefaultData = {
     profilePic: string | null
   } | null
 
-  contributor: {
-    name: string | null
-  }[]
+  contributor: Pick<User, 'id'>[]
 
   likes: {
     id: number

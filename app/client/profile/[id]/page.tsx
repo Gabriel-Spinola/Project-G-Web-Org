@@ -24,6 +24,7 @@ import { User } from '@prisma/client'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData } from '../server-actions'
+import { UserData } from '@/lib/types/common'
 
 type Props = {
   params: { id: string }
@@ -32,7 +33,7 @@ type Props = {
 export default async function Profile({
   params,
 }: Props): Promise<React.JSX.Element> {
-  const user: Partial<User> | null = await getUserData(params.id, {
+  const user: UserData | null = await getUserData(params.id, {
     id: true,
     name: true,
     title: true,
@@ -52,7 +53,7 @@ export default async function Profile({
           <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
             <UserInfo
               isOwner={isOwner}
-              followers={100000}
+              followers={user.followers.length}
               location={user.location ?? 'Contagem'}
               graduation={user.graduations?.at(0) ?? 'UFMG'}
               from={user.location ?? 'Minas Gerais - Brasil'}

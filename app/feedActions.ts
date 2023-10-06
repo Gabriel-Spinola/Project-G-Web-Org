@@ -1,6 +1,7 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { ExpectedData } from '@/lib/schemas/postSchema'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
 
@@ -48,33 +49,39 @@ export async function fetchPosts(
 }
 
 // TODO - only need to receive the new post data not the formdata
-export async function handleFormSubimission(newpost: { FormData }) {
-  'use server'
-
-  const images = formData.get('images') as File[] | null
-
-  console.log(images)
-
-  if (images) {
-    try {
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
-        {
-          method: 'POST',
-          body: formData,
+export async function createNewPost(
+  newPost: ExpectedData,
+): Promise<ESResponse<string>> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      )
+        body: JSON.stringify(newPost),
+      },
+    )
 
-      const { data } = await response.json()
+    const { data } = await response.json()
 
-      if (!response.ok) {
-        throw new Error('response not ok' + JSON.stringify(data))
-      }
+    if (!response.ok) {
+      throw new Error('response not ok' + JSON.stringify(data))
+    }
 
-      console.log('worked ' + JSON.stringify(data))
-      // revalidatePath('/client/temp/with-server/')
-    } catch (e: unknown) {
-      console.error(e)
+    console.log('worked ' + JSON.stringify(data))
+    return {
+      data: 'worked ' + JSON.stringify(data),
+      error: null,
+    }
+    // revalidatePath('/client/temp/with-server/')
+  } catch (e: unknown) {
+    console.error(e)
+
+    return {
+      data: null,
+      error: e as string,
     }
   }
 }

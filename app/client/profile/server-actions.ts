@@ -1,6 +1,6 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { UserSelectedData } from './actions'
-import { User } from '@prisma/client'
+import { UserData } from '@/lib/types/common'
 
 /**
  * @author Gabriel Spinola
@@ -13,7 +13,7 @@ import { User } from '@prisma/client'
 export async function getUserData(
   id: string,
   requestData: UserSelectedData,
-): Promise<Partial<User> | null> {
+): Promise<UserData | null> {
   'use server'
 
   try {
@@ -22,17 +22,17 @@ export async function getUserData(
       {
         method: 'POST',
         headers: {
-          'Cotent-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
-        cache: 'no-cache', // REVIEW -
         next: { tags: ['user-data'] },
       },
     )
 
     if (!response.ok) throw new Error('Response not ok')
 
-    const { data }: { data: Partial<User> } = await response.json()
+    const { data }: { data: UserData } = await response.json()
+
     return data
   } catch (error: unknown) {
     console.error(error, 'Failed to fetch users')
