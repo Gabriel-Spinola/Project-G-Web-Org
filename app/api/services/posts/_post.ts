@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
+import { ExpectedData } from '@/lib/schemas/postSchema'
 import { FileBody, StorageResponse } from '@/lib/storage/storage'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
@@ -61,7 +62,7 @@ async function createPost(
 function checkRequiredFields(
   title: string | null | undefined,
   content: string | null | undefined,
-  images: string | null | undefined,
+  images: FileBody[] | null | undefined,
 ): boolean {
   return !!(title && content && images)
 }
@@ -71,13 +72,12 @@ export async function handlePost(
   req: Request,
 ): Promise<NextResponse> {
   try {
-    const formData = await req.formData()
+    const newPost = (await req.json()) as ExpectedData | null
 
-    const title = formData.get('title')?.toString()
-    const content = formData.get('content')?.toString()
-    const postImages = formData.getAll('images') as FileBody[] | null
+    const content = newPost?.content
+    const postImages = newPost?.images as FileBody[] | null | undefined
 
-    if (!checkRequiredFields(title, content, 'aa')) {
+    if (!checkRequiredFields('asdas', content, postImages)) {
       return NextResponse.json(
         {
           data: 'Failed to create post: missing or invalid request data',
@@ -85,6 +85,8 @@ export async function handlePost(
         { status: 400 },
       )
     }
+
+    console.log(JSON.stringify(postImages))
 
     const postData: Partial<Post> = {
       content,

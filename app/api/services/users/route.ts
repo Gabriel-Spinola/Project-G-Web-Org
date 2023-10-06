@@ -1,8 +1,9 @@
 import { prisma } from '@/lib/database/prisma'
-import { User } from '@prisma/client'
+import { UserData } from '@/lib/types/common'
+import { Follows, User } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-type SelectedData = Record<string, boolean>
+type SelectedData = Record<keyof User, boolean>
 
 async function handler(req: Request) {
   const url = new URL(req.url)
@@ -15,9 +16,9 @@ async function handler(req: Request) {
   }
 
   try {
-    const data: Partial<User> | null = await prisma.user.findUnique({
+    const data: UserData | null = await prisma.user.findUnique({
       where: { id },
-      select: selectedData,
+      select: { ...selectedData, followers: true, following: true },
     })
 
     if (data) {
