@@ -8,7 +8,7 @@
  */
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
-import { fetchPosts } from './feedActions'
+import { fetchPosts, revalidateFeed } from './feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import { Session, getServerSession } from 'next-auth'
@@ -29,6 +29,7 @@ export default async function Home() {
               <InfiniteScrollPosts
                 initialPublication={data || undefined}
                 currentUserId={session?.user.id}
+                revalidate={revalidateFeed}
               />
             ) : (
               <>Oops você chegou ao fim!</>
