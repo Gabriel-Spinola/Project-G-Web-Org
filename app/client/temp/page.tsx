@@ -71,7 +71,7 @@ export default function CreatePost() {
 
       try {
         const response = await fetch(
-          `${API_URL}${API_ENDPOINTS.services.posts}?id=clmz40axx0000ecugc38z6mbb`,
+          `${API_URL}${API_ENDPOINTS.services.posts}?id=clneuw2o60000w494md2x3u8f`,
           {
             method: 'POST',
             body: formData,

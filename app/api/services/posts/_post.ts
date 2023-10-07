@@ -77,16 +77,16 @@ export async function handlePost(
     const content = formData.get('content')?.toString()
     const postImages = formData.getAll('images') as File[] | null
 
-    const bufferImages: Promise<Buffer>[] | undefined = postImages?.map(
-      async (image: File): Promise<Buffer> =>
-        Buffer.from(await image.arrayBuffer()),
-    )
+    // const bufferImages: Promise<Buffer>[] | undefined = postImages?.map(
+    //   async (image: File): Promise<Buffer> =>
+    //     Buffer.from(await image.arrayBuffer()),
+    // )
 
     // const bytes = await postImages?.at(0)?.arrayBuffer()
     // // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // const buffer = Buffer.from(bytes!)
 
-    if (!checkRequiredFields('asd', content, 'aa') || !bufferImages) {
+    if (!checkRequiredFields('asd', content, 'aa')) {
       return NextResponse.json(
         {
           data: 'Failed to create post: missing or invalid request data',
@@ -107,8 +107,8 @@ export async function handlePost(
 
     if (postImages) {
       const storedImages = await Promise.all(
-        bufferImages.map(async (image, index) =>
-          storeImage(authorId, postImages[index].name, await image),
+        postImages.map((image: File) =>
+          storeImage(authorId, image.name, image),
         ),
       )
 

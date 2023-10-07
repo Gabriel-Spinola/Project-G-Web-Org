@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
-export default function SendImageButton() {
+type Props = {
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function SendImageButton({ onChange }: Props) {
   return (
     <div className="notClose img-btn mr-[280px]">
       <button className="notClose p-1 relative overflow-hidden flex flex-row mt-8 text-medium-primary select-none text-sm hover:text-darker-white border-solid border-darker-white border-2 rounded bg-darker-white hover:bg-medium-primary hover:border-medium-primary">
@@ -23,6 +27,7 @@ export default function SendImageButton() {
           name="images"
           accept=".png, .jpg, .jpeg, .webp"
           className="notClose absolute left-0 top-1 scale-150 scale-y-150 opacity-0"
+          onChange={onChange}
           multiple
         />
         Envie uma imagem
