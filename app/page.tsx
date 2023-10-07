@@ -7,6 +7,8 @@
  * @license GPL 3.0
  */
 
+// FIXME - Chakra Modals may be adding to much memory cost. 
+
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { fetchPosts, revalidateFeed } from './feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
