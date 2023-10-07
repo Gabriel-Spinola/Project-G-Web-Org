@@ -23,9 +23,10 @@ interface PostFormState {
 type Props = {
   closeModal: () => void
   revalidate?: () => void
+  currentUserId: string
 }
 
-export function FeedModal({ revalidate, closeModal }: Props) {
+export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
   const [form, setForm] = useState<PostFormState | null>({
     content: '',
     images: null,
@@ -53,13 +54,11 @@ export function FeedModal({ revalidate, closeModal }: Props) {
       return
     }
 
-    const img = event.target.files[0]
+    const newImage = event.target.files[0]
+    setImages((prevImages) => {
+      if (prevImages) return [...prevImages, newImage]
 
-    // setImages(event.target.files[0])
-    setImages((currentImg) => {
-      if (currentImg) return [...currentImg, img]
-
-      return [img]
+      return [newImage]
     })
   }
 
@@ -79,7 +78,7 @@ export function FeedModal({ revalidate, closeModal }: Props) {
 
     try {
       const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.posts}?id=clneuw2o60000w494md2x3u8f`,
+        `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
         {
           method: 'POST',
           body: formData,
@@ -100,9 +99,15 @@ export function FeedModal({ revalidate, closeModal }: Props) {
       if (revalidate) {
         revalidate()
       }
-    } catch (e: unknown) {
-      console.error(e)
+    } catch (error: unknown) {
+      console.error(error)
     }
+  }
+
+  function removeImageFromPreviewByIndex(index: number) {
+    setImages(
+      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
+    )
   }
 
   return (
@@ -125,7 +130,7 @@ export function FeedModal({ revalidate, closeModal }: Props) {
                 placeholder="Faça uma publicação"
                 className="notClose bg-medium-gray text-darker-white w-full pb-[192px] text-xl margin-none text-start outline-none"
                 value={form?.content}
-                onChange={(event): void =>
+                onChange={(event) =>
                   handleStateChange('content', event.target.value)
                 }
               ></textarea>
@@ -145,28 +150,19 @@ export function FeedModal({ revalidate, closeModal }: Props) {
         <section id="images-preview">
           {images && (
             <>
-              {images.map((image, $index) => (
-                <div key={$index}>
-                  <button
-                    onClick={() => {
-                      setImages(
-                        (currentImg) =>
-                          currentImg?.filter((_, index) => index !== $index),
-                      )
-                    }}
-                    type="button"
-                  >
-                    X
+              {images.map((image, index) => (
+                <div key={index}>
+                  {/* Remove Img Button */}
+                  <button onClick={() => removeImageFromPreviewByIndex(index)} type="button">
+                    <span>X</span>
                   </button>
 
-                  {images && (
-                    <img
-                      src={URL.createObjectURL(image)}
-                      width={300}
-                      height={400}
-                      alt="Image Sent"
-                    />
-                  )}
+                  <img
+                    src={URL.createObjectURL(image)}
+                    width={300}
+                    height={400}
+                    alt="Image Sent"
+                  />
                 </div>
               ))}
             </>
