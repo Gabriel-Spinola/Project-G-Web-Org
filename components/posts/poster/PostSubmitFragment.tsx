@@ -57,7 +57,7 @@ export default function PostSubmitFragment({
             ) : (
               <>
                 <h2>Primeiro faça login para espalhar sua criatividade!</h2>
-                
+
                 <Button onClick={() => signIn(undefined, { callbackUrl: '/' })}>
                   Login
                 </Button>
