@@ -13,9 +13,7 @@ import SendImageButton from './SendImageButton'
 import SendPDFButton from './SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from './SubmitPostButton'
-import { createNewPost } from '@/app/feedActions'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { signIn } from 'next-auth/react'
 
 interface PostFormState {
   content: string
