@@ -21,7 +21,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center">
-        <PostSubmitFragment></PostSubmitFragment>
+        <PostSubmitFragment />
 
         {!error ? (
           <>

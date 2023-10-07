@@ -11,6 +11,9 @@ async function getPosts(
     const skip = (page - 1) * take
 
     const data = await prisma.post.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
       where,
       skip,
       take,
