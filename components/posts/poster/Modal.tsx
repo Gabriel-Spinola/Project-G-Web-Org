@@ -20,22 +20,6 @@ interface PostFormState {
   images: File[] | null
 }
 
-function toBase64(file: File): Promise<unknown> {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader()
-
-    fileReader.readAsDataURL(file)
-
-    fileReader.onload = () => {
-      resolve(fileReader.result)
-    }
-
-    fileReader.onerror = (error) => {
-      reject(error)
-    }
-  })
-}
-
 type Props = {
   closeModal: () => void
   revalidate?: () => void
@@ -47,7 +31,6 @@ export function FeedModal({ revalidate, closeModal }: Props) {
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
-  const [base64, setBase64] = useState<string[] | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   function handleStateChange(
@@ -78,14 +61,6 @@ export function FeedModal({ revalidate, closeModal }: Props) {
 
       return [img]
     })
-
-    // const image = await toBase64(event.target.files[0])
-
-    // setBase64((currentImg) => {
-    //   if (currentImg) return [...currentImg, image as string]
-
-    //   return [image as string]
-    // })
   }
 
   async function handleFormSubmission(
@@ -120,7 +95,6 @@ export function FeedModal({ revalidate, closeModal }: Props) {
       console.log('worked ' + JSON.stringify(data))
 
       setImages(undefined)
-      setBase64(undefined)
 
       closeModal()
       if (revalidate) {
