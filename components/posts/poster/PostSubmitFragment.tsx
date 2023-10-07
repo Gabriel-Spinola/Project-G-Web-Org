@@ -24,12 +24,17 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { FeedModal } from './Modal'
+import { signIn } from 'next-auth/react'
 
 type Props = {
   revalidate?: () => void
+  currentUserId?: string
 }
 
-export default function PostSubmitFragment({ revalidate }: Props) {
+export default function PostSubmitFragment({
+  revalidate,
+  currentUserId,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -43,14 +48,27 @@ export default function PostSubmitFragment({ revalidate }: Props) {
           <ModalCloseButton />
 
           <ModalBody>
-            <FeedModal revalidate={revalidate} closeModal={onClose} />
+            {currentUserId ? (
+              <FeedModal
+                revalidate={revalidate}
+                closeModal={onClose}
+                currentUserId={currentUserId}
+              />
+            ) : (
+              <>
+                <h2>Primeiro faça login para espalhar sua criatividade!</h2>
+                
+                <Button onClick={() => signIn(undefined, { callbackUrl: '/' })}>
+                  Login
+                </Button>
+              </>
+            )}
           </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

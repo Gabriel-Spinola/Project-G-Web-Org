@@ -17,7 +17,7 @@ async function storeImage(
       .from(SUPABASE_PUBLIC_BUCKET_NAME)
       .upload(`posts/${authorId}/${fileName}`, images, {
         cacheControl: '3600',
-        upsert: true, // NOTE - TEMP
+        upsert: true,
       })
 
     if (error) {
@@ -77,6 +77,7 @@ export async function handlePost(
     const content = formData.get('content')?.toString()
     const postImages = formData.getAll('images') as File[] | null
 
+    // REVIEW - Usage of buffers and base64
     // const bufferImages: Promise<Buffer>[] | undefined = postImages?.map(
     //   async (image: File): Promise<Buffer> =>
     //     Buffer.from(await image.arrayBuffer()),
