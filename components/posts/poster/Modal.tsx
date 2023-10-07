@@ -37,16 +37,17 @@ function toBase64(file: File): Promise<unknown> {
 }
 
 type Props = {
+  closeModal: () => void
   revalidate?: () => void
 }
 
-export function FeedModal({ revalidate }: Props) {
+export function FeedModal({ revalidate, closeModal }: Props) {
   const [form, setForm] = useState<PostFormState | null>({
     content: '',
     images: null,
   })
-  const [images, setImages] = useState<File | null>(null)
-  const [base64, setBase64] = useState<string | null>(null)
+  const [images, setImages] = useState<File[] | undefined>(undefined)
+  const [base64, setBase64] = useState<string[] | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   function handleStateChange(
@@ -62,14 +63,29 @@ export function FeedModal({ revalidate }: Props) {
     })
   }
 
-  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
+  async function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
 
-    if (!event.target.files) {
+    if (!event.target.files || event.target.files.length <= 0) {
       return
     }
 
-    setImages(event.target.files[0])
+    const img = event.target.files[0]
+
+    // setImages(event.target.files[0])
+    setImages((currentImg) => {
+      if (currentImg) return [...currentImg, img]
+
+      return [img]
+    })
+
+    // const image = await toBase64(event.target.files[0])
+
+    // setBase64((currentImg) => {
+    //   if (currentImg) return [...currentImg, image as string]
+
+    //   return [image as string]
+    // })
   }
 
   async function handleFormSubmission(
@@ -79,8 +95,12 @@ export function FeedModal({ revalidate }: Props) {
 
     const formData = new FormData(event.currentTarget)
 
-    const base64 = await toBase64(images as File)
-    setBase64(base64 as string)
+    images?.pop()
+    images?.forEach((img) => {
+      formData.append('images', img)
+    })
+
+    console.log(formData.getAll('images'))
 
     try {
       const response = await fetch(
@@ -99,9 +119,10 @@ export function FeedModal({ revalidate }: Props) {
 
       console.log('worked ' + JSON.stringify(data))
 
-      setImages(null)
-      setBase64(null)
+      setImages(undefined)
+      setBase64(undefined)
 
+      closeModal()
       if (revalidate) {
         revalidate()
       }
@@ -148,8 +169,33 @@ export function FeedModal({ revalidate }: Props) {
 
         {/* Images Preview Section */}
         <section id="images-preview">
-          {base64 && (
-            <img src={base64} width={300} height={400} alt="Image Sent" />
+          {images && (
+            <>
+              {images.map((image, $index) => (
+                <div key={$index}>
+                  <button
+                    onClick={() => {
+                      setImages(
+                        (currentImg) =>
+                          currentImg?.filter((_, index) => index !== $index),
+                      )
+                    }}
+                    type="button"
+                  >
+                    X
+                  </button>
+
+                  {images && (
+                    <img
+                      src={URL.createObjectURL(image)}
+                      width={300}
+                      height={400}
+                      alt="Image Sent"
+                    />
+                  )}
+                </div>
+              ))}
+            </>
           )}
         </section>
       </div>

@@ -43,7 +43,7 @@ export default function PostSubmitFragment({ revalidate }: Props) {
           <ModalCloseButton />
 
           <ModalBody>
-            <FeedModal revalidate={revalidate} />
+            <FeedModal revalidate={revalidate} closeModal={onClose} />
           </ModalBody>
 
           <ModalFooter>
