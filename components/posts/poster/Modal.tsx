@@ -38,7 +38,11 @@ function toBase64(file: File): Promise<unknown> {
   })
 }
 
-export function FeedModal() {
+type Props = {
+  revalidate?: () => void
+}
+
+export function FeedModal({ revalidate }: Props) {
   const [form, setForm] = useState<PostFormState | null>({
     content: '',
     images: null,
@@ -99,6 +103,10 @@ export function FeedModal() {
 
       setImages(null)
       setBase64(null)
+
+      if (revalidate) {
+        revalidate()
+      }
     } catch (e: unknown) {
       console.error(e)
     }
@@ -107,6 +115,7 @@ export function FeedModal() {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-20">
       <div className="w-[40vw] h-[260px] flex flex-col mt-[-20%] z-10">
+        {/* Form Section */}
         <section
           id="post-form"
           className="notClose z-1 drop-shadow-sm bg-medium-gray text-darker-white text-xl p-8 rounded-[8px]"
@@ -139,6 +148,7 @@ export function FeedModal() {
           </form>
         </section>
 
+        {/* Images Preview Section */}
         <section id="images-preview">
           {base64 && (
             <img src={base64} width={300} height={400} alt="Image Sent" />

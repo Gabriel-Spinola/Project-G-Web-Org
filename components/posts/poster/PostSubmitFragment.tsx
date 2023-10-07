@@ -25,7 +25,11 @@ import {
 } from '@chakra-ui/react'
 import { FeedModal } from './Modal'
 
-export default function PostSubmitFragment() {
+type Props = {
+  revalidate?: () => void
+}
+
+export default function PostSubmitFragment({ revalidate }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -39,7 +43,7 @@ export default function PostSubmitFragment() {
           <ModalCloseButton />
 
           <ModalBody>
-            <FeedModal />
+            <FeedModal revalidate={revalidate} />
           </ModalBody>
 
           <ModalFooter>
