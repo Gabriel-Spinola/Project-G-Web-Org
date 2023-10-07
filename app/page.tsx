@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-// FIXME - Chakra Modals may be adding to much memory cost.
+// FIXME - Chakra Modals may be adding too much memory cost.
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { fetchPosts, revalidateFeed } from './feedActions'
@@ -23,7 +23,10 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center">
-        <PostSubmitFragment revalidate={revalidateFeed} currentUserId={session?.user.id} />
+        <PostSubmitFragment
+          revalidate={revalidateFeed}
+          currentUserId={session?.user.id}
+        />
 
         {!error ? (
           <>

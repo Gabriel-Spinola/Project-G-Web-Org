@@ -153,7 +153,10 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
               {images.map((image, index) => (
                 <div key={index}>
                   {/* Remove Img Button */}
-                  <button onClick={() => removeImageFromPreviewByIndex(index)} type="button">
+                  <button
+                    onClick={() => removeImageFromPreviewByIndex(index)}
+                    type="button"
+                  >
                     <span>X</span>
                   </button>
 
