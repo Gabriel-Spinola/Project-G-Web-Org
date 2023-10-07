@@ -1,4 +1,4 @@
-import { fetchPosts } from '@/app/feedActions'
+import { fetchPosts, revalidateFeed } from '@/app/feedActions'
 import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
@@ -13,9 +13,18 @@ export default async function UserPosts({ authorID }: Params) {
       <PostSubmitFragment />
 
       {!error ? (
-        <InfiniteScrollPosts initialPublication={data || undefined} />
+        <>
+          {data && data?.length > 0 ? (
+            <InfiniteScrollPosts
+              initialPublication={data || undefined}
+              revalidate={revalidateFeed}
+            />
+          ) : (
+            <>Oops você chegou ao fim!</>
+          )}
+        </>
       ) : (
-        <h1>Failed to load feed</h1>
+        <h1>Feed Failed to load</h1>
       )}
     </section>
   )
