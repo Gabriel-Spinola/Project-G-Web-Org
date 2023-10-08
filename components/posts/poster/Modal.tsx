@@ -74,8 +74,6 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
       formData.append('images', img)
     })
 
-    console.log(formData.getAll('images'))
-
     try {
       const response = await fetch(
         `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
