@@ -4,10 +4,10 @@
  *
  * @project Project G
  * @version main-release
- * @license GPL 3.0
+ * @license i.e. MIT
  */
 
-import RegisterForm from './components/RegisterForm'
+import RegisterForm from '@/components/register/form'
 import React from 'react'
 
 export default function Register() {
