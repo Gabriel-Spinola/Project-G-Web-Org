@@ -14,6 +14,7 @@ import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
+import FullPostModal from './FullPostModal'
 
 interface Params {
   post: FullPost
@@ -27,6 +28,8 @@ export default function PostItem({ post, currentUserId }: Params) {
 
   return (
     <div className={styles.postado}>
+      <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
+
       <div className={styles.autor}>
         <div className={styles.foto}>
           <div className="overflow-x-auto"></div>
@@ -88,6 +91,7 @@ export default function PostItem({ post, currentUserId }: Params) {
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
+        <FullPostModal />
       </div>
     </div>
   )
