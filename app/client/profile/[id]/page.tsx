@@ -21,7 +21,7 @@ import DisplayUserInfo from '@/components/profile/ProfileCard'
 import React from 'react'
 import UserInfo from '@/components/profile/UserInfo'
 import { User } from '@prisma/client'
-import { AuthOptions } from '@/lib/auth/AuthOptions'
+import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData } from '../server-actions'
 

@@ -1,4 +1,4 @@
-import { AuthOptions } from '@/lib/auth/AuthOptions'
+import { AuthOptions } from '@/lib/auth'
 import { Comment } from '@prisma/client'
 import { Session, getServerSession } from 'next-auth'
 import React from 'react'

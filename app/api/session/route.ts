@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import { AuthOptions } from '@/lib/auth/AuthOptions'
+import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
