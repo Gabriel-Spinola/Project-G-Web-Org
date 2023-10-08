@@ -32,6 +32,10 @@ export default async function AuthTestingPage() {
       }}
     >
       <>
+        <br />
+        <br />
+        <br />
+        <br />
         <LoginButton />
         <RegisterButton />
         <LogoutButton />
