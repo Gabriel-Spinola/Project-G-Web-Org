@@ -103,7 +103,7 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
       console.error(error)
     }
   }
- 
+
   function removeImageFromPreviewByIndex(index: number) {
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
