@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-import RegisterForm from './components/RegisterForm'
+import RegisterForm from '../login/components/RegisterForm'
 import React from 'react'
 
 export default function Register() {
