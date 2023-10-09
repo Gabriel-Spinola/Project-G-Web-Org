@@ -4,50 +4,31 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
-import {
-  LoginButton,
-  LogoutButton,
-  ProfileButton,
-  RegisterButton,
-} from '@/components/debug/AuthButtons'
-import AuthUsers from '@/components/debug/AuthUsers'
-import { AuthOptions } from '@/lib/auth'
-import { getServerSession } from 'next-auth'
+import { BgImage } from '@/components/BgImage'
+import ToggleForms from './components/toggleForms'
 
-import React from 'react'
-import CreateProfile from '@/components/register/CreateProfile'
-
-export default async function AuthTestingPage() {
-  const session = await getServerSession(AuthOptions)
-
+export default function LoginPage() {
   return (
-    <main
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2vh',
-      }}
-    >
-      <>
-        <br />
-        <br />
-        <br />
-        <br />
-        <LoginButton />
-        <RegisterButton />
-        <LogoutButton />
-        <ProfileButton />
-
-        <h1>Server session: </h1>
-        <pre>{JSON.stringify(session)}</pre>
-
-        <AuthUsers />
-
-        <CreateProfile session={session} />
-      </>
+    <main className="min-w-full flex max-w-full h-[calc(100vh-88px)]">
+      <BgImage
+        url={
+          'https://images.unsplash.com/photo-1633354574427-b0dd0697130a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2089&q=80'
+        }
+        alt={'SingInBgImage'}
+      />
+      <section
+        id="loginContainer"
+        className="min-w-full min-h-full flex items-center justify-center"
+      >
+        <div
+          className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
+        >
+          <ToggleForms />
+        </div>
+      </section>
     </main>
   )
 }
