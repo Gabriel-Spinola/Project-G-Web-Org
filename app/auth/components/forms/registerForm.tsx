@@ -9,16 +9,21 @@
 
 'use client'
 
-import { registerNewUser } from '@/app/auth/register/_actions'
+import { registerNewUser } from '@/app/auth/_actions'
 import { ESResponse } from '@/lib/types/common'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
-import { RegisterButton } from './RegisterButton'
+import { SubmitButton } from '../submitButton'
+import TextBox from '../textBox'
 
-export default function RegisterForm() {
+interface Props {
+  handleFormChange: () => void
+}
+
+export default function RegisterForm({ handleFormChange }: Props) {
   const [isVerified, setIsVerified] = useState<boolean>(false)
 
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -68,34 +73,49 @@ export default function RegisterForm() {
     <form
       ref={formRef}
       action={handleFormSubmission}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 500,
-        rowGap: 10,
-      }}
+      className={`flex-col w-full gap-4 items-center}`}
     >
-      <label htmlFor="name">Name</label>
-      <input type="text" name="name" style={{ padding: '1rem' }} required />
+      <TextBox
+        className="w-full"
+        labelText="Nome"
+        htmlForId="name"
+        type={'text'}
+      />
 
-      <label htmlFor="email">Email</label>
-      <input type="email" name="email" style={{ padding: '1rem' }} required />
+      <TextBox
+        className="w-full"
+        labelText="E-mail"
+        htmlForId="email"
+        type={'email'}
+      />
 
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        style={{ padding: '1rem' }}
-        required
+      <TextBox
+        className="w-full"
+        labelText="Senha"
+        htmlForId="password"
+        type={'password'}
       />
 
       <ReCAPTCHA
         sitekey={process.env.RECAPTCHA_SITE_KEY as string}
         ref={recaptchaRef}
         onChange={handleCaptchaSubmission}
+        className="my-5"
       />
 
-      <RegisterButton isVerified={isVerified} />
+      <SubmitButton isVerified={isVerified} buttonText={'REGISTRAR'} />
+
+      <p>
+        Já possui Conta?{' '}
+        <a
+          href="#"
+          id="formButton"
+          className="text-light-secundary underline hover:text-darker-secundary font-bold"
+          onClick={handleFormChange}
+        >
+          Logue Aqui
+        </a>{' '}
+      </p>
     </form>
   )
 }
