@@ -1,8 +1,6 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ExpectedData } from '@/lib/schemas/postSchema'
-import { FileBody } from '@/lib/storage/storage'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
 

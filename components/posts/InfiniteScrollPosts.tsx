@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchPosts } from '@/app/feedActions'
+import { fetchPosts } from '@/app/(feed)/_feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
