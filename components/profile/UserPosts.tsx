@@ -1,4 +1,4 @@
-import { fetchPosts, revalidateFeed } from '@/app/feedActions'
+import { fetchPosts, revalidateFeed } from '@/app/(feed)/_feedActions'
 import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'

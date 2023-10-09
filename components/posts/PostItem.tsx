@@ -15,6 +15,7 @@ import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import FullPostModal from './FullPostModal'
+import DeletePostButton from './DeletePostButton'
 
 interface Params {
   post: FullPost
@@ -22,6 +23,9 @@ interface Params {
 }
 
 export default function PostItem({ post, currentUserId }: Params) {
+  const isOwner = currentUserId === post.authorId
+
+  // Check if the current user liked the post
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
@@ -29,6 +33,8 @@ export default function PostItem({ post, currentUserId }: Params) {
   return (
     <div className={styles.postado}>
       <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
+
+      {isOwner && <DeletePostButton postId={post.id} />}
 
       <div className={styles.autor}>
         <div className={styles.foto}>

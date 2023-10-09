@@ -103,6 +103,8 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
   }
 
   function removeImageFromPreviewByIndex(index: number) {
+    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for perfomance
+
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
     )
