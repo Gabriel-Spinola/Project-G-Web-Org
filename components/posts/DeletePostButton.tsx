@@ -1,9 +1,12 @@
 'use client'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function DeletePostButton({ postId }: { postId: string }) {
+  const router = useRouter()
+
   async function handlePostDeletion() {
     try {
       const response = await fetch(
@@ -20,6 +23,7 @@ export default function DeletePostButton({ postId }: { postId: string }) {
       }
 
       console.log('data: ', data)
+      router.refresh()
     } catch (error: unknown) {
       console.error(error)
     }
