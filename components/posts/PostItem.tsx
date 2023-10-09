@@ -16,6 +16,7 @@ import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from './DeletePostButton'
+import PostCommentsSection from './PostCommentsSection'
 
 interface Params {
   post: FullPost
@@ -98,6 +99,7 @@ export default function PostItem({ post, currentUserId }: Params) {
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
         <FullPostModal />
+        {/* <PostCommentsSection postId={post.id} /> */}
       </div>
     </div>
   )
