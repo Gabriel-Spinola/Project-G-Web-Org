@@ -1,8 +1,10 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse, FullPost } from '@/lib/types/common'
+import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
+import { commentsRefetchTag } from '../client/temp/comments/contants'
+import { unknown } from 'zod'
 
 /**
  * Helper function to control the feed revalidation in client components.

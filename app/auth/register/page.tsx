@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import RegisterForm from '@/components/register/form'
+import RegisterForm from './components/RegisterForm'
 import React from 'react'
 
 export default function Register() {
