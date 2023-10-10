@@ -58,7 +58,7 @@ export type UserData = Partial<User> & {
 }
 
 export type PublicationComment = Comment & {
-  author: { name: string } | null
+  author: { name: string }
 }
 
 /**

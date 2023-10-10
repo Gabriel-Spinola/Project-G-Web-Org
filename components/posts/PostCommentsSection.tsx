@@ -1,7 +1,9 @@
+'use client'
+
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, PublicationComment } from '@/lib/types/common'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 async function fetchComments(
   postId: string,
@@ -32,24 +34,32 @@ async function fetchComments(
   }
 }
 
-export default async function PostCommentsSection({
-  postId,
-}: {
-  postId: string
-}) {
-  const { data, error } = await fetchComments(postId)
+export default function PostCommentsSection({ postId }: { postId: string }) {
+  const [comments, setComments] = useState<PublicationComment[] | undefined>(
+    undefined,
+  )
 
-  if (error) {
-    return <h1>Failed to fetch comments</h1>
-  }
+  useEffect(() => {
+    async function fetch() {
+      const { data, error } = await fetchComments(postId)
+
+      if (error) {
+        console.error(error)
+      }
+
+      setComments(data as PublicationComment[])
+    }
+
+    fetch()
+  }, [postId])
 
   return (
     <div>
       <h2>Comments</h2>
 
-      {data &&
-        data?.length > 0 &&
-        data?.map((comment: PublicationComment) => (
+      {comments &&
+        comments?.length > 0 &&
+        comments?.map((comment: PublicationComment) => (
           <div key={comment.id}>
             <span>{comment.author?.name}</span>
 
