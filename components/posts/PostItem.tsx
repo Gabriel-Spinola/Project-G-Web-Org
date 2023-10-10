@@ -31,10 +31,6 @@ export default function PostItem({ post, currentUserId }: Params) {
     (like: Partial<Like>) => like.userId === currentUserId,
   )
 
-  let clicked = false
-  console.log('post: ', post.content)
-  console.log(isLiked)
-
   return (
     <div className={styles.postado}>
       <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
@@ -85,14 +81,7 @@ export default function PostItem({ post, currentUserId }: Params) {
         />
 
         {/* Comments */}
-        <button
-          onClick={() => {
-            clicked = true
-            console.log('button')
-            console.log(clicked)
-          }}
-          className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]"
-        >
+        <button className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -110,8 +99,6 @@ export default function PostItem({ post, currentUserId }: Params) {
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
         <FullPostModal postId={post.id} />
-
-        {/* {clicked ? <PostCommentsSection postId={post.id} /> : <h1>a</h1>} */}
       </div>
     </div>
   )
