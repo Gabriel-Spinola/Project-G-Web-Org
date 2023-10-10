@@ -3,14 +3,17 @@
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, PublicationComment } from '@/lib/types/common'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 async function fetchComments(
   postId: string,
+  page?: number,
 ): Promise<ESResponse<PublicationComment[]>> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.comments}?id=${postId}`,
+      `${API_URL}${API_ENDPOINTS.services.comments}?id=${postId}&page=${
+        page ?? 1
+      }`,
       {
         method: 'GET',
         headers: {
@@ -39,19 +42,24 @@ export default function PostCommentsSection({ postId }: { postId: string }) {
     undefined,
   )
 
-  useEffect(() => {
-    async function fetch() {
-      const { data, error } = await fetchComments(postId)
+  // const [shouldRevalidate, setShouldRevalidate] = useState(false)
+  const [page, setPage] = useState(1)
 
-      if (error) {
-        console.error(error)
-      }
+  const loadComments = useCallback(async () => {
+    const { data, error } = await fetchComments(postId, page)
 
-      setComments(data as PublicationComment[])
+    if (error) {
+      console.error(error)
+
+      return
     }
 
-    fetch()
-  }, [postId])
+    setComments(data as PublicationComment[])
+  }, [page, postId])
+
+  useEffect(() => {
+    loadComments()
+  }, [loadComments])
 
   return (
     <div>
@@ -74,6 +82,15 @@ export default function PostCommentsSection({ postId }: { postId: string }) {
             ></textarea>
           </div>
         ))}
+
+      <button
+        type="button"
+        onClick={() => {
+          setPage(page + 1)
+        }}
+      >
+        Carregar mais
+      </button>
     </div>
   )
 }
