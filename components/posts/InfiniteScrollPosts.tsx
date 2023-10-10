@@ -47,12 +47,15 @@ export default function InfiniteScrollPosts({
     ])
   }, [page])
 
+  // TODO - Enable Revalidation
   useEffect(() => {
     // If the spinner is in the client view load more posts.
     if (inView) {
       loadMorePosts()
       revalidate()
     }
+
+    console.log('running effect')
   }, [inView, loadMorePosts, revalidate])
 
   return (
