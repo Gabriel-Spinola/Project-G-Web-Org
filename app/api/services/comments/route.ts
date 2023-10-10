@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
-import { Comment } from '@prisma/client'
+import { PublicationComment } from '@/lib/types/common'
 import { NextResponse } from 'next/server'
 
 // TODO - pagination
@@ -10,8 +10,9 @@ export async function GET(req: Request) {
 
   if (req.method === 'GET' && postId) {
     try {
-      const data: Comment[] = await prisma.comment.findMany({
+      const data: PublicationComment[] = await prisma.comment.findMany({
         where: { postId },
+        include: { author: { select: { name: true } } },
       })
 
       return NextResponse.json({ data }, { status: 200 })

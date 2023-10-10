@@ -99,7 +99,7 @@ export default function PostItem({ post, currentUserId }: Params) {
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
         <FullPostModal />
-        {/* <PostCommentsSection postId={post.id} /> */}
+        <PostCommentsSection postId={post.id} />
       </div>
     </div>
   )
