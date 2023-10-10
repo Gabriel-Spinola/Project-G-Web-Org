@@ -37,10 +37,9 @@ async function fetchComments(
   }
 }
 
+// FIXME - Use useRef to fix refetching problem
 export default function PostCommentsSection({ postId }: { postId: string }) {
-  const [comments, setComments] = useState<PublicationComment[] | undefined>(
-    undefined,
-  )
+  const [comments, setComments] = useState<PublicationComment[]>([])
 
   // const [shouldRevalidate, setShouldRevalidate] = useState(false)
   const [page, setPage] = useState(1)
@@ -48,18 +47,23 @@ export default function PostCommentsSection({ postId }: { postId: string }) {
   const loadComments = useCallback(async () => {
     const { data, error } = await fetchComments(postId, page)
 
-    if (error) {
+    if (error || !data) {
       console.error(error)
 
       return
     }
 
-    setComments(data as PublicationComment[])
+    console.log(data)
+
+    setComments((prevComment) => [
+      ...prevComment,
+      ...(data as PublicationComment[]),
+    ])
   }, [page, postId])
 
   useEffect(() => {
-    loadComments()
-  }, [loadComments])
+    if (comments.length <= 0) loadComments()
+  }, [comments, loadComments])
 
   return (
     <div>
