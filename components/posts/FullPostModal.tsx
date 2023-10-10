@@ -12,8 +12,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import React from 'react'
+import PostCommentsSection from './PostCommentsSection'
+import PostComment from '../comments/PostComment'
 
-export default function FullPostModal() {
+export default function FullPostModal({ postId }: { postId: string }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -26,7 +28,10 @@ export default function FullPostModal() {
           <ModalHeader>Faça uma publicação</ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody>comment</ModalBody>
+          <ModalBody>
+            <PostComment />
+            <PostCommentsSection postId={postId} />
+          </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>

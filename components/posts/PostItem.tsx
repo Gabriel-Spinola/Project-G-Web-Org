@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
@@ -30,6 +30,10 @@ export default function PostItem({ post, currentUserId }: Params) {
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+
+  let clicked = false
+  console.log('post: ', post.content)
+  console.log(isLiked)
 
   return (
     <div className={styles.postado}>
@@ -81,7 +85,14 @@ export default function PostItem({ post, currentUserId }: Params) {
         />
 
         {/* Comments */}
-        <button className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]">
+        <button
+          onClick={() => {
+            clicked = true
+            console.log('button')
+            console.log(clicked)
+          }}
+          className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -98,8 +109,9 @@ export default function PostItem({ post, currentUserId }: Params) {
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal />
-        <PostCommentsSection postId={post.id} />
+        <FullPostModal postId={post.id} />
+
+        {/* {clicked ? <PostCommentsSection postId={post.id} /> : <h1>a</h1>} */}
       </div>
     </div>
   )
