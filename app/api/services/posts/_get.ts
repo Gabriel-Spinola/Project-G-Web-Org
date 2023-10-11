@@ -23,7 +23,7 @@ async function getPosts(
         },
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
-        comments: { select: { id: true } },
+        comments: { select: { id: true, content: true } },
       },
     })
 
