@@ -1,10 +1,11 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ExpectedData } from '@/lib/schemas/postSchema'
-import { FileBody } from '@/lib/storage/storage'
-import { ESResponse, FullPost } from '@/lib/types/common'
+import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
 import { revalidateTag } from 'next/cache'
+import { commentsRefetchTag } from '../client/temp/comments/contants'
+import { prisma } from '@/lib/database/prisma'
+import { Comment, Post } from '@prisma/client'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -81,5 +82,43 @@ export async function createNewPost(
       data: null,
       error: e as string,
     }
+  }
+}
+
+export async function postComment(formData: FormData) {
+  const content = formData.get('content')?.toString()
+  const authorId = formData.get('author-id')?.toString()
+  const targetId = formData.get('target-id')?.toString()
+
+  if (!content || !authorId) return
+
+  try {
+    const createComment: Comment = await prisma.comment.create({
+      data: {
+        content,
+        authorId,
+        postId: targetId,
+        isEdited: false,
+        createdAt: new Date(Date.now()),
+      },
+    })
+
+    const updateTarget: Post = await prisma.post.update({
+      where: { id: targetId },
+      // NOTE - Push new comment into post
+      data: { comments: { connect: { id: createComment.id } } },
+    })
+
+    console.log(
+      'sucess' +
+        JSON.stringify(createComment) +
+        '\n' +
+        JSON.stringify(updateTarget),
+    )
+
+    revalidateTag(commentsRefetchTag)
+    revalidateTag('revalidate-feed')
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
