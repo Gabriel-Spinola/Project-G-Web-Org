@@ -11,11 +11,10 @@
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
 import { fetchPosts, revalidateFeed } from './(feed)/_feedActions'
-import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
+import { ESResponse, FullPost } from '@/lib/types/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import { Session, getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import { useRouter } from 'next/router'
 
 export default async function Home() {
   const session: Session | null = await getServerSession(AuthOptions)

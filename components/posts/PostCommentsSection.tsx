@@ -2,8 +2,8 @@
 
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse, PublicationComment } from '@/lib/types/common'
-import React, { useCallback, useEffect, useState } from 'react'
+import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 async function fetchComments(
   postId: string,
@@ -38,42 +38,41 @@ async function fetchComments(
 }
 
 // FIXME - Use useRef to fix refetching problem
-export default function PostCommentsSection({ postId }: { postId: string }) {
+export default function PostCommentsSection({ post }: { post: FullPost }) {
   const [comments, setComments] = useState<PublicationComment[]>([])
 
-  // const [shouldRevalidate, setShouldRevalidate] = useState(false)
   const [page, setPage] = useState(1)
 
-  const loadComments = useCallback(async () => {
-    const { data, error } = await fetchComments(postId, page)
+  // const loadComments = useCallback(async () => {
+  //   // const { data, error } = await fetchComments(postId, page)
 
-    if (error || !data) {
-      console.error(error)
+  //   if (error || !data) {
+  //     console.error(error)
 
-      return
-    }
+  //     return
+  //   }
 
-    console.log(data)
+  //   console.log(data)
 
-    setComments((prevComment) => [
-      ...prevComment,
-      ...(data as PublicationComment[]),
-    ])
-  }, [page, postId])
+  //   setComments((prevComment) => [
+  //     ...prevComment,
+  //     ...(data as PublicationComment[]),
+  //   ])
+  // }, [page, post])
 
-  useEffect(() => {
-    if (comments.length <= 0) loadComments()
-  }, [comments, loadComments])
+  // useEffect(() => {
+  //   loadComments()
+  // }, [loadComments])
 
   return (
     <div>
       <h2>Comments</h2>
 
-      {comments &&
-        comments?.length > 0 &&
-        comments?.map((comment: PublicationComment) => (
+      {post &&
+        post.comments.length > 0 &&
+        post.comments.map((comment) => (
           <div key={comment.id}>
-            <span>{comment.author?.name}</span>
+            <span>{post.author?.name}</span>
 
             <label htmlFor="content"></label>
             <textarea

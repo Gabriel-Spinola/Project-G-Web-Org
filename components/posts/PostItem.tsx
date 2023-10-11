@@ -16,7 +16,6 @@ import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from './DeletePostButton'
-import PostCommentsSection from './PostCommentsSection'
 
 interface Params {
   post: FullPost
@@ -30,6 +29,7 @@ export default function PostItem({ post, currentUserId }: Params) {
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+  console.log('post ', post.content)
 
   return (
     <div className={styles.postado}>
@@ -97,8 +97,8 @@ export default function PostItem({ post, currentUserId }: Params) {
           <span>{post.comments?.length ?? 0}</span>
         </button>
 
-        <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal postId={post.id} />
+        {/* <a href={`/client/posts/${post.id}`}>Check Post</a> */}
+        <FullPostModal post={post} />
       </div>
     </div>
   )

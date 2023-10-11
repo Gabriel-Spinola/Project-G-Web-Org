@@ -11,11 +11,13 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import PostCommentsSection from './PostCommentsSection'
 import PostComment from '../comments/PostComment'
+import { useRouter } from 'next/navigation'
+import { FullPost } from '@/lib/types/common'
 
-export default function FullPostModal({ postId }: { postId: string }) {
+export default function FullPostModal({ post }: { post: FullPost }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -29,8 +31,8 @@ export default function FullPostModal({ postId }: { postId: string }) {
           <ModalCloseButton />
 
           <ModalBody>
+            <PostCommentsSection post={post} />
             <PostComment />
-            <PostCommentsSection postId={postId} />
           </ModalBody>
 
           <ModalFooter>

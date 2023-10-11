@@ -80,7 +80,10 @@ export type PublicationsDefaultData = {
     userId: string
   }[]
 
-  comments: { id: number }[]
+  comments: {
+    id: number
+    content: string
+  }[]
 }
 
 /**
