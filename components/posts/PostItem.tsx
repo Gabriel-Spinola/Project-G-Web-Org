@@ -7,13 +7,15 @@
  * @license GPL 3.0
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
+import FullPostModal from './FullPostModal'
+import DeletePostButton from './DeletePostButton'
 
 interface Params {
   post: FullPost
@@ -21,12 +23,20 @@ interface Params {
 }
 
 export default function PostItem({ post, currentUserId }: Params) {
+  const isOwner = currentUserId === post.authorId
+
+  // Check if the current user liked the post
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+  console.log('post ', post.content)
 
   return (
     <div className={styles.postado}>
+      <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
+
+      {isOwner && <DeletePostButton postId={post.id} />}
+
       <div className={styles.autor}>
         <div className={styles.foto}>
           <div className="overflow-x-auto"></div>
@@ -87,7 +97,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           <span>{post.comments?.length ?? 0}</span>
         </button>
 
-        <a href={`/client/posts/${post.id}`}>Check Post</a>
+        <FullPostModal post={post} />
       </div>
     </div>
   )
