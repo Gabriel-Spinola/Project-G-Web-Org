@@ -5,6 +5,7 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 // TODO: Generalize Feed
 type Params = {
@@ -54,8 +55,6 @@ export default function InfiniteScrollPosts({
       loadMorePosts()
       revalidate()
     }
-
-    console.log('running effect')
   }, [inView, loadMorePosts, revalidate])
 
   return (

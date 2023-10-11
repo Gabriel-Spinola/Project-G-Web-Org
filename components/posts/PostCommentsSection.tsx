@@ -1,9 +1,10 @@
-'use client'
-
+import { postComment } from '@/app/(feed)/_feedActions'
+import { deleteComment } from '@/app/client/temp/comments/actions'
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
+import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 async function fetchComments(
   postId: string,
@@ -37,41 +38,47 @@ async function fetchComments(
   }
 }
 
-// FIXME - Use useRef to fix refetching problem
+// TODO - Create temp comment array to create the illusion of creating and deleting comments
+// while the data is still being processes
 export default function PostCommentsSection({ post }: { post: FullPost }) {
-  const [comments, setComments] = useState<PublicationComment[]>([])
-
-  const [page, setPage] = useState(1)
-
-  // const loadComments = useCallback(async () => {
-  //   // const { data, error } = await fetchComments(postId, page)
-
-  //   if (error || !data) {
-  //     console.error(error)
-
-  //     return
-  //   }
-
-  //   console.log(data)
-
-  //   setComments((prevComment) => [
-  //     ...prevComment,
-  //     ...(data as PublicationComment[]),
-  //   ])
-  // }, [page, post])
-
-  // useEffect(() => {
-  //   loadComments()
-  // }, [loadComments])
+  const tempComments = post.comments
 
   return (
     <div>
+      <form action={postComment}>
+        <input type="hidden" name="author-id" value={post.authorId as string} />
+        <input type="hidden" name="target-id" value={post.id} />
+
+        <label htmlFor="content"></label>
+        <textarea
+          name="content"
+          title="content"
+          id="contentk"
+          cols={30}
+          rows={3}
+          placeholder="Faça seu comentário"
+        ></textarea>
+
+        <CreateCommentButton />
+      </form>
+
+      <hr />
+
       <h2>Comments</h2>
 
-      {post &&
-        post.comments.length > 0 &&
+      {post.comments.length > 0 &&
         post.comments.map((comment) => (
           <div key={comment.id}>
+            <button
+              type="button"
+              onClick={async () => {
+                await deleteComment(comment.id)
+
+                post.comments.pop()
+              }}
+            >
+              delete
+            </button>
             <span>{post.author?.name}</span>
 
             <label htmlFor="content"></label>
@@ -85,15 +92,6 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
             ></textarea>
           </div>
         ))}
-
-      <button
-        type="button"
-        onClick={() => {
-          setPage(page + 1)
-        }}
-      >
-        Carregar mais
-      </button>
     </div>
   )
 }

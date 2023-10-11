@@ -11,10 +11,9 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import PostCommentsSection from './PostCommentsSection'
 import PostComment from '../comments/PostComment'
-import { useRouter } from 'next/navigation'
 import { FullPost } from '@/lib/types/common'
 
 export default function FullPostModal({ post }: { post: FullPost }) {
