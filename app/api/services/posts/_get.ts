@@ -10,7 +10,7 @@ async function getPosts(
   try {
     const skip = (page - 1) * take
 
-    const data = await prisma.post.findMany({
+    const data: FullPost[] = await prisma.post.findMany({
       orderBy: {
         createdAt: 'desc',
       },
