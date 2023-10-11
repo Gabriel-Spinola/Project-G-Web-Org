@@ -8,13 +8,14 @@
  */
 
 import React from 'react'
-import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
-
+import OneImageDisplay from './components/oneImageDisplay'
+import TwoImageDisplay from './components/twoImageDisplay'
+import ThreeImageDisplay from './components/threeImageDisplay'
 interface Params {
   post: FullPost
   currentUserId?: string
@@ -40,24 +41,41 @@ export default function PostItem({ post, currentUserId }: Params) {
           <small className={styles.localizacao}>{post.author?.location}</small>
         </a>
       </div>
-
       <article className={styles.p1}>{post?.content}</article>
 
-      {/* TODO - Add more images to the container */}
-      <div className="image-container">
-        <Image
-          className={styles.oneImg}
-          src={
-            post.images.length > 0
-              ? getPostImageUrl(post.images[0])
-              : '/test-img/imgtest.jpg'
-          }
-          alt={post.images.length > 0 ? post.images[0] : 'noimg'}
-          width={776}
-          height={1000}
-          priority
-        />
-      </div>
+      {post.images.length === 1 ? (
+        <>
+          <p>1</p>
+          <OneImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            width={776}
+            height={1000}
+          />
+        </>
+      ) : post.images.length === 2 ? (
+        <>
+          <p>2</p>
+          <TwoImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            secondImgSrc={getPostImageUrl(post.images[1])}
+            width={388}
+            height={1000}
+          />
+        </>
+      ) : post.images.length === 3 ? (
+        <>
+          <p>3</p>
+          <ThreeImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            secondImgSrc={getPostImageUrl(post.images[1])}
+            thirdImgSrc={getPostImageUrl(post.images[2])}
+            width={776}
+            height={1000}
+          />
+        </>
+      ) : (
+        'ocorreu um erro'
+      )}
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
