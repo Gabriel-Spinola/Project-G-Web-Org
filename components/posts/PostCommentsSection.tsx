@@ -1,10 +1,10 @@
 import { postComment } from '@/app/(feed)/_feedActions'
 import { deleteComment } from '@/app/client/temp/comments/actions'
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
-import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
-import React, { useState } from 'react'
+import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
+import React from 'react'
 
 async function fetchComments(
   postId: string,
