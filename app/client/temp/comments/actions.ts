@@ -7,8 +7,9 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { LikeOptions, commentsRefetchTag } from './contants'
 import { Session } from 'next-auth'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { PublicationComment } from '@/lib/types/common'
 
-export async function getComments(): Promise<Comment[] | null> {
+export async function getComments(): Promise<PublicationComment[] | null> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.comments}`,
@@ -26,7 +27,7 @@ export async function getComments(): Promise<Comment[] | null> {
       throw new Error(JSON.stringify(await response.json()))
     }
 
-    const { data }: { data: Comment[] } = await response.json()
+    const { data }: { data: PublicationComment[] } = await response.json()
 
     return data
   } catch (e: unknown) {

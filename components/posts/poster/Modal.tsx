@@ -74,8 +74,6 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
       formData.append('images', img)
     })
 
-    console.log(formData.getAll('images'))
-
     try {
       const response = await fetch(
         `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
@@ -105,6 +103,8 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
   }
 
   function removeImageFromPreviewByIndex(index: number) {
+    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for perfomance
+
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
     )

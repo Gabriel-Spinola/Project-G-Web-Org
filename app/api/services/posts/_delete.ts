@@ -11,12 +11,12 @@ export async function handleDelete(postId: string): Promise<NextResponse> {
     })
 
     if (deletedPost.images.length > 0) {
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from(SUPABASE_PUBLIC_BUCKET_NAME)
         .remove(deletedPost.images.map((imagePath) => imagePath))
 
-      if (error || data.length > 0) {
-        throw error ?? 'Failed to delete some of the images' + data
+      if (error) {
+        throw error
       }
     }
 
@@ -31,10 +31,7 @@ export async function handleDelete(postId: string): Promise<NextResponse> {
       { status: 400 },
     )
   } catch (error: unknown) {
-    console.error(
-      'SERVICES/DELETE-POST::failed to get posts (database level):',
-      error,
-    )
+    console.error('SERVICES/DELETE-POST:', error)
 
     return NextResponse.json(
       {

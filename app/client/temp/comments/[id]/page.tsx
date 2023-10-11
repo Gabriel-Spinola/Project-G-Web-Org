@@ -4,7 +4,7 @@ import { Session, getServerSession } from 'next-auth'
 import React from 'react'
 import { getComments, handleSubmitComment } from '../actions'
 import CreateCommentButton from '../../components/CreateCommentButton'
-import { LikeButton, DeleteCommentButton } from '../../components/Buttons'
+import { DeleteCommentButton } from '../../components/Buttons'
 
 interface Params {
   params: { id: string }

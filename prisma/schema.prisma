@@ -193,10 +193,10 @@ model Comment {
   authorId String
 
   post   Post?   @relation(fields: [postId], references: [id])
-  postId String? @unique
+  postId String?
 
   project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?  @unique
+  projectId String? 
 }
 
 model Like {
