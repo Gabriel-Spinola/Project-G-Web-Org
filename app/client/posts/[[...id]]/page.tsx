@@ -6,26 +6,24 @@ import { Comment } from '@prisma/client'
 
 type Props = {
   params: {
-    id?: string
-    currentUserId?: string
+    id: string[]
   }
 }
 
 export default async function PostPage({ params }: Props) {
   const comments: Comment[] | null = await getComments()
 
+  const authorId: string = params.id[0]
+  const postId: string = params.id[1]
+
   return (
     <>
       <main>
-        {params.currentUserId && params.id ? (
+        {authorId && postId ? (
           <>
             <form action={handleSubmitComment}>
-              <input type="hidden" name="author-id" value={params.id} />
-              <input
-                type="hidden"
-                name="target-id"
-                value={params.currentUserId}
-              />
+              <input type="hidden" name="author-id" value={authorId} />
+              <input type="hidden" name="target-id" value={postId} />
 
               <select name="type" id="type">
                 <option value="posts">Posts</option>

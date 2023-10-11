@@ -1,4 +1,4 @@
-import { Follows, Post, Project, User } from '@prisma/client'
+import { Comment, Follows, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -40,7 +40,7 @@ import { Follows, Post, Project, User } from '@prisma/client'
  *
  * @author Gabriel Spinola
  */
-export type ESResponse<DataType, CustomError = string> =
+export type ESResponse<DataType, CustomError = string | unknown> =
   | {
       data: DataType
       error: null
@@ -55,6 +55,10 @@ export type UserData = Partial<User> & {
     followers: number
     following: number
   }
+}
+
+export type PublicationComment = Comment & {
+  author: { name: string }
 }
 
 /**
@@ -76,7 +80,10 @@ export type PublicationsDefaultData = {
     userId: string
   }[]
 
-  comments: { id: number }[]
+  comments: {
+    id: number
+    content: string
+  }[]
 }
 
 /**

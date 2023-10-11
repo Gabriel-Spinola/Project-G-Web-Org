@@ -1,10 +1,11 @@
 'use client'
 
-import { fetchPosts } from '@/app/feedActions'
+import { fetchPosts } from '@/app/(feed)/_feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 // TODO: Generalize Feed
 type Params = {
@@ -47,6 +48,7 @@ export default function InfiniteScrollPosts({
     ])
   }, [page])
 
+  // TODO - Enable Revalidation
   useEffect(() => {
     // If the spinner is in the client view load more posts.
     if (inView) {
