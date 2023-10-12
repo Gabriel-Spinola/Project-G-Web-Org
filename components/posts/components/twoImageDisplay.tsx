@@ -23,7 +23,6 @@ export default function TwoImageDisplay({
         alt={'Imagem Do Post'}
         width={width}
         height={height}
-        objectFit="cover"
         sizes="(max-width: 100%)"
         style={{ objectFit: 'contain' }}
         priority
@@ -34,7 +33,6 @@ export default function TwoImageDisplay({
         alt={'Imagem Do Post'}
         width={width}
         height={height}
-        objectFit="cover"
         sizes="(max-width: 100%)"
         style={{ objectFit: 'contain' }}
         priority
