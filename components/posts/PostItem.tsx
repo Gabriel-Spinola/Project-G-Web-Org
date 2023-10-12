@@ -17,6 +17,7 @@ import OneImageDisplay from './components/oneImageDisplay'
 import TwoImageDisplay from './components/twoImageDisplay'
 import ThreeImageDisplay from './components/threeImageDisplay'
 import FullPostModal from './FullPostModal'
+import DeletePostButton from '../Buttons/DeletePostButton'
 interface Params {
   post: FullPost
   currentUserId?: string
@@ -42,6 +43,9 @@ export default function PostItem({ post, currentUserId }: Params) {
           <small className={styles.localizacao}>{post.author?.location}</small>
         </a>
       </div>
+
+      {isOwner && <DeletePostButton postId={post.id} />}
+
       <article className={styles.p1}>{post?.content}</article>
       {post.images.length === 1 ? (
         <>
