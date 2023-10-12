@@ -25,7 +25,7 @@ export default function DeletePostButton({ postId }: { postId: string }) {
       }
 
       console.log('data: ', data)
-      router.push('/?delete=' + data.id)
+      router.push('/?delete=' + data.id, { scroll: false })
     } catch (error: unknown) {
       console.error(error)
     }
