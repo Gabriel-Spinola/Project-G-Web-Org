@@ -16,6 +16,7 @@ import { Like } from '@prisma/client'
 import OneImageDisplay from './components/oneImageDisplay'
 import TwoImageDisplay from './components/twoImageDisplay'
 import ThreeImageDisplay from './components/threeImageDisplay'
+import FullPostModal from './FullPostModal'
 interface Params {
   post: FullPost
   currentUserId?: string
@@ -104,6 +105,7 @@ export default function PostItem({ post, currentUserId }: Params) {
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
+        <FullPostModal post={post} />
       </div>
     </div>
   )
