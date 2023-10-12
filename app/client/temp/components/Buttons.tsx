@@ -53,7 +53,7 @@ export function LikeButton({ params }: LikeButtonParams) {
     >
       {isLiked ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
 
-      <span className="text-xl">{optimisticLikes}</span>
+      <span className="font-medium">{optimisticLikes}</span>
     </button>
   )
 }
