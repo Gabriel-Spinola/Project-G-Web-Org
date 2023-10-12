@@ -1,65 +1,137 @@
 'use client'
 
-import { fetchPosts } from '@/app/(feed)/_feedActions'
+// import { fetchPosts } from '@/app/(feed)/_feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { isAbortError } from 'next/dist/server/pipe-readable'
 
 // TODO: Generalize Feed
 type Params = {
   initialPublication: FullPost[] | undefined
-  revalidate: () => void
   currentUserId?: string
+}
+
+export async function fetchPosts(
+  page = 1,
+  signal?: AbortSignal,
+  authorId: string | null = null,
+): Promise<ESResponse<FullPost[]>> {
+  try {
+    const apiRequestURL = !authorId
+      ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
+      : `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}&id=${authorId}`
+
+    const response = await fetch(apiRequestURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      next: { tags: ['revalidate-feed'] },
+      signal,
+    })
+
+    if (!response.ok) {
+      throw new Error("Response's not okay")
+    }
+
+    const { data }: { data: FullPost[] } = await response.json()
+
+    return {
+      data,
+      error: null,
+    }
+  } catch (error: unknown) {
+    if (isAbortError(error)) {
+      console.log('feed aborted')
+
+      return {
+        data: null,
+        error: 'Feed fetch aborted',
+      }
+    }
+
+    console.error(error)
+
+    return {
+      data: null,
+      error: 'Failed to fetch posts',
+    }
+  }
 }
 
 export default function InfiniteScrollPosts({
   initialPublication,
-  revalidate,
   currentUserId,
 }: Params) {
   const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const deletedPost = searchParams.get('delete')
+
+  if (deletedPost) {
+    console.log(deletedPost)
+  }
 
   // Memoize all loaded posts
-  const loadMorePosts = useCallback(async () => {
-    const next = page + 1
-    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next)
+  const loadMorePosts = useCallback(
+    async function (signal: AbortSignal) {
+      const next = page + 1
+      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+        next,
+        signal,
+      )
 
-    if (error) {
-      console.error(error)
+      if (error) {
+        console.error(error)
 
-      return
-    }
+        return
+      }
 
-    if (!data?.length) {
-      setNoPostFound(true)
+      if (!data?.length || data?.length <= 0) {
+        setNoPostFound(true)
 
-      return
-    }
+        return
+      }
 
-    setPages(next)
-    setPosts((prevPost: FullPost[] | undefined) => [
-      ...(prevPost?.length ? prevPost : []),
-      ...data,
-    ])
-  }, [page])
+      setPages((prevPage) => prevPage + 1)
+      setPosts((prevPost: FullPost[] | undefined) => [
+        ...(prevPost?.length ? prevPost : []),
+        ...data,
+      ])
+    },
+    [page],
+  )
 
   // TODO - Enable Revalidation
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
     // If the spinner is in the client view load more posts.
     if (inView) {
-      loadMorePosts()
-      revalidate()
+      loadMorePosts(signal)
     }
-  }, [inView, loadMorePosts, revalidate])
+
+    if (deletedPost) {
+      setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
+    }
+
+    return (): void => {
+      controller.abort()
+      router.push('/', { scroll: false })
+    }
+  }, [inView, loadMorePosts, deletedPost, router])
 
   return (
     <>
-      {posts?.map((post) => (
+      {posts?.map((post: FullPost) => (
         <PostItem key={post.id} post={post} currentUserId={currentUserId} />
       ))}
 

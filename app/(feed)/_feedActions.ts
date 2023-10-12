@@ -1,11 +1,12 @@
 'use server'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
-import { revalidateTag } from 'next/cache'
-import { commentsRefetchTag } from '../client/temp/comments/contants'
 import { prisma } from '@/lib/database/prisma'
+import { ESResponse, FullPost } from '@/lib/types/common'
 import { Comment, Post } from '@prisma/client'
+import { revalidateTag } from 'next/cache'
+import { isAbortError } from 'next/dist/server/pipe-readable'
+import { commentsRefetchTag } from '../client/temp/comments/contants'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -15,6 +16,7 @@ export const revalidateFeed = (): void => revalidateTag('revalidate-feed')
 
 export async function fetchPosts(
   page = 1,
+  signal?: AbortSignal,
   authorId: string | null = null,
 ): Promise<ESResponse<FullPost[]>> {
   try {
@@ -28,6 +30,7 @@ export async function fetchPosts(
         'Content-Type': 'application/json',
       },
       next: { tags: ['revalidate-feed'] },
+      signal,
     })
 
     if (!response.ok) {
@@ -41,6 +44,15 @@ export async function fetchPosts(
       error: null,
     }
   } catch (error: unknown) {
+    if (isAbortError(error)) {
+      console.log('feed aborted')
+
+      return {
+        data: null,
+        error: 'Feed fetch aborted',
+      }
+    }
+
     console.error(error)
 
     return {

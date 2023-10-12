@@ -1,6 +1,8 @@
 'use client'
 
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { FullPost } from '@/lib/types/common'
+import { Post } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -16,19 +18,27 @@ export default function DeletePostButton({ postId }: { postId: string }) {
         },
       )
 
-      const { data } = await response.json()
+      const { data }: { data: Post } = await response.json()
 
       if (!response.ok) {
         throw new Error('response not ok' + JSON.stringify(data))
       }
 
       console.log('data: ', data)
-      router.refresh()
+      router.push('/?delete=' + data.id)
     } catch (error: unknown) {
       console.error(error)
     }
   }
 
   // TODO - Ask for confirmation before deleting the post
-  return <button onClick={handlePostDeletion}>Delete Post</button>
+  return (
+    <button
+      onClick={async () => {
+        await handlePostDeletion()
+      }}
+    >
+      Delete Post
+    </button>
+  )
 }
