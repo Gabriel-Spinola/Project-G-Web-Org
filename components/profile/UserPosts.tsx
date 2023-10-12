@@ -1,4 +1,4 @@
-import { fetchPosts, revalidateFeed } from '@/app/(feed)/_feedActions'
+import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
@@ -6,7 +6,11 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 type Params = { authorID: string }
 
 export default async function UserPosts({ authorID }: Params) {
-  const { data, error }: ESResponse<FullPost[]> = await fetchPosts(1, authorID)
+  const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+    1,
+    undefined,
+    authorID,
+  )
 
   return (
     <section id="PostWrapper" className="flex flex-col">
@@ -15,10 +19,7 @@ export default async function UserPosts({ authorID }: Params) {
       {!error ? (
         <>
           {data && data?.length > 0 ? (
-            <InfiniteScrollPosts
-              initialPublication={data || undefined}
-              revalidate={revalidateFeed}
-            />
+            <InfiniteScrollPosts initialPublication={data} />
           ) : (
             <>Oops você chegou ao fim!</>
           )}

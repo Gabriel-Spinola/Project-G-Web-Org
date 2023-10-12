@@ -9,11 +9,12 @@
 
 'use client'
 
-import SendImageButton from './SendImageButton'
-import SendPDFButton from './SendPDFButton'
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
-import SubmitPostButton from './SubmitPostButton'
+import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { useRouter } from 'next/navigation'
 
 interface PostFormState {
   content: string
@@ -22,17 +23,17 @@ interface PostFormState {
 
 type Props = {
   closeModal: () => void
-  revalidate?: () => void
   currentUserId: string
 }
 
-export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
+export function NewPostModal({ closeModal, currentUserId }: Props) {
   const [form, setForm] = useState<PostFormState | null>({
     content: '',
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const router = useRouter()
 
   function handleStateChange(
     fieldName: keyof PostFormState,
@@ -94,9 +95,7 @@ export function FeedModal({ revalidate, closeModal, currentUserId }: Props) {
       setImages(undefined)
 
       closeModal()
-      if (revalidate) {
-        revalidate()
-      }
+      router.push('/?create=1', { scroll: false })
     } catch (error: unknown) {
       console.error(error)
     }

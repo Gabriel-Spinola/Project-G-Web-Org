@@ -133,6 +133,7 @@ export async function increaseLikeCount(
         id: authorId,
         NOT: { likes: { some: { postId: targetId } } },
       },
+      select: { id: true },
       data: newLike,
     })
 

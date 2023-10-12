@@ -1,22 +1,21 @@
 'use client'
 
-import { fetchPosts } from '@/app/(feed)/_feedActions'
+// import { fetchPosts } from '@/app/(feed)/_feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { fetchPosts } from '@/app/(feed)/_actions'
 
 // TODO: Generalize Feed
 type Params = {
   initialPublication: FullPost[] | undefined
-  revalidate: () => void
   currentUserId?: string
 }
 
 export default function InfiniteScrollPosts({
   initialPublication,
-  revalidate,
   currentUserId,
 }: Params) {
   const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
@@ -24,42 +23,80 @@ export default function InfiniteScrollPosts({
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
 
-  // Memoize all loaded posts
-  const loadMorePosts = useCallback(async () => {
-    const next = page + 1
-    const { data, error }: ESResponse<FullPost[]> = await fetchPosts(next)
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
-    if (error) {
-      console.error(error)
+  const deletedPost = searchParams.get('delete')
+  const createdPost = searchParams.get('create')
 
-      return
-    }
+  // NOTE - Memoize all loaded posts
+  const loadMorePosts = useCallback(
+    async function (signal: AbortSignal) {
+      const next = page + 1
+      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+        next,
+        signal,
+      )
 
-    if (!data?.length) {
-      setNoPostFound(true)
+      if (error) {
+        console.error(error)
 
-      return
-    }
+        return
+      }
 
-    setPages(next)
-    setPosts((prevPost: FullPost[] | undefined) => [
-      ...(prevPost?.length ? prevPost : []),
-      ...data,
-    ])
-  }, [page])
+      if (!data?.length || data?.length <= 0) {
+        setNoPostFound(true)
 
-  // TODO - Enable Revalidation
+        return
+      }
+
+      setPages((prevPage) => prevPage + 1)
+      setPosts((prevPost: FullPost[] | undefined) => [
+        ...(prevPost?.length ? prevPost : []),
+        ...data,
+      ])
+    },
+    [page],
+  )
+
+  // NOTE - Handles feed data fetching
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
     // If the spinner is in the client view load more posts.
     if (inView) {
-      loadMorePosts()
-      revalidate()
+      loadMorePosts(signal)
     }
-  }, [inView, loadMorePosts, revalidate])
+
+    // Abort api fetch when needed
+    return (): void => {
+      controller.abort()
+    }
+  }, [inView, loadMorePosts])
+
+  // NOTE - Handles url callbacks for any feed data update
+  useEffect(() => {
+    if (deletedPost) {
+      setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
+    }
+
+    if (createdPost) {
+      setPosts(initialPublication)
+    }
+
+    // Resets URL
+    return (): void => {
+      router.push('/', { scroll: false })
+    }
+
+    // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deletedPost, router, createdPost /*, initialPublication */])
 
   return (
     <>
-      {posts?.map((post) => (
+      {posts?.map((post: FullPost) => (
         <PostItem key={post.id} post={post} currentUserId={currentUserId} />
       ))}
 
