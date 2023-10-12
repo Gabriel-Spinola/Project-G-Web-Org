@@ -71,15 +71,13 @@ export default function InfiniteScrollPosts({
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
+
   const searchParams = useSearchParams()
   const router = useRouter()
+
   const deletedPost = searchParams.get('delete')
 
-  if (deletedPost) {
-    console.log(deletedPost)
-  }
-
-  // Memoize all loaded posts
+  // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
@@ -109,7 +107,7 @@ export default function InfiniteScrollPosts({
     [page],
   )
 
-  // TODO - Enable Revalidation
+  // NOTE - Handles feed data fetching
   useEffect(() => {
     const controller = new AbortController()
     const signal = controller.signal
@@ -119,15 +117,23 @@ export default function InfiniteScrollPosts({
       loadMorePosts(signal)
     }
 
+    // Abort api fetch when needed
+    return (): void => {
+      controller.abort()
+    }
+  }, [inView, loadMorePosts])
+
+  // NOTE - Handles url callbacks for any feed data update
+  useEffect(() => {
     if (deletedPost) {
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
+    // Resets URL
     return (): void => {
-      controller.abort()
       router.push('/', { scroll: false })
     }
-  }, [inView, loadMorePosts, deletedPost, router])
+  }, [deletedPost, router])
 
   return (
     <>
