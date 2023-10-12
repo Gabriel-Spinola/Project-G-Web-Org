@@ -1,0 +1,16 @@
+'use client'
+
+import React, { useState } from 'react'
+import styles from './buttons.module.scss'
+
+
+export function CommentButton (){
+  return (
+    <button
+      onClick={}
+      className={`like flex flex-col justify-center items-center w-[48px]`}
+    >
+      
+    </button>
+  )
+}

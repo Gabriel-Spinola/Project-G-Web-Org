@@ -9,14 +9,11 @@
 
 @import "/app/styles/variables.module.scss";
 
-.poster-button {
-    font-family: $nav-font;
-    -webkit-box-shadow: 0 0 8px #00000065;
-    box-shadow: 0 0 8px #00000065;
-}
-
 #textAnimation {
     div {
+        font-family: $nav-font;
+        -webkit-box-shadow: 0 0 8px #00000065;
+        box-shadow: 0 0 8px #00000065;
         background-color: $darker-white;
         height: 2px;
         width: 16px;
@@ -25,7 +22,7 @@
 
 #textAnimation:hover {
     div {
-        background-color: $medium-primary;
+        background-color: $light-gray;
         height: 2px;
         width: 182px;
         animation-name: sub-expand;
