@@ -42,7 +42,6 @@ export default function PostItem({ post, currentUserId }: Params) {
         </a>
       </div>
       <article className={styles.p1}>{post?.content}</article>
-
       {post.images.length === 1 ? (
         <>
           <p>1</p>
@@ -76,7 +75,6 @@ export default function PostItem({ post, currentUserId }: Params) {
       ) : (
         'ocorreu um erro'
       )}
-
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton

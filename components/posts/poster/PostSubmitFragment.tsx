@@ -11,7 +11,8 @@
 
 import React from 'react'
 
-import './PostSubmitFragment.module.scss'
+import styles from './PostSubmitFragment.module.scss'
+
 import {
   Modal,
   ModalOverlay,
@@ -39,8 +40,14 @@ export default function PostSubmitFragment({
 
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
-
+      <button
+        className={`w-full m-8 p-8 bg-medium-gray text-darker-white rounded-lg hover:text-medium-primary hover:scale-[101%] text-start text-lg`}
+        id={styles.textAnimation}
+        onClick={onOpen}
+      >
+        Faça uma publicação
+        <div id={styles.textSub}></div>
+      </button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
