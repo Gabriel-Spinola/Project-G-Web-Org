@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { fetchPosts } from '@/app/(feed)/actions'
+import { fetchPosts } from '@/app/(feed)/_actions'
 
 // TODO: Generalize Feed
 type Params = {
@@ -89,7 +89,10 @@ export default function InfiniteScrollPosts({
     return (): void => {
       router.push('/', { scroll: false })
     }
-  }, [deletedPost, router, createdPost, initialPublication])
+
+    // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deletedPost, router, createdPost /*, initialPublication */])
 
   return (
     <>

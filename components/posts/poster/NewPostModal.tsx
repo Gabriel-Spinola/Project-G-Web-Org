@@ -9,10 +9,10 @@
 
 'use client'
 
-import SendImageButton from './SendImageButton'
-import SendPDFButton from './SendPDFButton'
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
-import SubmitPostButton from './SubmitPostButton'
+import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { useRouter } from 'next/navigation'
 
@@ -26,7 +26,7 @@ type Props = {
   currentUserId: string
 }
 
-export function FeedModal({ closeModal, currentUserId }: Props) {
+export function NewPostModal({ closeModal, currentUserId }: Props) {
   const [form, setForm] = useState<PostFormState | null>({
     content: '',
     images: null,

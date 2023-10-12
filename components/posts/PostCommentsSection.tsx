@@ -1,4 +1,4 @@
-import { postComment } from '@/app/(feed)/_feedActions'
+import { postComment } from '@/app/(feed)/_serverActions'
 import { deleteComment } from '@/app/client/temp/comments/actions'
 import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
