@@ -32,9 +32,8 @@ export default async function Home() {
           <>
             {data && data?.length > 0 ? (
               <InfiniteScrollPosts
-                initialPublication={data || undefined}
+                initialPublication={data}
                 currentUserId={session?.user.id}
-                revalidate={revalidateFeed}
               />
             ) : (
               <>Oops você chegou ao fim!</>
