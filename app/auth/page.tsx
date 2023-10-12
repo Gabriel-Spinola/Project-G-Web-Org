@@ -11,9 +11,9 @@
 
 import { BgImage } from '@/components/BgImage'
 import { useRef, useState } from 'react'
-import TextBox from './components/textBox'
+import TextBox from './components/TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { SubmitButton } from './components/submitButton'
+import { SubmitButton } from './components/SubmitButton'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 
