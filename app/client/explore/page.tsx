@@ -7,8 +7,8 @@
  * @license i.e. MIT
  */
 
-import BottomSection from '@/components/Explore/BottomSection'
-import UpperSection from '@/components/Explore/UpperSection'
+import BottomSection from './components/BottomSection'
+import UpperSection from './components/UpperSection'
 
 export default function Explore() {
   return (
