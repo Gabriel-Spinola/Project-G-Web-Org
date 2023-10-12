@@ -17,7 +17,7 @@ import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import FullPostModal from './FullPostModal'
-import DeletePostButton from './DeletePostButton'
+import DeletePostButton from '../Buttons/DeletePostButton'
 
 interface Params {
   post: FullPost

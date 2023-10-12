@@ -23,7 +23,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { FeedModal } from './Modal'
+import { NewPostModal } from './NewPostModal'
 import { signIn } from 'next-auth/react'
 
 type Props = {
@@ -31,10 +31,7 @@ type Props = {
   currentUserId?: string
 }
 
-export default function PostSubmitFragment({
-  revalidate,
-  currentUserId,
-}: Props) {
+export default function PostSubmitFragment({ currentUserId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -49,7 +46,7 @@ export default function PostSubmitFragment({
 
           <ModalBody>
             {currentUserId ? (
-              <FeedModal
+              <NewPostModal
                 closeModal={onClose}
                 currentUserId={currentUserId}
               />
