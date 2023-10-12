@@ -17,7 +17,6 @@ export default function OneImageDisplay({ imgSrc, width, height }: Props) {
         alt={'Imagem Do Post'}
         width={width}
         height={height}
-        objectFit="cover"
         sizes="(max-width: 100%)"
         style={{ objectFit: 'contain' }}
         priority
