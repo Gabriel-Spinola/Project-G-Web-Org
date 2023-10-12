@@ -6,61 +6,12 @@ import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { isAbortError } from 'next/dist/server/pipe-readable'
+import { fetchPosts } from '@/app/(feed)/actions'
 
 // TODO: Generalize Feed
 type Params = {
   initialPublication: FullPost[] | undefined
   currentUserId?: string
-}
-
-export async function fetchPosts(
-  page = 1,
-  signal?: AbortSignal,
-  authorId: string | null = null,
-): Promise<ESResponse<FullPost[]>> {
-  try {
-    const apiRequestURL = !authorId
-      ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
-      : `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}&id=${authorId}`
-
-    const response = await fetch(apiRequestURL, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      next: { tags: ['revalidate-feed'] },
-      signal,
-    })
-
-    if (!response.ok) {
-      throw new Error("Response's not okay")
-    }
-
-    const { data }: { data: FullPost[] } = await response.json()
-
-    return {
-      data,
-      error: null,
-    }
-  } catch (error: unknown) {
-    if (isAbortError(error)) {
-      console.log('feed aborted')
-
-      return {
-        data: null,
-        error: 'Feed fetch aborted',
-      }
-    }
-
-    console.error(error)
-
-    return {
-      data: null,
-      error: 'Failed to fetch posts',
-    }
-  }
 }
 
 export default function InfiniteScrollPosts({
@@ -76,6 +27,7 @@ export default function InfiniteScrollPosts({
   const router = useRouter()
 
   const deletedPost = searchParams.get('delete')
+  const createdPost = searchParams.get('create')
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
@@ -129,11 +81,15 @@ export default function InfiniteScrollPosts({
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
+    if (createdPost) {
+      setPosts(initialPublication)
+    }
+
     // Resets URL
     return (): void => {
       router.push('/', { scroll: false })
     }
-  }, [deletedPost, router])
+  }, [deletedPost, router, createdPost, initialPublication])
 
   return (
     <>

@@ -50,7 +50,6 @@ export default function PostSubmitFragment({
           <ModalBody>
             {currentUserId ? (
               <FeedModal
-                revalidate={revalidate}
                 closeModal={onClose}
                 currentUserId={currentUserId}
               />

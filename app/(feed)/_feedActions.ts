@@ -4,7 +4,7 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { prisma } from '@/lib/database/prisma'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { Comment, Post } from '@prisma/client'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { isAbortError } from 'next/dist/server/pipe-readable'
 import { commentsRefetchTag } from '../client/temp/comments/contants'
 
@@ -12,7 +12,7 @@ import { commentsRefetchTag } from '../client/temp/comments/contants'
  * Helper function to control the feed revalidation in client components.
  * @returns Feed Revalidation
  */
-export const revalidateFeed = (): void => revalidateTag('revalidate-feed')
+export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function fetchPosts(
   page = 1,
@@ -64,11 +64,12 @@ export async function fetchPosts(
 
 // TODO - only need to receive the new post data not the formData
 export async function createNewPost(
+  id: string,
   formData: FormData,
 ): Promise<ESResponse<string>> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.posts}?id=clneuw2o60000w494md2x3u8f`,
+      `${API_URL}${API_ENDPOINTS.services.posts}?id=${id}`,
       {
         method: 'POST',
         body: formData,
@@ -81,7 +82,7 @@ export async function createNewPost(
       throw new Error('response not ok ' + JSON.stringify(data))
     }
 
-    console.log('worked ' + JSON.stringify(data))
+    revalidatePath('/')
     return {
       data: 'worked ' + JSON.stringify(data),
       error: null,

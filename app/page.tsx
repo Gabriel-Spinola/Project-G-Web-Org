@@ -10,11 +10,14 @@
 // FIXME - Chakra Modals may be adding too much memory cost.
 
 import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
-import { fetchPosts, revalidateFeed } from './(feed)/_feedActions'
+// import { fetchPosts, revalidateFeed } from './(feed)/_feedActions'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import { Session, getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import { isAbortError } from 'next/dist/server/pipe-readable'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { fetchPosts } from './(feed)/actions'
 
 export default async function Home() {
   const session: Session | null = await getServerSession(AuthOptions)
@@ -23,10 +26,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center">
-        <PostSubmitFragment
-          revalidate={revalidateFeed}
-          currentUserId={session?.user.id}
-        />
+        <PostSubmitFragment currentUserId={session?.user.id} />
 
         {!error ? (
           <>
