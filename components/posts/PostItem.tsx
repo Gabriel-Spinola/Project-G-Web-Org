@@ -18,31 +18,41 @@ import TwoImageDisplay from './components/twoImageDisplay'
 import ThreeImageDisplay from './components/threeImageDisplay'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from '../Buttons/DeletePostButton'
+
 interface Params {
   post: FullPost
   currentUserId?: string
 }
 
 export default function PostItem({ post, currentUserId }: Params) {
+  const isOwner = currentUserId === post.authorId
+
+  // Check if the current user liked the post
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
 
   return (
-    <div className={styles.postado}>
-      <div className={styles.autor}>
-        <div className={styles.foto}>
-          <div className="overflow-x-auto"></div>
-        </div>
+    <div className={styles.post}>
+      <section className={styles.authorContainer}>
+        <a href={`/client/profile/${post.authorId}`}>
+          <div className={styles.authorPhoto}>
+            <div className="overflow-x-auto"></div>
+          </div>
+        </a>
 
         <a
-          className={styles.nomeLocalizacao}
+          className={styles.userInfo}
           href={`/client/profile/${post.authorId}`}
         >
-          <h1 className={styles.nome}>{post.author?.name ?? '):'}</h1>
+          <h1
+            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+          >
+            {post.author?.name ?? '):'}
+          </h1>
           <small className={styles.localizacao}>{post.author?.location}</small>
         </a>
-      </div>
+      </section>
 
       {isOwner && <DeletePostButton postId={post.id} />}
 
