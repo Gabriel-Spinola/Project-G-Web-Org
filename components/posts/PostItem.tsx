@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
  * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
@@ -7,7 +9,7 @@
  * @license GPL 3.0
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
@@ -15,7 +17,7 @@ import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import FullPostModal from './FullPostModal'
-import DeletePostButton from './DeletePostButton'
+import DeletePostButton from '../Buttons/DeletePostButton'
 
 interface Params {
   post: FullPost
