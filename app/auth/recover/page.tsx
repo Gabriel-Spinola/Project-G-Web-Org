@@ -11,7 +11,7 @@
 
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs'
 import { BgImage } from '@/components/BgImage'
-import TextBox from '../components/textBox'
+import TextBox from '../components/TextBox'
 
 export default function RegisterPage() {
   return (
