@@ -59,7 +59,6 @@ export default function PostItem({ post, currentUserId }: Params) {
       <article className={styles.p1}>{post?.content}</article>
       {post.images.length === 1 ? (
         <>
-          <p>1 imagem</p>
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             width={776}
@@ -68,7 +67,6 @@ export default function PostItem({ post, currentUserId }: Params) {
         </>
       ) : post.images.length === 2 ? (
         <>
-          <p>2 imagem</p>
           <TwoImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             secondImgSrc={getPostImageUrl(post.images[1])}
@@ -78,7 +76,6 @@ export default function PostItem({ post, currentUserId }: Params) {
         </>
       ) : post.images.length === 3 ? (
         <>
-          <p>3 imagem</p>
           <ThreeImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             secondImgSrc={getPostImageUrl(post.images[1])}
