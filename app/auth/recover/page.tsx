@@ -12,8 +12,21 @@
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs'
 import { BgImage } from '@/components/BgImage'
 import TextBox from '../components/TextBox'
+import { SubmitButton } from '../components/SubmitButton'
+import { verifyCaptcha } from '@/server/serverActions'
+import { useRef, useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function RegisterPage() {
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const [isVerified, setIsVerified] = useState<boolean>(false)
+
+  async function handleCaptchaSubmission(token: string | null): Promise<void> {
+    // Server function to verify captcha
+    await verifyCaptcha(token)
+      .then(() => setIsVerified(true))
+      .catch(() => setIsVerified(false))
+  }
   return (
     <main className="min-w-full flex max-w-full h-[calc(100vh-88px)]">
       <BgImage
@@ -41,6 +54,16 @@ export default function RegisterPage() {
               RECUPERAR SENHA{' '}
             </h1>
             <TextBox className="w-full" labelText="E-mail" type={'email'} />
+            <ReCAPTCHA
+              sitekey={process.env.RECAPTCHA_SITE_KEY as string}
+              ref={recaptchaRef}
+              onChange={handleCaptchaSubmission}
+              className="my-4"
+            />
+            <SubmitButton
+              isVerified={isVerified}
+              buttonText={'ENVIAR E-MAIL DE RECUPERAÇÃO'}
+            />
           </form>
         </div>
       </section>

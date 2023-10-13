@@ -16,8 +16,12 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitButton } from './components/SubmitButton'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
+import { LogoutButton } from '@/components/debug/AuthButtons'
+import { AuthOptions } from '@/lib/auth'
+import { getServerSession } from 'next-auth'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getServerSession(AuthOptions)
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const email = useRef('')
   const password = useRef('')
@@ -56,59 +60,63 @@ export default function LoginPage() {
         <div
           className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
         >
-          <form
-            onSubmit={handleLoginForm}
-            id="loginForm"
-            className={`flex-col items-center w-[100%] gap-8`}
-          >
-            <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
-              {' '}
-              LOGIN{' '}
-            </h1>
+          {JSON.stringify(session) !== null ? (
+            <form
+              onSubmit={handleLoginForm}
+              id="loginForm"
+              className={`flex-col items-center w-[100%] gap-8`}
+            >
+              <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
+                {' '}
+                LOGIN{' '}
+              </h1>
 
-            <TextBox
-              className="w-full"
-              labelText="E-mail"
-              type={'email'}
-              onChange={(e) => (email.current = e.target.value)}
-            />
-            <TextBox
-              className="w-full"
-              labelText="Senha"
-              type={'password'}
-              onChange={(e) => (password.current = e.target.value)}
-            />
+              <TextBox
+                className="w-full"
+                labelText="E-mail"
+                type={'email'}
+                onChange={(e) => (email.current = e.target.value)}
+              />
+              <TextBox
+                className="w-full"
+                labelText="Senha"
+                type={'password'}
+                onChange={(e) => (password.current = e.target.value)}
+              />
 
-            <p>
-              Esqueceu a senha?{' '}
-              <a
-                href="auth/recover"
-                id="formButton"
-                className="text-light-secundary underline hover:text-darker-secundary font-bold"
-              >
-                Clique aqui
-              </a>{' '}
-            </p>
+              <p>
+                Esqueceu a senha?{' '}
+                <a
+                  href="auth/recover"
+                  id="formButton"
+                  className="text-light-secundary underline hover:text-darker-secundary font-bold"
+                >
+                  Clique aqui
+                </a>{' '}
+              </p>
 
-            <ReCAPTCHA
-              sitekey={process.env.RECAPTCHA_SITE_KEY as string}
-              ref={recaptchaRef}
-              onChange={handleCaptchaSubmission}
-              className="my-4"
-            />
+              <ReCAPTCHA
+                sitekey={process.env.RECAPTCHA_SITE_KEY as string}
+                ref={recaptchaRef}
+                onChange={handleCaptchaSubmission}
+                className="my-4"
+              />
 
-            <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
-            <p>
-              Precisa criar uma conta?{' '}
-              <a
-                href="auth/register"
-                id="formButton"
-                className="text-light-secundary underline hover:text-darker-secundary font-bold"
-              >
-                Crie aqui
-              </a>{' '}
-            </p>
-          </form>
+              <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
+              <p>
+                Precisa criar uma conta?{' '}
+                <a
+                  href="auth/register"
+                  id="formButton"
+                  className="text-light-secundary underline hover:text-darker-secundary font-bold"
+                >
+                  Crie aqui
+                </a>{' '}
+              </p>
+            </form>
+          ) : (
+            <LogoutButton />
+          )}
         </div>
       </section>
     </main>
