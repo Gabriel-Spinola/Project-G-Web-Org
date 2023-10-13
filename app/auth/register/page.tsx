@@ -16,8 +16,8 @@ import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
-import { SubmitButton } from '../components/SubmitButton'
-import TextBox from '../components/TextBox'
+import { SubmitButton } from '../components/submitButton'
+import TextBox from '../components/textBox'
 import { BgImage } from '@/components/BgImage'
 
 export default function RegisterPage() {

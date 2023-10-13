@@ -11,9 +11,9 @@
 
 import { BgImage } from '@/components/BgImage'
 import { useRef, useState } from 'react'
-import TextBox from './components/TextBox'
+import TextBox from './components/textBox'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { SubmitButton } from './components/SubmitButton'
+import { SubmitButton } from './components/submitButton'
 import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 
@@ -59,7 +59,7 @@ export default function LoginPage() {
           <form
             onSubmit={handleLoginForm}
             id="loginForm"
-            className={`flex-col items-center w-[100%] gap-8`}
+            className={`flex-col items-center w-[100%] gap-8 text-center`}
           >
             <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
               {' '}
