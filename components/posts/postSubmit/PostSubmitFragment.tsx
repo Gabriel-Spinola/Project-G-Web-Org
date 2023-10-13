@@ -24,7 +24,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { NewPostModal } from './NewPostModal'
+import { NewPostModal } from './PostSubmitForm'
 import { signIn } from 'next-auth/react'
 
 type Props = {
@@ -46,8 +46,8 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
         <div id={styles.textSub}></div>
       </button>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
+        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
+        <ModalContent width="800px">
           <ModalHeader>Faça uma publicação</ModalHeader>
           <ModalCloseButton />
 
@@ -69,8 +69,12 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+            <Button
+              className="bg-gradient-to-tl from-medium-tertiary to-medium-primary"
+              mr={3}
+              onClick={onClose}
+            >
+              Fechar
             </Button>
           </ModalFooter>
         </ModalContent>
