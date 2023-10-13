@@ -12,8 +12,35 @@
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs'
 import { BgImage } from '@/components/BgImage'
 import TextBox from '../components/TextBox'
+import { SubmitButton } from '../components/SubmitButton'
+import { verifyCaptcha } from '@/server/serverActions'
+import { useRef, useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { signIn } from 'next-auth/react'
 
-export default function RegisterPage() {
+export default function RecoverPage() {
+  const email = useRef('')
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const [isVerified, setIsVerified] = useState<boolean>(false)
+
+  async function handleCaptchaSubmission(token: string | null): Promise<void> {
+    // Server function to verify captcha
+    await verifyCaptcha(token)
+      .then(() => setIsVerified(true))
+      .catch(() => setIsVerified(false))
+  }
+
+  async function handleRecoverySubmission(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault()
+
+    signIn('email', {
+      email: email.current,
+      redirect: true,
+      callbackUrl: '/',
+    })
+  }
   return (
     <main className="min-w-full flex max-w-full h-[calc(100vh-88px)]">
       <BgImage
@@ -29,18 +56,37 @@ export default function RegisterPage() {
         <div
           className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
         >
-          <form className={`flex-col`}>
+          <form className={`flex-col`} onSubmit={handleRecoverySubmission}>
             <a
               href="/auth"
               className="hover:text-medium-secundary absolute -my-10 -mx-10"
             >
               <BsFillArrowLeftCircleFill size={32} />
             </a>
+
             <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
               {' '}
               RECUPERAR SENHA{' '}
             </h1>
-            <TextBox className="w-full" labelText="E-mail" type={'email'} />
+
+            <TextBox
+              className="w-full"
+              labelText="E-mail"
+              type={'email'}
+              onChange={(e) => (email.current = e.target.value)}
+            />
+
+            <ReCAPTCHA
+              sitekey={process.env.RECAPTCHA_SITE_KEY as string}
+              ref={recaptchaRef}
+              onChange={handleCaptchaSubmission}
+              className="my-4"
+            />
+
+            <SubmitButton
+              isVerified={isVerified}
+              buttonText={'ENVIAR E-MAIL DE RECUPERAÇÃO'}
+            />
           </form>
         </div>
       </section>

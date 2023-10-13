@@ -1,4 +1,4 @@
-import ExploreHighlight from '../../app/client/explore/components/ExploreHighlights'
+import ExploreHighlight from './ExploreHighlights'
 
 export default function BottomSection() {
   return (

@@ -10,8 +10,13 @@
 'use client'
 
 import { Image } from '@chakra-ui/react'
+<<<<<<< HEAD:components/Explore/UpperSection.tsx
 import ExploreSearchBar from '@/app/client/explore/components/FindObject'
 import Carousel from '@/app/client/explore/components/Carousel'
+=======
+import ExploreSearchBar from './FindObject'
+import Carousel from './Carousel'
+>>>>>>> main:app/client/explore/components/UpperSection.tsx
 
 export default function UpperSection() {
   return (
