@@ -1,3 +1,14 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license GPL 3.0
+ */
+
+'use client'
+
 import TextBox from './TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitButton } from './SubmitButton'
