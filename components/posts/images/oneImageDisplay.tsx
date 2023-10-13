@@ -10,7 +10,7 @@ interface Props {
 
 export default function OneImageDisplay({ imgSrc, width, height }: Props) {
   return (
-    <div className={`w-full h-full rounded-lg object-cover bg-black`}>
+    <div className={`w-full h-full rounded-lg object-cover bg-medium-gray/75`}>
       <Image
         className="rounded-lg"
         src={imgSrc}

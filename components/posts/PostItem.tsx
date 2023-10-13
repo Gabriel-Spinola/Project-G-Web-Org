@@ -13,9 +13,9 @@ import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
-import OneImageDisplay from './components/oneImageDisplay'
-import TwoImageDisplay from './components/twoImageDisplay'
-import ThreeImageDisplay from './components/threeImageDisplay'
+import OneImageDisplay from './images/oneImageDisplay'
+import TwoImageDisplay from './images/twoImageDisplay'
+import ThreeImageDisplay from './images/threeImageDisplay'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from '../Buttons/DeletePostButton'
 
@@ -50,7 +50,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           >
             {post.author?.name ?? '):'}
           </h1>
-          <small className={styles.localizacao}>{post.author?.location}</small>
+          <small className={styles.usarLocal}>{post.author?.location}</small>
         </a>
       </section>
 
@@ -72,8 +72,8 @@ export default function PostItem({ post, currentUserId }: Params) {
           <TwoImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             secondImgSrc={getPostImageUrl(post.images[1])}
-            width={388}
-            height={1000}
+            width={384}
+            height={480}
           />
         </>
       ) : post.images.length === 3 ? (
@@ -83,8 +83,9 @@ export default function PostItem({ post, currentUserId }: Params) {
             imgSrc={getPostImageUrl(post.images[0])}
             secondImgSrc={getPostImageUrl(post.images[1])}
             thirdImgSrc={getPostImageUrl(post.images[2])}
-            width={776}
-            height={1000}
+            width={384}
+            height={240}
+            heightOne={480}
           />
         </>
       ) : (
