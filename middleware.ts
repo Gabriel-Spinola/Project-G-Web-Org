@@ -60,11 +60,12 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
+    // REVIEW - Check if HEADER & OPTIONS method need a secret or not
     if (req.method !== 'GET') {
       const secret = req.nextUrl.searchParams.get('secret')
 
       if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
-        return NextResponse.json({ message: 'Invalid Secret' }, {status: 401})
+        return NextResponse.json({ message: 'Invalid Secret' }, { status: 401 })
       }
     }
 
