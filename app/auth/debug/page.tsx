@@ -19,13 +19,12 @@ import { getServerSession } from 'next-auth'
 
 import React from 'react'
 import CreateProfile from '@/components/register/CreateProfile'
-import { checkIfAuthorized } from '@/lib/auth/actions'
 import { $Enums } from '@prisma/client'
 
 export default async function AuthTestingPage() {
   const session = await getServerSession(AuthOptions)
 
-  if (!(await checkIfAuthorized($Enums.Positions.Admin))) {
+  if (session?.user.position !== $Enums.Positions.Admin) {
     return <main>You&apos;re not allowed</main>
   }
 
