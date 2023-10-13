@@ -60,8 +60,7 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
-    // REVIEW - Check if HEADER & OPTIONS methods needs to be protected by a secret or not
-    if (req.method !== 'GET') {
+    if (!req.nextUrl.pathname.startsWith('/api/auth/')) {
       const secret = req.headers.get('X-API-Key')
 
       if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
