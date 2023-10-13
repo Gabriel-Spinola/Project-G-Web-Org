@@ -7,8 +7,6 @@
  * @license i.e. MIT
  */
 
-'use client'
-
 import SendImageButton from '@/components/Buttons/SendImageButton'
 import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'

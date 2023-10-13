@@ -18,7 +18,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -45,13 +44,13 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
         Faça uma publicação
         <div id={styles.textSub}></div>
       </button>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
-        <ModalContent width="800px">
+        <ModalContent>
           <ModalHeader>Faça uma publicação</ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody height={'100%'}>
             {currentUserId ? (
               <NewPostModal
                 closeModal={onClose}
@@ -67,16 +66,6 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
               </>
             )}
           </ModalBody>
-
-          <ModalFooter>
-            <Button
-              className="bg-gradient-to-tl from-medium-tertiary to-medium-primary"
-              mr={3}
-              onClick={onClose}
-            >
-              Fechar
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
