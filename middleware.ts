@@ -44,7 +44,9 @@ function rateLimiterMiddleware(ip: string): boolean {
 }
 
 async function middleware(req: NextRequestWithAuth) {
-  if (req.nextUrl.pathname.startsWith('/api/')) {
+  const pathName = req.nextUrl.pathname
+
+  if (pathName.startsWith('/api/')) {
     // SECTION - Rate Limiter
     const ip =
       req.headers.get('x-forwarded-for') ||
@@ -60,7 +62,7 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
-    if (!req.nextUrl.pathname.startsWith('/api/auth/')) {
+    if (!pathName.startsWith('/api/auth/')) {
       const secret = req.headers.get('X-API-Key')
 
       if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
@@ -73,7 +75,7 @@ async function middleware(req: NextRequestWithAuth) {
   }
 
   const isEnteringOnAuthPage = onlyAuthenticatedPages.some(
-    (pageUrl: string): boolean => req.nextUrl.pathname.startsWith(pageUrl),
+    (pageUrl: string): boolean => pathName.startsWith(pageUrl),
   )
 
   if (isEnteringOnAuthPage) {
