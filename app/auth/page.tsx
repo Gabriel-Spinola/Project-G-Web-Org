@@ -7,8 +7,6 @@
  * @license GPL 3.0
  */
 
-'use client'
-
 import { BgImage } from '@/components/BgImage'
 import { LogoutButton } from '@/components/debug/AuthButtons'
 import { AuthOptions } from '@/lib/auth'
@@ -32,7 +30,15 @@ export default async function LoginPage() {
         <div
           className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
         >
-          {session ? <LogoutButton /> : <LoginForm />}
+          {session ? (
+            <>
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <LoginForm />
+            </>
+          )}
         </div>
       </section>
     </main>
