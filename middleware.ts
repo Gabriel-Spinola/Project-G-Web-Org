@@ -60,6 +60,14 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
+    if (req.method !== 'GET') {
+      const secret = req.nextUrl.searchParams.get('secret')
+
+      if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
+        return NextResponse.json({ message: 'Invalid Secret' }, {status: 401})
+      }
+    }
+
     // SECTION - Storage management
     // TODO: Storage Cleanup
   }
