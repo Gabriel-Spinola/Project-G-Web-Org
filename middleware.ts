@@ -47,7 +47,7 @@ async function middleware(req: NextRequestWithAuth) {
   const pathName = req.nextUrl.pathname
 
   if (pathName.startsWith('/api/')) {
-    // SECTION - Rate Limiter
+    // NOTE - Rate Limiter
     const ip =
       req.headers.get('x-forwarded-for') ||
       req.ip ||
@@ -62,6 +62,7 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
+    // NOTE - API secret
     if (!pathName.startsWith('/api/auth/')) {
       const secret = req.headers.get('X-API-Key')
 
@@ -70,7 +71,7 @@ async function middleware(req: NextRequestWithAuth) {
       }
     }
 
-    // SECTION - Storage management
+    // NOTE - Storage management
     // TODO: Storage Cleanup
   }
 
