@@ -60,7 +60,7 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
-    // REVIEW - Check if HEADER & OPTIONS method need a secret or not
+    // REVIEW - Check if HEADER & OPTIONS methods needs to be protected by a secret or not
     if (req.method !== 'GET') {
       const secret = req.nextUrl.searchParams.get('secret')
 
