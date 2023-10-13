@@ -16,8 +16,8 @@ import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
-import { SubmitButton } from '../components/submitButton'
-import TextBox from '../components/textBox'
+import { SubmitButton } from '../components/SubmitButton'
+import TextBox from '../components/TextBox'
 import { BgImage } from '@/components/BgImage'
 
 export default function RegisterPage() {
@@ -79,13 +79,14 @@ export default function RegisterPage() {
         className="min-w-full min-h-full flex items-center justify-center"
       >
         <div
-          className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
+          className={`absolute flex flex-col items-center rounded-xl bg-darker-white/75 border-solid border-2 border-light-white text-darker-white p-16`}
         >
           <form
             ref={formRef}
             action={handleFormSubmission}
             className={`flex-col w-full gap-4 items-center}`}
           >
+            <h1 className="text-center text-2xl mb-8">Crie sua conta</h1>
             <TextBox
               className="w-full"
               labelText="Nome"
@@ -116,7 +117,7 @@ export default function RegisterPage() {
 
             <SubmitButton isVerified={isVerified} buttonText={'REGISTRAR'} />
 
-            <p>
+            <p className="text-center">
               Já possui Conta?{' '}
               <a
                 href="/auth"

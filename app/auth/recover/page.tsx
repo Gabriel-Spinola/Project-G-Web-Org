@@ -54,7 +54,7 @@ export default function RecoverPage() {
         className="min-w-full min-h-full flex items-center justify-center"
       >
         <div
-          className={`absolute flex flex-col items-center rounded-xl bg-gradient-to-tl from-medium-tertiary to-medium-primary border-solid border-2 border-light-white text-darker-white p-16`}
+          className={`absolute flex flex-col items-center rounded-xl bg-darker-white/75 border-solid border-2 border-light-white text-darker-white p-16`}
         >
           <form className={`flex-col`} onSubmit={handleRecoverySubmission}>
             <a

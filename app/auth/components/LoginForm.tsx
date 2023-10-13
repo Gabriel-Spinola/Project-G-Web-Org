@@ -46,7 +46,7 @@ export default function LoginForm() {
       id="loginForm"
       className={`flex-col items-center w-[100%] gap-8`}
     >
-      <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
+      <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold text-center">
         {' '}
         LOGIN{' '}
       </h1>
@@ -64,12 +64,12 @@ export default function LoginForm() {
         onChange={(e) => (password.current = e.target.value)}
       />
 
-      <p>
+      <p className="text-center">
         Esqueceu a senha?{' '}
         <a
           href="auth/recover"
           id="formButton"
-          className="text-light-secundary underline hover:text-darker-secundary font-bold"
+          className="text-light-gray underline hover:text-darker-gray font-bold"
         >
           Clique aqui
         </a>{' '}
@@ -83,12 +83,12 @@ export default function LoginForm() {
       />
 
       <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
-      <p>
+      <p className="text-center">
         Precisa criar uma conta?{' '}
         <a
           href="auth/register"
           id="formButton"
-          className="text-light-secundary underline hover:text-darker-secundary font-bold"
+          className="text-light-gray underline hover:text-darker-gray font-bold"
         >
           Crie aqui
         </a>{' '}

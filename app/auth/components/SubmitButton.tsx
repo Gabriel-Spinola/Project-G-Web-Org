@@ -24,10 +24,7 @@ export function SubmitButton({
       type="submit"
       aria-disabled={pending || !isVerified}
       disabled={pending || !isVerified}
-      className={`text-black p-4 cursor-pointer w-full rounded-lg`}
-      style={{
-        backgroundColor: `${pending ? '#ccc' : '#fff'}`,
-      }}
+      className={`text-pure-white p-4 cursor-pointer w-full rounded-lg bg-gradient-to-tl from-medium-tertiary to-medium-primary`}
     >
       {pending ? 'Carregando' : buttonText}
     </button>
