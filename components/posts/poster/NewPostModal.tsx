@@ -9,10 +9,10 @@
 
 'use client'
 
-import SendImageButton from '@/components/Buttons/sendImageButton'
-import SendPDFButton from '@/components/Buttons/sendPDFButton'
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
-import SubmitPostButton from '@/components/Buttons/submitPostButton'
+import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { useRouter } from 'next/navigation'
 
