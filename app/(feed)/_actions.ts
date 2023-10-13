@@ -44,6 +44,7 @@ export async function fetchPosts(
     const response = await fetch(apiRequestURL, {
       method: 'GET',
       headers: {
+        'X-API-Key': process.env.API_SECRET as string,
         'Content-Type': 'application/json',
       },
       next: { tags: ['revalidate-feed'] },
