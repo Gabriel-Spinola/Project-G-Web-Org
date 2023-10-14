@@ -21,6 +21,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta charSet="UTF-8" />
+        <title>ProjectG</title>
       </head>
       <body className={inter.className}>
         <Providers>
