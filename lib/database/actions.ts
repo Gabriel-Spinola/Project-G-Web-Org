@@ -41,6 +41,7 @@ export async function getRowDataFromAPI(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_SECRET as string,
       },
       cache: 'no-cache',
     },
@@ -65,6 +66,9 @@ export async function createNewProjectApiCall(
     // 'Post: Database inserting
     return await fetch(url, {
       method: id ? 'PUT' : 'POST',
+      headers: {
+        'X-API-Key': process.env.API_SECRET as string,
+      },
       body: formData,
       cache: 'no-cache',
     })
@@ -83,6 +87,7 @@ export async function tryGetUserDataFromApi(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_SECRET as string,
         },
       },
     )

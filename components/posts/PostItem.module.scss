@@ -9,10 +9,10 @@
  
 @import '../../app/styles/variables.module.scss';
 
-.postado {
+.post {
     display: flex;
     flex-direction: column;
-    width: 45vw;
+    width: 800px;
     background-color: $pure-white;
     padding: 0;
     border-radius: 12px;
@@ -22,31 +22,31 @@
     -webkit-box-shadow: 0 0 8px #00000065;
             box-shadow: 0 0 8px #00000065;
 
-    .autor {
+    .authorContainer {
         display: flex;
         flex-direction: row;
         font-family: $nav-font;
         margin-bottom: 16px;
 
-        .foto {
+        .authorPhoto {
             background-color: lightblue;
             border-radius: 50%;
             height: 48px;
             width: 48px;
         }
 
-        .nomeLocalizacao {
+        .userInfo {
             display: flex;
             flex-direction: column;
             margin-left: 16px;
 
-            .nome {
+            .userName {
                 color: $light-primary;
                 font-size: 24px;
                 font-weight: 400;
             }
 
-            .localizacao {
+            .userLocal {
                 color: #000;
                 font-size: 16px;
                 font-weight: 400px;
@@ -72,7 +72,7 @@
 }
 
 @media (max-width: 1024px) {
-    .postado{
+    .post{
         width: 100%;
     }
 }

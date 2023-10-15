@@ -44,8 +44,10 @@ function rateLimiterMiddleware(ip: string): boolean {
 }
 
 async function middleware(req: NextRequestWithAuth) {
-  if (req.nextUrl.pathname.startsWith('/api/')) {
-    // SECTION - Rate Limiter
+  const pathName = req.nextUrl.pathname
+
+  if (pathName.startsWith('/api/')) {
+    // NOTE - Rate Limiter
     const ip =
       req.headers.get('x-forwarded-for') ||
       req.ip ||
@@ -60,12 +62,21 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
-    // SECTION - Storage management
+    // NOTE - API secret
+    if (!pathName.startsWith('/api/auth/')) {
+      const secret = req.headers.get('X-API-Key')
+
+      if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
+        return NextResponse.json({ message: 'Invalid Secret' }, { status: 401 })
+      }
+    }
+
+    // NOTE - Storage management
     // TODO: Storage Cleanup
   }
 
   const isEnteringOnAuthPage = onlyAuthenticatedPages.some(
-    (pageUrl: string): boolean => req.nextUrl.pathname.startsWith(pageUrl),
+    (pageUrl: string): boolean => pathName.startsWith(pageUrl),
   )
 
   if (isEnteringOnAuthPage) {

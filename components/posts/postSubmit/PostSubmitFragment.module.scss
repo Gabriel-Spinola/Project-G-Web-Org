@@ -1,0 +1,40 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+
+@import "/app/styles/variables.module.scss";
+
+#textAnimation {
+    div {
+        font-family: $nav-font;
+        -webkit-box-shadow: 0 0 8px #00000065;
+        box-shadow: 0 0 8px #00000065;
+        background-color: $darker-white;
+        height: 2px;
+        width: 16px;
+    }
+}
+
+#textAnimation:hover {
+    div {
+        background-color: $light-gray;
+        height: 2px;
+        width: 182px;
+        animation-name: sub-expand;
+        animation-duration: 0.5s;
+    }
+}
+
+@keyframes sub-expand {
+    0% {
+        width: 16px;
+    }
+    100% {
+        width: 182px;
+    }
+}

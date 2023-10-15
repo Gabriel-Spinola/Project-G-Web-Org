@@ -7,8 +7,6 @@
  * @license i.e. MIT
  */
 
-'use client'
-
 import SendImageButton from '@/components/Buttons/SendImageButton'
 import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
@@ -81,6 +79,9 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
         {
           method: 'POST',
           body: formData,
+          headers: {
+            'X-API-Key': process.env.API_SECRET as string,
+          },
         },
       )
 
@@ -110,67 +111,65 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-20">
-      <div className="w-[40vw] h-[260px] flex flex-col mt-[-20%] z-10">
-        {/* Form Section */}
-        <section
-          id="post-form"
-          className="notClose z-1 drop-shadow-sm bg-medium-gray text-darker-white text-xl p-8 rounded-[8px]"
+    <section>
+      {/* Form Section */}
+      <section
+        id="post-form"
+        className="notClose z-1 drop-shadow-sm text-xl p-8 rounded-[8px]"
+      >
+        <form
+          method="POST"
+          onSubmit={handleFormSubmission}
+          className="notClose"
         >
-          <form
-            method="POST"
-            onSubmit={handleFormSubmission}
-            className="notClose"
-          >
-            {/* Content */}
-            <div className="notClose max-h-[80px] flex flex-row">
-              <textarea
-                name="content"
-                placeholder="Faça uma publicação"
-                className="notClose bg-medium-gray text-darker-white w-full pb-[192px] text-xl margin-none text-start outline-none"
-                value={form?.content}
-                onChange={(event) =>
-                  handleStateChange('content', event.target.value)
-                }
-              ></textarea>
-            </div>
+          {/* Content */}
+          <div className="notClose max-h-[80px] flex flex-row">
+            <textarea
+              name="content"
+              placeholder="Faça uma publicação"
+              className="notClose w-full pb-[192px] text-xl margin-none text-start outline-none"
+              value={form?.content}
+              onChange={(event) =>
+                handleStateChange('content', event.target.value)
+              }
+            ></textarea>
+          </div>
 
-            {/* Input Buttons */}
-            <div className=" mt-3 flex flex-row">
-              <SendPDFButton />
-              <SendImageButton onChange={onImageChanges} />
+          {/* Input Buttons */}
+          <div className=" mt-3 flex flex-row">
+            <SendPDFButton />
+            <SendImageButton onChange={onImageChanges} />
 
-              <SubmitPostButton />
-            </div>
-          </form>
-        </section>
+            <SubmitPostButton />
+          </div>
+        </form>
+      </section>
 
-        {/* Images Preview Section */}
-        <section id="images-preview">
-          {images && (
-            <>
-              {images.map((image, index) => (
-                <div key={index}>
-                  {/* Remove Img Button */}
-                  <button
-                    onClick={() => removeImageFromPreviewByIndex(index)}
-                    type="button"
-                  >
-                    <span>X</span>
-                  </button>
+      {/* Images Preview Section */}
+      <section id="images-preview">
+        {images && (
+          <>
+            {images.map((image, index) => (
+              <div key={index}>
+                {/* Remove Img Button */}
+                <button
+                  onClick={() => removeImageFromPreviewByIndex(index)}
+                  type="button"
+                >
+                  <span>X</span>
+                </button>
 
-                  <img
-                    src={URL.createObjectURL(image)}
-                    width={300}
-                    height={400}
-                    alt="Image Sent"
-                  />
-                </div>
-              ))}
-            </>
-          )}
-        </section>
-      </div>
-    </div>
+                <img
+                  src={URL.createObjectURL(image)}
+                  width={300}
+                  height={400}
+                  alt="Image Sent"
+                />
+              </div>
+            ))}
+          </>
+        )}
+      </section>
+    </section>
   )
 }
