@@ -36,6 +36,7 @@ export default function InfiniteScrollPosts({
       const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
         next,
         signal,
+        currentUserId,
       )
 
       if (error) {
@@ -85,9 +86,9 @@ export default function InfiniteScrollPosts({
       setPosts(initialPublication)
     }
 
-    // Resets URL
+    // Update feed state
     return (): void => {
-      router.push('/', { scroll: false })
+      router.refresh()
     }
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
