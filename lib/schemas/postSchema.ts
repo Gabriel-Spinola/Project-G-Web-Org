@@ -6,7 +6,7 @@ export type ExpectedData = {
   images?: File[] | null
 }
 
-export const MAX_FILE_SIZE = 500000
+export const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
@@ -22,17 +22,46 @@ export const newPostDataSchema = zod.object({
       message: 'Seu post ultrapassou o limite de caracteres (4000)',
     }),
   images: zod
-    .any()
-    .optional()
-    .refine(
-      (file: File) => file.size <= MAX_FILE_SIZE,
-      'O tamanho máximo de imagens é de até 5mb',
-    )
-    .refine(
-      (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-      'Somente images com os formatos: .jpg, .jpeg, .png and .webp são suportadas.',
-    ),
+    .any({
+      invalid_type_error: 'caracteres inválidos',
+    })
+    .optional(),
 })
+
+export function validateImageInput(
+  file: File,
+  qtyImages?: number,
+): ESResponse<never> {
+  const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+  const notLatin = '/[\\p{IsLatin}]+$'
+
+  const notPunctuated = '[^\x00-\x7F]|[áç]'
+
+  console.log(file.size)
+
+  if (file.name.match(notLatin) || file.name.match(notPunctuated)) {
+    return {
+      data: null,
+      error:
+        'Nome do arquivo é inválido. (Ex.: Contém letras fora do alfabeto latim)',
+    }
+  }
+
+  // REVIEW - Special characters
+  // if (file.name.match(invalidCharacters)) {
+  //   return 'Nome do arquivo é inválido. (Ex.: Contém letras fora do alfabeto latim)'
+  // }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return { data: null, error: 'O tamanho máximo de arquivos é de 5mb' }
+  }
+
+  if (qtyImages && qtyImages >= 3) {
+    return { data: null, error: 'O número máximo de imagens por post é 3' }
+  }
+
+  return { data: null, error: null }
+}
 
 /**
  * @param formData
@@ -40,7 +69,7 @@ export const newPostDataSchema = zod.object({
  */
 export function validateForm(
   formData: FormData,
-): ESResponse<ExpectedData, zod.ZodError<ExpectedData>> {
+): ESResponse<FormData, zod.ZodError<ExpectedData>> {
   const parsedFormData = newPostDataSchema.safeParse(
     Object.fromEntries(formData.entries()),
   )
@@ -49,5 +78,5 @@ export function validateForm(
     return { data: null, error: parsedFormData.error }
   }
 
-  return { data: parsedFormData.data, error: null }
+  return { data: formData, error: null }
 }

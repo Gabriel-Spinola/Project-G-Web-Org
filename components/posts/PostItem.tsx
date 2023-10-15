@@ -58,7 +58,7 @@ export default function PostItem({ post, currentUserId }: Params) {
 
       <article className={styles.p1}>{post?.content}</article>
 
-      {post.images.length > 0 ? (
+      {post.images.length === 1 ? (
         <>
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
@@ -75,7 +75,7 @@ export default function PostItem({ post, currentUserId }: Params) {
             height={480}
           />
         </>
-      ) : (
+      ) : post.images.length === 3 ? (
         <>
           <ThreeImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
@@ -86,6 +86,8 @@ export default function PostItem({ post, currentUserId }: Params) {
             heightOne={480}
           />
         </>
+      ) : (
+        <></>
       )}
 
       {/* Likes */}

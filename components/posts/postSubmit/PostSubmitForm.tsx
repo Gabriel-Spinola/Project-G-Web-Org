@@ -13,6 +13,10 @@ import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { usePathname, useRouter } from 'next/navigation'
+import {
+  validateForm,
+  validateImageInput,
+} from '@/lib/schemas/postSchema'
 
 interface PostFormState {
   content: string
@@ -54,8 +58,10 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
-    if (images && images?.length >= 3) {
-      alert('O máximo de imagens por post é 3')
+    const { error } = validateImageInput(event.target.files[0], images?.length)
+
+    if (error) {
+      alert(error)
 
       return
     }
@@ -84,12 +90,27 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       formData.delete('images')
     }
 
+    const validatedForm = validateForm(formData)
+
+    if (validatedForm.error) {
+      let errorMessage = ''
+
+      validatedForm.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+
+      return
+    }
+
     try {
       const response = await fetch(
         `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
         {
           method: 'POST',
-          body: formData,
+          body: validatedForm.data,
           headers: {
             'X-API-Key': process.env.API_SECRET as string,
           },
