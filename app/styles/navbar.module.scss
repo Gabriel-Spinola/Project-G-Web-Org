@@ -9,7 +9,7 @@
 
 @import "./variables.module.scss";
 
-#header-nav {
+#navDesktop {
   ul {
     li {
       margin: 0 88px;
@@ -40,17 +40,17 @@
 
 //navbar responsiveness till 1536px
 @media (max-width: 1536px) {
-  #header-nav {
+  #navDesktop {
     ul {
       li {
-        margin: 0 64px;
+        margin: 0 48px;
       }
     }
   }
 }
 //navbar responsiveness till 1280px
 @media (max-width: 1280px) {
-  #header-nav {
+  #navDesktop {
     ul {
       li {
         margin: 0 48px;
@@ -60,12 +60,8 @@
 }
 //navbar responsiveness till 1024px
 @media (max-width: 1024px) {
-  #header-nav {
-    ul {
-      li {
-        margin: 0 32px;
-      }
-    }
+  #navDesktop {
+    display: none;
   }
 }
 
@@ -78,5 +74,50 @@
   }
   100% {
     width: 100%;
+  }
+}
+
+//navbar mobile
+
+@media (min-width: 1025px) {
+  #navMobile {
+    display: none;
+  }
+}
+
+#navMobile{
+  #menuLines {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 32px;
+  z-index: 99;
+}
+#mobileLogoContainer{
+  z-index: 0;
+}
+  #menuLines:hover {
+    cursor: pointer;
+  }
+  .line {
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: $medium-primary;
+  }
+
+  #mobileMenuItems {
+    z-index: 100;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 88px);
+    background-color: $medium-white;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    text-align: center;
   }
 }
