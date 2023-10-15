@@ -28,7 +28,6 @@ export default function SendImageButton({ onChange }: Props) {
           accept=".png, .jpg, .jpeg, .webp"
           className="notClose absolute left-0 top-1 scale-150 scale-y-150 opacity-0"
           onChange={onChange}
-          multiple
         />
         Envie uma imagem
       </button>
