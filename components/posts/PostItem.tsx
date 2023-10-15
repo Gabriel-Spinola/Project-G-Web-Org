@@ -33,15 +33,15 @@ export default function PostItem({ post, currentUserId }: Params) {
   )
 
   return (
-    <div className={styles.postado}>
-      <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
-
+    <div className={styles.post}>
       {isOwner && <DeletePostButton postId={post.id} />}
-
-      <div className={styles.autor}>
-        <div className={styles.foto}>
-          <div className="overflow-x-auto"></div>
-        </div>
+      
+      <section className={styles.authorContainer}>
+        <a href={`/client/profile/${post.authorId}`}>
+          <div className={styles.authorPhoto}>
+            <div className="overflow-x-auto"></div>
+          </div>
+        </a>
 
         <a
           className={styles.userInfo}
@@ -54,11 +54,11 @@ export default function PostItem({ post, currentUserId }: Params) {
           </h1>
           <small className={styles.usarLocal}>{post.author?.location}</small>
         </a>
-      </div>
+      </section>
 
-      {isOwner && <DeletePostButton postId={post.id} />}
 
       <article className={styles.p1}>{post?.content}</article>
+
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay
@@ -88,8 +88,9 @@ export default function PostItem({ post, currentUserId }: Params) {
           />
         </>
       ) : (
-        'ocorreu um erro'
+        'Ocorreu um erro'
       )}
+
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
