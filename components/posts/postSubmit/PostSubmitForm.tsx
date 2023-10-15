@@ -11,7 +11,8 @@ import SendImageButton from '@/components/Buttons/SendImageButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { validateForm, validateImageInput } from '@/lib/schemas/postSchema'
 
 interface PostFormState {
   content: string
@@ -31,6 +32,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   const [images, setImages] = useState<File[] | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const router = useRouter()
+  const pathName = usePathname()
 
   function handleStateChange(
     fieldName: keyof PostFormState,
@@ -45,10 +47,18 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     })
   }
 
-  async function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
+  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
 
     if (!event.target.files || event.target.files.length <= 0) {
+      return
+    }
+
+    const { error } = validateImageInput(event.target.files[0], images?.length)
+
+    if (error) {
+      alert(error)
+
       return
     }
 
@@ -67,17 +77,36 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
 
     const formData = new FormData(event.currentTarget)
 
-    images?.pop()
-    images?.forEach((img) => {
-      formData.append('images', img)
-    })
+    if (images && images?.length >= 0) {
+      images?.pop()
+      images?.forEach((img) => {
+        formData.append('images', img)
+      })
+    } else {
+      formData.delete('images')
+    }
+
+    const validatedForm = validateForm(formData)
+
+    if (validatedForm.error) {
+      let errorMessage = ''
+
+      validatedForm.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+
+      return
+    }
 
     try {
       const response = await fetch(
         `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
         {
           method: 'POST',
-          body: formData,
+          body: validatedForm.data,
           headers: {
             'X-API-Key': process.env.API_SECRET as string,
           },
@@ -93,16 +122,15 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       console.log('worked ' + JSON.stringify(data))
 
       setImages(undefined)
-
       closeModal()
-      router.push('/?create=1', { scroll: false })
+      router.push(pathName + '?create=1', { scroll: false })
     } catch (error: unknown) {
       console.error(error)
     }
   }
 
   function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for perfomance
+    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
 
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
@@ -131,6 +159,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
               onChange={(event) =>
                 handleStateChange('content', event.target.value)
               }
+              required
             ></textarea>
           </div>
 

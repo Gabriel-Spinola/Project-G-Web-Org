@@ -2,13 +2,13 @@
 import '@/app/styles/navbar.css'
 import { StaticImage } from '../Image'
 import { useSession } from 'next-auth/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
 
 export default function Navbar() {
   const { data: session } = useSession()
-  const [menuOpen, setMenuOpen] = React.useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   function ToggleMenu() {
     setMenuOpen(!menuOpen)
@@ -65,6 +65,7 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
+
       <nav id="navMobile">
         <div className="flex h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl">
           <button

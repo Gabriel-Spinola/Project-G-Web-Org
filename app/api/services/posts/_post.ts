@@ -2,7 +2,7 @@ import { prisma } from '@/lib/database/prisma'
 import { FileBody, StorageResponse } from '@/lib/storage/storage'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // export const config = { runtime: 'experimental-edge' }
@@ -88,7 +88,7 @@ export async function handlePost(
     // // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // const buffer = Buffer.from(bytes!)
 
-    if (!checkRequiredFields('asd', content, 'aa')) {
+    if (!content) {
       return NextResponse.json(
         {
           data: 'Failed to create post: missing or invalid request data',
