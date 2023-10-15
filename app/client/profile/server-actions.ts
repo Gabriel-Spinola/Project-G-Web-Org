@@ -4,7 +4,6 @@ import { UserData } from '@/lib/types/common'
 
 /**
  * @author Gabriel Spinola
- * @default Cache is currently deactivated
  *
  * @param id Id of the user as a string.
  * @param requestData the specific data from the user you want to request.
@@ -23,6 +22,7 @@ export async function getUserData(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_SECRET as string,
         },
         body: JSON.stringify(requestData),
         next: { tags: ['user-data'] },
