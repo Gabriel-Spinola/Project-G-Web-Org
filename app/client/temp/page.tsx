@@ -74,6 +74,9 @@ export default function CreatePost() {
           `${API_URL}${API_ENDPOINTS.services.posts}?id=clneuw2o60000w494md2x3u8f`,
           {
             method: 'POST',
+            headers: {
+              'X-API-Key': process.env.API_SECRET as string,
+            },
             body: formData,
           },
         )

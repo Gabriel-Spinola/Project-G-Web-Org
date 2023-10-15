@@ -42,6 +42,9 @@ export default async function CreatePost() {
           `${API_URL}${API_ENDPOINTS.services.posts}?id=clmuuc8ek0000w4rkqu3pvwhc`,
           {
             method: 'POST',
+            headers: {
+              'X-API-Key': process.env.API_SECRET as string,
+            },
             body: formData,
           },
         )
