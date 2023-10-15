@@ -10,8 +10,6 @@ interface Params {
 
 export const StaticImage = (params: Params) => {
   return (
-    <section>
-      <Image className={params.className} src={params.url} alt={params.alt} />
-    </section>
+    <Image className={params.className} src={params.url} alt={params.alt} />
   )
 }

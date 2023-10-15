@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/navbar/Navbar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -18,16 +18,19 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <>
       <head>
         <meta charSet="UTF-8" />
+        <title>ProjectG</title>
       </head>
-      <body className={inter.className}>
-        <Providers>
-          <Navbar />
-          {children}
-        </Providers>
-      </body>
-    </html>
+      <html lang="en">
+        <body className={inter.className}>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </>
   )
 }
