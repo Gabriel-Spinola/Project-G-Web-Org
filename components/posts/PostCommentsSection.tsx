@@ -19,6 +19,7 @@ async function fetchComments(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_SECRET as string,
         },
         next: { tags: [commentsRefetchTag] },
       },

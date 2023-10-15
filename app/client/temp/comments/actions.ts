@@ -18,6 +18,7 @@ export async function getComments(): Promise<PublicationComment[] | null> {
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_SECRET as string,
         },
         next: { tags: [commentsRefetchTag] },
       },
