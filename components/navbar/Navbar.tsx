@@ -3,6 +3,8 @@ import '@/app/styles/navbar.css'
 import { StaticImage } from '../Image'
 import { useSession } from 'next-auth/react'
 import React from 'react'
+import { RxHamburgerMenu } from 'react-icons/rx'
+import { MdClose } from 'react-icons/md'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -10,7 +12,6 @@ export default function Navbar() {
 
   function ToggleMenu() {
     setMenuOpen(!menuOpen)
-    console.log(!menuOpen)
   }
 
   return (
@@ -66,10 +67,13 @@ export default function Navbar() {
       </nav>
       <nav id="navMobile">
         <div className="flex h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl">
-          <button type="button" onClick={ToggleMenu} id="menuLines">
-            <span className="line"></span>
-            <span className="line"></span>
-            <span className="line"></span>
+          <button
+            type="button"
+            onClick={ToggleMenu}
+            id="menuLines"
+            className={menuOpen ? 'closeMenu' : 'hamburguerMenu'}
+          >
+            {menuOpen ? <MdClose size="32" /> : <RxHamburgerMenu size="32" />}
           </button>
 
           <section
