@@ -6,6 +6,7 @@ const nextConfig = {
   },
   env: {
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+    API_SECRET: process.env.NEXTAUTH_SECRET,
   },
   images: {
     remotePatterns: [

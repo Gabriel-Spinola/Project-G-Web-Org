@@ -78,6 +78,9 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
         {
           method: 'POST',
           body: formData,
+          headers: {
+            'X-API-Key': process.env.API_SECRET as string,
+          },
         },
       )
 
