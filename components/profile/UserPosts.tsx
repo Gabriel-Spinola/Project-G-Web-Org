@@ -14,7 +14,7 @@ export default async function UserPosts({ authorID }: Params) {
 
   return (
     <section id="PostWrapper" className="flex flex-col">
-      <PostSubmitFragment />
+      <PostSubmitFragment currentUserId={authorID} />
 
       {!error ? (
         <>

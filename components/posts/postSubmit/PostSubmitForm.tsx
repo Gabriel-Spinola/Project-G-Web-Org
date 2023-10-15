@@ -12,7 +12,7 @@ import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface PostFormState {
   content: string
@@ -32,6 +32,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   const [images, setImages] = useState<File[] | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const router = useRouter()
+  const pathName = usePathname()
 
   function handleStateChange(
     fieldName: keyof PostFormState,
@@ -96,7 +97,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       setImages(undefined)
 
       closeModal()
-      router.push('/?create=1', { scroll: false })
+      router.push(pathName + '?create=1', { scroll: false })
     } catch (error: unknown) {
       console.error(error)
     }

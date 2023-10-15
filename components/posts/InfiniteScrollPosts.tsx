@@ -8,17 +8,18 @@ import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 
-// TODO: Generalize Feed
-type Params = {
-  initialPublication: FullPost[] | undefined
+// TODO: Generalize Feed - Incomplete
+type Params<Publication extends FullPost = FullPost> = {
+  initialPublication: Publication[] | undefined
   currentUserId?: string
 }
 
-export default function InfiniteScrollPosts({
-  initialPublication,
-  currentUserId,
-}: Params) {
-  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
+export default function InfiniteScrollPosts<
+  Publication extends FullPost = FullPost,
+>({ initialPublication, currentUserId }: Params<Publication>) {
+  const [posts, setPosts] = useState<Publication[] | undefined>(
+    initialPublication,
+  )
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
@@ -33,7 +34,7 @@ export default function InfiniteScrollPosts({
   const loadMorePosts = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
-      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+      const { data, error }: ESResponse<Publication[]> = await fetchPosts(
         next,
         signal,
         currentUserId,
@@ -52,12 +53,12 @@ export default function InfiniteScrollPosts({
       }
 
       setPages((prevPage) => prevPage + 1)
-      setPosts((prevPost: FullPost[] | undefined) => [
+      setPosts((prevPost: Publication[] | undefined) => [
         ...(prevPost?.length ? prevPost : []),
         ...data,
       ])
     },
-    [page],
+    [page, currentUserId],
   )
 
   // NOTE - Handles feed data fetching
@@ -97,7 +98,7 @@ export default function InfiniteScrollPosts({
 
   return (
     <>
-      {posts?.map((post: FullPost) => (
+      {posts?.map((post: Publication) => (
         <PostItem key={post.id} post={post} currentUserId={currentUserId} />
       ))}
 
