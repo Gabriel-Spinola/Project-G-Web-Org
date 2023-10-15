@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
  * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
@@ -10,12 +8,14 @@
  */
 
 import React from 'react'
-import Image from 'next/image'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
+import OneImageDisplay from './images/oneImageDisplay'
+import TwoImageDisplay from './images/twoImageDisplay'
+import ThreeImageDisplay from './images/threeImageDisplay'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from '../Buttons/DeletePostButton'
 
@@ -34,6 +34,8 @@ export default function PostItem({ post, currentUserId }: Params) {
 
   return (
     <div className={styles.postado}>
+      <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
+
       {isOwner && <DeletePostButton postId={post.id} />}
 
       <div className={styles.autor}>
@@ -42,32 +44,52 @@ export default function PostItem({ post, currentUserId }: Params) {
         </div>
 
         <a
-          className={styles.nomeLocalizacao}
+          className={styles.userInfo}
           href={`/client/profile/${post.authorId}`}
         >
-          <h1 className={styles.nome}>{post.author?.name ?? '):'}</h1>
-          <small className={styles.localizacao}>{post.author?.location}</small>
+          <h1
+            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+          >
+            {post.author?.name ?? '):'}
+          </h1>
+          <small className={styles.usarLocal}>{post.author?.location}</small>
         </a>
-      </div>
+      </section>
+
+      {isOwner && <DeletePostButton postId={post.id} />}
 
       <article className={styles.p1}>{post?.content}</article>
-
-      {/* TODO - Add more images to the container */}
-      <div className="image-container">
-        <Image
-          className={styles.oneImg}
-          src={
-            post.images.length > 0
-              ? getPostImageUrl(post.images[0])
-              : '/test-img/imgtest.jpg'
-          }
-          alt={post.images.length > 0 ? post.images[0] : 'noimg'}
-          width={776}
-          height={1000}
-          priority
-        />
-      </div>
-
+      {post.images.length === 1 ? (
+        <>
+          <OneImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            width={776}
+            height={1000}
+          />
+        </>
+      ) : post.images.length === 2 ? (
+        <>
+          <TwoImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            secondImgSrc={getPostImageUrl(post.images[1])}
+            width={384}
+            height={480}
+          />
+        </>
+      ) : post.images.length === 3 ? (
+        <>
+          <ThreeImageDisplay
+            imgSrc={getPostImageUrl(post.images[0])}
+            secondImgSrc={getPostImageUrl(post.images[1])}
+            thirdImgSrc={getPostImageUrl(post.images[2])}
+            width={384}
+            height={240}
+            heightOne={480}
+          />
+        </>
+      ) : (
+        'ocorreu um erro'
+      )}
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
@@ -96,6 +118,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           <span>{post.comments?.length ?? 0}</span>
         </button>
 
+        <a href={`/client/posts/${post.id}`}>Check Post</a>
         <FullPostModal post={post} />
       </div>
     </div>

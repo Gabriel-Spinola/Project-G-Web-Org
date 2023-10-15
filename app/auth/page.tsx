@@ -4,50 +4,43 @@
  *
  * @project Project G
  * @version main-release
- * @license i.e. MIT
+ * @license GPL 3.0
  */
 
-import {
-  LoginButton,
-  LogoutButton,
-  ProfileButton,
-  RegisterButton,
-} from '@/components/debug/AuthButtons'
-import AuthUsers from '@/components/debug/AuthUsers'
+import { BgImage } from '@/components/BgImage'
+import { LogoutButton } from '@/components/debug/AuthButtons'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
+import LoginForm from './components/LoginForm'
 
-import React from 'react'
-import CreateProfile from '@/components/register/CreateProfile'
-
-export default async function AuthTestingPage() {
+export default async function LoginPage() {
   const session = await getServerSession(AuthOptions)
-
   return (
-    <main
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2vh',
-      }}
-    >
-      <>
-        <br />
-        <br />
-        <br />
-        <br />
-        <LoginButton />
-        <RegisterButton />
-        <LogoutButton />
-        <ProfileButton />
-
-        <h1>Server session: </h1>
-        <pre>{JSON.stringify(session)}</pre>
-
-        <AuthUsers />
-
-        <CreateProfile session={session} />
-      </>
+    <main className="min-w-full flex max-w-full h-[calc(100vh-88px)]">
+      <BgImage
+        url={
+          'https://images.unsplash.com/photo-1633354574427-b0dd0697130a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2089&q=80'
+        }
+        alt={'SingInBgImage'}
+      />
+      <section
+        id="loginContainer"
+        className="min-w-full min-h-full flex items-center justify-center"
+      >
+        <div
+          className={`absolute flex flex-col items-center rounded-xl bg-darker-white/75 border-solid border-2 border-light-white text-medium-gray p-16`}
+        >
+          {session ? (
+            <>
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <LoginForm />
+            </>
+          )}
+        </div>
+      </section>
     </main>
   )
 }

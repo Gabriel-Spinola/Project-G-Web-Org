@@ -6,6 +6,8 @@ import {
   decreaseLikeCount,
   increaseLikeCount,
 } from '@/app/(feed)/_serverActions'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import styles from './buttons.module.scss'
 
 type LikeButtonParams = {
   params: {
@@ -45,19 +47,11 @@ export function LikeButton({ params }: LikeButtonParams) {
     <>
       <button
         onClick={handleLike}
-        className="like flex flex-col justify-center items-center  hover:text-medium-primary w-[48px]"
+        className={`like flex flex-col justify-center items-center w-[48px] ${
+          isLiked ? styles.liked : 'text-light-gray'
+        }`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M20.16 5A6.29 6.29 0 0 0 12 4.36a6.27 6.27 0 0 0-8.16 9.48l6.21 6.22a2.78 2.78 0 0 0 3.9 0l6.21-6.22a6.27 6.27 0 0 0 0-8.84Zm-1.41 7.46l-6.21 6.21a.76.76 0 0 1-1.08 0l-6.21-6.24a4.29 4.29 0 0 1 0-6a4.27 4.27 0 0 1 6 0a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 0a4.29 4.29 0 0 1 .08 6Z"
-          />
-        </svg>
+        {isLiked ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
 
         <span>{optimisticLikes}</span>
       </button>

@@ -9,7 +9,7 @@
 
 // FIXME - Chakra Modals may be adding too much memory cost.
 
-import PostSubmitFragment from '@/components/posts/poster/PostSubmitFragment'
+import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import { Session, getServerSession } from 'next-auth'

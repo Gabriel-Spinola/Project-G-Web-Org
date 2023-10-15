@@ -1,6 +1,6 @@
 import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
-import PostSubmitFragment from '../posts/poster/PostSubmitFragment'
+import PostSubmitFragment from '../posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 
 type Params = { authorID: string }

@@ -11,19 +11,19 @@
 
 import React from 'react'
 
-import './PostSubmitFragment.module.scss'
+import styles from './PostSubmitFragment.module.scss'
+
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { NewPostModal } from './NewPostModal'
+import { NewPostModal } from './PostSubmitForm'
 import { signIn } from 'next-auth/react'
 
 type Props = {
@@ -36,15 +36,21 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
 
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+      <button
+        className={`w-full m-8 p-8 bg-gradient-to-tl from-medium-tertiary to-medium-primary text-darker-white rounded-lg hover:font-semibold hover:text-light-gray hover:scale-[101%] text-start text-lg`}
+        id={styles.textAnimation}
+        onClick={onOpen}
+      >
+        Faça uma publicação
+        <div id={styles.textSub}></div>
+      </button>
+      <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
+        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
           <ModalHeader>Faça uma publicação</ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody height={'100%'}>
             {currentUserId ? (
               <NewPostModal
                 closeModal={onClose}
@@ -60,12 +66,6 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
               </>
             )}
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
