@@ -93,7 +93,9 @@ export default function Navbar() {
         </div>
         <ul
           id="mobileMenuItems"
-          className={menuOpen ? 'displayMenu' : 'hideMenu'}
+          className={`${
+            menuOpen ? 'displayMenu' : 'hideMenu'
+          } + text-xl sm:text-2xl md:text-3xl`}
         >
           <a href="/" className="w-full">
             <li className="p-4 hover:bg-darker-white">Feed</li>
