@@ -2,7 +2,6 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export async function handlePostDeletion(
   postId: string,

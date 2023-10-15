@@ -2,13 +2,13 @@
 import '@/app/styles/navbar.css'
 import { StaticImage } from '../Image'
 import { useSession } from 'next-auth/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
 
 export default function Navbar() {
   const { data: session } = useSession()
-  const [menuOpen, setMenuOpen] = React.useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   function ToggleMenu() {
     setMenuOpen(!menuOpen)
