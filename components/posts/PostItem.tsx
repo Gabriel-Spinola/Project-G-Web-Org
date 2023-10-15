@@ -54,7 +54,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           </h1>
           <small className={styles.usarLocal}>{post.author?.location}</small>
         </a>
-      </section>
+      </div>
 
       {isOwner && <DeletePostButton postId={post.id} />}
 
