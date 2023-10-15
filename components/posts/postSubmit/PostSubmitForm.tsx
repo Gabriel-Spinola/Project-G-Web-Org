@@ -69,10 +69,14 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
 
     const formData = new FormData(event.currentTarget)
 
-    images?.pop()
-    images?.forEach((img) => {
-      formData.append('images', img)
-    })
+    if (images && images?.length >= 0) {
+      images?.pop()
+      images?.forEach((img) => {
+        formData.append('images', img)
+      })
+    } else {
+      formData.delete('images')
+    }
 
     try {
       const response = await fetch(
@@ -95,7 +99,6 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       console.log('worked ' + JSON.stringify(data))
 
       setImages(undefined)
-
       closeModal()
       router.push(pathName + '?create=1', { scroll: false })
     } catch (error: unknown) {
@@ -133,6 +136,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
               onChange={(event) =>
                 handleStateChange('content', event.target.value)
               }
+              required
             ></textarea>
           </div>
 
