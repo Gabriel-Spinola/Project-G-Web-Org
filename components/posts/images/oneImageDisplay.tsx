@@ -11,16 +11,15 @@ interface Props {
 export default function OneImageDisplay({ imgSrc, width, height }: Props) {
   return (
     <div
-      className={`w-full h-full rounded-lg object-cover bg-medium-gray/75 hover:brightness-90 hover:cursor-pointer`}
+      className={`w-full rounded-lg object-cover bg-medium-gray/75 hover:brightness-90 hover:cursor-pointer`}
     >
       <Image
-        className="rounded-lg"
+        className="rounded-lg object-cover"
         src={imgSrc}
         alt={'Imagem Do Post'}
         width={width}
         height={height}
         sizes="(max-width: 100%)"
-        style={{ objectFit: 'contain' }}
         priority
       />
     </div>

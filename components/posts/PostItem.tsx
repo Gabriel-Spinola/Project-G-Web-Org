@@ -17,7 +17,8 @@ import OneImageDisplay from './images/oneImageDisplay'
 import TwoImageDisplay from './images/twoImageDisplay'
 import ThreeImageDisplay from './images/threeImageDisplay'
 import FullPostModal from './FullPostModal'
-import DeletePostButton from '../Buttons/DeletePostButton'
+import UserPhoto from '../profile/Avatar'
+import OwnerSettings from './OwnerSettings'
 
 interface Params {
   post: FullPost
@@ -35,26 +36,29 @@ export default function PostItem({ post, currentUserId }: Params) {
   return (
     <div className={styles.post}>
       <section className={styles.authorContainer}>
-        <a href={`/client/profile/${post.authorId}`}>
-          <div className={styles.authorPhoto}>
-            <div className="overflow-x-auto"></div>
-          </div>
-        </a>
+        <div id="Author" className="flex">
+          <a href={`/client/profile/${post.authorId}`}>
+            <UserPhoto
+              size={'lg'}
+              src={post.author?.profilePic ? post.author?.profilePic : ''}
+            />
+          </a>
 
-        <a
-          className={styles.userInfo}
-          href={`/client/profile/${post.authorId}`}
-        >
-          <h1
-            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+          <a
+            className={styles.userInfo}
+            href={`/client/profile/${post.authorId}`}
           >
-            {post.author?.name ?? '):'}
-          </h1>
-          <small className={styles.usarLocal}>{post.author?.location}</small>
-        </a>
-      </section>
+            <h1
+              className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+            >
+              {post.author?.name ?? '):'}
+            </h1>
+            <small className=" text-base">{post.author?.location}</small>
+          </a>
+        </div>
 
-      {isOwner && <DeletePostButton postId={post.id} />}
+        {isOwner && <OwnerSettings postId={post.id} />}
+      </section>
 
       <article className={styles.p1}>{post?.content}</article>
       {post.images.length === 1 ? (
@@ -62,7 +66,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             width={776}
-            height={1000}
+            height={776}
           />
         </>
       ) : post.images.length === 2 ? (
