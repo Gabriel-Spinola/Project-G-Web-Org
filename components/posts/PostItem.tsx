@@ -35,7 +35,7 @@ export default function PostItem({ post, currentUserId }: Params) {
   return (
     <div className={styles.post}>
       {isOwner && <DeletePostButton postId={post.id} />}
-      
+
       <section className={styles.authorContainer}>
         <a href={`/client/profile/${post.authorId}`}>
           <div className={styles.authorPhoto}>
@@ -55,7 +55,6 @@ export default function PostItem({ post, currentUserId }: Params) {
           <small className={styles.usarLocal}>{post.author?.location}</small>
         </a>
       </section>
-
 
       <article className={styles.p1}>{post?.content}</article>
 
