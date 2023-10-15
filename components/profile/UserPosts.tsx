@@ -19,7 +19,10 @@ export default async function UserPosts({ authorID }: Params) {
       {!error ? (
         <>
           {data && data?.length > 0 ? (
-            <InfiniteScrollPosts initialPublication={data} />
+            <InfiniteScrollPosts
+              initialPublication={data}
+              currentUserId={authorID}
+            />
           ) : (
             <>Oops você chegou ao fim!</>
           )}

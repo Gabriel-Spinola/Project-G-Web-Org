@@ -102,7 +102,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   }
 
   function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for perfomance
+    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
 
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),

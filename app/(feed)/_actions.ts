@@ -5,8 +5,8 @@ import { isAbortError } from 'next/dist/server/pipe-readable'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export async function handlePostDeletion(
-  router: AppRouterInstance,
   postId: string,
+  routeCallback: () => void,
 ) {
   try {
     const response = await fetch(
@@ -22,7 +22,7 @@ export async function handlePostDeletion(
       throw new Error('response not ok' + JSON.stringify(data))
     }
 
-    router.push('/?delete=' + data.id, { scroll: false })
+    routeCallback()
   } catch (error: unknown) {
     console.error(error)
   }

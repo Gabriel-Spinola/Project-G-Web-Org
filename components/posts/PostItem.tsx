@@ -31,12 +31,9 @@ export default function PostItem({ post, currentUserId }: Params) {
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
-  console.log('post ', post.content)
 
   return (
     <div className={styles.postado}>
-      <a href={`/client/posts/${post.authorId}/${post.id}/`}>see post</a>
-
       {isOwner && <DeletePostButton postId={post.id} />}
 
       <div className={styles.autor}>
