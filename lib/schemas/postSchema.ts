@@ -35,10 +35,7 @@ export function validateImageInput(
 ): ESResponse<never> {
   const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   const notLatin = '/[\\p{IsLatin}]+$'
-
   const notPunctuated = '[^\x00-\x7F]|[áç]'
-
-  console.log(file.size)
 
   if (file.name.match(notLatin) || file.name.match(notPunctuated)) {
     return {
