@@ -10,10 +10,10 @@
 @import "/app/styles/variables.module.scss";
 
 #textAnimation {
+    -webkit-box-shadow: 0 0 8px #00000065;
+    box-shadow: 0 0 8px #00000065;
     div {
         font-family: $nav-font;
-        -webkit-box-shadow: 0 0 8px #00000065;
-        box-shadow: 0 0 8px #00000065;
         background-color: $darker-white;
         height: 2px;
         width: 16px;
@@ -22,7 +22,7 @@
 
 #textAnimation:hover {
     div {
-        background-color: $light-gray;
+        background-color: $darker-white;
         height: 2px;
         width: 182px;
         animation-name: sub-expand;
