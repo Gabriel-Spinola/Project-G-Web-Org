@@ -54,6 +54,12 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
+    if (images && images?.length >= 3) {
+      alert('O máximo de imagens por post é 3')
+
+      return
+    }
+
     const newImage = event.target.files[0]
     setImages((prevImages) => {
       if (prevImages) return [...prevImages, newImage]

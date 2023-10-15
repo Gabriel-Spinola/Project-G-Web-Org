@@ -45,7 +45,14 @@ export default function RegisterPage() {
     const validatedForm = validateRegisterForm(formData)
 
     if (validatedForm.error) {
-      alert('Algo no fomulário é invalido' + validatedForm.error.message)
+      let errorMessage = ''
+
+      validatedForm.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
 
       return
     }
@@ -105,6 +112,13 @@ export default function RegisterPage() {
               className="w-full"
               labelText="Senha"
               htmlForId="password"
+              type={'password'}
+            />
+
+            <TextBox
+              className="w-full"
+              labelText="Confime a senha"
+              htmlForId="confirmPassword"
               type={'password'}
             />
 
