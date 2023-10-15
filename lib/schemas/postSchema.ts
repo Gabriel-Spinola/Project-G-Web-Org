@@ -24,7 +24,7 @@ export const newPostDataSchema = zod.object({
     }),
   images: zod
     .any({
-      invalid_type_error: 'caracteres inválidos',
+      invalid_type_error: 'imagem inválida',
     })
     .optional(),
 })

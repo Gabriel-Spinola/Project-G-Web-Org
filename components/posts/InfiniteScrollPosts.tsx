@@ -29,6 +29,7 @@ export default function InfiniteScrollPosts<
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
+  const updateComment = searchParams.get('update-comment')
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
@@ -83,7 +84,7 @@ export default function InfiniteScrollPosts<
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
-    if (createdPost) {
+    if (createdPost || updateComment) {
       setPosts(initialPublication)
     }
 
@@ -94,7 +95,12 @@ export default function InfiniteScrollPosts<
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deletedPost, router, createdPost /*, initialPublication */])
+  }, [
+    deletedPost,
+    router,
+    createdPost,
+    updateComment /*, initialPublication */,
+  ])
 
   return (
     <>

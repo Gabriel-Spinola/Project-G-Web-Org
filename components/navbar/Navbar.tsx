@@ -65,6 +65,7 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
+
       <nav id="navMobile">
         <div className="flex h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl">
           <button

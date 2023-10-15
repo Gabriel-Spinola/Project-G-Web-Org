@@ -48,7 +48,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     })
   }
 
-  async function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
+  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
 
     if (!event.target.files || event.target.files.length <= 0) {
