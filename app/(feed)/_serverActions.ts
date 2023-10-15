@@ -4,8 +4,8 @@ import { prisma } from '@/lib/database/prisma'
 import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment, Post } from '@prisma/client'
-import { revalidatePath, revalidateTag } from 'next/cache'
-import { commentsRefetchTag } from '../client/temp/comments/contants'
+import { revalidatePath } from 'next/cache'
+import { ESResponse } from '@/lib/types/common'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -13,12 +13,19 @@ import { commentsRefetchTag } from '../client/temp/comments/contants'
  */
 export const revalidateFeed = (): void => revalidatePath('/')
 
-export async function postComment(formData: FormData) {
+export async function postComment(
+  formData: FormData,
+): Promise<ESResponse<number>> {
   const content = formData.get('content')?.toString()
   const authorId = formData.get('author-id')?.toString()
   const targetId = formData.get('target-id')?.toString()
 
-  if (!content || !authorId) return
+  if (!content || !authorId) {
+    return {
+      data: null,
+      error: 'missing fields: content & authorId',
+    }
+  }
 
   try {
     const createComment: Comment = await prisma.comment.create({
@@ -44,10 +51,14 @@ export async function postComment(formData: FormData) {
         JSON.stringify(updateTarget),
     )
 
-    revalidateTag(commentsRefetchTag)
-    revalidateTag('revalidate-feed')
+    return {
+      data: createComment.id,
+      error: null,
+    }
   } catch (error: unknown) {
     console.error(error)
+
+    return { data: null, error }
   }
 }
 

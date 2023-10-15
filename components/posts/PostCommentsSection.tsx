@@ -1,52 +1,55 @@
+'use client'
+
 import { postComment } from '@/app/(feed)/_serverActions'
 import { deleteComment } from '@/app/client/temp/comments/actions'
-import { commentsRefetchTag } from '@/app/client/temp/comments/contants'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse, FullPost, PublicationComment } from '@/lib/types/common'
+import { FullPost } from '@/lib/types/common'
 import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
-import React from 'react'
+import React, { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
-async function fetchComments(
-  postId: string,
-  page?: number,
-): Promise<ESResponse<PublicationComment[]>> {
-  try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.comments}?id=${postId}&page=${
-        page ?? 1
-      }`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.API_SECRET as string,
-        },
-        next: { tags: [commentsRefetchTag] },
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error(JSON.stringify(await response.json()))
-    }
-
-    const { data }: { data: PublicationComment[] } = await response.json()
-
-    return { data, error: null }
-  } catch (error: unknown) {
-    console.error(error)
-
-    return { data: null, error }
-  }
+type DisplayComment = {
+  id: number
+  content: string
 }
 
-// TODO - Create temp comment array to create the illusion of creating and deleting comments
 // while the data is still being processes
 export default function PostCommentsSection({ post }: { post: FullPost }) {
-  const tempComments = post.comments
+  const [comments, setComments] = useState<DisplayComment[]>(post.comments)
+
+  const router = useRouter()
+  const pathName = usePathname()
+
+  function handleFacadeCommentSubmit(id: number, content: string) {
+    setComments((prev) => [
+      ...prev,
+      {
+        id,
+        content,
+      },
+    ])
+  }
+
+  function handleFacadeCommentDeletion(id: number) {
+    setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
+    router.replace(`${pathName}?update-comment=${id}`)
+  }
 
   return (
     <div>
-      <form action={postComment}>
+      <form
+        action={async (formData) => {
+          const { data, error } = await postComment(formData)
+
+          if (error || !data) {
+            alert('failed to create comment')
+
+            return
+          }
+
+          handleFacadeCommentSubmit(data, formData.get('content') as string)
+          router.replace(`${pathName}?update-comment=${data}`)
+        }}
+      >
         <input type="hidden" name="author-id" value={post.authorId as string} />
         <input type="hidden" name="target-id" value={post.id} />
 
@@ -67,15 +70,14 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
 
       <h2>Comments</h2>
 
-      {post.comments.length > 0 &&
-        post.comments.map((comment) => (
-          <div key={comment.id}>
+      {comments.length > 0 &&
+        comments.map((comment, index) => (
+          <div key={index}>
             <button
               type="button"
               onClick={async () => {
+                handleFacadeCommentDeletion(comment.id)
                 await deleteComment(comment.id)
-
-                post.comments.pop()
               }}
             >
               delete
