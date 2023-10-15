@@ -15,7 +15,6 @@ export default function SendImageButton({ onChange }: Props) {
         accept=".png, .jpg, .jpeg, .webp"
         className="hidden"
         onChange={onChange}
-        multiple
       />
       <label
         htmlFor="images"
