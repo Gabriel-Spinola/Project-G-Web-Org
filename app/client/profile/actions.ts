@@ -19,6 +19,9 @@ export async function updateUserPageData(
       `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${userId}`,
       {
         method: 'PUT',
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+        },
         body: formData,
       },
     )
