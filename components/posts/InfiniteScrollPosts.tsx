@@ -8,17 +8,18 @@ import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 
-// TODO: Generalize Feed
-type Params = {
-  initialPublication: FullPost[] | undefined
+// TODO: Generalize Feed - Incomplete
+type Params<Publication extends FullPost = FullPost> = {
+  initialPublication: Publication[] | undefined
   currentUserId?: string
 }
 
-export default function InfiniteScrollPosts({
-  initialPublication,
-  currentUserId,
-}: Params) {
-  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
+export default function InfiniteScrollPosts<
+  Publication extends FullPost = FullPost,
+>({ initialPublication, currentUserId }: Params<Publication>) {
+  const [posts, setPosts] = useState<Publication[] | undefined>(
+    initialPublication,
+  )
   const [page, setPages] = useState<number>(1)
   const [isNoPostFound, setNoPostFound] = useState<boolean>(false)
   const [ref, inView] = useInView()
@@ -28,14 +29,16 @@ export default function InfiniteScrollPosts({
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
+  const updateComment = searchParams.get('update-comment')
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
-      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+      const { data, error }: ESResponse<Publication[]> = await fetchPosts(
         next,
         signal,
+        currentUserId,
       )
 
       if (error) {
@@ -51,12 +54,12 @@ export default function InfiniteScrollPosts({
       }
 
       setPages((prevPage) => prevPage + 1)
-      setPosts((prevPost: FullPost[] | undefined) => [
+      setPosts((prevPost: Publication[] | undefined) => [
         ...(prevPost?.length ? prevPost : []),
         ...data,
       ])
     },
-    [page],
+    [page, currentUserId],
   )
 
   // NOTE - Handles feed data fetching
@@ -81,22 +84,27 @@ export default function InfiniteScrollPosts({
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
-    if (createdPost) {
+    if (createdPost || updateComment) {
       setPosts(initialPublication)
     }
 
-    // Resets URL
+    // Update feed state
     return (): void => {
-      router.push('/', { scroll: false })
+      router.refresh()
     }
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deletedPost, router, createdPost /*, initialPublication */])
+  }, [
+    deletedPost,
+    router,
+    createdPost,
+    updateComment /*, initialPublication */,
+  ])
 
   return (
     <>
-      {posts?.map((post: FullPost) => (
+      {posts?.map((post: Publication) => (
         <PostItem key={post.id} post={post} currentUserId={currentUserId} />
       ))}
 

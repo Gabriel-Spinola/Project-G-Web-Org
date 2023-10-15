@@ -14,12 +14,15 @@ export default async function UserPosts({ authorID }: Params) {
 
   return (
     <section id="PostWrapper" className="flex flex-col">
-      <PostSubmitFragment />
+      <PostSubmitFragment currentUserId={authorID} />
 
       {!error ? (
         <>
           {data && data?.length > 0 ? (
-            <InfiniteScrollPosts initialPublication={data} />
+            <InfiniteScrollPosts
+              initialPublication={data}
+              currentUserId={authorID}
+            />
           ) : (
             <>Oops você chegou ao fim!</>
           )}

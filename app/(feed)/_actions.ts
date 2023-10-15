@@ -2,11 +2,10 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export async function handlePostDeletion(
-  router: AppRouterInstance,
   postId: string,
+  routeCallback: () => void,
 ) {
   try {
     const response = await fetch(
@@ -25,17 +24,17 @@ export async function handlePostDeletion(
       throw new Error('response not ok' + JSON.stringify(data))
     }
 
-    router.push('/?delete=' + data.id, { scroll: false })
+    routeCallback()
   } catch (error: unknown) {
     console.error(error)
   }
 }
 
-export async function fetchPosts(
+export async function fetchPosts<T extends FullPost = FullPost>(
   page = 1,
   signal?: AbortSignal,
   authorId?: string,
-): Promise<ESResponse<FullPost[]>> {
+): Promise<ESResponse<T[]>> {
   try {
     const apiRequestURL = !authorId
       ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
@@ -55,7 +54,7 @@ export async function fetchPosts(
       throw new Error("Response's not okay")
     }
     console.log(`fetch`)
-    const { data }: { data: FullPost[] } = await response.json()
+    const { data }: { data: T[] } = await response.json()
 
     return {
       data,
