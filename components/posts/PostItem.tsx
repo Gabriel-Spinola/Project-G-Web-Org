@@ -12,19 +12,25 @@ import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
-import { Like } from '@prisma/client'
+import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
-import DeletePostButton from '../Buttons/DeletePostButton'
+import UserPhoto from '../profile/Avatar'
+import PostSettings from './PostSettings'
 
 interface Params {
   post: FullPost
   currentUserId?: string
+  currentUserPosition: $Enums.Positions | undefined
 }
 
-export default function PostItem({ post, currentUserId }: Params) {
+export default function PostItem({
+  post,
+  currentUserId,
+  currentUserPosition,
+}: Params) {
   const isOwner = currentUserId === post.authorId
 
   // Check if the current user liked the post
@@ -34,26 +40,33 @@ export default function PostItem({ post, currentUserId }: Params) {
 
   return (
     <div className={styles.post}>
-      {isOwner && <DeletePostButton postId={post.id} />}
-
       <section className={styles.authorContainer}>
-        <a href={`/client/profile/${post.authorId}`}>
-          <div className={styles.authorPhoto}>
-            <div className="overflow-x-auto"></div>
-          </div>
-        </a>
+        <div id="Author" className="flex">
+          <a href={`/client/profile/${post.authorId}`}>
+            <UserPhoto
+              size={'lg'}
+              src={post.author?.profilePic ? post.author?.profilePic : ''}
+            />
+          </a>
 
-        <a
-          className={styles.userInfo}
-          href={`/client/profile/${post.authorId}`}
-        >
-          <h1
-            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+          <a
+            className={styles.userInfo}
+            href={`/client/profile/${post.authorId}`}
           >
-            {post.author?.name ?? '):'}
-          </h1>
-          <small className={styles.usarLocal}>{post.author?.location}</small>
-        </a>
+            <h1
+              className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
+            >
+              {post.author?.name ?? '):'}
+            </h1>
+            <small className=" text-base">{post.author?.location}</small>
+          </a>
+        </div>
+
+        <PostSettings
+          postId={post.id}
+          isOwner={isOwner}
+          currentUserPosition={currentUserPosition}
+        />
       </section>
 
       <article className={styles.p1}>{post?.content}</article>

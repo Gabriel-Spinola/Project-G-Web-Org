@@ -63,7 +63,10 @@ export default async function Profile({
               }
             />
 
-            <UserPosts authorID={params.id} />
+            <UserPosts
+              authorID={params.id}
+              currentUserPosition={session?.user.position}
+            />
           </div>
         </div>
       </>
