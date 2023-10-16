@@ -8,7 +8,6 @@
  */
 
 import SendImageButton from '@/components/Buttons/SendImageButton'
-import SendPDFButton from '@/components/Buttons/SendPDFButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
@@ -151,11 +150,11 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
           className="notClose"
         >
           {/* Content */}
-          <div className="notClose max-h-[80px] flex flex-row">
+          <div className="notClose flex flex-row">
             <textarea
               name="content"
               placeholder="Faça uma publicação"
-              className="notClose w-full pb-[192px] text-xl margin-none text-start outline-none"
+              className="notClose w-full pb-[192px] text-xl margin-none text-start outline-none resize-none"
               value={form?.content}
               onChange={(event) =>
                 handleStateChange('content', event.target.value)
@@ -165,10 +164,8 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
           </div>
 
           {/* Input Buttons */}
-          <div className=" mt-3 flex flex-row">
-            <SendPDFButton />
+          <div className=" mt-3 flex flex-row justify-between items-center">
             <SendImageButton onChange={onImageChanges} />
-
             <SubmitPostButton />
           </div>
         </form>

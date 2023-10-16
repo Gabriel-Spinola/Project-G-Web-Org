@@ -2,10 +2,17 @@ import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
+import { $Enums } from '@prisma/client'
 
-type Params = { authorID: string }
+type Params = {
+  authorID: string
+  currentUserPosition: $Enums.Positions | undefined
+}
 
-export default async function UserPosts({ authorID }: Params) {
+export default async function UserPosts({
+  authorID,
+  currentUserPosition,
+}: Params) {
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
     1,
     undefined,
@@ -22,6 +29,7 @@ export default async function UserPosts({ authorID }: Params) {
             <InfiniteScrollPosts
               initialPublication={data}
               currentUserId={authorID}
+              currentUserPosition={currentUserPosition}
             />
           ) : (
             <>Oops você chegou ao fim!</>

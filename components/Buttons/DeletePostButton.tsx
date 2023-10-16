@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import { handlePostDeletion } from '@/app/(feed)/_actions'
+import { FaTrash } from 'react-icons/fa'
 
 export default function DeletePostButton({ postId }: { postId: string }) {
   const router = useRouter()
@@ -16,8 +17,10 @@ export default function DeletePostButton({ postId }: { postId: string }) {
           router.push(`${pathName}?delete=${postId}`, { scroll: false })
         })
       }}
+      className="flex gap-4 items-center"
     >
-      Delete Post
+      <FaTrash size={20} />
+      Deletar Post
     </button>
   )
 }
