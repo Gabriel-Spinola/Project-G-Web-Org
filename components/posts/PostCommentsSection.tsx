@@ -6,6 +6,8 @@ import { FullPost } from '@/lib/types/common'
 import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { validateForm } from '@/lib/schemas/commentSchema'
+import { signIn } from 'next-auth/react'
 
 type DisplayComment = {
   id: number
@@ -13,7 +15,13 @@ type DisplayComment = {
 }
 
 // while the data is still being processes
-export default function PostCommentsSection({ post }: { post: FullPost }) {
+export default function PostCommentsSection({
+  post,
+  isLogged,
+}: {
+  post: FullPost
+  isLogged: boolean
+}) {
   const [comments, setComments] = useState<DisplayComment[]>(post.comments)
 
   const router = useRouter()
@@ -34,22 +42,43 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
     router.replace(`${pathName}?update-comment=${id}`)
   }
 
+  async function handleFormSubimission(formData: FormData) {
+    if (!isLogged) {
+      signIn()
+
+      return
+    }
+
+    const validatedData = validateForm(formData)
+
+    if (validatedData.error) {
+      let errorMessage = ''
+
+      validatedData.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+
+      return
+    }
+
+    const { data, error } = await postComment(validatedData.data)
+
+    if (error || !data) {
+      alert('failed to create comment')
+
+      return
+    }
+
+    handleFacadeCommentSubmit(data, formData.get('content') as string)
+    router.replace(`${pathName}?update-comment=${data}`)
+  }
+
   return (
     <div>
-      <form
-        action={async (formData) => {
-          const { data, error } = await postComment(formData)
-
-          if (error || !data) {
-            alert('failed to create comment')
-
-            return
-          }
-
-          handleFacadeCommentSubmit(data, formData.get('content') as string)
-          router.replace(`${pathName}?update-comment=${data}`)
-        }}
-      >
+      <form action={handleFormSubimission}>
         <input type="hidden" name="author-id" value={post.authorId as string} />
         <input type="hidden" name="target-id" value={post.id} />
 
