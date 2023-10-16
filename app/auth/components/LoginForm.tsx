@@ -15,6 +15,7 @@ import { SubmitButton } from './SubmitButton'
 import { useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { verifyCaptcha } from '@/server/serverActions'
+import { FcGoogle } from 'react-icons/fc'
 
 export default function LoginForm() {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -81,6 +82,16 @@ export default function LoginForm() {
         onChange={handleCaptchaSubmission}
         className="my-4"
       />
+
+      <button
+        onClick={() => signIn('google')}
+        className="w-full flex justify-around items-center text-xl bg-pure-white rounded-lg p-4 mb-4 text-light-gray"
+      >
+        <FcGoogle size={36} />
+        <p>
+          Entrar com <span className="font-semibold">GOOGLE</span>
+        </p>
+      </button>
 
       <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
       <p className="text-center">

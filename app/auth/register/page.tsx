@@ -18,6 +18,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
 import { SubmitButton } from '../components/SubmitButton'
 import TextBox from '../components/TextBox'
+import { FcGoogle } from 'react-icons/fc'
 import { BgImage } from '@/components/BgImage'
 
 export default function RegisterPage() {
@@ -128,6 +129,16 @@ export default function RegisterPage() {
               onChange={handleCaptchaSubmission}
               className="my-5"
             />
+
+            <button
+              onClick={() => signIn('google')}
+              className="w-full flex justify-around items-center text-xl bg-pure-white rounded-lg p-4 mb-4 text-light-gray"
+            >
+              <FcGoogle size={36} />
+              <p>
+                Entrar com <span className="font-semibold">GOOGLE</span>
+              </p>
+            </button>
 
             <SubmitButton isVerified={isVerified} buttonText={'REGISTRAR'} />
 
