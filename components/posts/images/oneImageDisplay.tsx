@@ -11,7 +11,7 @@ interface Props {
 export default function OneImageDisplay({ imgSrc, width, height }: Props) {
   return (
     <div
-      className={`w-full rounded-lg object-cover bg-medium-gray/75 hover:brightness-90 hover:cursor-pointer`}
+      className={`w-full rounded-lg object-cover bg-medium-gray/75 hover:brightness-90 hover:cursor-pointer hover:`}
     >
       <Image
         className="rounded-lg object-cover"
