@@ -15,9 +15,14 @@ import React from 'react'
 import PostCommentsSection from './PostCommentsSection'
 import PostComment from '../comments/PostComment'
 import { FullPost } from '@/lib/types/common'
-import { usePathname, useRouter } from 'next/navigation'
 
-export default function FullPostModal({ post }: { post: FullPost }) {
+export default function FullPostModal({
+  post,
+  isLogged,
+}: {
+  post: FullPost
+  isLogged: boolean
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -31,7 +36,7 @@ export default function FullPostModal({ post }: { post: FullPost }) {
           <ModalCloseButton />
 
           <ModalBody>
-            <PostCommentsSection post={post} />
+            <PostCommentsSection post={post} isLogged={isLogged} />
             <PostComment />
           </ModalBody>
 

@@ -119,7 +119,7 @@ export default function PostItem({ post, currentUserId }: Params) {
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal post={post} />
+        <FullPostModal post={post} isLogged={!!currentUserId} />
       </div>
     </div>
   )

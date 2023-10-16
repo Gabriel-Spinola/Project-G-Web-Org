@@ -8,12 +8,6 @@ export type ExpectedData = {
 
 // NOTE - 5mb
 export const MAX_FILE_SIZE = 5000000
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]
 
 export const newPostDataSchema = zod.object({
   content: zod
@@ -29,6 +23,13 @@ export const newPostDataSchema = zod.object({
     .optional(),
 })
 
+/**
+ * Validate function design to validate post images at runtime.
+ *
+ * @param file the file you wisth to validate
+ * @param qtyImages the length of the files array given from the input
+ * @returns nothing if passed and error if failed
+ */
 export function validateImageInput(
   file: File,
   qtyImages?: number,
