@@ -32,7 +32,7 @@ export default function PostSettings({ postId, isOwner }: Props) {
   }, [dropDownMenuRef])
 
   return (
-    <section>
+    <section className="z-[999]">
       <button
         onClick={() => {
           setDropDownMenu(!dropDownMenu)
@@ -42,21 +42,21 @@ export default function PostSettings({ postId, isOwner }: Props) {
       </button>
       {dropDownMenu ? (
         <ul
-          className="absolute py-4 px-1 bg-light-gray text-darker-white rounded-lg"
+          className="absolute py-4 px-1 bg-light-gray  text-darker-white rounded-lg"
           ref={dropDownMenuRef}
         >
-          <li className="w-full p-2 flex gap-4 bg-light-gray hover-bg-darker-gray">
+          <li className="w-full p-2 flex gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
             <BiSolidShare size={20} />
-            <button>Compartilhar Publicação</button>
+            Compartilhar publicação
           </li>
           {!isOwner ? (
-            <li className="w-full p-2 flex gap-4 bg-light-gray hover-bg-darker-gray">
+            <li className="w-full p-2 flex gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
               <AiFillWarning size={20} />
-              <button>Denunciar Publicação</button>
+              Denunciar publicação
             </li>
           ) : null}
           {isOwner ? (
-            <li className="w-full p-2 bg-light-gray hover-bg-darker-gray">
+            <li className="w-full p-2 bg-light-gray hover:bg-darker-gray">
               <DeletePostButton postId={postId} />
             </li>
           ) : null}

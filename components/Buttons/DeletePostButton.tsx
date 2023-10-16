@@ -19,7 +19,7 @@ export default function DeletePostButton({ postId }: { postId: string }) {
       }}
       className="flex gap-4 items-center"
     >
-      <FaTrash />
+      <FaTrash size={20} />
       Deletar Post
     </button>
   )
