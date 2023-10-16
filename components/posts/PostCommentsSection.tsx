@@ -16,7 +16,6 @@ type DisplayComment = {
   content: string
 }
 
-// while the data is still being processes
 export default function PostCommentsSection({
   post,
   currentUserId,
