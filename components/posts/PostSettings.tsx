@@ -3,13 +3,19 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiSolidShare } from 'react-icons/bi'
 import { AiFillWarning } from 'react-icons/ai'
 import DeletePostButton from '../Buttons/DeletePostButton'
+import { $Enums } from '@prisma/client'
 
 interface Props {
   postId: string
   isOwner: boolean
+  currentUserPosition: $Enums.Positions | undefined
 }
 
-export default function PostSettings({ postId, isOwner }: Props) {
+export default function PostSettings({
+  postId,
+  isOwner,
+  currentUserPosition,
+}: Props) {
   const [dropDownMenu, setDropDownMenu] = useState(false)
 
   const dropDownMenuRef = useRef<HTMLUListElement | null>(null)
@@ -55,7 +61,7 @@ export default function PostSettings({ postId, isOwner }: Props) {
               Denunciar publicação
             </li>
           ) : null}
-          {isOwner ? (
+          {isOwner || currentUserPosition === $Enums.Positions.Admin ? (
             <li className="w-full p-2 bg-light-gray hover:bg-darker-gray">
               <DeletePostButton postId={postId} />
             </li>

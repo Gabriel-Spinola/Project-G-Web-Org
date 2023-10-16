@@ -31,6 +31,7 @@ export default async function Home() {
               <InfiniteScrollPosts
                 initialPublication={data}
                 currentUserId={session?.user.id}
+                currentUserPosition={session?.user.position}
               />
             ) : (
               <>Oops você chegou ao fim!</>
