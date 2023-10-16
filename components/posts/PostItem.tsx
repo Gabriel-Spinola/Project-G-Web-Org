@@ -11,13 +11,13 @@ import React from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
-import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
 import OneImageDisplay from './images/oneImageDisplay'
 import TwoImageDisplay from './images/twoImageDisplay'
 import ThreeImageDisplay from './images/threeImageDisplay'
 import FullPostModal from './FullPostModal'
 import DeletePostButton from '../Buttons/DeletePostButton'
+import { LikeButton } from '../Buttons/LikeButton'
 
 interface Params {
   post: FullPost
@@ -94,6 +94,7 @@ export default function PostItem({ post, currentUserId }: Params) {
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
           params={{
+            option: 'postId',
             likes: post.likes?.length ?? 0,
             targetId: post.id,
             authorId: currentUserId,
@@ -119,7 +120,7 @@ export default function PostItem({ post, currentUserId }: Params) {
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal post={post} isLogged={!!currentUserId} />
+        <FullPostModal post={post} currentUserId={currentUserId} />
       </div>
     </div>
   )

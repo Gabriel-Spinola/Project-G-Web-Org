@@ -8,6 +8,8 @@ import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { validateForm } from '@/lib/schemas/commentSchema'
 import { signIn } from 'next-auth/react'
+import { LikeButton } from '../Buttons/LikeButton'
+import { Like } from '@prisma/client'
 
 type DisplayComment = {
   id: number
@@ -17,10 +19,10 @@ type DisplayComment = {
 // while the data is still being processes
 export default function PostCommentsSection({
   post,
-  isLogged,
+  currentUserId,
 }: {
   post: FullPost
-  isLogged: boolean
+  currentUserId?: string
 }) {
   const [comments, setComments] = useState<DisplayComment[]>(post.comments)
 
@@ -43,7 +45,7 @@ export default function PostCommentsSection({
   }
 
   async function handleFormSubimission(formData: FormData) {
-    if (!isLogged) {
+    if (!currentUserId) {
       signIn()
 
       return
@@ -78,6 +80,7 @@ export default function PostCommentsSection({
 
   return (
     <div>
+      {/* FIXME - Incorrectly assign author id */}
       <form action={handleFormSubimission}>
         <input type="hidden" name="author-id" value={post.authorId as string} />
         <input type="hidden" name="target-id" value={post.id} />
@@ -112,7 +115,6 @@ export default function PostCommentsSection({
               delete
             </button>
             <span>{post.author?.name}</span>
-
             <label htmlFor="content"></label>
             <textarea
               title="content"
@@ -122,6 +124,19 @@ export default function PostCommentsSection({
               value={comment.content}
               readOnly
             ></textarea>
+
+            <LikeButton
+              params={{
+                option: 'commentId',
+                likes: post.comments[index]?.likes?.length ?? 0,
+                targetId: comment.id,
+                authorId: currentUserId,
+                isLiked:
+                  post.comments[index]?.likes?.some(
+                    (like: Partial<Like>) => like.userId === currentUserId,
+                  ) ?? false,
+              }}
+            />
           </div>
         ))}
     </div>
