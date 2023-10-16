@@ -7,16 +7,22 @@ import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
+import { $Enums } from '@prisma/client'
 
 // TODO: Generalize Feed - Incomplete
 type Params<Publication extends FullPost = FullPost> = {
   initialPublication: Publication[] | undefined
   currentUserId?: string
+  currentUserPosition: $Enums.Positions | undefined
 }
 
 export default function InfiniteScrollPosts<
   Publication extends FullPost = FullPost,
->({ initialPublication, currentUserId }: Params<Publication>) {
+>({
+  initialPublication,
+  currentUserId,
+  currentUserPosition,
+}: Params<Publication>) {
   const [posts, setPosts] = useState<Publication[] | undefined>(
     initialPublication,
   )
@@ -105,7 +111,12 @@ export default function InfiniteScrollPosts<
   return (
     <>
       {posts?.map((post: Publication) => (
-        <PostItem key={post.id} post={post} currentUserId={currentUserId} />
+        <PostItem
+          key={post.id}
+          post={post}
+          currentUserId={currentUserId}
+          currentUserPosition={currentUserPosition}
+        />
       ))}
 
       {/* loading spinner */}

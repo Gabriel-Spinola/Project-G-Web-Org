@@ -25,6 +25,7 @@
     .authorContainer {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
         font-family: $nav-font;
         margin-bottom: 16px;
 
@@ -46,12 +47,6 @@
                 font-weight: 400;
             }
 
-            .userLocal {
-                color: #000;
-                font-size: 16px;
-                font-weight: 400px;
-                margin-top: -8px;
-            }
         }
     }
 
@@ -63,6 +58,7 @@
         font-weight: 300;
         line-height: 30px;
         margin-bottom: 10px;
+        white-space: pre-wrap;
     }
 
     .oneImg {

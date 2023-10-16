@@ -17,7 +17,6 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -37,7 +36,7 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
   return (
     <>
       <button
-        className={`w-full m-8 p-8 bg-gradient-to-tl from-medium-tertiary to-medium-primary text-darker-white rounded-lg hover:font-semibold hover:text-light-gray hover:scale-[101%] text-start text-lg`}
+        className={`w-full m-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
         id={styles.textAnimation}
         onClick={onOpen}
       >
@@ -47,7 +46,6 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
       <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
-          <ModalHeader>Faça uma publicação</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody height={'100%'}>
