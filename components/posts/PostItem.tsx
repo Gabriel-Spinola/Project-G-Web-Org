@@ -13,12 +13,11 @@ import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
-import OneImageDisplay from './images/oneImageDisplay'
+import OneImageDisplay from './images/OneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
-import UserPhoto from '../profile/Avatar'
-import PostSettings from './PostSettings'
+import DeletePostButton from '../Buttons/DeletePostButton'
 
 interface Params {
   post: FullPost
@@ -35,38 +34,36 @@ export default function PostItem({ post, currentUserId }: Params) {
 
   return (
     <div className={styles.post}>
+      {isOwner && <DeletePostButton postId={post.id} />}
+
       <section className={styles.authorContainer}>
-        <div id="Author" className="flex">
-          <a href={`/client/profile/${post.authorId}`}>
-            <UserPhoto
-              size={'lg'}
-              src={post.author?.profilePic ? post.author?.profilePic : ''}
-            />
-          </a>
+        <a href={`/client/profile/${post.authorId}`}>
+          <div className={styles.authorPhoto}>
+            <div className="overflow-x-auto"></div>
+          </div>
+        </a>
 
-          <a
-            className={styles.userInfo}
-            href={`/client/profile/${post.authorId}`}
+        <a
+          className={styles.userInfo}
+          href={`/client/profile/${post.authorId}`}
+        >
+          <h1
+            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
           >
-            <h1
-              className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
-            >
-              {post.author?.name ?? '):'}
-            </h1>
-            <small className=" text-base">{post.author?.location}</small>
-          </a>
-        </div>
-
-        <PostSettings postId={post.id} isOwner={isOwner} />
+            {post.author?.name ?? '):'}
+          </h1>
+          <small className={styles.usarLocal}>{post.author?.location}</small>
+        </a>
       </section>
 
       <article className={styles.p1}>{post?.content}</article>
+
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             width={776}
-            height={776}
+            height={1000}
           />
         </>
       ) : post.images.length === 2 ? (
@@ -89,7 +86,10 @@ export default function PostItem({ post, currentUserId }: Params) {
             heightOne={480}
           />
         </>
-      ) : null}
+      ) : (
+        <></>
+      )}
+
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
