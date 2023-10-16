@@ -13,12 +13,12 @@ import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '@/app/client/temp/components/Buttons'
 import { Like } from '@prisma/client'
-import OneImageDisplay from './images/OneImageDisplay'
+import OneImageDisplay from './images/oneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
 import UserPhoto from '../profile/Avatar'
-import OwnerSettings from './OwnerSettings'
+import PostSettings from './PostSettings'
 
 interface Params {
   post: FullPost
@@ -57,7 +57,7 @@ export default function PostItem({ post, currentUserId }: Params) {
           </a>
         </div>
 
-        {isOwner && <OwnerSettings postId={post.id} />}
+        <PostSettings postId={post.id} isOwner={isOwner} />
       </section>
 
       <article className={styles.p1}>{post?.content}</article>
