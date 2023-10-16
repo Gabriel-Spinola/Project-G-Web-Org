@@ -80,9 +80,8 @@ export default function PostCommentsSection({
 
   return (
     <div>
-      {/* FIXME - Incorrectly assign author id */}
       <form action={handleFormSubimission}>
-        <input type="hidden" name="author-id" value={post.authorId as string} />
+        <input type="hidden" name="author-id" value={currentUserId} />
         <input type="hidden" name="target-id" value={post.id} />
 
         <label htmlFor="content"></label>
