@@ -49,7 +49,7 @@ export function LikeButton({ params }: LikeButtonParams) {
     <>
       <button
         onClick={handleLike}
-        className={`like flex flex-col justify-center items-center w-[48px] ${
+        className={`like flex flex-col hover:text-medium-primary justify-center items-center w-[48px] ${
           isLiked ? styles.liked : 'text-light-gray'
         }`}
       >
