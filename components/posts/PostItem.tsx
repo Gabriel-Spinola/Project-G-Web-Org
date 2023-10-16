@@ -89,9 +89,7 @@ export default function PostItem({ post, currentUserId }: Params) {
             heightOne={480}
           />
         </>
-      ) : (
-        'ocorreu um erro'
-      )}
+      ) : null}
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
