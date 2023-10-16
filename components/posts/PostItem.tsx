@@ -11,14 +11,14 @@ import React from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
-import { LikeButton } from '@/app/client/temp/components/Buttons'
+import { LikeButton } from '../Buttons/LikeButton'
 import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
-import UserPhoto from '../profile/Avatar'
 import PostSettings from './PostSettings'
+import UserPhoto from '../profile/Avatar'
 
 interface Params {
   post: FullPost
@@ -37,7 +37,6 @@ export default function PostItem({
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
-
   return (
     <div className={styles.post}>
       <section className={styles.authorContainer}>
@@ -107,6 +106,7 @@ export default function PostItem({
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
           params={{
+            option: 'postId',
             likes: post.likes?.length ?? 0,
             targetId: post.id,
             authorId: currentUserId,
@@ -132,7 +132,7 @@ export default function PostItem({
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal post={post} />
+        <FullPostModal post={post} currentUserId={currentUserId} />
       </div>
     </div>
   )
