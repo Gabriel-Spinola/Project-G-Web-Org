@@ -18,10 +18,10 @@ import { FullPost } from '@/lib/types/common'
 
 export default function FullPostModal({
   post,
-  isLogged,
+  currentUserId,
 }: {
   post: FullPost
-  isLogged: boolean
+  currentUserId?: string
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -36,7 +36,7 @@ export default function FullPostModal({
           <ModalCloseButton />
 
           <ModalBody>
-            <PostCommentsSection post={post} isLogged={isLogged} />
+            <PostCommentsSection post={post} currentUserId={currentUserId} />
             <PostComment />
           </ModalBody>
 

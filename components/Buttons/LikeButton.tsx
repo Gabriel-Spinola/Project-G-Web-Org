@@ -8,11 +8,13 @@ import {
 } from '@/app/(feed)/_serverActions'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import styles from './buttons.module.scss'
+import { LikeOptions } from '@/app/(feed)/_constants'
 
 type LikeButtonParams = {
   params: {
+    option: LikeOptions
     likes: number
-    targetId: string
+    targetId: string | number
     authorId?: string
     isLiked: boolean
   }
@@ -37,9 +39,9 @@ export function LikeButton({ params }: LikeButtonParams) {
     setOptimisticLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1))
 
     if (!isLiked) {
-      await increaseLikeCount('postId', params.authorId, params.targetId)
+      await increaseLikeCount(params.option, params.authorId, params.targetId)
     } else {
-      await decreaseLikeCount(params.targetId)
+      await decreaseLikeCount(params.option, params.targetId)
     }
   }
 
