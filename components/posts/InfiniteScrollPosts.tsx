@@ -13,7 +13,7 @@ import { $Enums } from '@prisma/client'
 type Params<Publication extends FullPost = FullPost> = {
   initialPublication: Publication[] | undefined
   currentUserId?: string
-  currentUserPosition: $Enums.Positions | undefined
+  currentUserPosition?: $Enums.Positions | undefined
 }
 
 export default function InfiniteScrollPosts<
