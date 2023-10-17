@@ -58,7 +58,7 @@ export default function UserInfo(params: Params) {
             <ModalCloseButton />
 
             <form>
-              <ModalBody>
+              <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
                 <FormLabel>Título</FormLabel>
                 <Editable defaultValue={'aaa'} isPreviewFocusable={true}>
                   <EditablePreview />

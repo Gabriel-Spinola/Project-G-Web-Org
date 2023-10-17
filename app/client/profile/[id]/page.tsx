@@ -22,7 +22,7 @@ type Props = {
 
 // FIXME - Suspense not working properly
 export default async function Profile({ params }: Props) {
-  const user: UserData | null = await getUserData(params.id, {
+  const userData = getUserData(params.id, {
     id: true,
     name: true,
     title: true,
@@ -31,10 +31,10 @@ export default async function Profile({ params }: Props) {
     location: true,
   })
 
-  const session = await getServerSession(AuthOptions)
-  const isOwner = session?.user.id === user?.id
+  const sessionData = getServerSession(AuthOptions)
 
-  console.log(user?.description)
+  const [user, session] = await Promise.all([userData, sessionData])
+  const isOwner = session?.user.id === user?.id
 
   return (
     <>
