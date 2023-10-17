@@ -24,16 +24,12 @@ import { PiSunHorizonFill } from 'react-icons/pi'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import styles from '@/components/profile/profile.module.scss'
+import { UserData } from '@/lib/types/common'
 
 interface Params {
   isOwner: boolean
-  followers: number
-  location: string
-  graduation: string
-  from: string
   work: string
-  phone: string
-  description: string
+  user: Partial<UserData>
 }
 
 export default function UserInfo(params: Params) {
@@ -45,7 +41,7 @@ export default function UserInfo(params: Params) {
       className="mt-8 w-80% lg:w-[312px] rounded-[12px] p-4 bg-pure-white text-darker-gray"
     >
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-      <p id="description">{params.description}</p>
+      <p id="description">{params.user.description}</p>
 
       <hr />
 
@@ -97,22 +93,35 @@ export default function UserInfo(params: Params) {
 
         <span>
           <BellIcon w={6} h={6} /> Seguidores:{' '}
-          <span className="font-bold">{params.followers}</span>
+          <span className="font-bold">
+            {params.user._count?.followers ?? 0}
+          </span>
+        </span>
+
+        <span>
+          <BellIcon w={6} h={6} /> Seguindo:{' '}
+          <span className="font-bold">
+            {params.user._count?.following ?? 0}
+          </span>
         </span>
 
         <span>
           <Icon as={RiGraduationCapFill} w={6} h={6} /> Graduação:{' '}
-          <span className="font-bold">{params.graduation}</span>
+          {params.user.graduations?.map((graduation, index) => (
+            <span key={index} className="font-bold">
+              {graduation}
+            </span>
+          ))}
         </span>
 
         <span>
           <Icon as={PiSunHorizonFill} w={6} h={6} /> De:{' '}
-          <span className="font-bold">{params.from}</span>
+          <span className="font-bold">{params.user.location}</span>
         </span>
 
         <span>
           <Icon as={BsFillPinMapFill} w={6} h={6} /> Em:{' '}
-          <span className="font-bold">{params.location}</span>
+          <span className="font-bold">{params.user.location}</span>
         </span>
 
         <span>
@@ -122,7 +131,9 @@ export default function UserInfo(params: Params) {
 
         <span>
           <Icon as={BsFillTelephoneFill} w={6} h={6} /> Telefone:{' '}
-          <span className="font-bold">{params.phone}</span>
+          <span className="font-bold">
+            {params.user.contactPhone?.toString() ?? '+55 31 97300-8566'}
+          </span>
         </span>
       </div>
     </section>
