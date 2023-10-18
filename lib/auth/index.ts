@@ -75,8 +75,8 @@ export const AuthOptions: NextAuthOptions = {
   ],
   callbacks: {
     session: ({ session, token }) => {
-      // NOTE: Debuggin
-      console.debug('Session Callback ' + { session, token })
+      // NOTE: Debugging
+      // console.debug('Session Callback ' + { session, token })
 
       return {
         ...session,
@@ -88,8 +88,8 @@ export const AuthOptions: NextAuthOptions = {
       }
     },
     jwt: ({ token, user }) => {
-      // NOTE: Debuggin
-      console.debug('JWT Callback', { token, user })
+      // NOTE: Debugging
+      // console.debug('JWT Callback', { token, user })
 
       if (user) {
         const $user = user as unknown as Partial<User>
