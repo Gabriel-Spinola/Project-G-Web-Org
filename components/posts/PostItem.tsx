@@ -17,13 +17,12 @@ import OneImageDisplay from './images/OneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
-import PostSettings from './PostSettings'
-import UserPhoto from '../profile/Avatar'
+import PostHeader from './PostHeader'
 
 interface Params {
   post: FullPost
   currentUserId?: string
-  currentUserPosition: $Enums.Positions | undefined
+  currentUserPosition?: $Enums.Positions
 }
 
 export default function PostItem({
@@ -39,43 +38,21 @@ export default function PostItem({
   )
   return (
     <div className={styles.post}>
-      <section className={styles.authorContainer}>
-        <div id="Author" className="flex">
-          <a href={`/client/profile/${post.authorId}`}>
-            <UserPhoto
-              size={'lg'}
-              src={post.author?.profilePic ? post.author?.profilePic : ''}
-            />
-          </a>
+      <PostHeader
+        post={post}
+        currentUserPosition={currentUserPosition}
+        isOwner={isOwner}
+      />
 
-          <a
-            className={styles.userInfo}
-            href={`/client/profile/${post.authorId}`}
-          >
-            <h1
-              className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
-            >
-              {post.author?.name ?? '):'}
-            </h1>
-            <small className=" text-base">{post.author?.location}</small>
-          </a>
-        </div>
-
-        <PostSettings
-          postId={post.id}
-          isOwner={isOwner}
-          currentUserPosition={currentUserPosition}
-        />
-      </section>
-
-      <article className={styles.p1}>{post?.content}</article>
-
+      <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
+        {post?.content}
+      </article>
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             width={776}
-            height={1000}
+            height={776}
           />
         </>
       ) : post.images.length === 2 ? (
@@ -98,10 +75,8 @@ export default function PostItem({
             heightOne={480}
           />
         </>
-      ) : (
-        <></>
-      )}
-
+      ) : null}
+      
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
