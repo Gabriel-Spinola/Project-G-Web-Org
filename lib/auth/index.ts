@@ -16,10 +16,6 @@ import EmailProvider from 'next-auth/providers/email'
 import GoogleProvider from 'next-auth/providers/google'
 import { Credentials, validateCredentials } from './actions'
 
-/* NOTE
-I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
-*/
-
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
   session: {
