@@ -76,7 +76,7 @@ export default function PostItem({
           />
         </>
       ) : null}
-      
+
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
