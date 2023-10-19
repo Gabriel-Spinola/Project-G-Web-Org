@@ -6,14 +6,23 @@ import { FullPost } from '@/lib/types/common'
 import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { validateForm } from '@/lib/schemas/commentSchema'
+import { signIn } from 'next-auth/react'
+import { LikeButton } from '../Buttons/LikeButton'
+import { Like } from '@prisma/client'
 
 type DisplayComment = {
   id: number
   content: string
 }
 
-// while the data is still being processes
-export default function PostCommentsSection({ post }: { post: FullPost }) {
+export default function PostCommentsSection({
+  post,
+  currentUserId,
+}: {
+  post: FullPost
+  currentUserId?: string
+}) {
   const [comments, setComments] = useState<DisplayComment[]>(post.comments)
 
   const router = useRouter()
@@ -34,23 +43,44 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
     router.replace(`${pathName}?update-comment=${id}`)
   }
 
+  async function handleFormSubimission(formData: FormData) {
+    if (!currentUserId) {
+      signIn()
+
+      return
+    }
+
+    const validatedData = validateForm(formData)
+
+    if (validatedData.error) {
+      let errorMessage = ''
+
+      validatedData.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+
+      return
+    }
+
+    const { data, error } = await postComment(validatedData.data)
+
+    if (error || !data) {
+      alert('failed to create comment')
+
+      return
+    }
+
+    handleFacadeCommentSubmit(data, formData.get('content') as string)
+    router.replace(`${pathName}?update-comment=${data}`)
+  }
+
   return (
     <div>
-      <form
-        action={async (formData) => {
-          const { data, error } = await postComment(formData)
-
-          if (error || !data) {
-            alert('failed to create comment')
-
-            return
-          }
-
-          handleFacadeCommentSubmit(data, formData.get('content') as string)
-          router.replace(`${pathName}?update-comment=${data}`)
-        }}
-      >
-        <input type="hidden" name="author-id" value={post.authorId as string} />
+      <form action={handleFormSubimission}>
+        <input type="hidden" name="author-id" value={currentUserId} />
         <input type="hidden" name="target-id" value={post.id} />
 
         <label htmlFor="content"></label>
@@ -83,7 +113,6 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
               delete
             </button>
             <span>{post.author?.name}</span>
-
             <label htmlFor="content"></label>
             <textarea
               title="content"
@@ -93,6 +122,19 @@ export default function PostCommentsSection({ post }: { post: FullPost }) {
               value={comment.content}
               readOnly
             ></textarea>
+
+            <LikeButton
+              params={{
+                option: 'commentId',
+                likes: post.comments[index]?.likes?.length ?? 0,
+                targetId: comment.id,
+                authorId: currentUserId,
+                isLiked:
+                  post.comments[index]?.likes?.some(
+                    (like: Partial<Like>) => like.userId === currentUserId,
+                  ) ?? false,
+              }}
+            />
           </div>
         ))}
     </div>

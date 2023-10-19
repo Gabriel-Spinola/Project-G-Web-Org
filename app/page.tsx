@@ -17,19 +17,21 @@ import { AuthOptions } from '@/lib/auth'
 import { fetchPosts } from './(feed)/_actions'
 
 export default async function Home() {
-  const session: Session | null = await getServerSession(AuthOptions)
-  const { data, error }: ESResponse<FullPost[]> = await fetchPosts()
+  const sessionPromise = getServerSession(AuthOptions)
+  const postsPromise = fetchPosts<FullPost>()
+
+  const [session, posts] = await Promise.all([sessionPromise, postsPromise])
 
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center">
         <PostSubmitFragment currentUserId={session?.user.id} />
 
-        {!error ? (
+        {!posts.error ? (
           <>
-            {data && data?.length > 0 ? (
+            {posts.data && posts.data?.length > 0 ? (
               <InfiniteScrollPosts
-                initialPublication={data}
+                initialPublication={posts.data}
                 currentUserId={session?.user.id}
                 currentUserPosition={session?.user.position}
               />

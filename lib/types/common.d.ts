@@ -83,6 +83,11 @@ export type PublicationsDefaultData = {
   comments: {
     id: number
     content: string
+
+    likes: {
+      id: number
+      userId: string
+    }[]
   }[]
 }
 
