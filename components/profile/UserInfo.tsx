@@ -1,6 +1,8 @@
 'use client'
 
-import React from 'react'
+import styles from '@/components/profile/profile.module.scss'
+import { UserData } from '@/lib/types/common'
+import { BellIcon, EditIcon } from '@chakra-ui/icons'
 import {
   Button,
   Divider,
@@ -18,13 +20,10 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import { BellIcon, EditIcon } from '@chakra-ui/icons'
-import { RiGraduationCapFill } from 'react-icons/ri'
-import { PiSunHorizonFill } from 'react-icons/pi'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
-import styles from '@/components/profile/profile.module.scss'
-import { UserData } from '@/lib/types/common'
+import { PiSunHorizonFill } from 'react-icons/pi'
+import { RiGraduationCapFill } from 'react-icons/ri'
 
 interface Params {
   isOwner: boolean
@@ -43,6 +42,16 @@ export default function UserInfo(params: Params) {
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
       <p id="description">{params.user.description}</p>
 
+      <Button
+        onClick={(event) => {
+          event.preventDefault()
+
+          console.log('click')
+        }}
+      >
+        Seguir
+      </Button>
+
       <hr />
 
       <div className="flex flex-col py-2 gap-2">
@@ -59,19 +68,22 @@ export default function UserInfo(params: Params) {
 
             <form>
               <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
-                <FormLabel>Título</FormLabel>
-                <Editable defaultValue={'aaa'} isPreviewFocusable={true}>
+                <FormLabel>Telefone</FormLabel>
+                <Editable
+                  defaultValue={'(xx) xxxx-xxxx'}
+                  isPreviewFocusable={true}
+                >
                   <EditablePreview />
                   <EditableInput
-                    display="insira um título"
+                    display="Seu núemro de celular"
                     type="text"
                     name="title"
                     id="title"
                   />
                 </Editable>
 
-                <FormLabel>Descrição</FormLabel>
-                <Editable defaultValue={'test'}>
+                <FormLabel>Localização</FormLabel>
+                <Editable defaultValue={'Sua localização'}>
                   <EditablePreview />
                 </Editable>
 
