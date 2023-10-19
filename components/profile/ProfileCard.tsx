@@ -64,7 +64,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
     /**
      * Helper function to get a field's value or default to an empty string
      */
-    const getFieldValueOrDefault = (  
+    const getFieldValueOrDefault = (
       fieldName: string,
       defaultValue: string,
     ): string | null => {

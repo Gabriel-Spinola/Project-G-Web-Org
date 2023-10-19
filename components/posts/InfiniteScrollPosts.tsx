@@ -96,7 +96,7 @@ export default function InfiniteScrollPosts<
 
     // Update feed state
     return (): void => {
-      router.refresh()
+      router.push('/')
     }
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
