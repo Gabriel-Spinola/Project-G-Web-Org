@@ -7,19 +7,14 @@
  * @license GPL 3.0
  */
 
+import { prisma } from '@/lib/database/prisma'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { User } from '@prisma/client'
 import type { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { prisma } from '@/lib/database/prisma'
+import GoogleProvider from 'next-auth/providers/google'
 import { Credentials, validateCredentials } from './actions'
-import { User } from '@prisma/client'
-import { API_ENDPOINTS, API_URL } from '../apiConfig'
-
-/* NOTE
-I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
-*/
 
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
@@ -52,8 +47,6 @@ export const AuthOptions: NextAuthOptions = {
       async authorize(credentials: Credentials) {
         const user: User | null = await validateCredentials(credentials)
 
-        console.log('LOG::RUNNING AUTHORIZE')
-
         if (!user) {
           console.warn('AUTH_OPTIONS::Authorize: invalid user')
 
@@ -82,8 +75,8 @@ export const AuthOptions: NextAuthOptions = {
   ],
   callbacks: {
     session: ({ session, token }) => {
-      // NOTE: Debuggin
-      console.debug('Session Callback ' + { session, token })
+      // NOTE: Debugging
+      // console.debug('Session Callback ' + { session, token })
 
       return {
         ...session,
@@ -95,8 +88,8 @@ export const AuthOptions: NextAuthOptions = {
       }
     },
     jwt: ({ token, user }) => {
-      // NOTE: Debuggin
-      console.debug('JWT Callback', { token, user })
+      // NOTE: Debugging
+      // console.debug('JWT Callback', { token, user })
 
       if (user) {
         const $user = user as unknown as Partial<User>
@@ -110,49 +103,6 @@ export const AuthOptions: NextAuthOptions = {
 
       return token
     },
-    // async signIn({ user, account }) {
-    //   const userExists = await prisma.user.findUnique({
-    //     where: { email: user.email || '' },
-    //   })
-
-    //   // if (!userExists && account?.provider === 'google') {
-    //   //   const { name, email } = user
-
-    //   //   console.log('LOG::creating user from google provider')
-
-    //   //   try {
-    //   //     const response = await fetch(
-    //   //       `${API_URL}${API_ENDPOINTS.services.users}`,
-    //   //       {
-    //   //         method: 'POST',
-    //   //         headers: {
-    //   //           'X-API-Key': process.env.API_SECRET as string,
-    //   //           'Content-Type': 'application/json',
-    //   //         },
-    //   //         body: JSON.stringify({
-    //   //           name,
-    //   //           email,
-    //   //         }),
-    //   //       },
-    //   //     )
-
-    //   //     const { data } = await response.json()
-    //   //     console.log(JSON.stringify(data))
-
-    //   //     if (response.ok) {
-    //   //       return true
-    //   //     }
-
-    //   //     throw new Error('Response not Okay')
-    //   //   } catch (error: unknown) {
-    //   //     console.error('LOG::failed to crete users ', error)
-
-    //   //     return '/auth/'
-    //   //   }
-    //   // }
-
-    //   return userExists ? true : '/auth/register'
-    // },
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,

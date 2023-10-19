@@ -9,11 +9,11 @@
 
 // FIXME - Chakra Modals may be adding too much memory cost.
 
-import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
-import { ESResponse, FullPost } from '@/lib/types/common'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
-import { Session, getServerSession } from 'next-auth'
+import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { AuthOptions } from '@/lib/auth'
+import { FullPost } from '@/lib/types/common'
+import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
 
 export default async function Home() {
