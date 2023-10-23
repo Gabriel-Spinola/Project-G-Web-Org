@@ -1,5 +1,6 @@
 'use client'
 
+import FollowButton from '@/components/Buttons/FollowButton'
 import styles from './profile.module.scss'
 import { UserData } from '@/lib/types/common'
 import { BellIcon, EditIcon } from '@chakra-ui/icons'
@@ -27,6 +28,7 @@ import { RiGraduationCapFill } from 'react-icons/ri'
 
 interface Params {
   isOwner: boolean
+  currentUser: string
   work: string
   user: Partial<UserData>
 }
@@ -42,15 +44,13 @@ export default function UserInfo(params: Params) {
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
       <p id="description">{params.user.description}</p>
 
-      <Button
-        onClick={(event) => {
-          event.preventDefault()
-
-          console.log('click')
-        }}
-      >
-        Seguir
-      </Button>
+      {!params.isOwner && (
+        <FollowButton
+          authorId={params.currentUser}
+          isFollowing={false}
+          targetId={params.user.id as string}
+        />
+      )}
 
       <hr />
 

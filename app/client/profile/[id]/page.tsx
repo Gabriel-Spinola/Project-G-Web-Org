@@ -46,7 +46,12 @@ export default async function Profile({ params }: Props) {
         <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
           <Suspense fallback={<div>Loading userInfo...</div>}>
             {user && (
-              <UserInfo isOwner={isOwner} user={user} work={'Senai CTTI'} />
+              <UserInfo
+                isOwner={isOwner}
+                currentUser={session?.user.id as string}
+                user={user}
+                work={'Senai CTTI'}
+              />
             )}
           </Suspense>
 

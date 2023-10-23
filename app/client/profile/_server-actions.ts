@@ -1,6 +1,10 @@
+'use server'
+
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { UserSelectedData } from './_actions'
-import { UserData } from '@/lib/types/common'
+import { prisma } from '@/lib/database/prisma'
+import { ESResponse, UserData } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 /**
  * @author Gabriel Spinola
@@ -38,5 +42,51 @@ export async function getUserData(
     console.error(error, 'Failed to fetch users')
 
     return null
+  }
+}
+
+export async function follow(
+  authorId: string,
+  targetId: string,
+): Promise<ESResponse<string>> {
+  try {
+    const newFollow = await prisma.follows.create({
+      data: {
+        followerId: authorId,
+        followingId: targetId,
+      },
+    })
+
+    console.log('Followed')
+    return ESSucceed(newFollow.followerId)
+  } catch (error: unknown) {
+    console.error('Following Failed ' + error)
+
+    return ESFailed(error)
+  }
+}
+
+export async function unfollow(
+  authorId: string,
+  targetId: string,
+): Promise<ESResponse<number>> {
+  try {
+    const deletedFollow = await prisma.follows.deleteMany({
+      where: {
+        followerId: authorId,
+        followingId: targetId,
+      },
+    })
+
+    if (deletedFollow.count <= 0) {
+      throw new Error('Failed to unfollow')
+    }
+
+    console.log('Unffolowed')
+    return ESSucceed(deletedFollow.count)
+  } catch (error: unknown) {
+    console.error('Unfollwing Failed ' + error)
+
+    return ESFailed(error)
   }
 }
