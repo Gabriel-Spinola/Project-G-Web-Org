@@ -20,7 +20,7 @@ export default function FollowButton({
   async function handleFollow() {
     setIsFollowing(!_isFollowing)
 
-    if (isFollowing) {
+    if (!_isFollowing) {
       const { data, error } = await follow(authorId, targetId)
 
       if (error) {
@@ -41,7 +41,7 @@ export default function FollowButton({
 
   return (
     <Button onClick={handleFollow}>
-      {!_isFollowing ? 'deixar de seguir' : 'seguir'}
+      {_isFollowing ? 'deixar de seguir' : 'seguir'}
     </Button>
   )
 }
