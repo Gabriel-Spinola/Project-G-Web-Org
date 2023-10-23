@@ -7,12 +7,12 @@
  * @license i.e. MIT
  */
 
-import { compare } from 'bcryptjs'
-import { prisma } from '../database/prisma'
-import { sign } from 'jsonwebtoken'
 import { $Enums, User } from '@prisma/client'
+import { compare } from 'bcryptjs'
+import { sign } from 'jsonwebtoken'
 import { Session, getServerSession } from 'next-auth'
 import { AuthOptions } from '.'
+import { prisma } from '../database/prisma'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
 
@@ -48,7 +48,9 @@ export async function validateCredentials(
     })
 
     if (!user || !(await compare(credentials.password, user.password || ''))) {
-      console.log(`GETTING NULL ${credentials.password} != ${user?.password}`)
+      console.error(
+        `ERROR_LOG::Incorret Password: ${credentials.password} != ${user?.password}`,
+      )
 
       return null
     }

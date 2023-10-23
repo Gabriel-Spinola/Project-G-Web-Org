@@ -16,7 +16,13 @@ import PostCommentsSection from './PostCommentsSection'
 import PostComment from '../comments/PostComment'
 import { FullPost } from '@/lib/types/common'
 
-export default function FullPostModal({ post }: { post: FullPost }) {
+export default function FullPostModal({
+  post,
+  currentUserId,
+}: {
+  post: FullPost
+  currentUserId?: string
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -30,7 +36,7 @@ export default function FullPostModal({ post }: { post: FullPost }) {
           <ModalCloseButton />
 
           <ModalBody>
-            <PostCommentsSection post={post} />
+            <PostCommentsSection post={post} currentUserId={currentUserId} />
             <PostComment />
           </ModalBody>
 

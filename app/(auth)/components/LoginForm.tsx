@@ -84,6 +84,7 @@ export default function LoginForm() {
       />
 
       <button
+        type="button"
         onClick={() => signIn('google')}
         className="w-full flex justify-around items-center text-xl bg-pure-white rounded-lg p-4 mb-4 text-light-gray"
       >

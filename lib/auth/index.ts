@@ -7,18 +7,14 @@
  * @license GPL 3.0
  */
 
+import { prisma } from '@/lib/database/prisma'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { User } from '@prisma/client'
 import type { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { prisma } from '@/lib/database/prisma'
+import GoogleProvider from 'next-auth/providers/google'
 import { Credentials, validateCredentials } from './actions'
-import { User } from '@prisma/client'
-
-/* NOTE
-I added the randomKey to the configuration simply to demonstrate that any additional information can be included in the session. It doesn’t have a specific purpose or functionality within the code. Its purpose is solely to illustrate the flexibility of including custom data or variables in the session.
-*/
 
 export const AuthOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
@@ -27,8 +23,16 @@ export const AuthOptions: NextAuthOptions = {
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: `${profile.given_name} ${profile.family_name}`,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
     }),
     CredentialsProvider({
       name: 'Sign in',
@@ -71,7 +75,7 @@ export const AuthOptions: NextAuthOptions = {
   ],
   callbacks: {
     session: ({ session, token }) => {
-      // NOTE: Debuggin
+      // NOTE: Debugging
       // console.debug('Session Callback ' + { session, token })
 
       return {
@@ -84,8 +88,8 @@ export const AuthOptions: NextAuthOptions = {
       }
     },
     jwt: ({ token, user }) => {
-      // NOTE: Debuggin
-      // console.debug("JWT Callback", { token, user });
+      // NOTE: Debugging
+      // console.debug('JWT Callback', { token, user })
 
       if (user) {
         const $user = user as unknown as Partial<User>
@@ -98,13 +102,6 @@ export const AuthOptions: NextAuthOptions = {
       }
 
       return token
-    },
-    async signIn({ user }) {
-      const userExists = await prisma.user.findUnique({
-        where: { email: user.email || '' },
-      })
-
-      return userExists ? true : '/register'
     },
   },
   adapter: PrismaAdapter(prisma),
