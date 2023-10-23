@@ -58,10 +58,10 @@ export async function isFollowing(
     })
 
     if (follow.length <= 0) {
-      return ESSucceed(true)
+      return ESSucceed(false)
     }
 
-    return ESSucceed(false)
+    return ESSucceed(true)
   } catch (error: unknown) {
     return ESFailed(error)
   }
