@@ -5,6 +5,7 @@ import { UserSelectedData } from './_actions'
 import { prisma } from '@/lib/database/prisma'
 import { ESResponse, UserData } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
+import { revalidateTag } from 'next/cache'
 
 /**
  * @author Gabriel Spinola
@@ -80,6 +81,7 @@ export async function follow(
     })
 
     console.log('Followed')
+    revalidateTag('user-data')
     return ESSucceed(newFollow.followerId)
   } catch (error: unknown) {
     console.error('Following Failed ' + error)
@@ -105,6 +107,7 @@ export async function unfollow(
     }
 
     console.log('Unffolowed')
+    revalidateTag('user-data')
     return ESSucceed(deletedFollow.count)
   } catch (error: unknown) {
     console.error('Unfollwing Failed ' + error)
