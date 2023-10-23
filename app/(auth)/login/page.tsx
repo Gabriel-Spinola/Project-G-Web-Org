@@ -11,7 +11,7 @@ import { BgImage } from '@/components/BgImage'
 import { LogoutButton } from '@/components/debug/AuthButtons'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
-import LoginForm from './components/LoginForm'
+import LoginForm from '../components/LoginForm'
 
 export default async function LoginPage() {
   const session = await getServerSession(AuthOptions)
