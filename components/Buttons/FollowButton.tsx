@@ -41,7 +41,7 @@ export default function FollowButton({
 
   return (
     <Button onClick={handleFollow}>
-      {_isFollowing ? 'deixar de seguir' : 'seguir'}
+      {!_isFollowing ? 'deixar de seguir' : 'seguir'}
     </Button>
   )
 }

@@ -45,6 +45,28 @@ export async function getUserData(
   }
 }
 
+export async function isFollowing(
+  authorId: string,
+  targetId: string,
+): Promise<ESResponse<boolean>> {
+  try {
+    const follow = await prisma.follows.findMany({
+      where: {
+        followerId: authorId,
+        followingId: targetId,
+      },
+    })
+
+    if (follow.length <= 0) {
+      return ESSucceed(true)
+    }
+
+    return ESSucceed(false)
+  } catch (error: unknown) {
+    return ESFailed(error)
+  }
+}
+
 export async function follow(
   authorId: string,
   targetId: string,

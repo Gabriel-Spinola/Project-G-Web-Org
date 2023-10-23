@@ -13,11 +13,31 @@ import React, { Suspense } from 'react'
 import UserInfo from '@/app/client/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
-import { getUserData } from '../_server-actions'
+import { getUserData, isFollowing } from '../_server-actions'
 import { UserData } from '@/lib/types/common'
 
 type Props = {
   params: { id: string }
+}
+
+async function handleFollowingCheckage(
+  authorId: string,
+  targetId: string,
+  isOwner: boolean,
+): Promise<boolean> {
+  if (isOwner) {
+    return false
+  }
+
+  const { data, error } = await isFollowing(authorId, targetId)
+
+  if (error) {
+    alert('Failed to check following')
+
+    return false
+  }
+
+  return data ?? false
 }
 
 // FIXME - Suspense not working properly
@@ -35,6 +55,13 @@ export default async function Profile({ params }: Props) {
 
   const [user, session] = await Promise.all([userData, sessionData])
   const isOwner = session?.user.id === user?.id
+  const isFollowing = await handleFollowingCheckage(
+    session?.user.id as string,
+    user?.id as string,
+    isOwner,
+  )
+
+  console.log(isFollowing)
 
   return (
     <>
@@ -49,6 +76,7 @@ export default async function Profile({ params }: Props) {
               <UserInfo
                 isOwner={isOwner}
                 currentUser={session?.user.id as string}
+                isFollowing={isFollowing}
                 user={user}
                 work={'Senai CTTI'}
               />

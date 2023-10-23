@@ -25,10 +25,12 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
+import { isFollowing } from '../_server-actions'
 
 interface Params {
   isOwner: boolean
   currentUser: string
+  isFollowing: boolean
   work: string
   user: Partial<UserData>
 }
@@ -47,7 +49,7 @@ export default function UserInfo(params: Params) {
       {!params.isOwner && (
         <FollowButton
           authorId={params.currentUser}
-          isFollowing={false}
+          isFollowing={params.isFollowing}
           targetId={params.user.id as string}
         />
       )}
