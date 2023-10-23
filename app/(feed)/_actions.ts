@@ -53,7 +53,7 @@ export async function fetchPosts<T extends FullPost = FullPost>(
     if (!response.ok) {
       throw new Error("Response's not okay")
     }
-    console.log(`fetch`)
+
     const { data }: { data: T[] } = await response.json()
 
     return {
@@ -62,8 +62,6 @@ export async function fetchPosts<T extends FullPost = FullPost>(
     }
   } catch (error: unknown) {
     if (isAbortError(error)) {
-      console.log('feed aborted')
-
       return {
         data: null,
         error: 'Feed fetch aborted',

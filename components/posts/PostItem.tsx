@@ -11,19 +11,18 @@ import React from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
-import { LikeButton } from '@/app/client/temp/components/Buttons'
+import { LikeButton } from '../Buttons/LikeButton'
 import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
-import UserPhoto from '../profile/Avatar'
-import PostSettings from './PostSettings'
+import PostHeader from './PostHeader'
 
 interface Params {
   post: FullPost
   currentUserId?: string
-  currentUserPosition: $Enums.Positions | undefined
+  currentUserPosition?: $Enums.Positions
 }
 
 export default function PostItem({
@@ -37,46 +36,23 @@ export default function PostItem({
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
-
   return (
     <div className={styles.post}>
-      <section className={styles.authorContainer}>
-        <div id="Author" className="flex">
-          <a href={`/client/profile/${post.authorId}`}>
-            <UserPhoto
-              size={'lg'}
-              src={post.author?.profilePic ? post.author?.profilePic : ''}
-            />
-          </a>
+      <PostHeader
+        post={post}
+        currentUserPosition={currentUserPosition}
+        isOwner={isOwner}
+      />
 
-          <a
-            className={styles.userInfo}
-            href={`/client/profile/${post.authorId}`}
-          >
-            <h1
-              className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
-            >
-              {post.author?.name ?? '):'}
-            </h1>
-            <small className=" text-base">{post.author?.location}</small>
-          </a>
-        </div>
-
-        <PostSettings
-          postId={post.id}
-          isOwner={isOwner}
-          currentUserPosition={currentUserPosition}
-        />
-      </section>
-
-      <article className={styles.p1}>{post?.content}</article>
-
+      <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
+        {post?.content}
+      </article>
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay
             imgSrc={getPostImageUrl(post.images[0])}
             width={776}
-            height={1000}
+            height={776}
           />
         </>
       ) : post.images.length === 2 ? (
@@ -99,14 +75,13 @@ export default function PostItem({
             heightOne={480}
           />
         </>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
         <LikeButton
           params={{
+            option: 'postId',
             likes: post.likes?.length ?? 0,
             targetId: post.id,
             authorId: currentUserId,
@@ -132,7 +107,7 @@ export default function PostItem({
         </button>
 
         <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal post={post} />
+        <FullPostModal post={post} currentUserId={currentUserId} />
       </div>
     </div>
   )
