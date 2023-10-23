@@ -1,6 +1,6 @@
 'use client'
 
-import styles from '@/components/profile/profile.module.scss'
+import styles from './profile.module.scss'
 import { UserData } from '@/lib/types/common'
 import { BellIcon, EditIcon } from '@chakra-ui/icons'
 import {
