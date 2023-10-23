@@ -2,6 +2,7 @@
 
 import { follow, unfollow } from '@/app/client/profile/_server-actions'
 import { Button } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 type Params = {
