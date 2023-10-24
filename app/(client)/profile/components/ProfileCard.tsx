@@ -162,6 +162,14 @@ export default function ProfileCard({ user, isOwner }: Params) {
 
           <form onSubmit={handleFormSubmission}>
             <ModalBody>
+              <FormLabel>Nome de Exibição</FormLabel>
+              <Editable
+                defaultValue={user.name || defaultEditFormValues.description}
+              >
+                <EditablePreview />
+                <EditableTextarea name="display-name" id="display-name" />
+              </Editable>
+
               <FormLabel>Título</FormLabel>
               <Editable
                 defaultValue={user.title || defaultEditFormValues.title}
@@ -176,14 +184,11 @@ export default function ProfileCard({ user, isOwner }: Params) {
                 />
               </Editable>
 
-              <FormLabel>Nome de Exibição</FormLabel>
-              <Editable
-                defaultValue={
-                  user.description || defaultEditFormValues.description
-                }
-              >
+              {/* STUB - Stub for profile pic */}
+              <FormLabel>Foto de Perfil</FormLabel>
+              <Editable defaultValue="profile-pic">
                 <EditablePreview />
-                <EditableTextarea name="description" id="description" />
+                <EditableTextarea name="display-name" id="display-name" />
               </Editable>
 
               <Divider />

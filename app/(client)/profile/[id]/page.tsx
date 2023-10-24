@@ -75,7 +75,7 @@ export default async function Profile({ params }: Props) {
             {user && (
               <UserInfo
                 isOwner={isOwner}
-                currentUser={session?.user.id as string}
+                currentUserId={session?.user.id as string}
                 isFollowing={isFollowing}
                 user={user}
                 work={'Senai CTTI'}
