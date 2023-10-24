@@ -1,4 +1,4 @@
-import { UserSelectedData } from '@/app/client/profile/_actions'
+import { UserSelectedData } from '@/app/(client)/profile/_actions'
 import { prisma } from '@/lib/database/prisma'
 import { UserData } from '@/lib/types/common'
 import { User } from '@prisma/client'

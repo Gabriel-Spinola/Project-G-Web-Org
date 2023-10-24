@@ -24,7 +24,7 @@ export function SubmitButton({
       type="submit"
       aria-disabled={pending || !isVerified}
       disabled={pending || !isVerified}
-      className={`text-pure-white p-4 cursor-pointer w-full rounded-lg bg-gradient-to-tl from-medium-tertiary to-medium-primary`}
+      className={`text-pure-white text-2xl font-bold p-4 cursor-pointer w-full rounded-lg bg-gradient-to-tl from-medium-tertiary to-medium-primary hover:brightness-90 hover:scale-[101%]`}
     >
       {pending ? 'Carregando' : buttonText}
     </button>

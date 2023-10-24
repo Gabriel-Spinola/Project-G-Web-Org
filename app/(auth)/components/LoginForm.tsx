@@ -16,6 +16,7 @@ import { useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { verifyCaptcha } from '@/server/serverActions'
 import { FcGoogle } from 'react-icons/fc'
+import Link from 'next/link'
 
 export default function LoginForm() {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -45,9 +46,9 @@ export default function LoginForm() {
     <form
       onSubmit={handleLoginForm}
       id="loginForm"
-      className={`flex-col items-center w-[100%] gap-8`}
+      className="flex flex-col items-center justify-evenly w-full h-full p-8 md:p-16"
     >
-      <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold text-center">
+      <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-center">
         {' '}
         LOGIN{' '}
       </h1>
@@ -67,13 +68,13 @@ export default function LoginForm() {
 
       <p className="text-center">
         Esqueceu a senha?{' '}
-        <a
-          href="auth/recover"
+        <Link
+          href="/recover"
           id="formButton"
-          className="text-light-gray underline hover:text-darker-gray font-bold"
+          className="text-light-primary underline hover:text-darker-primary font-bold"
         >
           Clique aqui
-        </a>{' '}
+        </Link>{' '}
       </p>
 
       <ReCAPTCHA
@@ -83,27 +84,25 @@ export default function LoginForm() {
         className="my-4"
       />
 
-      <button
-        type="button"
-        onClick={() => signIn('google')}
-        className="w-full flex justify-around items-center text-xl bg-pure-white rounded-lg p-4 mb-4 text-light-gray"
-      >
-        <FcGoogle size={36} />
-        <p>
-          Entrar com <span className="font-semibold">GOOGLE</span>
-        </p>
-      </button>
+      <div id="submitLogin" className="flex w-full gap-4">
+        <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
+        <button
+          onClick={() => signIn('google')}
+          className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
+        >
+          <FcGoogle size={36} />
+        </button>
+      </div>
 
-      <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
       <p className="text-center">
         Precisa criar uma conta?{' '}
-        <a
-          href="auth/register"
+        <Link
+          href="/register"
           id="formButton"
-          className="text-light-gray underline hover:text-darker-gray font-bold"
+          className="text-light-primary underline hover:text-darker-primary font-bold"
         >
           Crie aqui
-        </a>{' '}
+        </Link>{' '}
       </p>
     </form>
   )
