@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { UserSelectedData } from './actions'
+import { UserSelectedData } from './_actions'
 import { UserData } from '@/lib/types/common'
 
 /**
