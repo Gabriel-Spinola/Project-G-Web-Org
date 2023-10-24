@@ -65,7 +65,7 @@ export async function postComment(
 export async function increaseLikeCount(
   selectedType: LikeOptions,
   authorId: string,
-  targetId: string,
+  targetId: string | number,
 ): Promise<void> {
   try {
     const newLike = { likes: { create: { [selectedType]: targetId } } }
@@ -73,7 +73,7 @@ export async function increaseLikeCount(
     const updateUser = await prisma.user.update({
       where: {
         id: authorId,
-        NOT: { likes: { some: { postId: targetId } } },
+        NOT: { likes: { some: { [selectedType]: targetId } } },
       },
       select: { id: true },
       data: newLike,
@@ -92,11 +92,14 @@ export async function increaseLikeCount(
   }
 }
 
-export async function decreaseLikeCount(targetId: string): Promise<void> {
+export async function decreaseLikeCount(
+  selectedType: LikeOptions,
+  targetId: string | number,
+): Promise<void> {
   try {
     // REVIEW - Best solution found till now, is to make all Like fields unique
     const deleteLike = await prisma.like.deleteMany({
-      where: { postId: targetId },
+      where: { [selectedType]: targetId },
     })
 
     console.log('DELETE? ' + JSON.stringify(deleteLike))

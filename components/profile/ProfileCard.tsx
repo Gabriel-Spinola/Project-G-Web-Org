@@ -40,7 +40,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import { updateUserPageData } from '@/app/client/profile/actions'
+import { updateUserPageData } from '@/app/(client)/profile/_actions'
 
 interface Params {
   user: Partial<User>
@@ -52,10 +52,7 @@ const defaultEditFormValues = {
   description: 'Insira uma descrição',
 }
 
-export default function DisplayUserInfo({
-  user,
-  isOwner,
-}: Params): React.JSX.Element {
+export default function ProfileCard({ user, isOwner }: Params) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
@@ -167,7 +164,7 @@ export default function DisplayUserInfo({
             <ModalBody>
               <FormLabel>Título</FormLabel>
               <Editable
-                defaultValue={user?.title || defaultEditFormValues.title}
+                defaultValue={user.title || defaultEditFormValues.title}
                 isPreviewFocusable={true}
               >
                 <EditablePreview />
@@ -182,7 +179,7 @@ export default function DisplayUserInfo({
               <FormLabel>Descrição</FormLabel>
               <Editable
                 defaultValue={
-                  user?.description || defaultEditFormValues.description
+                  user.description || defaultEditFormValues.description
                 }
               >
                 <EditablePreview />
