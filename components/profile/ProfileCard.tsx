@@ -40,7 +40,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import { updateUserPageData } from '@/app/client/profile/_actions'
+import { updateUserPageData } from '@/app/(client)/profile/_actions'
 
 interface Params {
   user: Partial<User>
