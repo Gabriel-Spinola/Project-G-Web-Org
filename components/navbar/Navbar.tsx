@@ -1,14 +1,13 @@
 'use client'
+
 import '@/app/styles/navbar.css'
 import { StaticImage } from '../Image'
-import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
 import Link from 'next/link'
 
-export default function Navbar() {
-  const { data: session } = useSession()
+export default function Navbar({ userSession }: { userSession?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   function ToggleMenu() {
@@ -52,8 +51,8 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            {session ? (
-              <Link href={`/profile/${session?.user.id}`}>
+            {userSession ? (
+              <Link href={`/profile/${userSession}`}>
                 Perfil
                 <div></div>
               </Link>
@@ -116,11 +115,8 @@ export default function Navbar() {
           </a>
           <hr className="h-px bg-black/25 border-0" />
 
-          {session ? (
-            <a
-              href={`../client/profile/${session?.user.id}`}
-              className="w-full"
-            >
+          {userSession ? (
+            <a href={`../client/profile/${userSession}`} className="w-full">
               <li className="p-4 hover:bg-darker-white">Perfil</li>
             </a>
           ) : (
