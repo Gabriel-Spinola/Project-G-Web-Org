@@ -7,10 +7,10 @@
  * @license i.e. MIT
  */
 
-import UserPosts from '@/app/client/profile/components/UserPosts'
-import ProfileCard from '@/app/client/profile/components/ProfileCard'
+import UserPosts from '@/app/(client)/profile/components/UserPosts'
+import ProfileCard from '@/app/(client)/profile/components/ProfileCard'
 import React, { Suspense } from 'react'
-import UserInfo from '@/app/client/profile/components/UserInfo'
+import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, isFollowing } from '../_server-actions'
