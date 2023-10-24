@@ -12,7 +12,7 @@ import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { usePathname, useRouter } from 'next/navigation'
-import { validateForm, validateImageInput } from '@/lib/schemas/postSchema'
+import { validateForm, validateImageInput } from '@/lib/schemas/post.schema'
 
 interface PostFormState {
   content: string
