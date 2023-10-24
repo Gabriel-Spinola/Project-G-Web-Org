@@ -7,17 +7,37 @@
  * @license i.e. MIT
  */
 
-import UserPosts from '@/components/profile/UserPosts'
-import ProfileCard from '@/components/profile/ProfileCard'
+import UserPosts from '@/app/client/profile/components/UserPosts'
+import ProfileCard from '@/app/client/profile/components/ProfileCard'
 import React, { Suspense } from 'react'
-import UserInfo from '@/components/profile/UserInfo'
+import UserInfo from '@/app/client/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
-import { getUserData } from '../_server-actions'
+import { getUserData, isFollowing } from '../_server-actions'
 import { UserData } from '@/lib/types/common'
 
 type Props = {
   params: { id: string }
+}
+
+async function handleFollowingCheckage(
+  authorId: string,
+  targetId: string,
+  isOwner: boolean,
+): Promise<boolean> {
+  if (isOwner) {
+    return false
+  }
+
+  const { data, error } = await isFollowing(authorId, targetId)
+
+  if (error) {
+    alert('Failed to check following')
+
+    return false
+  }
+
+  return data ?? false
 }
 
 // FIXME - Suspense not working properly
@@ -35,6 +55,13 @@ export default async function Profile({ params }: Props) {
 
   const [user, session] = await Promise.all([userData, sessionData])
   const isOwner = session?.user.id === user?.id
+  const isFollowing = await handleFollowingCheckage(
+    session?.user.id as string,
+    user?.id as string,
+    isOwner,
+  )
+
+  console.log(isFollowing)
 
   return (
     <>
@@ -46,7 +73,13 @@ export default async function Profile({ params }: Props) {
         <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
           <Suspense fallback={<div>Loading userInfo...</div>}>
             {user && (
-              <UserInfo isOwner={isOwner} user={user} work={'Senai CTTI'} />
+              <UserInfo
+                isOwner={isOwner}
+                currentUser={session?.user.id as string}
+                isFollowing={isFollowing}
+                user={user}
+                work={'Senai CTTI'}
+              />
             )}
           </Suspense>
 
