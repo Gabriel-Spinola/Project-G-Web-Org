@@ -98,31 +98,31 @@ export default function Navbar({ userSession }: { userSession?: string }) {
             menuOpen ? 'displayMenu' : 'hideMenu'
           } + text-xl sm:text-2xl md:text-3xl`}
         >
-          <a href="/" className="w-full">
+          <Link href="/" className="w-full">
             <li className="p-4 hover:bg-darker-white">Feed</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/explore" className="w-full">
+          <Link href="/explore" className="w-full">
             <li className="p-4 hover:bg-darker-white">Explorar</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/projects" className="w-full">
+          <Link href="/projects" className="w-full">
             <li className="p-4 hover:bg-darker-white">Projetos</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/search" className="w-full">
+          <Link href="/search" className="w-full">
             <li className="p-4 hover:bg-darker-white">Busca</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
 
           {userSession ? (
-            <a href={`../client/profile/${userSession}`} className="w-full">
+            <Link href={`/profile/${userSession}`} className="w-full">
               <li className="p-4 hover:bg-darker-white">Perfil</li>
-            </a>
+            </Link>
           ) : (
-            <a href="/auth" className="w-full">
+            <Link href="/login" className="w-full">
               <li className="p-4 hover:bg-darker-white">Logar</li>
-            </a>
+            </Link>
           )}
         </ul>
       </nav>
