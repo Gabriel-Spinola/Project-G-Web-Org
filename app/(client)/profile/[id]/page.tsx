@@ -13,31 +13,11 @@ import React, { Suspense } from 'react'
 import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
-import { getUserData, isFollowing } from '../_server-actions'
-import { UserData } from '@/lib/types/common'
+import { getUserData } from '../_server-actions'
+import { handleFollowingCheckage } from '../_actions'
 
 type Props = {
   params: { id: string }
-}
-
-async function handleFollowingCheckage(
-  authorId: string,
-  targetId: string,
-  isOwner: boolean,
-): Promise<boolean> {
-  if (isOwner) {
-    return false
-  }
-
-  const { data, error } = await isFollowing(authorId, targetId)
-
-  if (error) {
-    alert('Failed to check following')
-
-    return false
-  }
-
-  return data ?? false
 }
 
 // FIXME - Suspense not working properly
@@ -61,28 +41,28 @@ export default async function Profile({ params }: Props) {
     isOwner,
   )
 
-  console.log(isFollowing)
-
   return (
     <>
+      {/* TODO - Add skeleton */}
       <Suspense fallback={<div>Loading profile card...</div>}>
         {user && <ProfileCard user={user} isOwner={isOwner} />}
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
         <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
+          {/* TODO - Add skeleton */}
           <Suspense fallback={<div>Loading userInfo...</div>}>
             {user && (
               <UserInfo
                 isOwner={isOwner}
-                currentUserId={session?.user.id as string}
                 isFollowing={isFollowing}
+                currentUserId={session?.user.id as string}
                 user={user}
-                work={'Senai CTTI'}
               />
             )}
           </Suspense>
 
+          {/* TODO - Add skeleton */}
           <Suspense fallback={<div>Loading userPosts...</div>}>
             <UserPosts
               authorID={params.id}
@@ -93,6 +73,4 @@ export default async function Profile({ params }: Props) {
       </div>
     </>
   )
-
-  // return <h1>User not found</h1>
 }

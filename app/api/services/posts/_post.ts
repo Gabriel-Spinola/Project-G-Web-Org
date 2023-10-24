@@ -26,9 +26,9 @@ async function storeImage(
     }
 
     return data
-  } catch (e: unknown) {
-    console.error('failed at image storage ' + e)
-    throw e
+  } catch (error: unknown) {
+    console.error('failed at image storage ' + error)
+    throw error
   }
 }
 
@@ -57,15 +57,6 @@ async function createPost(
 
     return null
   }
-}
-
-// TODO: Add real requirements
-function checkRequiredFields(
-  title: string | null | undefined,
-  content: string | null | undefined,
-  images: string | null | undefined,
-): boolean {
-  return !!(title && content && images)
 }
 
 export async function handlePost(

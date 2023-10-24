@@ -1,6 +1,7 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse } from '@/lib/types/common'
 import { User } from '@prisma/client'
+import { isFollowing } from './_server-actions'
 
 export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
 
@@ -34,9 +35,35 @@ export async function updateUserPageData(
 
     return { data, error: null }
   } catch (error: unknown) {
-    // TODO - Client Response
     console.error(error)
 
     return { data: null, error: error as string }
   }
+}
+
+/**
+ *
+ * @param authorId
+ * @param targetId
+ * @param isOwner
+ * @returns isFollowing
+ */
+export async function handleFollowingCheckage(
+  authorId: string,
+  targetId: string,
+  isOwner: boolean,
+): Promise<boolean> {
+  if (isOwner) {
+    return false
+  }
+
+  const { data, error } = await isFollowing(authorId, targetId)
+
+  if (error) {
+    alert('Failed to check following')
+
+    return false
+  }
+
+  return data ?? false
 }
