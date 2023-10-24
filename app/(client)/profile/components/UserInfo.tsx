@@ -25,13 +25,11 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
-import { isFollowing } from '../_server-actions'
 
 interface Params {
   isOwner: boolean
-  currentUser: string
+  currentUserId: string
   isFollowing: boolean
-  work: string
   user: Partial<UserData>
 }
 
@@ -48,7 +46,7 @@ export default function UserInfo(params: Params) {
 
       {!params.isOwner && (
         <FollowButton
-          authorId={params.currentUser}
+          authorId={params.currentUserId}
           isFollowing={params.isFollowing}
           targetId={params.user.id as string}
         />
@@ -57,9 +55,11 @@ export default function UserInfo(params: Params) {
       <hr />
 
       <div className="flex flex-col py-2 gap-2">
-        <Button leftIcon={<EditIcon />} onClick={onOpen}>
-          Edite seus dados
-        </Button>
+        {params.isOwner && (
+          <Button leftIcon={<EditIcon />} onClick={onOpen}>
+            Edite seus dados
+          </Button>
+        )}
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -140,7 +140,7 @@ export default function UserInfo(params: Params) {
 
         <span>
           <Icon as={MdWork} w={6} h={6} /> Trabalho:{' '}
-          <span className="font-bold">{params.work}</span>
+          <span className="font-bold">Senai CTTI</span>
         </span>
 
         <span>
