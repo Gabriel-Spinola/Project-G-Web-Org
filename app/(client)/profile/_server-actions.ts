@@ -18,8 +18,6 @@ export async function getUserData(
   id: string,
   requestData: UserSelectedData,
 ): Promise<UserData | null> {
-  'use server'
-
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.users}?id=${id}`,
@@ -46,6 +44,11 @@ export async function getUserData(
   }
 }
 
+/**
+ * @param authorId
+ * @param targetId
+ * @returns isFollowing
+ */
 export async function isFollowing(
   authorId: string,
   targetId: string,
@@ -68,6 +71,12 @@ export async function isFollowing(
   }
 }
 
+/**
+ * @default OnSuccess revalidates user data fetch
+ * @param authorId
+ * @param targetId
+ * @returns if succeed return new follower id otherwise returns the error info
+ */
 export async function follow(
   authorId: string,
   targetId: string,
@@ -80,7 +89,6 @@ export async function follow(
       },
     })
 
-    console.log('Followed')
     revalidateTag('user-data')
     return ESSucceed(newFollow.followerId)
   } catch (error: unknown) {
@@ -90,6 +98,12 @@ export async function follow(
   }
 }
 
+/**
+ * @default OnSuccess revalidates user data fetch
+ * @param authorId
+ * @param targetId
+ * @returns if succeed return new follower count otherwise returns the error info
+ */
 export async function unfollow(
   authorId: string,
   targetId: string,
@@ -106,7 +120,6 @@ export async function unfollow(
       throw new Error('Failed to unfollow')
     }
 
-    console.log('Unffolowed')
     revalidateTag('user-data')
     return ESSucceed(deletedFollow.count)
   } catch (error: unknown) {
