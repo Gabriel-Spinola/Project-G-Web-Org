@@ -49,7 +49,6 @@ interface Params {
 
 const defaultEditFormValues = {
   title: 'Insira seu titulo',
-  description: 'Insira uma descrição',
 }
 
 export default function ProfileCard({ user, isOwner }: Params) {
@@ -77,15 +76,6 @@ export default function ProfileCard({ user, isOwner }: Params) {
     formData.set(
       'title',
       getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
-    )
-
-    // Update form data for 'description' field
-    formData.set(
-      'description',
-      getFieldValueOrDefault(
-        'description',
-        defaultEditFormValues.description,
-      ) ?? '',
     )
 
     const { data, error } = await updateUserPageData(
@@ -163,9 +153,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
           <form onSubmit={handleFormSubmission}>
             <ModalBody>
               <FormLabel>Nome de Exibição</FormLabel>
-              <Editable
-                defaultValue={user.name || defaultEditFormValues.description}
-              >
+              <Editable defaultValue={user.name}>
                 <EditablePreview />
                 <EditableTextarea name="display-name" id="display-name" />
               </Editable>
@@ -182,13 +170,6 @@ export default function ProfileCard({ user, isOwner }: Params) {
                   name="title"
                   id="title"
                 />
-              </Editable>
-
-              {/* STUB - Stub for profile pic */}
-              <FormLabel>Foto de Perfil</FormLabel>
-              <Editable defaultValue="profile-pic">
-                <EditablePreview />
-                <EditableTextarea name="display-name" id="display-name" />
               </Editable>
 
               <Divider />
