@@ -3,6 +3,7 @@ import { $Enums } from '@prisma/client'
 import { FullPost } from '@/lib/types/common'
 import UserPhoto from '@/components/profile/Avatar'
 import PostSettings from './PostSettings'
+import Link from 'next/link'
 
 interface Props {
   post: FullPost
@@ -18,12 +19,12 @@ export default function PostHeader({
   return (
     <section className="flex flex-row justify-between mb-4">
       <div id="Author" className="flex gap-2">
-        <a href={`/client/profile/${post.authorId}`}>
+        <Link href={`/client/profile/${post.authorId}`}>
           <UserPhoto
             size={'lg'}
             src={post.author?.profilePic ? post.author?.profilePic : ''}
           />
-        </a>
+        </Link>
 
         <a className="flex flex-col" href={`/client/profile/${post.authorId}`}>
           <h1
