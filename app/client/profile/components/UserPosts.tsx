@@ -1,6 +1,6 @@
 import { fetchPosts } from '@/app/(feed)/_actions'
-import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
-import PostSubmitFragment from '../posts/postSubmit/PostSubmitFragment'
+import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPosts'
+import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { $Enums } from '@prisma/client'
 import { Suspense } from 'react'
