@@ -30,10 +30,10 @@ async function getPosts(
     })
 
     return data
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error occurred:', error)
 
-    throw new Error('Failed to fetch posts from the database.')
+    return null
   }
 }
 
