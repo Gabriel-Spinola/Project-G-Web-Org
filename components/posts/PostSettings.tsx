@@ -43,20 +43,20 @@ export default function PostSettings({
             <ModalCloseButton />
           </ModalHeader>
           <ModalBody p={0}>
-            <ul className="py-4 bg-light-gray text-darker-white rounded-b-md">
-              <li className="w-full p-2 flex justify-start gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
+            <ul className="py-4 px-2 bg-light-gray text-darker-white rounded-b-md">
+              <li className="w-full p-2 flex justify-start rounded-md gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
                 <BiSolidShare size={20} />
                 Compartilhar publicação
               </li>
               {!isOwner ? (
-                <li className="w-full p-2 flex justify-start gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
+                <li className="w-full p-2 flex justify-start rounded-md gap-4 bg-light-gray hover:bg-darker-gray hover:cursor-pointer">
                   <AiFillWarning size={20} />
                   Denunciar publicação
                 </li>
               ) : null}
               {isOwner || currentUserPosition === $Enums.Positions.Admin ? (
                 <>
-                  <li className="w-full p-2 bg-light-gray hover:cursor-pointer hover:bg-darker-gray flex gap-4 items-center">
+                  <li className="w-full p-2 bg-light-gray rounded-md hover:cursor-pointer hover:bg-darker-gray flex gap-4 items-center">
                     <DeletePostButton postId={postId} />
                   </li>
                 </>
