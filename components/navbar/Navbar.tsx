@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
+import Link from 'next/link'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -22,19 +23,19 @@ export default function Navbar() {
       >
         <ul className="flex flex-row">
           <li>
-            <a href="../client/explore">
+            <Link href="/explore">
               Explorar
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="../client/projects">
+            <Link href="/projects">
               Projetos
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/">
+            <Link href="/">
               <StaticImage
                 url={
                   'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/logo.png'
@@ -42,25 +43,25 @@ export default function Navbar() {
                 alt={'logo'}
                 className={''}
               />
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="../client/search">
+            <Link href="/search">
               Busca
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
             {session ? (
-              <a href={`../client/profile/${session?.user.id}`}>
+              <Link href={`/profile/${session?.user.id}`}>
                 Perfil
                 <div></div>
-              </a>
+              </Link>
             ) : (
-              <a href="/auth">
+              <Link href="/login">
                 Logar
                 <div></div>
-              </a>
+              </Link>
             )}
           </li>
         </ul>
