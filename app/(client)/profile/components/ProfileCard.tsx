@@ -176,7 +176,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
                 />
               </Editable>
 
-              <FormLabel>Descrição</FormLabel>
+              <FormLabel>Nome de Exibição</FormLabel>
               <Editable
                 defaultValue={
                   user.description || defaultEditFormValues.description
