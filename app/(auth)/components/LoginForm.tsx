@@ -107,6 +107,7 @@ export default function LoginForm() {
       <div id="submitLogin" className="flex w-full gap-4">
         <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
         <button
+          type="button"
           onClick={() => signIn('google')}
           className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
         >
