@@ -140,6 +140,7 @@ export default function RegisterPage() {
                   buttonText={'REGISTRAR'}
                 />
                 <button
+                  type="button"
                   onClick={() => signIn('google')}
                   className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
                 >
