@@ -1,36 +1,10 @@
 import { prisma } from '@/lib/database/prisma'
-import { FileBody, StorageResponse } from '@/lib/storage/storage'
-import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
+import { storeImage } from '@/lib/storage/actions'
 import { Post } from '@prisma/client'
 import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // export const config = { runtime: 'experimental-edge' }
-
-async function storeImage(
-  authorId: string,
-  fileName: string,
-  images: FileBody,
-): Promise<StorageResponse> {
-  try {
-    // FIXME - failing at certain types of images
-    const { data, error } = await supabase.storage
-      .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(`posts/${authorId}/${fileName}`, images, {
-        cacheControl: '3600',
-        upsert: true,
-      })
-
-    if (error) {
-      throw error
-    }
-
-    return data
-  } catch (error: unknown) {
-    console.error('failed at image storage ' + error)
-    throw error
-  }
-}
 
 async function createPost(
   newPost: Partial<Post>,
