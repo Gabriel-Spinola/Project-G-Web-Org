@@ -25,6 +25,10 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
+import Image from 'next/image'
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import { ChangeEvent, useState } from 'react'
+import { validateImageInput } from '@/lib/schemas/post.schema'
 
 interface Params {
   isOwner: boolean
@@ -71,6 +75,7 @@ export default function UserInfo(params: Params) {
             <form>
               <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
                 <FormLabel>Telefone</FormLabel>
+
                 <Editable
                   defaultValue={'(xx) xxxx-xxxx'}
                   isPreviewFocusable={true}

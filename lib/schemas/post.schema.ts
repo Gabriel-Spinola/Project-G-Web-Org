@@ -77,5 +77,7 @@ export function validateForm(
     return { data: null, error: parsedFormData.error }
   }
 
+  {data, error} 
+
   return { data: formData, error: null }
 }

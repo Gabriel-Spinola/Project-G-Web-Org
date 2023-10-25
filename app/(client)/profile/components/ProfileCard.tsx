@@ -29,7 +29,6 @@ import {
   Divider,
   FormLabel,
   EditableTextarea,
-  Avatar,
   Box,
   IconButton,
 } from '@chakra-ui/react'
@@ -41,6 +40,7 @@ import React, { FormEvent } from 'react'
 import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { updateUserPageData } from '@/app/(client)/profile/_actions'
+import EditableAvatar from './EditableAvatar'
 
 interface Params {
   user: Partial<User>
@@ -106,8 +106,9 @@ export default function ProfileCard({ user, isOwner }: Params) {
       <Box className="absolute w-[100%] h-[208px] bg-black bg-opacity-75 ml-[-64px]"></Box>
 
       <div id="profile-avatar-wrapper">
-        <Avatar size={'2xl'} src={user?.profilePic || ''}></Avatar>
+        <EditableAvatar profilePicUrl={user.profilePic || user.image || ''} />
       </div>
+
       <div
         id="profile-info-wrapper"
         className="flex flex-row items-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"

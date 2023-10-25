@@ -125,6 +125,8 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       closeModal()
       router.push(pathName + '?create=1', { scroll: false })
     } catch (error: unknown) {
+      alert('Failed to create post')
+
       console.error(error)
     }
   }
