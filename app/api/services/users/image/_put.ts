@@ -29,7 +29,7 @@ async function updateUser(
 export default async function handlePut(id: string, req: Request) {
   const formData = await req.formData()
 
-  const newImage = formData.get('image') as File | null
+  const newImage = formData.get('images') as File | null
 
   if (!newImage) {
     return NextResponse.json(

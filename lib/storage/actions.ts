@@ -20,7 +20,7 @@ export async function storeImage(
 
     return data
   } catch (error: unknown) {
-    console.error('failed at image storage ' + error)
+    console.error('failed at image storage ' + JSON.stringify(error))
 
     return null
   }
