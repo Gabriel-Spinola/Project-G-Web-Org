@@ -31,6 +31,7 @@ import {
   EditableTextarea,
   Box,
   IconButton,
+  Avatar,
 } from '@chakra-ui/react'
 
 import { EditIcon } from '@chakra-ui/icons'
@@ -41,6 +42,7 @@ import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
+import { getProfilePicImageUrl } from '@/lib/storage/supabase'
 
 interface Params {
   user: Partial<User>
@@ -49,6 +51,14 @@ interface Params {
 
 const defaultEditFormValues = {
   title: 'Insira seu titulo',
+}
+
+function getProfilePicURL(user: Pick<User, 'profilePic' | 'image'>): string {
+  if (user.profilePic) {
+    return getProfilePicImageUrl(user.profilePic)
+  }
+
+  return user.image ?? ''
 }
 
 export default function ProfileCard({ user, isOwner }: Params) {
@@ -96,6 +106,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
       id="Wrapper"
       className="flex h-[208px] min-w-full max-w-full items-center gap-[32px] py-0 px-[64px]"
     >
+      {/* NOTE - Card BG */}
       <Box
         className="absolute w-[100%] h-[208px] overflow-visible ml-[-64px] z-99"
         bgImage={
@@ -105,10 +116,27 @@ export default function ProfileCard({ user, isOwner }: Params) {
       ></Box>
       <Box className="absolute w-[100%] h-[208px] bg-black bg-opacity-75 ml-[-64px]"></Box>
 
+      {/* NOTE - Profile pic */}
       <div id="profile-avatar-wrapper">
-        <EditableAvatar profilePicUrl={user.profilePic || user.image || ''} />
+        {isOwner ? (
+          <EditableAvatar
+            profilePicUrl={getProfilePicURL({
+              profilePic: user.profilePic as string | null,
+              image: user.image as string | null,
+            })}
+          />
+        ) : (
+          <Avatar
+            size={'2xl'}
+            src={getProfilePicURL({
+              profilePic: user.profilePic as string | null,
+              image: user.image as string | null,
+            })}
+          ></Avatar>
+        )}
       </div>
 
+      {/* NOTE - Card info */}
       <div
         id="profile-info-wrapper"
         className="flex flex-row items-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
@@ -123,6 +151,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
         </div>
       </div>
 
+      {/* NOTE - Card info editing */}
       {isOwner && (
         <div className="max-w-[10%]">
           <Menu>

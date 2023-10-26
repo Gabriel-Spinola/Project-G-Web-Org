@@ -2,10 +2,11 @@
 
 import { follow, unfollow } from '@/app/(client)/profile/_server-actions'
 import { Button } from '@chakra-ui/react'
+import { signIn } from 'next-auth/react'
 import React, { useState } from 'react'
 
 type Params = {
-  authorId: string
+  authorId?: string
   isFollowing: boolean
   targetId: string
 }
@@ -18,6 +19,12 @@ export default function FollowButton({
   const [_isFollowing, setIsFollowing] = useState(isFollowing)
 
   async function handleFollow() {
+    if (!authorId) {
+      signIn('credentials')
+
+      return
+    }
+
     setIsFollowing(!_isFollowing)
 
     if (!_isFollowing) {

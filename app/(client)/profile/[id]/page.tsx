@@ -20,7 +20,6 @@ type Props = {
   params: { id: string }
 }
 
-// FIXME - Suspense not working properly
 export default async function Profile({ params }: Props) {
   const userData = getUserData(params.id, {
     id: true,
@@ -28,7 +27,9 @@ export default async function Profile({ params }: Props) {
     title: true,
     description: true,
     graduations: true,
+    profilePic: true,
     location: true,
+    image: true,
   })
 
   const sessionData = getServerSession(AuthOptions)
@@ -56,7 +57,7 @@ export default async function Profile({ params }: Props) {
               <UserInfo
                 isOwner={isOwner}
                 isFollowing={isFollowing}
-                currentUserId={session?.user.id as string}
+                currentUserId={session?.user.id}
                 user={user}
               />
             )}
