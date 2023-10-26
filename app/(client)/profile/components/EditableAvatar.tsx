@@ -30,8 +30,9 @@ export default function EditableAvatar({ profilePicUrl }: Props) {
     const formData = new FormData(event.currentTarget)
 
     try {
+      console.log('sending img')
       const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.users}/images/`,
+        `${API_URL}${API_ENDPOINTS.services.users}/image/?id=admin`,
         {
           method: 'PUT',
           body: formData,
@@ -95,7 +96,7 @@ export default function EditableAvatar({ profilePicUrl }: Props) {
             <form method="PUT" onSubmit={handleFormSubmission}>
               <SendImageButton onChange={onImageChanges} />
 
-              <Button type="button">Send image</Button>
+              <Button type="submit">Send image</Button>
             </form>
 
             <div id="image-preview-container">
