@@ -32,7 +32,7 @@ import { validateImageInput } from '@/lib/schemas/post.schema'
 
 interface Params {
   isOwner: boolean
-  currentUserId: string
+  currentUserId?: string
   isFollowing: boolean
   user: Partial<UserData>
 }
