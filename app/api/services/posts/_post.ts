@@ -75,7 +75,7 @@ export async function handlePost(
     if (postImages) {
       const storedImages = await Promise.all(
         postImages.map((image: File) =>
-          storeImage(authorId, image.name, image),
+          storeImage(`posts/${authorId}/${image.name}`, image),
         ),
       )
 

@@ -2,15 +2,14 @@ import { FileBody, StorageResponse } from './storage'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from './supabase'
 
 export async function storeImage(
-  authorId: string,
-  fileName: string,
+  url: string,
   images: FileBody,
 ): Promise<StorageResponse> {
   try {
     // FIXME - failing at certain types of images
     const { data, error } = await supabase.storage
       .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(`posts/${authorId}/${fileName}`, images, {
+      .upload(url, images, {
         cacheControl: '3600',
         upsert: true,
       })

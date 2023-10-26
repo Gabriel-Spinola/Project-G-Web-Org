@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import handlePut from './_put'
 
 async function handler(req: Request): Promise<NextResponse> {
-  console.log('testing cli')
   const url = new URL(req.url)
   const id: string | null = url.searchParams.get('id')
 
@@ -16,7 +15,7 @@ async function handler(req: Request): Promise<NextResponse> {
   }
 
   if (req.method === 'PUT') {
-    return handlePut(req)
+    return handlePut(id, req)
   }
 
   return NextResponse.json(
