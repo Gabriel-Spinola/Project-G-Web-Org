@@ -43,6 +43,7 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
         Faça uma publicação
         <div id={styles.textSub}></div>
       </button>
+
       <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>

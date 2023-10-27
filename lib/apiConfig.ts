@@ -19,14 +19,6 @@ export const API_ENDPOINTS = {
   },
 }
 
-// STUB - TEMP
-export enum ModelsApiCode {
-  Project = '0',
-  Post = '1',
-  Comment = '2',
-  User = '3',
-}
-
 export const SUPABASE_STORAGE_URL = `https://${process.env.SUPABASE_PROJECT_ID}.supabase.co/storage/v1/upload/resumable`
 
 export const API_URL =
