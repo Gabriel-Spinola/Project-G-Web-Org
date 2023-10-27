@@ -10,9 +10,9 @@
 import SendImageButton from '@/components/Buttons/SendImageButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { usePathname, useRouter } from 'next/navigation'
 import { validateForm, validateImageInput } from '@/lib/schemas/post.schema'
+import { createNewPost } from '@/app/(feed)/_actions'
 
 interface PostFormState {
   content: string
@@ -30,7 +30,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  // TODO const [isLoading, setIsLoading] = useState<boolean>(true)
   const router = useRouter()
   const pathName = usePathname()
 
@@ -101,34 +101,17 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
-    try {
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
-        {
-          method: 'POST',
-          body: validatedForm.data,
-          headers: {
-            'X-API-Key': process.env.API_SECRET as string,
-          },
-        },
-      )
+    const { error } = await createNewPost(currentUserId, validatedForm.data)
 
-      const { data } = await response.json()
-
-      if (!response.ok) {
-        throw new Error('response not ok' + JSON.stringify(data))
-      }
-
-      console.log('worked ' + JSON.stringify(data))
-
-      setImages(undefined)
-      closeModal()
-      router.push(pathName + '?create=1', { scroll: false })
-    } catch (error: unknown) {
+    if (error) {
       alert('Failed to create post')
 
-      console.error(error)
+      return
     }
+
+    setImages(undefined)
+    closeModal()
+    router.push(pathName + '?create=1', { scroll: false })
   }
 
   function removeImageFromPreviewByIndex(index: number) {

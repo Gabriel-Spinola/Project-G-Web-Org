@@ -34,7 +34,7 @@ export function validateImageInput(
   file: File,
   qtyImages?: number,
 ): ESResponse<never> {
-  const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+  // const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   const notLatin = '/[\\p{IsLatin}]+$'
   const notPunctuated = '[^\x00-\x7F]|[áç]'
 

@@ -5,7 +5,7 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import { User } from '@prisma/client'
 
@@ -28,7 +28,7 @@ export default function InfiniteScrollPosts<
 
   const searchParams = useSearchParams()
   const router = useRouter()
-  const pathName = usePathname()
+  // REVIEW const pathName = usePathname()
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
