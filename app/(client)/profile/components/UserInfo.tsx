@@ -1,6 +1,7 @@
 'use client'
 
-import styles from '@/components/profile/profile.module.scss'
+import FollowButton from '@/components/Buttons/FollowButton'
+import styles from './profile.module.scss'
 import { UserData } from '@/lib/types/common'
 import { BellIcon, EditIcon } from '@chakra-ui/icons'
 import {
@@ -24,10 +25,15 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
+import Image from 'next/image'
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import { ChangeEvent, useState } from 'react'
+import { validateImageInput } from '@/lib/schemas/post.schema'
 
 interface Params {
   isOwner: boolean
-  work: string
+  currentUserId?: string
+  isFollowing: boolean
   user: Partial<UserData>
 }
 
@@ -42,22 +48,22 @@ export default function UserInfo(params: Params) {
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
       <p id="description">{params.user.description}</p>
 
-      <Button
-        onClick={(event) => {
-          event.preventDefault()
-
-          console.log('click')
-        }}
-      >
-        Seguir
-      </Button>
+      {!params.isOwner && (
+        <FollowButton
+          authorId={params.currentUserId}
+          isFollowing={params.isFollowing}
+          targetId={params.user.id as string}
+        />
+      )}
 
       <hr />
 
       <div className="flex flex-col py-2 gap-2">
-        <Button leftIcon={<EditIcon />} onClick={onOpen}>
-          Edite seus dados
-        </Button>
+        {params.isOwner && (
+          <Button leftIcon={<EditIcon />} onClick={onOpen}>
+            Edite seus dados
+          </Button>
+        )}
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -69,6 +75,7 @@ export default function UserInfo(params: Params) {
             <form>
               <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
                 <FormLabel>Telefone</FormLabel>
+
                 <Editable
                   defaultValue={'(xx) xxxx-xxxx'}
                   isPreviewFocusable={true}
@@ -138,7 +145,7 @@ export default function UserInfo(params: Params) {
 
         <span>
           <Icon as={MdWork} w={6} h={6} /> Trabalho:{' '}
-          <span className="font-bold">{params.work}</span>
+          <span className="font-bold">Senai CTTI</span>
         </span>
 
         <span>

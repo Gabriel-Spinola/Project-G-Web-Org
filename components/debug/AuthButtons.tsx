@@ -56,5 +56,7 @@ export const LogoutButton = () => {
 export const ProfileButton = () => {
   const session = useSession()
 
-  return <Link href={`/client/profile/${session.data?.user.id}`}>Profile</Link>
+  return (
+    <Link href={`/(client)/profile/${session.data?.user.id}`}>Profile</Link>
+  )
 }

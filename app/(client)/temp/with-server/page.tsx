@@ -56,7 +56,7 @@ export default async function CreatePost() {
         }
 
         console.log('worked ' + JSON.stringify(data))
-        // revalidatePath('/client/temp/with-server/')
+        // revalidatePath('/(client)/temp/with-server/')
       } catch (e: unknown) {
         console.error(e)
       }
