@@ -1,5 +1,0 @@
-0000000000000000000000000000000000000000 2f76b480326c7d4e1cee7d50b0a6b713114f5f3b Gabriel Spinola <gabrielspinola77@gmail.com> 1698313345 -0300	clone: from https://github.com/Gabriel-Spinola/Project-G-Web-Org.git
-2f76b480326c7d4e1cee7d50b0a6b713114f5f3b 52b8ecb447fc619e745ead57c5b4fa83d1cfa582 Gabriel Spinola <gabrielspinola77@gmail.com> 1698409225 -0300	commit (merge): merge profile
-52b8ecb447fc619e745ead57c5b4fa83d1cfa582 2d2a4bdedd7562c6110ec6509412988eeaaf7b63 Gabriel Spinola <gabrielspinola77@gmail.com> 1698409526 -0300	commit: production fix
-2d2a4bdedd7562c6110ec6509412988eeaaf7b63 385465d10250d76104b015c927449e5b2d3889f8 Gabriel Spinola <gabrielspinola77@gmail.com> 1698412753 -0300	commit: feed inconsistent posts fetching fix
-385465d10250d76104b015c927449e5b2d3889f8 cc2ba976948ded0297c82df8861ab74b50c5e16b Gabriel Spinola <gabrielspinola77@gmail.com> 1698413407 -0300	commit: .
