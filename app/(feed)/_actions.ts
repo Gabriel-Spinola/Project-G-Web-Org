@@ -92,14 +92,17 @@ export async function fetchPosts<T extends FullPost = FullPost>(
  */
 export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
   try {
-    const response = await fetch(`${API_URL}${API_ENDPOINTS}?id=${postId}`, {
-      method: 'GET',
-      headers: {
-        'X-API-Key': process.env.API_SECRET as string,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.users}/only/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+          'Content-Type': 'application/json',
+        },
+        next: { tags: ['revalidate-post'] },
       },
-      next: { tags: ['revalidate-post'] },
-    })
+    )
 
     if (!response.ok) {
       throw new Error("Response's not okay")

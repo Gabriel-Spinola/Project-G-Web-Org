@@ -2,6 +2,7 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, UserData } from '@/lib/types/common'
 import { User } from '@prisma/client'
 import { isFollowing } from './_server-actions'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
 
@@ -39,6 +40,38 @@ export async function getUserData(
     console.error(error, 'Failed to fetch users')
 
     return null
+  }
+}
+
+export async function changeProfilePic(
+  id: string,
+  formData: FormData,
+): Promise<ESResponse<string>> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.users}/image/${id}`,
+      {
+        method: 'PUT',
+        body: formData,
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+        },
+      },
+    )
+
+    const { data }: { data: string } = await response.json()
+
+    if (!response.ok || !data) {
+      throw new Error('response not ok' + JSON.stringify(data))
+    }
+
+    console.log('worked ' + JSON.stringify(data))
+
+    return ESSucceed(data)
+  } catch (error: unknown) {
+    console.error(error)
+
+    return ESFailed(error)
   }
 }
 

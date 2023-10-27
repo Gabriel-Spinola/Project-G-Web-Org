@@ -6,7 +6,6 @@ export async function storeImage(
   images: FileBody,
 ): Promise<StorageResponse> {
   try {
-    // FIXME - failing at certain types of images
     const { data, error } = await supabase.storage
       .from(SUPABASE_PUBLIC_BUCKET_NAME)
       .upload(url, images, {

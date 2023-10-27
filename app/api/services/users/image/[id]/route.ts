@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
-import handlePut from './_put'
+import handlePut from '../_put'
 
-async function handler(req: Request): Promise<NextResponse> {
-  const url = new URL(req.url)
-  const id: string | null = url.searchParams.get('id')
+async function handler(
+  req: Request,
+  { params }: { params: { id: string } },
+): Promise<NextResponse> {
+  const { id } = params
 
   if (!id) {
     return NextResponse.json(
