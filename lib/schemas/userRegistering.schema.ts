@@ -29,11 +29,11 @@ export const registerUserDataSchema = zod
       .toLowerCase()
       .email({ message: 'Insira um email válido' }),
     password: zod
-      .string({ required_error: 'Por favor insira o seu nome' })
+      .string({ required_error: 'Por favor insira o sua senha' })
       .max(64, { message: 'Sua senha deve conter no máximo 50 caracteres' })
       .min(6, { message: 'Sua senha deve conter no mínimo 6 caracteres' }),
     confirmPassword: zod
-      .string({ required_error: 'Por favor insira o seu nome' })
+      .string({ required_error: 'Por favor confirme sua senha' })
       .max(64, { message: 'Sua senha deve conter no máximo 50 caracteres' })
       .min(6, { message: 'Sua senha deve conter no mínimo 6 caracteres' }),
   })

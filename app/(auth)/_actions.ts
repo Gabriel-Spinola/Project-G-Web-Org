@@ -4,7 +4,7 @@ import { prisma } from '@/lib/database/prisma'
 import { hash } from 'bcryptjs'
 import { ESResponse } from '@/lib/types/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { RegisterFormExpectedData } from '@/lib/schemas/userRegisteringSchema'
+import { RegisterFormExpectedData } from '@/lib/schemas/userRegistering.schema'
 
 /**
  * @param formData

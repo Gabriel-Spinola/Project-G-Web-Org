@@ -1,19 +1,16 @@
 import { fetchPosts } from '@/app/(feed)/_actions'
-import InfiniteScrollPosts from '../posts/InfiniteScrollPosts'
-import PostSubmitFragment from '../posts/postSubmit/PostSubmitFragment'
+import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPosts'
+import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
-import { $Enums } from '@prisma/client'
+import { User } from '@prisma/client'
 import { Suspense } from 'react'
 
 type Params = {
   authorID: string
-  currentUserPosition: $Enums.Positions | undefined
+  currentUserData?: Pick<User, 'id' | 'position'>
 }
 
-export default async function UserPosts({
-  authorID,
-  currentUserPosition,
-}: Params) {
+export default async function UserPosts({ authorID, currentUserData }: Params) {
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
     1,
     undefined,
@@ -30,8 +27,8 @@ export default async function UserPosts({
             {data && data?.length > 0 ? (
               <InfiniteScrollPosts
                 initialPublication={data}
-                currentUserId={authorID}
-                currentUserPosition={currentUserPosition}
+                currentUserData={currentUserData}
+                profileId={authorID}
               />
             ) : (
               <>Oops você chegou ao fim!</>
