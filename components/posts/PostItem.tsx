@@ -108,7 +108,7 @@ export default function PostItem({
           <span>{post.comments?.length ?? 0}</span>
         </button>
 
-        <Link href={`/client/posts/${post.id}`}>Check Post</Link>
+        <Link href={`/(client)/posts/${post.id}`}>Check Post</Link>
         <FullPostModal post={post} currentUserId={currentUserId} />
       </div>
     </div>
