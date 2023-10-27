@@ -15,6 +15,7 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData } from '../_server-actions'
 import { handleFollowingCheckage } from '../_actions'
+import { signIn } from 'next-auth/react'
 
 type Props = {
   params: { id: string }
@@ -42,6 +43,12 @@ export default async function Profile({ params }: Props) {
     isOwner,
   )
 
+  if (!session?.user || !session.user.position) {
+    signIn('credentials')
+
+    return
+  }
+
   return (
     <>
       {/* TODO - Add skeleton */}
@@ -67,7 +74,10 @@ export default async function Profile({ params }: Props) {
           <Suspense fallback={<div>Loading userPosts...</div>}>
             <UserPosts
               authorID={params.id}
-              currentUserPosition={session?.user.position}
+              currentUserData={{
+                id: session?.user.id,
+                position: session?.user.position,
+              }}
             />
           </Suspense>
         </div>

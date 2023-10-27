@@ -7,22 +7,18 @@ import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
-import { $Enums } from '@prisma/client'
+import { User } from '@prisma/client'
 
 // TODO: Generalize Feed - Incomplete
 type Params<Publication extends FullPost = FullPost> = {
   initialPublication: Publication[] | undefined
-  currentUserId?: string
-  currentUserPosition?: $Enums.Positions | undefined
+  currentUserData?: Pick<User, 'id' | 'position'>
+  profileId?: string
 }
 
 export default function InfiniteScrollPosts<
   Publication extends FullPost = FullPost,
->({
-  initialPublication,
-  currentUserId,
-  currentUserPosition,
-}: Params<Publication>) {
+>({ initialPublication, currentUserData, profileId }: Params<Publication>) {
   const [posts, setPosts] = useState<Publication[] | undefined>(
     initialPublication,
   )
@@ -45,7 +41,7 @@ export default function InfiniteScrollPosts<
       const { data, error }: ESResponse<Publication[]> = await fetchPosts(
         next,
         signal,
-        currentUserId,
+        profileId,
       )
 
       if (error) {
@@ -66,7 +62,7 @@ export default function InfiniteScrollPosts<
         ...data,
       ])
     },
-    [page, currentUserId],
+    [page, profileId],
   )
 
   // NOTE - Handles feed data fetching
@@ -115,8 +111,8 @@ export default function InfiniteScrollPosts<
         <PostItem
           key={post.id}
           post={post}
-          currentUserId={currentUserId}
-          currentUserPosition={currentUserPosition}
+          currentUserId={currentUserData?.id}
+          currentUserPosition={currentUserData?.position}
         />
       ))}
 
