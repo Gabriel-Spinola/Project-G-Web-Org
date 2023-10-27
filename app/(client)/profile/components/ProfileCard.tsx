@@ -120,6 +120,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
       <div id="profile-avatar-wrapper">
         {isOwner ? (
           <EditableAvatar
+            profileId={user.id as string}
             profilePicUrl={getProfilePicURL({
               profilePic: user.profilePic as string | null,
               image: user.image as string | null,
