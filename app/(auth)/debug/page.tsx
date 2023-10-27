@@ -18,7 +18,6 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 
 import React from 'react'
-import CreateProfile from '@/components/register/CreateProfile'
 import { $Enums } from '@prisma/client'
 
 export default async function AuthTestingPage() {
@@ -50,8 +49,6 @@ export default async function AuthTestingPage() {
         <pre>{JSON.stringify(session)}</pre>
 
         <AuthUsers />
-
-        <CreateProfile session={session} />
       </>
     </main>
   )

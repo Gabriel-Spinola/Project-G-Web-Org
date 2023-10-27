@@ -27,13 +27,12 @@ async function getPost(id: string): Promise<ESResponse<FullPost>> {
   }
 }
 
-async function handler(req: Request) {
+async function handler(req: Request, { params }: { params: { id: string } }) {
   if (req.method !== 'GET') {
     return NextResponse.json({ data: 'Only GET allowed' }, { status: 405 })
   }
 
-  const url = new URL(req.url)
-  const id: string | null = url.searchParams.get('id')
+  const { id } = params
 
   if (!id) {
     return NextResponse.json(

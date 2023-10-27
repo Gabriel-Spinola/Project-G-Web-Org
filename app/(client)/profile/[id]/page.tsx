@@ -14,7 +14,6 @@ import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, handleFollowingCheckage } from '../_actions'
-import { signIn } from 'next-auth/react'
 import { $Enums } from '@prisma/client'
 
 type Props = {
