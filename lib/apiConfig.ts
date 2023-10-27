@@ -10,6 +10,7 @@
 export const API_ENDPOINTS = {
   services: {
     posts: 'api/services/posts/',
+    projects: 'api/services/projects/',
     users: 'api/services/users/',
     comments: 'api/services/comments/',
   },
