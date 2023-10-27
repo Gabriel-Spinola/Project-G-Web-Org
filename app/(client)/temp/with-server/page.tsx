@@ -1,28 +1,5 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { revalidatePath } from 'next/cache'
-import React, { useState } from 'react'
-
-interface PostFormState {
-  title: string
-  content: string
-  images: File[] | null
-}
-
-function toBase64(file: File): Promise<unknown> {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader()
-
-    fileReader.readAsDataURL(file)
-
-    fileReader.onload = () => {
-      resolve(fileReader.result)
-    }
-
-    fileReader.onerror = (error) => {
-      reject(error)
-    }
-  })
-}
+import React from 'react'
 
 export default async function CreatePost() {
   // let base64: string | null = null

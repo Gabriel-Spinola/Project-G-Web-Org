@@ -15,12 +15,14 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import React, { ChangeEvent, useState } from 'react'
+import { changeProfilePic } from '../_actions'
 
 type Props = {
+  profileId: string
   profilePicUrl: string
 }
 
-export default function EditableAvatar({ profilePicUrl }: Props) {
+export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [image, setImages] = useState<File | undefined>(undefined)
 
@@ -29,34 +31,16 @@ export default function EditableAvatar({ profilePicUrl }: Props) {
 
     const formData = new FormData(event.currentTarget)
 
-    try {
-      console.log('sending img')
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.users}/image/?id=admin`,
-        {
-          method: 'PUT',
-          body: formData,
-          headers: {
-            'X-API-Key': process.env.API_SECRET as string,
-          },
-        },
-      )
+    const { error } = await changeProfilePic(profileId, formData)
 
-      const { data } = await response.json()
+    if (error) {
+      alert('Falha ao atualizar imagem')
 
-      if (!response.ok) {
-        throw new Error('response not ok' + JSON.stringify(data))
-      }
-
-      console.log('worked ' + JSON.stringify(data))
-
-      setImages(undefined)
-      onClose()
-    } catch (error: unknown) {
-      alert('Failed to create post')
-
-      console.error(error)
+      return
     }
+
+    setImages(undefined)
+    onClose()
   }
 
   async function onImageChanges(event: ChangeEvent<HTMLInputElement>) {

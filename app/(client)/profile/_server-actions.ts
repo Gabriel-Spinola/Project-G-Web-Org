@@ -1,9 +1,7 @@
 'use server'
 
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { UserSelectedData } from './_actions'
 import { prisma } from '@/lib/database/prisma'
-import { ESResponse, UserData } from '@/lib/types/common'
+import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { revalidateTag } from 'next/cache'
 

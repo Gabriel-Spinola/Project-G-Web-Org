@@ -25,11 +25,6 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
-import Image from 'next/image'
-import SendImageButton from '@/components/Buttons/SendImageButton'
-import { ChangeEvent, useState } from 'react'
-import { validateImageInput } from '@/lib/schemas/post.schema'
-
 interface Params {
   isOwner: boolean
   currentUserId?: string
@@ -77,7 +72,9 @@ export default function UserInfo(params: Params) {
                 <FormLabel>Telefone</FormLabel>
 
                 <Editable
-                  defaultValue={'(xx) xxxx-xxxx'}
+                  defaultValue={
+                    params.user.contactPhone?.toString() ?? '(xx) xxxx-xxxx'
+                  }
                   isPreviewFocusable={true}
                 >
                   <EditablePreview />
