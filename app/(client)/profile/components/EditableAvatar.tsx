@@ -1,7 +1,6 @@
 'use client'
 
 import SendImageButton from '@/components/Buttons/SendImageButton'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { validateImageInput } from '@/lib/schemas/post.schema'
 import { Avatar } from '@chakra-ui/avatar'
 import {
@@ -35,6 +34,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
     if (error) {
       alert('Falha ao atualizar imagem')
+      setImages(undefined)
 
       return
     }
