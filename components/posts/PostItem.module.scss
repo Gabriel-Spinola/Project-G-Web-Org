@@ -1,0 +1,46 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+ 
+@import '../../app/styles/variables.module.scss';
+
+.post {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    background-color: $pure-white;
+    padding: 0;
+    border-radius: 12px;
+    padding: 16px;
+    color: $darker-gray;
+    margin-bottom: 32px;   
+    -webkit-box-shadow: 0 0 8px #00000065;
+            box-shadow: 0 0 8px #00000065;
+
+    .authorContainer {
+        .userInfo {
+            .userName {
+                color: $light-primary;
+                font-size: 24px;
+                font-weight: 400;
+            }
+
+        }
+    }
+
+    .oneImg {
+        border-radius: 8px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .post{
+        width: 100%;
+    }
+}

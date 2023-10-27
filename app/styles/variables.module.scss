@@ -1,0 +1,56 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+ 
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&display=swap');
+
+$nav-font: 'roboto', sans-serif;
+
+
+$darker-gray: #202020;
+$medium-gray: #242424;
+$light-gray: #262626;
+ 
+$darker-white: #ebebeb;
+$medium-white: #f5f5f5;
+$light-white: #fafafa;
+$pure-white: #fff;
+
+$darker-primary: #E5684A;
+$medium-primary: #F06D4D;
+$light-primary: #FF7452;
+
+$darker-secundary: #6EC23A;
+$medium-secundary: #74CC3D;
+$light-secundary: #7AD640;
+
+$darker-terciary: #E836F5;
+$medium-terciary: #F238FF;
+$light-terciary: #F34DFF;
+
+
+:export {
+  darker-gray: $darker-gray;
+  medium-gray: $medium-gray;
+  light-gray: $light-gray;
+  darkerWhite: $darker-white;
+  medium-white: $medium-white;
+  light-white: $light-white;
+  pure-white: $pure-white;
+  darker-primary: $darker-primary;
+  medium-primary: $medium-primary;
+  light-primary: $light-primary;
+  darker-secundary: $darker-secundary;
+  medium-secundary: $medium-secundary;
+  light-secundary: $light-secundary;
+  darker-terciary: $darker-terciary;
+  medium-terciary: $medium-terciary;
+  light-terciary: $light-terciary;
+
+  
+}

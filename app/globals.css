@@ -1,0 +1,22 @@
+/**
+ * @author Gabriel Spinola Mendes da Silva | gabrielspinola77@gmail.com
+ * @author Lucas Vinicius Pereira Martis | lucasvinipessoal@gmail.com
+ *
+ * @project Project G
+ * @version main-release
+ * @license i.e. MIT
+ */
+ 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+input {
+  color: black;
+}
