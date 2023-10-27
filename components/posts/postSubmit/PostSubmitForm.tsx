@@ -11,8 +11,9 @@ import SendImageButton from '@/components/Buttons/SendImageButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { usePathname, useRouter } from 'next/navigation'
-import { validateForm, validateImageInput } from '@/lib/schemas/post.schema'
+import { validateForm } from '@/lib/schemas/post.schema'
 import { createNewPost } from '@/app/(feed)/_actions'
+import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 
 interface PostFormState {
   content: string
