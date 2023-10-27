@@ -107,3 +107,17 @@ export async function decreaseLikeCount(
     console.error('Like Failed ' + error)
   }
 }
+
+export async function deleteComment(id: number): Promise<void | null> {
+  try {
+    const deletedComment: Comment = await prisma.comment.delete({
+      where: { id },
+    })
+
+    console.log(JSON.stringify(deletedComment))
+  } catch (error: unknown) {
+    console.error('Failed to delete comment')
+
+    return null
+  }
+}
