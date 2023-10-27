@@ -31,7 +31,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
-  // TODO const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const router = useRouter()
   const pathName = usePathname()
 
@@ -76,6 +76,10 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   ): Promise<void> {
     event.preventDefault()
 
+    if (isLoading) {
+      return
+    }
+
     const formData = new FormData(event.currentTarget)
 
     if (images && images?.length >= 0) {
@@ -102,6 +106,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
+    setIsLoading(true)
     const { error } = await createNewPost(currentUserId, validatedForm.data)
 
     if (error) {
@@ -111,6 +116,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     }
 
     setImages(undefined)
+    setIsLoading(false)
     closeModal()
     router.push(pathName + '?create=1', { scroll: false })
   }
@@ -152,7 +158,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
           {/* Input Buttons */}
           <div className=" mt-3 flex flex-row justify-between items-center">
             <SendImageButton onChange={onImageChanges} />
-            <SubmitPostButton />
+            <SubmitPostButton isLoading={isLoading} />
           </div>
         </form>
       </section>
