@@ -1,6 +1,6 @@
 'use client'
 
-import { follow, unfollow } from '@/app/(client)/profile/_server-actions'
+import { follow, unfollow } from '@/app/client/profile/_server-actions'
 import { Button } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import React, { useState } from 'react'

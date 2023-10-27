@@ -1,9 +1,9 @@
 'use client'
 
 import { postComment } from '@/app/(feed)/_serverActions'
-import { deleteComment } from '@/app/(client)/temp/comments/actions'
+import { deleteComment } from '@/app/client/temp/comments/actions'
 import { FullPost } from '@/lib/types/common'
-import CreateCommentButton from '@/app/(client)/temp/components/CreateCommentButton'
+import CreateCommentButton from '@/app/client/temp/components/CreateCommentButton'
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { validateForm } from '@/lib/schemas/comment.schema'
