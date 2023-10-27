@@ -15,6 +15,7 @@ import { AuthOptions } from '@/lib/auth'
 import { FullPost } from '@/lib/types/common'
 import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
+import { $Enums } from '@prisma/client'
 
 export default async function Home() {
   const sessionPromise = getServerSession(AuthOptions)
@@ -32,8 +33,14 @@ export default async function Home() {
             {posts.data && posts.data?.length > 0 ? (
               <InfiniteScrollPosts
                 initialPublication={posts.data}
-                currentUserId={session?.user.id}
-                currentUserPosition={session?.user.position}
+                currentUserData={
+                  session
+                    ? {
+                        id: session?.user.id as string,
+                        position: session?.user.position as $Enums.Positions,
+                      }
+                    : undefined
+                }
               />
             ) : (
               <>Oops você chegou ao fim!</>

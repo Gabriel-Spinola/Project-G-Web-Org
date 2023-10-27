@@ -37,6 +37,7 @@ export default function PostItem({
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+
   return (
     <div className={styles.post}>
       <PostHeader
