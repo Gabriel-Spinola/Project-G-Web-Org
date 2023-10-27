@@ -18,6 +18,7 @@ import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import FullPostModal from './FullPostModal'
 import PostHeader from './PostHeader'
+import Link from 'next/link'
 
 interface Params {
   post: FullPost
@@ -106,7 +107,7 @@ export default function PostItem({
           <span>{post.comments?.length ?? 0}</span>
         </button>
 
-        <a href={`/client/posts/${post.id}`}>Check Post</a>
+        <Link href={`/client/posts/${post.id}`}>Check Post</Link>
         <FullPostModal post={post} currentUserId={currentUserId} />
       </div>
     </div>
