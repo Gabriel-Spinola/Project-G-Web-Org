@@ -22,7 +22,7 @@ interface ProjectFormState {
   images: File[] | null
 }
 
-export default async function CreateProjectForm({
+export default function CreateProjectForm({
   currentUserId,
 }: {
   currentUserId: string
@@ -79,7 +79,9 @@ export default async function CreateProjectForm({
     )
   }
 
-  async function handleFormSubmission(event: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmission(
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
@@ -92,6 +94,7 @@ export default async function CreateProjectForm({
     } else {
       formData.delete('images')
     }
+    formData.delete('files')
 
     const validatedForm = validateForm(formData)
 
@@ -121,8 +124,8 @@ export default async function CreateProjectForm({
 
   return (
     <>
-      <section id="form-section" onSubmit={handleFormSubmission}>
-        <form method="POST">
+      <section id="form-section">
+        <form method="POST" onSubmit={handleFormSubmission}>
           <input
             type="text"
             id="title"

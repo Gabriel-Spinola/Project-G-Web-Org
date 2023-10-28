@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
-import { storeFile, storeMultipleFiles } from '@/lib/storage/actions'
+import { storeMultipleFiles } from '@/lib/storage/actions'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { $Enums, Project } from '@prisma/client'
@@ -23,19 +23,24 @@ async function createNewProject(
 
     return ESSucceed(newProject.id)
   } catch (error: unknown) {
-    return ESFailed('Failed to insert new project into DB')
+    console.error(error)
+
+    return ESFailed('Failed to insert new project into DB ')
   }
 }
 
 export default async function handlePost(id: string, req: Request) {
   const formData = await req.formData()
 
-  const projectTitle = formData.get('content')?.toString()
+  const projectTitle = formData.get('title')?.toString()
   const projectDescription = formData.get('description')?.toString() as
     | string
     | null
   const projectFiles = formData.getAll('files') as File[] | null
   const projectImages = formData.getAll('images') as File[] | null
+
+  console.log(projectFiles)
+  console.log(projectImages)
 
   if (!projectTitle) {
     return NextResponse.json(
@@ -44,7 +49,8 @@ export default async function handlePost(id: string, req: Request) {
     )
   }
 
-  if (projectImages) {
+  if (projectImages && projectImages.length > 0) {
+    console.log('running images')
     const { error } = await storeMultipleFiles(
       `projects/${id}/images/`,
       projectImages,
@@ -59,7 +65,8 @@ export default async function handlePost(id: string, req: Request) {
       )
     }
   }
-  if (projectFiles) {
+  if (projectFiles && projectFiles.length > 0) {
+    console.log('running files')
     const { error } = await storeMultipleFiles(
       `projects/${id}/files/`,
       projectFiles,

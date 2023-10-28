@@ -21,7 +21,7 @@ export async function createNewProject(
     const { data }: { data: string } = await response.json()
 
     if (!response.ok) {
-      throw new Error('response not ok' + JSON.stringify(data))
+      throw new Error('response not ok ' + JSON.stringify(data))
     }
 
     return ESSucceed(data)
