@@ -1,4 +1,5 @@
 import { Comment, Post, Project, User } from '@prisma/client'
+import { number, unknown } from 'zod'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -40,13 +41,13 @@ import { Comment, Post, Project, User } from '@prisma/client'
  *
  * @author Gabriel Spinola
  */
-export type ESResponse<DataType, CustomError = string | unknown> =
+export type ESResponse<DataType, CustomError> =
   | {
       data: DataType
-      error: null
+      error: never
     }
   | {
-      data: null
+      data: never
       error: CustomError
     }
 

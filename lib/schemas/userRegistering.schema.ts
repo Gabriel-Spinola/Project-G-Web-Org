@@ -7,6 +7,7 @@
 
 import { z as zod } from 'zod'
 import { ESResponse } from '../types/common'
+import { ESFailed, ESSucceed } from '../types/helpers'
 
 export type RegisterFormExpectedData = {
   name: string
@@ -62,8 +63,8 @@ export function validateRegisterForm(
   )
 
   if (!parsedFormData.success) {
-    return { data: null, error: parsedFormData.error }
+    return ESFailed(parsedFormData.error)
   }
 
-  return { data: parsedFormData.data, error: null }
+  return ESSucceed(parsedFormData.data)
 }

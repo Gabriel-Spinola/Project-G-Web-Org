@@ -42,7 +42,7 @@ export async function fetchPosts<T extends FullPost = FullPost>(
   page = 1,
   signal?: AbortSignal,
   authorId?: string,
-): Promise<ESResponse<T[]>> {
+): Promise<ESResponse<T[], string>> {
   try {
     const apiRequestURL = !authorId
       ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
@@ -64,24 +64,15 @@ export async function fetchPosts<T extends FullPost = FullPost>(
 
     const { data }: { data: T[] } = await response.json()
 
-    return {
-      data,
-      error: null,
-    }
+    return ESSucceed(data)
   } catch (error: unknown) {
     if (isAbortError(error)) {
-      return {
-        data: null,
-        error: 'Feed fetch aborted',
-      }
+      return ESFailed('Feed fetch aborted')
     }
 
     console.error(error)
 
-    return {
-      data: null,
-      error: 'Failed to fetch posts',
-    }
+    return ESFailed('Failed to fetch posts')
   }
 }
 
@@ -90,7 +81,9 @@ export async function fetchPosts<T extends FullPost = FullPost>(
  * @param postId
  * @returns post
  */
-export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
+export async function fetchPost(
+  postId: string,
+): Promise<ESResponse<FullPost, unknown>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.users}/only/${postId}`,
@@ -121,7 +114,7 @@ export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
 export async function createNewPost(
   id: string,
   formData: FormData,
-): Promise<ESResponse<string>> {
+): Promise<ESResponse<string, unknown>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.posts}?id=${id}`,

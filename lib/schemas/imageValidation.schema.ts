@@ -1,4 +1,5 @@
 import { ESResponse } from '../types/common'
+import { ESFailed } from '../types/helpers'
 
 // NOTE - 5mb
 export const MAX_FILE_SIZE = 5000000
@@ -13,17 +14,15 @@ export const MAX_FILE_SIZE = 5000000
 export function validateImageInput(
   file: File,
   qtyImages?: number,
-): ESResponse<never> {
+): ESResponse<never, string> {
   // const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   const notLatin = '/[\\p{IsLatin}]+$'
   const notPunctuated = '[^\x00-\x7F]|[áç]'
 
   if (file.name.match(notLatin) || file.name.match(notPunctuated)) {
-    return {
-      data: null,
-      error:
-        'Nome do arquivo é inválido. (Ex.: Contém letras fora do alfabeto latim)',
-    }
+    return ESFailed(
+      'Nome do arquivo é inválido. (Ex.: Contém letras fora do alfabeto latim)',
+    )
   }
 
   // REVIEW - Special characters
@@ -32,12 +31,12 @@ export function validateImageInput(
   // }
 
   if (file.size > MAX_FILE_SIZE) {
-    return { data: null, error: 'O tamanho máximo de arquivos é de 5mb' }
+    return ESFailed('O tamanho máximo de arquivos é de 5mb')
   }
 
   if (qtyImages && qtyImages >= 3) {
-    return { data: null, error: 'O número máximo de imagens por post é 3' }
+    return ESFailed('O número máximo de imagens por post é 3')
   }
 
-  return { data: null, error: null }
+  return {} as never
 }

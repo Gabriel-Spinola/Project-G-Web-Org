@@ -46,7 +46,7 @@ export async function getUserData(
 export async function changeProfilePic(
   id: string,
   formData: FormData,
-): Promise<ESResponse<string>> {
+): Promise<ESResponse<string, unknown>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.users}/image/${id}`,
@@ -84,7 +84,7 @@ export async function changeProfilePic(
 export async function updateUserPageData(
   formData: FormData,
   userId: string,
-): Promise<ESResponse<User>> {
+): Promise<ESResponse<User, unknown>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.handlers.updateUser}?id=${userId}`,
@@ -103,11 +103,11 @@ export async function updateUserPageData(
 
     const { data }: { data: User } = await response.json()
 
-    return { data, error: null }
+    return ESSucceed(data)
   } catch (error: unknown) {
     console.error(error)
 
-    return { data: null, error: error as string }
+    return ESFailed(error)
   }
 }
 

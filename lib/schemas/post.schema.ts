@@ -1,5 +1,6 @@
 import { z as zod } from 'zod'
 import { ESResponse } from '../types/common'
+import { ESFailed, ESSucceed } from '../types/helpers'
 
 export type ExpectedData = {
   content: string
@@ -32,8 +33,8 @@ export function validateForm(
   )
 
   if (!parsedFormData.success) {
-    return { data: null, error: parsedFormData.error }
+    return ESFailed(parsedFormData.error)
   }
 
-  return { data: formData, error: null }
+  return ESSucceed(formData)
 }

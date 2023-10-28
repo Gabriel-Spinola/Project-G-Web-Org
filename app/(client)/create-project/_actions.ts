@@ -5,7 +5,7 @@ import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 export async function createNewProject(
   id: string,
   formData: FormData,
-): Promise<ESResponse<string>> {
+): Promise<ESResponse<string, unknown>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}${id}`,

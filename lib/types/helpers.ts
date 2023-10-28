@@ -1,11 +1,13 @@
 import { ESResponse } from './common'
 
-export function ESSucceed<DataType>(data: DataType): ESResponse<DataType> {
-  return { data, error: null }
+export function ESSucceed<DataType>(
+  data: DataType,
+): ESResponse<DataType, never> {
+  return { data, error: {} as never }
 }
 
-export function ESFailed<CustomError = string | unknown>(
+export function ESFailed<CustomError>(
   error: CustomError,
 ): ESResponse<never, CustomError> {
-  return { data: null, error }
+  return { data: {} as never, error }
 }

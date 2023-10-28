@@ -13,7 +13,7 @@ import { revalidateTag } from 'next/cache'
 export async function isFollowing(
   authorId: string,
   targetId: string,
-): Promise<ESResponse<boolean>> {
+): Promise<ESResponse<boolean, unknown>> {
   try {
     const follow = await prisma.follows.findMany({
       where: {
@@ -41,7 +41,7 @@ export async function isFollowing(
 export async function follow(
   authorId: string,
   targetId: string,
-): Promise<ESResponse<string>> {
+): Promise<ESResponse<string, unknown>> {
   try {
     const newFollow = await prisma.follows.create({
       data: {
@@ -68,7 +68,7 @@ export async function follow(
 export async function unfollow(
   authorId: string,
   targetId: string,
-): Promise<ESResponse<number>> {
+): Promise<ESResponse<number, unknown>> {
   try {
     const deletedFollow = await prisma.follows.deleteMany({
       where: {

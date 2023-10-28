@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/storage/supabase'
 import { ESResponse } from '@/lib/types/common'
+import { ESFailed } from '@/lib/types/helpers'
 
 /**
  * @summary Handmade re-creation of the FileObject API from supabase.
@@ -19,7 +20,7 @@ export async function getFileIfExistsInStorage(
   bucketName: string,
   filePath: string,
   folderPath: string,
-): Promise<ESResponse<CustomFileObject>> {
+): Promise<ESResponse<CustomFileObject, string>> {
   const { data, error } = await supabase.storage
     .from(bucketName)
     .list(folderPath)
@@ -27,12 +28,12 @@ export async function getFileIfExistsInStorage(
   if (error) {
     console.error(error)
 
-    return { data: null, error: error.message }
+    return ESFailed(error.message)
   }
 
   const files = data.filter((item) => item.name === filePath).at(0)
 
   return files !== undefined
-    ? { data: files, error: null }
-    : { data: null, error: 'File does not exists' }
+    ? { data: files, error: {} as never }
+    : { data: {} as never, error: 'File does not exists' }
 }

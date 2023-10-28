@@ -6,6 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment, Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -15,16 +16,13 @@ export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
   formData: FormData,
-): Promise<ESResponse<number>> {
+): Promise<ESResponse<number, string | unknown>> {
   const content = formData.get('content')?.toString()
   const authorId = formData.get('author-id')?.toString()
   const targetId = formData.get('target-id')?.toString()
 
   if (!content || !authorId) {
-    return {
-      data: null,
-      error: 'missing fields: content & authorId',
-    }
+    return ESFailed('missing fields: content & authorId')
   }
 
   try {
@@ -51,14 +49,11 @@ export async function postComment(
         JSON.stringify(updateTarget),
     )
 
-    return {
-      data: createComment.id,
-      error: null,
-    }
+    return ESSucceed(createComment.id)
   } catch (error: unknown) {
     console.error(error)
 
-    return { data: null, error }
+    return ESFailed(error)
   }
 }
 
