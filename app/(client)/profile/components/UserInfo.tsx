@@ -38,7 +38,7 @@ export default function UserInfo(params: Params) {
   return (
     <section
       id={styles.userInfo}
-      className="mt-8 w-80% lg:w-[312px] rounded-[12px] p-4 bg-pure-white text-darker-gray"
+      className="flex flex-col w-80% w-full x1:w-[312px] p-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray"
     >
       <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
       <p id="description">{params.user.description}</p>
@@ -53,10 +53,10 @@ export default function UserInfo(params: Params) {
 
       <hr />
 
-      <div className="flex flex-col py-2 gap-2">
+      <div className="flex flex-col h-full py-2 gap-2">
         {params.isOwner && (
           <Button leftIcon={<EditIcon />} onClick={onOpen}>
-            Edite seus dados
+            Editar meus dados
           </Button>
         )}
 
@@ -148,7 +148,7 @@ export default function UserInfo(params: Params) {
         <span>
           <Icon as={BsFillTelephoneFill} w={6} h={6} /> Telefone:{' '}
           <span className="font-bold">
-            {params.user.contactPhone?.toString() ?? '+55 31 97300-8566'}
+            {params.user.contactPhone?.toString() ?? ''}
           </span>
         </span>
       </div>
