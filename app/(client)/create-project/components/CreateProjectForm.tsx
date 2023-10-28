@@ -95,7 +95,6 @@ export default function CreateProjectForm({
     } else {
       formData.delete('images')
     }
-    formData.delete('files')
 
     const validatedForm = validateForm(formData)
 
@@ -150,13 +149,7 @@ export default function CreateProjectForm({
             required
           ></textarea>
 
-          <input
-            type="file"
-            accept="application/pdf"
-            id="files"
-            name="files"
-            multiple
-          />
+          <input type="file" accept="application/pdf" id="file" name="file" />
 
           <SendImageButton onChange={onImageChanges} />
 
