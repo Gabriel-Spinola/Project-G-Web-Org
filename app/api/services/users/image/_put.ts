@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
-import { storeImage } from '@/lib/storage/actions'
+import { storeFile } from '@/lib/storage/actions'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { NextResponse } from 'next/server'
@@ -8,7 +8,7 @@ async function updateUser(
   id: string,
   image: File,
 ): Promise<ESResponse<string>> {
-  const storedImage = await storeImage(`profile-pic/${id}/${image.name}`, image)
+  const storedImage = await storeFile(`profile-pic/${id}/${image.name}`, image)
 
   if (!storedImage) {
     return ESFailed('Failed to store the image')

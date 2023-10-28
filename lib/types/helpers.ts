@@ -1,6 +1,8 @@
 import { ESResponse } from './common'
 
-export function ESSucceed<DataType>(data: DataType): ESResponse<DataType> {
+export function ESSucceed<DataType, E>(
+  data: DataType,
+): ESResponse<DataType, E> {
   return { data, error: null }
 }
 
