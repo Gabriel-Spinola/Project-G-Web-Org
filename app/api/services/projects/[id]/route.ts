@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { handlePost } from '../../posts/_post'
+import handlePost from '../_post'
 
-export function handler(req: Request, { params }: { params: { id: string } }) {
+async function handler(req: Request, { params }: { params: { id: string } }) {
   const { id } = params
 
   switch (req.method) {

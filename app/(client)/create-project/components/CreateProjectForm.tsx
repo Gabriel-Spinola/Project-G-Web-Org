@@ -130,6 +130,7 @@ export default async function CreateProjectForm({
             value={form?.title}
             placeholder="input"
             onChange={(event) => handleStateChange('title', event.target.value)}
+            required
           />
 
           <textarea
@@ -142,9 +143,17 @@ export default async function CreateProjectForm({
             onChange={(event) =>
               handleStateChange('description', event.target.value)
             }
+            required
           ></textarea>
 
-          <input type="file" accept="application/pdf" multiple />
+          <input
+            type="file"
+            accept="application/pdf"
+            id="files"
+            name="files"
+            multiple
+          />
+
           <SendImageButton onChange={onImageChanges} />
 
           <input type="submit" value="submit" />
