@@ -1,7 +1,6 @@
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
-import { handleGet } from './_get'
-import { handlePost } from './_post'
+import { handlePost, handlePostWithSelectedData } from './_post'
 import handlePatch from './_patch'
 
 type SelectedData = Record<keyof User, boolean>
@@ -14,7 +13,7 @@ async function handler(req: Request) {
     if (id) {
       const reqData: SelectedData = await req.json()
 
-      return handleGet(id, reqData)
+      return handlePostWithSelectedData(id, reqData)
     }
 
     const reqData: Pick<User, 'email' | 'name'> = await req.json()
