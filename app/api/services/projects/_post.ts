@@ -50,7 +50,6 @@ export default async function handlePost(id: string, req: Request) {
   }
 
   if (projectImages && projectImages.length > 0) {
-    console.log('running images')
     const { error } = await storeMultipleFiles(
       `projects/${id}/images/`,
       projectImages,
@@ -66,7 +65,6 @@ export default async function handlePost(id: string, req: Request) {
     }
   }
   if (projectFiles && projectFiles.length > 0) {
-    console.log('running files')
     const { error } = await storeMultipleFiles(
       `projects/${id}/files/`,
       projectFiles,
