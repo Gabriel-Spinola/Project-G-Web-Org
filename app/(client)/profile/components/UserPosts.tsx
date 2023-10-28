@@ -4,6 +4,7 @@ import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubm
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { User } from '@prisma/client'
 import { Suspense } from 'react'
+import UserPostsSkeleton from './UserPostsSkeleton'
 
 type Params = {
   authorID: string
@@ -21,7 +22,7 @@ export default async function UserPosts({ authorID, currentUserData }: Params) {
     <section id="PostWrapper" className="flex flex-col">
       <PostSubmitFragment currentUserId={authorID} />
 
-      <Suspense fallback={<div>...Loading</div>}>
+      <Suspense fallback={<UserPostsSkeleton />}>
         {!error ? (
           <>
             {data && data?.length > 0 ? (

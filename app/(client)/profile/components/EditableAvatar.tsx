@@ -64,11 +64,12 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
   return (
     <div>
-      <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
-
-      <Button type="button" onClick={onOpen}>
-        edit photo
-      </Button>
+      <Avatar
+        size={'2xl'}
+        src={profilePicUrl}
+        onClick={onOpen}
+        className="hover:brightness-75 hover:cursor-pointer"
+      ></Avatar>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
