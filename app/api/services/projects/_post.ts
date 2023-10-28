@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/database/prisma'
-import { storeMultipleFiles } from '@/lib/storage/actions'
+import { storeFile, storeMultipleFiles } from '@/lib/storage/actions'
+import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { $Enums, Project } from '@prisma/client'
@@ -36,10 +37,8 @@ export default async function handlePost(id: string, req: Request) {
   const projectDescription = formData.get('description')?.toString() as
     | string
     | null
-  const projectFiles = formData.getAll('files') as File[] | null
+  const projectFile = formData.get('file') as File | null
   const projectImages = formData.getAll('images') as File[] | null
-
-  console.log(projectFiles)
   console.log(projectImages)
 
   if (!projectTitle) {
@@ -64,27 +63,27 @@ export default async function handlePost(id: string, req: Request) {
       )
     }
   }
-  if (projectFiles && projectFiles.length > 0) {
-    const { error } = await storeMultipleFiles(
-      `projects/${id}/files/`,
-      projectFiles,
+
+  // TODO - add pdf and stuff
+  /* if (projectFile) {
+    const storedFile = await storeFile(
+      `projects/${id}/files/${projectFile.name}`,
+      projectFile,
     )
 
-    if (error) {
-      console.error(error)
-
+    if (!storedFile) {
       return NextResponse.json(
         { data: 'Failed to upload one or more files' },
         { status: 500 },
       )
     }
-  }
+  } */
 
   const { data, error } = await createNewProject({
     title: projectTitle,
     description: projectDescription,
     images: projectImages?.map((file) => file.name) ?? [],
-    files: projectFiles?.map((file) => file.name) ?? [],
+    files: projectFile ? [projectFile.name] : [],
     projectType: $Enums.ProjectType.Architecture,
     tags: [],
     authorId: id,
