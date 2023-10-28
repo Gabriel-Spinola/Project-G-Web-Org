@@ -59,7 +59,7 @@ export default async function handlePost(id: string, req: Request) {
     if (error) {
       console.error(error)
 
-      NextResponse.json(
+      return NextResponse.json(
         { data: 'Failed to upload one or more images' },
         { status: 500 },
       )
@@ -75,7 +75,7 @@ export default async function handlePost(id: string, req: Request) {
     if (error) {
       console.error(error)
 
-      NextResponse.json(
+      return NextResponse.json(
         { data: 'Failed to upload one or more files' },
         { status: 500 },
       )
