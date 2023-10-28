@@ -14,6 +14,7 @@ import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
 import { ChangeEvent, useState } from 'react'
 import { createNewProject } from '../_actions'
+import Image from 'next/image'
 
 interface ProjectFormState {
   title: string
@@ -33,7 +34,7 @@ export default function CreateProjectForm({
     files: null,
     images: null,
   })
-  const [images, setImages] = useState<File[]>([])
+  const [images, setImages] = useState<File[] | undefined>(undefined)
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
@@ -119,7 +120,7 @@ export default function CreateProjectForm({
       return
     }
 
-    setImages([])
+    setImages(undefined)
   }
 
   return (
@@ -177,7 +178,7 @@ export default function CreateProjectForm({
                   <span>X</span>
                 </button>
 
-                <img
+                <Image
                   src={URL.createObjectURL(image)}
                   width={300}
                   height={400}
