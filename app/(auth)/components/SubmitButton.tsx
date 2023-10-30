@@ -7,8 +7,6 @@
  * @license GPL 3.0
  */
 
-import { experimental_useFormStatus as useFormStatus } from 'react-dom'
-
 export function SubmitButton({
   isVerified,
   buttonText,
@@ -16,17 +14,14 @@ export function SubmitButton({
   isVerified: boolean
   buttonText: string
 }) {
-  // NOTE - Gathers the current form status
-  const { pending } = useFormStatus()
-
   return (
     <button
       type="submit"
-      aria-disabled={pending || !isVerified}
-      disabled={pending || !isVerified}
+      aria-disabled={!isVerified}
+      disabled={!isVerified}
       className={`text-pure-white text-2xl font-bold p-4 cursor-pointer w-full rounded-lg bg-gradient-to-tl from-medium-tertiary to-medium-primary hover:brightness-90 hover:scale-[101%]`}
     >
-      {pending ? 'Carregando' : buttonText}
+      {buttonText}
     </button>
   )
 }
