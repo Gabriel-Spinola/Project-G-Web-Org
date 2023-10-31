@@ -200,6 +200,12 @@ model Comment {
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String? 
+
+  replies Comment[] @relation("Replies")
+
+  parentComment Comment? @relation("Replies", fields: [parentCommentId], references: [id])
+  parentCommentId Int?
+
 }
 
 model Like {
