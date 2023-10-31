@@ -1,7 +1,7 @@
 'use client'
 
 import SendImageButton from '@/components/Buttons/SendImageButton'
-import { validateImageInput } from '@/lib/schemas/post.schema'
+import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { Avatar } from '@chakra-ui/avatar'
 import {
   Button,

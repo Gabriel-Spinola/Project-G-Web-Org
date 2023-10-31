@@ -9,7 +9,6 @@ import {
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import styles from './buttons.module.scss'
 import { LikeOptions } from '@/app/(feed)/_constants'
-import { useRouter } from 'next/navigation'
 
 type LikeButtonParams = {
   params: {
