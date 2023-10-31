@@ -1,9 +1,8 @@
 import { prisma } from '@/lib/database/prisma'
-import { UserData } from '@/lib/types/common'
 import { NextResponse } from 'next/server'
 
 export async function GET(
-  req: Request,
+  _req: Request,
   { params }: { params: { query: string } },
 ) {
   const { query } = params
