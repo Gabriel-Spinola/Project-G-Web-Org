@@ -9,12 +9,14 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalHeader,
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import React, { ChangeEvent, useState } from 'react'
 import { changeProfilePic } from '../_actions'
+import { AiFillCamera } from 'react-icons/ai'
 
 type Props = {
   profileId: string
@@ -64,19 +66,22 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
   return (
     <div>
-      <Avatar
-        size={'2xl'}
-        src={profilePicUrl}
+      <div
         onClick={onOpen}
-        className="hover:brightness-75 hover:cursor-pointer"
-      ></Avatar>
+        className="flex justify-end items-end hover:brightness-75 hover:cursor-pointer"
+      >
+        <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
+        <div className="absolute bg-darker-white p-2 rounded-full">
+          <AiFillCamera color={'#242424'} />
+        </div>
+      </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-
         <ModalContent>
-          <ModalCloseButton />
-
+          <ModalHeader>
+            <ModalCloseButton />
+          </ModalHeader>
           <ModalBody>
             <form method="PUT" onSubmit={handleFormSubmission}>
               <SendImageButton onChange={onImageChanges} />

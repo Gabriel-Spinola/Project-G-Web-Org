@@ -47,16 +47,17 @@ export default async function Profile({ params }: Props) {
 
   return (
     <>
-      {/* TODO - Add skeleton */}
+      {/* NOTE - Profile Card Skeleton */}
       <Suspense fallback={<ProfileCardSkeleton />}>
         {user && <ProfileCard user={user} isOwner={isOwner} />}
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
         <div className="flex flex-col w-[90%] min-h-[calc(100vh-296px)] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
-          {/* TODO - Add skeleton */}
+          {/* NOTE - Profile User Info Skeleton */}
           <Suspense fallback={<UserInfoSkeleton />}>
             {user && (
+              // NOTE - This wrapper div prevents UserInfo container expansion
               <div>
                 <UserInfo
                   isOwner={isOwner}
@@ -68,7 +69,7 @@ export default async function Profile({ params }: Props) {
             )}
           </Suspense>
 
-          {/* TODO - Add skeleton */}
+          {/* NOTE - Profile User Post Skeleton */}
           <Suspense fallback={<UserPostsSkeleton />}>
             {/*  NOTE - This Wrapper Div defines post width */}
             <div className="lg:w-[680px] x1:w-[800px]">

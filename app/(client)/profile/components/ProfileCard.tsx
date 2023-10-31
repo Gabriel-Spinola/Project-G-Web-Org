@@ -169,6 +169,9 @@ export default function ProfileCard({ user, isOwner }: Params) {
               <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
                 Editar Perfil
               </MenuItem>
+              <MenuItem icon={<BsFillGearFill color="black" />}>
+                Configurações
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>
