@@ -1,8 +1,9 @@
 import { prisma } from '@/lib/database/prisma'
+import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export default async function handleGet(): Promise<
-  NextResponse<Record<'data', unknown>>
+  NextResponse<Record<'data', User[] | string>>
 > {
   try {
     const users = await prisma.user.findMany()
