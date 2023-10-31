@@ -10,6 +10,7 @@
 export const API_ENDPOINTS = {
   services: {
     posts: 'api/services/posts/',
+    projects: 'api/services/projects/',
     users: 'api/services/users/',
     comments: 'api/services/comments/',
   },
@@ -17,14 +18,6 @@ export const API_ENDPOINTS = {
     createProject: 'api/handlers/CreateProjectFormHandler/',
     updateUser: 'api/handlers/update-user/',
   },
-}
-
-// STUB - TEMP
-export enum ModelsApiCode {
-  Project = '0',
-  Post = '1',
-  Comment = '2',
-  User = '3',
 }
 
 export const SUPABASE_STORAGE_URL = `https://${process.env.SUPABASE_PROJECT_ID}.supabase.co/storage/v1/upload/resumable`

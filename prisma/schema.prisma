@@ -59,6 +59,7 @@ model Project {
   title       String
   description String?
   images      String[]
+  files       String[]
 
   projectType ProjectType
   tags        String[]

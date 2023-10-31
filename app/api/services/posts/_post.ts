@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
-import { storeImage } from '@/lib/storage/actions'
+import { storeFile } from '@/lib/storage/actions'
 import { Post } from '@prisma/client'
 import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
@@ -75,7 +75,7 @@ export async function handlePost(
     if (postImages) {
       const storedImages = await Promise.all(
         postImages.map((image: File) =>
-          storeImage(`posts/${authorId}/${image.name}`, image),
+          storeFile(`posts/${authorId}/${image.name}`, image),
         ),
       )
 

@@ -2,20 +2,33 @@ import { z as zod } from 'zod'
 import { ESResponse } from '../types/common'
 
 export type ExpectedData = {
-  content: string
-  images?: File[] | null
+  title: string
+  description: string
+  files: File[] | null
+  images: File[] | null
 }
 
-export const newPostDataSchema = zod.object({
-  content: zod
+export const dataSchema = zod.object({
+  title: zod
     .string({ required_error: 'Post não pode estar vazio' })
     .min(1)
-    .max(4000, {
+    .max(50, {
       message: 'Seu post ultrapassou o limite de caracteres (4000)',
     }),
+  description: zod
+    .string({ required_error: 'Post não pode estar vazio' })
+    .min(1)
+    .max(400, {
+      message: 'Seu post ultrapassou o limite de caracteres (4000)',
+    }),
+  files: zod
+    .any({
+      invalid_type_error: 'arquivos invalidos',
+    })
+    .optional(),
   images: zod
     .any({
-      invalid_type_error: 'imagem inválida',
+      invalid_type_error: 'imagens invalidas',
     })
     .optional(),
 })
@@ -27,7 +40,7 @@ export const newPostDataSchema = zod.object({
 export function validateForm(
   formData: FormData,
 ): ESResponse<FormData, zod.ZodError<ExpectedData>> {
-  const parsedFormData = newPostDataSchema.safeParse(
+  const parsedFormData = dataSchema.safeParse(
     Object.fromEntries(formData.entries()),
   )
 

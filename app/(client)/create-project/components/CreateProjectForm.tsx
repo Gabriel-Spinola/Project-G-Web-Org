@@ -7,36 +7,37 @@
  * @license i.e. MIT
  */
 
-import SendImageButton from '@/components/Buttons/SendImageButton'
-import React, { ChangeEvent, useState } from 'react'
-import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
-import { usePathname, useRouter } from 'next/navigation'
-import { validateForm } from '@/lib/schemas/post.schema'
-import { createNewPost } from '@/app/(feed)/_actions'
-import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
+'use client'
 
-interface PostFormState {
-  content: string
+import SendImageButton from '@/components/Buttons/SendImageButton'
+import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
+import { validateForm } from '@/lib/schemas/newProject.schema'
+import { ChangeEvent, useState } from 'react'
+import { createNewProject } from '../_actions'
+import Image from 'next/image'
+
+interface ProjectFormState {
+  title: string
+  description: string
+  files: File[] | null
   images: File[] | null
 }
 
-type Props = {
-  closeModal: () => void
+export default function CreateProjectForm({
+  currentUserId,
+}: {
   currentUserId: string
-}
-
-export function NewPostModal({ closeModal, currentUserId }: Props) {
-  const [form, setForm] = useState<PostFormState | null>({
-    content: '',
+}) {
+  const [form, setForm] = useState<ProjectFormState | null>({
+    title: '',
+    description: '',
+    files: null,
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const router = useRouter()
-  const pathName = usePathname()
 
   function handleStateChange(
-    fieldName: keyof PostFormState,
+    fieldName: keyof ProjectFormState,
     value: string,
   ): void {
     setForm((prevForm) => {
@@ -71,14 +72,18 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     })
   }
 
+  function removeImageFromPreviewByIndex(index: number) {
+    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
+
+    setImages(
+      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
+    )
+  }
+
   async function handleFormSubmission(
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> {
     event.preventDefault()
-
-    if (isLoading) {
-      return
-    }
 
     const formData = new FormData(event.currentTarget)
 
@@ -106,8 +111,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
-    setIsLoading(true)
-    const { error } = await createNewPost(currentUserId, validatedForm.data)
+    const { error } = await createNewProject(currentUserId, validatedForm.data)
 
     if (error) {
       alert('Failed to create post')
@@ -116,50 +120,40 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     }
 
     setImages(undefined)
-    setIsLoading(false)
-    closeModal()
-    router.push(pathName + '?create=1', { scroll: false })
-  }
-
-  function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
-
-    setImages(
-      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
-    )
   }
 
   return (
-    <section>
-      {/* Form Section */}
-      <section
-        id="post-form"
-        className="notClose z-1 drop-shadow-sm text-xl p-8 rounded-[8px]"
-      >
-        <form
-          method="POST"
-          onSubmit={handleFormSubmission}
-          className="notClose"
-        >
-          {/* Content */}
-          <div className="notClose flex flex-row">
-            <textarea
-              name="content"
-              placeholder="Faça uma publicação"
-              className="notClose w-full pb-[192px] text-xl margin-none text-start outline-none resize-none"
-              value={form?.content}
-              onChange={(event) =>
-                handleStateChange('content', event.target.value)
-              }
-              required
-            ></textarea>
-          </div>
+    <>
+      <section id="form-section">
+        <form method="POST" onSubmit={handleFormSubmission}>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={form?.title}
+            placeholder="input"
+            onChange={(event) => handleStateChange('title', event.target.value)}
+            required
+          />
 
-          {/* Input Buttons */}
-          <div className=" mt-3 flex flex-row justify-between items-center">
-            <SendImageButton onChange={onImageChanges} />
-            <SubmitPostButton isLoading={isLoading} />
-          </div>
+          <textarea
+            name="description"
+            id="description"
+            cols={30}
+            rows={10}
+            value={form?.description}
+            placeholder="textare"
+            onChange={(event) =>
+              handleStateChange('description', event.target.value)
+            }
+            required
+          ></textarea>
+
+          <input type="file" accept="application/pdf" id="file" name="file" />
+
+          <SendImageButton onChange={onImageChanges} />
+
+          <input type="submit" value="submit" />
         </form>
       </section>
 
@@ -177,7 +171,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
                   <span>X</span>
                 </button>
 
-                <img
+                <Image
                   src={URL.createObjectURL(image)}
                   width={300}
                   height={400}
@@ -188,6 +182,6 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
           </>
         )}
       </section>
-    </section>
+    </>
   )
 }
