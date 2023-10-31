@@ -16,6 +16,7 @@ type DisplayComment = {
   content: string
 }
 
+// REVIEW - this code is a complete shitty mess
 export default function PostCommentsSection({
   post,
   currentUserId,
@@ -113,6 +114,7 @@ export default function PostCommentsSection({
             >
               delete
             </button>
+
             <span>{post.author?.name}</span>
             <label htmlFor="content"></label>
             <textarea

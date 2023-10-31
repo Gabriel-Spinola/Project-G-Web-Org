@@ -18,7 +18,13 @@ export async function GET(req: Request) {
         skip,
         take,
         where: { postId },
-        include: { author: { select: { name: true } } },
+        include: {
+          author: { select: { name: true } },
+          replies: {
+            select: { id: true, content: true, isEdited: true },
+            include: { author: { select: { name: true } } },
+          },
+        },
       })
 
       return NextResponse.json({ data }, { status: 200 })

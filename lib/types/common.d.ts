@@ -59,6 +59,7 @@ export type UserData = Partial<User> & {
 
 export type PublicationComment = Comment & {
   author: { name: string }
+  replies: (Comment & { author: { name: string } })[]
 }
 
 /**
