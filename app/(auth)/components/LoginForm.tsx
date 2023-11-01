@@ -17,6 +17,7 @@ import { signIn } from 'next-auth/react'
 import { verifyCaptcha } from '@/server/serverActions'
 import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
+import { validateForm } from '@/lib/schemas/login.schema'
 
 export default function LoginForm() {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -27,9 +28,28 @@ export default function LoginForm() {
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    const formData = new FormData()
+    formData.append('email', email.current)
+    formData.append('password', password.current)
+
+    const { data, error } = validateForm(formData)
+
+    if (error) {
+      let errorMessage = ''
+
+      error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
+      })
+
+      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+
+      return
+    }
+
     signIn('credentials', {
-      email: email.current,
-      password: password.current,
+      email: data.email,
+      password: data.password,
       redirect: true,
       callbackUrl: '/',
     })
@@ -87,6 +107,7 @@ export default function LoginForm() {
       <div id="submitLogin" className="flex w-full gap-4">
         <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
         <button
+          type="button"
           onClick={() => signIn('google')}
           className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
         >

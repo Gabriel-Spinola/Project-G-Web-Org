@@ -7,11 +7,9 @@ import { handlePatch } from './_patch'
 import { Post } from '@prisma/client'
 
 /**
- *
  * @param req Request
  * @param id works as authorID for: GET, POST, and, as postID for: PUT, DELETE
  * @returns API Response. Into `{ data: "response data" }` format
- *
  */
 async function handler(req: Request): Promise<NextResponse> {
   const url = new URL(req.url)
