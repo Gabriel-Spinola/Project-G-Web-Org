@@ -1,16 +1,14 @@
 'use client'
 
-import { deleteComment, postComment } from '@/app/(feed)/_serverActions'
+import { postComment } from '@/app/(feed)/_serverActions'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
-
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { signIn } from 'next-auth/react'
-import { LikeButton } from '../Buttons/LikeButton'
-import { Like } from '@prisma/client'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
 import Comment from '../comments/Comment'
+import NewCommentDialog from '../comments/NewCommentDialog'
 
 // REVIEW - this code is a complete shitty mess
 export default function PostCommentsSection({
@@ -20,12 +18,12 @@ export default function PostCommentsSection({
   post: FullPost
   currentUserId?: string
 }) {
+  const router = useRouter()
+  const pathName = usePathname()
+
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
     post.comments,
   )
-
-  const router = useRouter()
-  const pathName = usePathname()
 
   function handleFacadeCommentSubmit(
     id: number,
@@ -49,77 +47,31 @@ export default function PostCommentsSection({
     router.replace(`${pathName}?update-comment=${id}`)
   }
 
-  async function handleFormSubimission(formData: FormData) {
-    if (!currentUserId) {
-      signIn()
-
-      return
-    }
-
-    const validatedData = validateForm(formData)
-
-    if (validatedData.error) {
-      let errorMessage = ''
-
-      validatedData.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
-
-      return
-    }
-
-    const { data, error } = await postComment(validatedData.data)
-
-    if (error || !data) {
-      alert('failed to create comment')
-
-      return
-    }
-
-    handleFacadeCommentSubmit(
-      data,
-      formData.get('content') as string,
-      currentUserId,
-    )
-
-    router.replace(`${pathName}?update-comment=${data}`)
-  }
-
   return (
-    <div>
-      <form action={handleFormSubimission}>
-        <input type="hidden" name="author-id" value={currentUserId} />
-        <input type="hidden" name="target-id" value={post.id} />
-
-        <label htmlFor="content"></label>
-        <textarea
-          name="content"
-          title="content"
-          id="contentk"
-          cols={30}
-          rows={3}
-          placeholder="Faça seu comentário"
-        ></textarea>
-
-        <CreateCommentButton />
-      </form>
+    <section>
+      <div id="form-container">
+        <NewCommentDialog
+          currentUserId={currentUserId}
+          postId={post.id}
+          handleFacadeCommentSubmit={handleFacadeCommentSubmit}
+        />
+      </div>
 
       <hr />
 
-      <h2>Comments</h2>
+      <div id="display">
+        <h2>Comments</h2>
 
-      {comments.length > 0 &&
-        comments.map((comment, index) => (
-          <Comment
-            key={index}
-            comment={comment}
-            currentUserId={currentUserId}
-            handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-          />
-        ))}
-    </div>
+        {comments.length > 0 &&
+          comments.map((comment, index) => (
+            <Comment
+              key={index}
+              comment={comment}
+              currentUserId={currentUserId}
+              handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+            />
+          ))}
+      </div>
+    </section>
   )
 }
