@@ -4,9 +4,6 @@ import { postComment } from '@/app/(feed)/_serverActions'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { validateForm } from '@/lib/schemas/comment.schema'
-import { signIn } from 'next-auth/react'
-import CreateCommentButton from '../Buttons/CreateCommentButton'
 import Comment from '../comments/Comment'
 import NewCommentDialog from '../comments/NewCommentDialog'
 
@@ -65,6 +62,7 @@ export default function PostCommentsSection({
         {comments.length > 0 &&
           comments.map((comment, index) => (
             <Comment
+              postId={post.id}
               key={index}
               comment={comment}
               currentUserId={currentUserId}

@@ -65,24 +65,21 @@ export default function NewCommentDialog({
   }
 
   return (
-    <div>
-      {' '}
-      <form action={handleFormSubimission}>
-        <input type="hidden" name="author-id" value={currentUserId} />
-        <input type="hidden" name="target-id" value={postId} />
+    <form action={handleFormSubimission}>
+      <input type="hidden" name="author-id" value={currentUserId} />
+      <input type="hidden" name="target-id" value={postId} />
 
-        <label htmlFor="content"></label>
-        <textarea
-          name="content"
-          title="content"
-          id="contentk"
-          cols={30}
-          rows={3}
-          placeholder="Faça seu comentário"
-        ></textarea>
+      <label htmlFor="content"></label>
+      <textarea
+        name="content"
+        title="content"
+        id="contentk"
+        cols={30}
+        rows={3}
+        placeholder="Faça seu comentário"
+      ></textarea>
 
-        <CreateCommentButton />
-      </form>
-    </div>
+      <CreateCommentButton />
+    </form>
   )
 }
