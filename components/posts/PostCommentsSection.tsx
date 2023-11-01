@@ -1,7 +1,7 @@
 'use client'
 
 import { deleteComment, postComment } from '@/app/(feed)/_serverActions'
-import { FullPost } from '@/lib/types/common'
+import { FullPost, TDisplayComment } from '@/lib/types/common'
 
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -10,11 +10,7 @@ import { signIn } from 'next-auth/react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
-
-type DisplayComment = {
-  id: number
-  content: string
-}
+import Comment from '../comments/Comment'
 
 // REVIEW - this code is a complete shitty mess
 export default function PostCommentsSection({
@@ -24,17 +20,26 @@ export default function PostCommentsSection({
   post: FullPost
   currentUserId?: string
 }) {
-  const [comments, setComments] = useState<DisplayComment[]>(post.comments)
+  const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
+    post.comments,
+  )
 
   const router = useRouter()
   const pathName = usePathname()
 
-  function handleFacadeCommentSubmit(id: number, content: string) {
+  function handleFacadeCommentSubmit(
+    id: number,
+    content: string,
+    authorName: string,
+  ) {
     setComments((prev) => [
       ...prev,
       {
         id,
         content,
+        author: {
+          name: authorName,
+        },
       },
     ])
   }
@@ -74,7 +79,12 @@ export default function PostCommentsSection({
       return
     }
 
-    handleFacadeCommentSubmit(data, formData.get('content') as string)
+    handleFacadeCommentSubmit(
+      data,
+      formData.get('content') as string,
+      currentUserId,
+    )
+
     router.replace(`${pathName}?update-comment=${data}`)
   }
 
@@ -103,42 +113,12 @@ export default function PostCommentsSection({
 
       {comments.length > 0 &&
         comments.map((comment, index) => (
-          <div key={index}>
-            <button
-              type="button"
-              onClick={async () => {
-                handleFacadeCommentDeletion(comment.id)
-
-                await deleteComment(comment.id)
-              }}
-            >
-              delete
-            </button>
-
-            <span>{post.author?.name}</span>
-            <label htmlFor="content"></label>
-            <textarea
-              title="content"
-              id="content"
-              cols={30}
-              rows={2}
-              value={comment.content}
-              readOnly
-            ></textarea>
-
-            <LikeButton
-              params={{
-                option: 'commentId',
-                likes: post.comments[index]?.likes?.length ?? 0,
-                targetId: comment.id,
-                authorId: currentUserId,
-                isLiked:
-                  post.comments[index]?.likes?.some(
-                    (like: Partial<Like>) => like.userId === currentUserId,
-                  ) ?? false,
-              }}
-            />
-          </div>
+          <Comment
+            key={index}
+            comment={comment}
+            currentUserId={currentUserId}
+            handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+          />
         ))}
     </div>
   )
