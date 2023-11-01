@@ -56,7 +56,7 @@ export default function PostSettings({
           textColor={'#ebebeb'}
         >
           <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }} gap={'16px'}>
-            <span onClick={CopyLink}>
+            <span onClick={CopyLink} className="flex flex-row">
               <BiSolidShare size={20} />
               Compartilhar publicação
             </span>

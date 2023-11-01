@@ -127,13 +127,15 @@ export default function ProfileCard({ user, isOwner }: Params) {
             })}
           />
         ) : (
-          <Avatar
-            size={'2xl'}
-            src={getProfilePicURL({
-              profilePic: user.profilePic as string | null,
-              image: user.image as string | null,
-            })}
-          ></Avatar>
+          <div>
+            <Avatar
+              size={'2xl'}
+              src={getProfilePicURL({
+                profilePic: user.profilePic as string | null,
+                image: user.image as string | null,
+              })}
+            />
+          </div>
         )}
       </div>
 

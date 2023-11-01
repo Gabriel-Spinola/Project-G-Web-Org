@@ -3,8 +3,6 @@ import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPost
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { User } from '@prisma/client'
-import { Suspense } from 'react'
-import UserPostsSkeleton from './UserPostsSkeleton'
 
 type Params = {
   authorID: string
@@ -22,23 +20,21 @@ export default async function UserPosts({ authorID, currentUserData }: Params) {
     <section id="PostWrapper" className="flex flex-col">
       <PostSubmitFragment currentUserId={authorID} />
 
-      <Suspense fallback={<UserPostsSkeleton />}>
-        {!error ? (
-          <>
-            {data && data?.length > 0 ? (
-              <InfiniteScrollPosts
-                initialPublication={data}
-                currentUserData={currentUserData}
-                profileId={authorID}
-              />
-            ) : (
-              <>Oops você chegou ao fim!</>
-            )}
-          </>
-        ) : (
-          <h1>Feed Failed to load</h1>
-        )}
-      </Suspense>
+      {!error ? (
+        <div className="flex flex-col justify-center">
+          {data && data?.length > 0 ? (
+            <InfiniteScrollPosts
+              initialPublication={data}
+              currentUserData={currentUserData}
+              profileId={authorID}
+            />
+          ) : (
+            <span className="w-full text-center">Oops você chegou ao fim!</span>
+          )}
+        </div>
+      ) : (
+        <span className="w-full text-center">Feed Failed to load</span>
+      )}
     </section>
   )
 }

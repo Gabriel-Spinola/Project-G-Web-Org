@@ -7,6 +7,8 @@
  * @license i.e. MIT
  */
 
+'use client'
+
 import { Box, Avatar } from '@chakra-ui/react'
 
 export default function ProfileCardSkeleton() {
@@ -40,8 +42,6 @@ export default function ProfileCardSkeleton() {
           <span className="h-[24px] w-[180px] bg-[#A0AEC0]" />
         </div>
       </div>
-
-      {/* NOTE - Card info editing */}
     </section>
   )
 }
