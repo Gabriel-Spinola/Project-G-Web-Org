@@ -79,24 +79,22 @@ export default function PostCommentsSection({
 
   return (
     <div>
-      <form action={handleFormSubimission}>
+      <form action={handleFormSubimission} className="flex flex-col">
         <input type="hidden" name="author-id" value={currentUserId} />
         <input type="hidden" name="target-id" value={post.id} />
 
         <label htmlFor="content"></label>
         <textarea
+          className="resize-none"
           name="content"
           title="content"
           id="contentk"
-          cols={30}
           rows={3}
           placeholder="Faça seu comentário"
         ></textarea>
 
         <CreateCommentButton />
       </form>
-
-      <hr />
 
       <h2>Comments</h2>
 

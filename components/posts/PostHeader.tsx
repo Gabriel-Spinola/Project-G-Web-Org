@@ -37,7 +37,7 @@ export default function PostHeader({
       </div>
 
       <PostSettings
-        postId={post.id}
+        post={post}
         isOwner={isOwner}
         currentUserPosition={currentUserPosition}
       />
