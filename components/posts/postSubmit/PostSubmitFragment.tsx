@@ -36,13 +36,14 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
   return (
     <>
       <button
-        className={`w-full m-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
+        className={`w-full my-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
         id={styles.textAnimation}
         onClick={onOpen}
       >
         Faça uma publicação
         <div id={styles.textSub}></div>
       </button>
+
       <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>

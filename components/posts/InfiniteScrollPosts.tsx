@@ -5,25 +5,21 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { CgSpinnerAlt } from 'react-icons/cg'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
-import { $Enums } from '@prisma/client'
+import { User } from '@prisma/client'
+import { CircularProgress } from '@chakra-ui/react'
 
 // TODO: Generalize Feed - Incomplete
 type Params<Publication extends FullPost = FullPost> = {
   initialPublication: Publication[] | undefined
-  currentUserId?: string
-  currentUserPosition?: $Enums.Positions | undefined
+  currentUserData?: Pick<User, 'id' | 'position'>
+  profileId?: string
 }
 
 export default function InfiniteScrollPosts<
   Publication extends FullPost = FullPost,
->({
-  initialPublication,
-  currentUserId,
-  currentUserPosition,
-}: Params<Publication>) {
+>({ initialPublication, currentUserData, profileId }: Params<Publication>) {
   const [posts, setPosts] = useState<Publication[] | undefined>(
     initialPublication,
   )
@@ -33,7 +29,6 @@ export default function InfiniteScrollPosts<
 
   const searchParams = useSearchParams()
   const router = useRouter()
-  const pathName = usePathname()
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
@@ -46,7 +41,7 @@ export default function InfiniteScrollPosts<
       const { data, error }: ESResponse<Publication[]> = await fetchPosts(
         next,
         signal,
-        currentUserId,
+        profileId,
       )
 
       if (error) {
@@ -67,7 +62,7 @@ export default function InfiniteScrollPosts<
         ...data,
       ])
     },
-    [page, currentUserId],
+    [page, profileId],
   )
 
   // NOTE - Handles feed data fetching
@@ -116,8 +111,8 @@ export default function InfiniteScrollPosts<
         <PostItem
           key={post.id}
           post={post}
-          currentUserId={currentUserId}
-          currentUserPosition={currentUserPosition}
+          currentUserId={currentUserData?.id}
+          currentUserPosition={currentUserData?.position}
         />
       ))}
 
@@ -127,10 +122,9 @@ export default function InfiniteScrollPosts<
       ) : (
         <div
           ref={ref}
-          className="col-span-1 mx-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4 animate-spin"
+          className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          <CgSpinnerAlt size={48} />
-          <span className="sr-only">Loading...</span>
+          <CircularProgress isIndeterminate color="black" size={8} />
         </div>
       )}
     </>

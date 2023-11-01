@@ -15,7 +15,7 @@ import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { validateRegisterForm } from '@/lib/schemas/userRegisteringSchema'
+import { validateRegisterForm } from '@/lib/schemas/userRegistering.schema'
 import { SubmitButton } from '../components/SubmitButton'
 import TextBox from '../components/TextBox'
 import { FcGoogle } from 'react-icons/fc'
@@ -140,6 +140,7 @@ export default function RegisterPage() {
                   buttonText={'REGISTRAR'}
                 />
                 <button
+                  type="button"
                   onClick={() => signIn('google')}
                   className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
                 >

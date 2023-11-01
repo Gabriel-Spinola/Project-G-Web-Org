@@ -2,8 +2,9 @@ import React from 'react'
 
 export default async function PostPage() {
   return (
-    <main className="flex">
-      <section id="postContent" className=""></section>
+    <main>
+      <section id="postSection">SIM</section>
+      <section id="commentSection"></section>
     </main>
   )
 }

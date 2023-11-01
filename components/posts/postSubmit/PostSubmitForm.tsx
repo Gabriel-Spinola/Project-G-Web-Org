@@ -10,9 +10,10 @@
 import SendImageButton from '@/components/Buttons/SendImageButton'
 import React, { ChangeEvent, useState } from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { usePathname, useRouter } from 'next/navigation'
-import { validateForm, validateImageInput } from '@/lib/schemas/postSchema'
+import { validateForm } from '@/lib/schemas/post.schema'
+import { createNewPost } from '@/app/(feed)/_actions'
+import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 
 interface PostFormState {
   content: string
@@ -75,6 +76,10 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
   ): Promise<void> {
     event.preventDefault()
 
+    if (isLoading) {
+      return
+    }
+
     const formData = new FormData(event.currentTarget)
 
     if (images && images?.length >= 0) {
@@ -101,32 +106,19 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
       return
     }
 
-    try {
-      const response = await fetch(
-        `${API_URL}${API_ENDPOINTS.services.posts}?id=${currentUserId}`,
-        {
-          method: 'POST',
-          body: validatedForm.data,
-          headers: {
-            'X-API-Key': process.env.API_SECRET as string,
-          },
-        },
-      )
+    setIsLoading(true)
+    const { error } = await createNewPost(currentUserId, validatedForm.data)
 
-      const { data } = await response.json()
+    if (error) {
+      alert('Failed to create post')
 
-      if (!response.ok) {
-        throw new Error('response not ok' + JSON.stringify(data))
-      }
-
-      console.log('worked ' + JSON.stringify(data))
-
-      setImages(undefined)
-      closeModal()
-      router.push(pathName + '?create=1', { scroll: false })
-    } catch (error: unknown) {
-      console.error(error)
+      return
     }
+
+    setImages(undefined)
+    setIsLoading(false)
+    closeModal()
+    router.push(pathName + '?create=1', { scroll: false })
   }
 
   function removeImageFromPreviewByIndex(index: number) {
@@ -166,7 +158,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
           {/* Input Buttons */}
           <div className=" mt-3 flex flex-row justify-between items-center">
             <SendImageButton onChange={onImageChanges} />
-            <SubmitPostButton />
+            <SubmitPostButton isLoading={isLoading} />
           </div>
         </form>
       </section>

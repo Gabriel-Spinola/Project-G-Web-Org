@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
 import Link from 'next/link'
+import NavBarSettings from './NavBarSettings'
 
 export default function Navbar({ userSession }: { userSession?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -18,9 +19,11 @@ export default function Navbar({ userSession }: { userSession?: string }) {
     <>
       <nav
         id="navDesktop"
-        className="flex h-[88px] w-full justify-around shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl"
+        className="flex justify-end p-8 h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl"
       >
-        <ul className="flex flex-row">
+        {userSession ? <NavBarSettings className="z-[100]" /> : null}
+
+        <ul className="absolute flex flex-row w-full items-center justify-center">
           <li>
             <Link href="/explore">
               Explorar

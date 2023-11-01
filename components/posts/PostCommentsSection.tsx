@@ -1,15 +1,15 @@
 'use client'
 
-import { postComment } from '@/app/(feed)/_serverActions'
-import { deleteComment } from '@/app/(client)/temp/comments/actions'
+import { deleteComment, postComment } from '@/app/(feed)/_serverActions'
 import { FullPost } from '@/lib/types/common'
-import CreateCommentButton from '@/app/(client)/temp/components/CreateCommentButton'
+
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { validateForm } from '@/lib/schemas/commentSchema'
+import { validateForm } from '@/lib/schemas/comment.schema'
 import { signIn } from 'next-auth/react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
+import CreateCommentButton from '../Buttons/CreateCommentButton'
 
 type DisplayComment = {
   id: number
@@ -79,24 +79,22 @@ export default function PostCommentsSection({
 
   return (
     <div>
-      <form action={handleFormSubimission}>
+      <form action={handleFormSubimission} className="flex flex-col">
         <input type="hidden" name="author-id" value={currentUserId} />
         <input type="hidden" name="target-id" value={post.id} />
 
         <label htmlFor="content"></label>
         <textarea
+          className="resize-none"
           name="content"
           title="content"
           id="contentk"
-          cols={30}
           rows={3}
           placeholder="Faça seu comentário"
         ></textarea>
 
         <CreateCommentButton />
       </form>
-
-      <hr />
 
       <h2>Comments</h2>
 
@@ -107,6 +105,7 @@ export default function PostCommentsSection({
               type="button"
               onClick={async () => {
                 handleFacadeCommentDeletion(comment.id)
+
                 await deleteComment(comment.id)
               }}
             >
