@@ -1,9 +1,12 @@
+'use client'
+
 import { TDisplayComment } from '@/lib/types/common'
 import React from 'react'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import ReplyDialog from './ReplyDialog'
+import { useDisclosure } from '@chakra-ui/react'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -16,9 +19,17 @@ export default function Comment({
   currentUserId,
   handleFacadeCommentDeletion,
 }: Props) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <div>
-      <ReplyDialog />
+      <button onClick={onOpen}>opendialogo</button>
+      <ReplyDialog
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        currentUserId={currentUserId}
+      />
 
       <button
         type="button"
