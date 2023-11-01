@@ -59,7 +59,9 @@ export async function fetchPosts<T extends FullPost = FullPost>(
     })
 
     if (!response.ok) {
-      throw new Error("Response's not okay")
+      const { data }: { data: string } = await response.json()
+
+      throw new Error("Response's not okay " + data)
     }
 
     const { data }: { data: T[] } = await response.json()

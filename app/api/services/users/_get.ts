@@ -1,28 +1,26 @@
 import { prisma } from '@/lib/database/prisma'
-import { UserData } from '@/lib/types/common'
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-type SelectedData = Record<keyof User, boolean>
-
-export async function handleGet(id: string, selectedData: SelectedData) {
+export default async function handleGet(): Promise<
+  NextResponse<Record<'data', User[] | string>>
+> {
   try {
-    const data: UserData | null = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        ...selectedData,
-        _count: { select: { followers: true, following: true } },
-      },
-    })
+    const users = await prisma.user.findMany()
 
-    if (!data) {
-      throw new Error('Failed to fetch data')
+    if (users.length <= 0) {
+      console.warn('no user found')
+
+      return NextResponse.json({ data: 'No user found' }, { status: 204 })
     }
 
-    return NextResponse.json({ data }, { status: 200 })
-  } catch (e: unknown) {
-    console.error(e)
+    return NextResponse.json({ data: users }, { status: 200 })
+  } catch (error: unknown) {
+    console.error(error)
 
-    return NextResponse.json({ data: 'failed' }, { status: 400 })
+    return NextResponse.json(
+      { data: 'failed to search for user' },
+      { status: 500 },
+    )
   }
 }

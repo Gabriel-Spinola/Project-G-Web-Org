@@ -1,20 +1,26 @@
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
-import { handleGet } from './_get'
-import { handlePost } from './_post'
+import { handlePost, handlePostWithSelectedData } from './_post'
 import handlePatch from './_patch'
+import handleGet from './_get'
 
 type SelectedData = Record<keyof User, boolean>
 
-async function handler(req: Request) {
+async function handler(
+  req: Request,
+): Promise<NextResponse<Record<'data', unknown>>> {
   const url = new URL(req.url)
   const id = url.searchParams.get('id')?.toString()
+
+  if (req.method === 'GET') {
+    return handleGet()
+  }
 
   if (req.method === 'POST') {
     if (id) {
       const reqData: SelectedData = await req.json()
 
-      return handleGet(id, reqData)
+      return handlePostWithSelectedData(id, reqData)
     }
 
     const reqData: Pick<User, 'email' | 'name'> = await req.json()
@@ -37,6 +43,11 @@ async function handler(req: Request) {
 
     return handlePatch(id, newUserData)
   }
+
+  return NextResponse.json(
+    { data: { message: 'Invalid method' } },
+    { status: 401 },
+  )
 }
 
 export { handler as POST, handler as PATCH }
