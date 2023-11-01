@@ -28,6 +28,12 @@ async function getPosts(
           include: {
             author: { select: { name: true } },
             likes: { select: { id: true, userId: true } },
+            replies: {
+              include: {
+                author: { select: { name: true } },
+                likes: { select: { id: true, userId: true } },
+              },
+            },
           },
         },
       },
