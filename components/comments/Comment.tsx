@@ -1,13 +1,14 @@
-import { FullPost, TDisplayComment } from '@/lib/types/common'
+import { TDisplayComment } from '@/lib/types/common'
 import React from 'react'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
+import ReplyDialog from './ReplyDialog'
 
 type Props = {
   comment: Partial<TDisplayComment>
   currentUserId?: string
-  handleFacadeCommentDeletion: (id: number) => void
+  handleFacadeCommentDeletion?: (id: number) => void
 }
 
 export default function Comment({
@@ -17,10 +18,14 @@ export default function Comment({
 }: Props) {
   return (
     <div>
+      <ReplyDialog />
+
       <button
         type="button"
         onClick={async () => {
-          handleFacadeCommentDeletion(comment.id as number)
+          if (handleFacadeCommentDeletion) {
+            handleFacadeCommentDeletion(comment.id as number)
+          }
 
           await deleteComment(comment.id as number)
         }}
@@ -52,6 +57,20 @@ export default function Comment({
             ) ?? false,
         }}
       />
+
+      <div id="replies">
+        {comment.replies?.map((reply, index) => (
+          <div key={index}>
+            <h1>subComments</h1>
+
+            <Comment
+              comment={reply}
+              currentUserId={currentUserId}
+              handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
