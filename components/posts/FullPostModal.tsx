@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import PostCommentsSection from './PostCommentsSection'
-import PostComment from '../comments/PostComment'
 import { FullPost } from '@/lib/types/common'
 
 export default function FullPostModal({
@@ -37,7 +36,6 @@ export default function FullPostModal({
 
           <ModalBody>
             <PostCommentsSection post={post} currentUserId={currentUserId} />
-            <PostComment />
           </ModalBody>
 
           <ModalFooter>

@@ -62,6 +62,17 @@ export type PublicationComment = Comment & {
   replies: (Comment & { author: { name: string } })[]
 }
 
+type TDisplayComment = Comment & {
+  author: {
+    name: string
+  }
+
+  likes: {
+    id: number
+    userId: string
+  }[]
+}
+
 /**
  * REVIEW - usage of _count for comments
  * @summary Describes the data that is recurrent in publications
@@ -81,15 +92,7 @@ export type PublicationsDefaultData = {
     userId: string
   }[]
 
-  comments: {
-    id: number
-    content: string
-
-    likes: {
-      id: number
-      userId: string
-    }[]
-  }[]
+  comments: TDisplayComment[]
 }
 
 /**
