@@ -23,15 +23,17 @@ async function getPosts(
         },
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
-        comments: { select: { id: true, content: true } },
+        comments: {
+          select: { id: true, content: true, likes: true },
+        },
       },
     })
 
     return data
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error occurred:', error)
 
-    throw new Error('Failed to fetch posts from the database.')
+    return null
   }
 }
 

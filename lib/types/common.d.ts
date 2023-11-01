@@ -1,4 +1,4 @@
-import { Comment, Follows, Post, Project, User } from '@prisma/client'
+import { Comment, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -83,6 +83,11 @@ export type PublicationsDefaultData = {
   comments: {
     id: number
     content: string
+
+    likes: {
+      id: number
+      userId: string
+    }[]
   }[]
 }
 
