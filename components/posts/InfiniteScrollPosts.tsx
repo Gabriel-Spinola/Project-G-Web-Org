@@ -118,7 +118,9 @@ export default function InfiniteScrollPosts<
 
       {/* loading spinner */}
       {isNoPostFound ? (
-        <h1>No post found</h1>
+        <span className="w-full text-center">
+          Ops, parece que você chegou ao fim!
+        </span>
       ) : (
         <div
           ref={ref}

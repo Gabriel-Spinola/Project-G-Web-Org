@@ -69,10 +69,9 @@ export default async function Profile({ params }: Props) {
             )}
           </Suspense>
 
-          {/* NOTE - Profile User Post Skeleton */}
-          <Suspense fallback={<UserPostsSkeleton />}>
-            {/*  NOTE - This Wrapper Div defines post width */}
-            <div className="lg:w-[680px] x1:w-[800px]">
+          {/*  NOTE - This Wrapper Div defines post width */}
+          <div className="lg:w-[680px] x1:w-[800px]">
+            {session ? (
               <UserPosts
                 authorID={params.id}
                 currentUserData={
@@ -84,8 +83,10 @@ export default async function Profile({ params }: Props) {
                     : undefined
                 }
               />
-            </div>
-          </Suspense>
+            ) : (
+              <UserPostsSkeleton />
+            )}
+          </div>
         </div>
       </div>
     </>

@@ -31,17 +31,19 @@ export default async function Home() {
         {!posts.error ? (
           <>
             {posts.data && posts.data?.length > 0 ? (
-              <InfiniteScrollPosts
-                initialPublication={posts.data}
-                currentUserData={
-                  session
-                    ? {
-                        id: session?.user.id as string,
-                        position: session?.user.position as $Enums.Positions,
-                      }
-                    : undefined
-                }
-              />
+              <div className="w-800px">
+                <InfiniteScrollPosts
+                  initialPublication={posts.data}
+                  currentUserData={
+                    session
+                      ? {
+                          id: session?.user.id as string,
+                          position: session?.user.position as $Enums.Positions,
+                        }
+                      : undefined
+                  }
+                />
+              </div>
             ) : (
               <>Oops você chegou ao fim!</>
             )}
