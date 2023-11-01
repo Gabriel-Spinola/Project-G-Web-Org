@@ -15,10 +15,16 @@ export async function GET(req: Request) {
 
     try {
       const data: PublicationComment[] = await prisma.comment.findMany({
-        where: { postId },
-        include: { author: { select: { name: true } } },
         skip,
         take,
+        where: { postId },
+        include: {
+          author: { select: { name: true } },
+          replies: {
+            select: { id: true, content: true, isEdited: true },
+            include: { author: { select: { name: true } } },
+          },
+        },
       })
 
       return NextResponse.json({ data }, { status: 200 })

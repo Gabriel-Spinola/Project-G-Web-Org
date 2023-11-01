@@ -11,7 +11,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import PostCommentsSection from './PostCommentsSection'
-import PostComment from '../comments/PostComment'
 
 interface Props {
   commentNumber: number
@@ -39,7 +38,6 @@ export default function CommentModal({
           <ModalCloseButton />
           <ModalBody>
             <PostCommentsSection post={post} currentUserId={currentUserId} />
-            <PostComment />
           </ModalBody>
         </ModalContent>
       </Modal>
