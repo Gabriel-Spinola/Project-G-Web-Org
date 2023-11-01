@@ -59,6 +59,7 @@ model Project {
   title       String
   description String?
   images      String[]
+  files       String[]
 
   projectType ProjectType
   tags        String[]
@@ -115,7 +116,9 @@ enum Positions {
 model User {
   id       String  @id @default(cuid())
   name     String
-  password String
+  displayName String?
+  password String?
+  image String?
 
   followers Follows[] @relation("Follower")
   following Follows[] @relation("Following")
