@@ -19,14 +19,13 @@ export async function getUserData(
 ): Promise<UserData | null> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.users}?id=${id}`,
+      `${API_URL}${API_ENDPOINTS.services.users}/only/${id}`,
       {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'X-API-Key': process.env.API_SECRET as string,
         },
-        body: JSON.stringify(requestData),
         next: { tags: ['user-data'] },
       },
     )
