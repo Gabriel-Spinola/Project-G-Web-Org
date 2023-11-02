@@ -10,7 +10,7 @@
 import React from 'react'
 
 function Footer() {
-  return (B
+  return (
     <footer>
       <h1>Footer</h1>
     </footer>
