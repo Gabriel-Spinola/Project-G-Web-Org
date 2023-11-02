@@ -17,11 +17,14 @@ async function getProject(id: string): Promise<ESResponse<Project>> {
   }
 }
 
-export async function GET({
-  params,
-}: {
-  params: { id: string }
-}): Promise<APIResponse<Project | string>> {
+export async function GET(
+  req: Request,
+  {
+    params,
+  }: {
+    params: { id: string }
+  },
+): Promise<APIResponse<Project | string>> {
   const { id } = params
   const { data, error } = await getProject(id)
 
