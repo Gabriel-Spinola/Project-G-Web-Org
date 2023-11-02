@@ -1,7 +1,6 @@
 import { FullPost } from '@/lib/types/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
-import { name } from '@/app/(client)/search/_actions'
 
 async function getPosts(
   where: { authorId?: string; published?: boolean },
