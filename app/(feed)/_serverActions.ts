@@ -87,7 +87,7 @@ export async function increaseLikeCount(
 
     console.log('POST? ' + JSON.stringify(updateUser))
   } catch (error: unknown) {
-    // REVIEW - check of possible optimizations for this solution
+    // REVIEW - check for possible optimizations for this solution
     if (error instanceof PrismaClientKnownRequestError) {
       console.warn('cannot like the same post twice thrown\n', error)
 
