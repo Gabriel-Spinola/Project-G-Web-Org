@@ -7,20 +7,14 @@
  * @license i.e. MIT
  */
 
+import React from 'react'
+
 type Props = {
   params: { id: string }
 }
 
-const Project = ({ params }: Props) => {
-  return (
-    <div className="project-container">
-      <h1>{params.id}</h1>
+export default function Project({ params }: Props) {
+  const { id } = params
 
-      <button>edit</button>
-      <br />
-      <button>delete</button>
-    </div>
-  )
+  return <div>Project</div>
 }
-
-export default Project
