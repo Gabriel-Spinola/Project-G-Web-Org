@@ -17,6 +17,12 @@ async function getPost(id: string): Promise<ESResponse<FullPost>> {
           include: {
             author: { select: { name: true } },
             likes: { select: { id: true, userId: true } },
+            replies: {
+              include: {
+                author: { select: { name: true } },
+                likes: { select: { id: true, userId: true } },
+              },
+            },
           },
         },
       },
