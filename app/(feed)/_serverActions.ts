@@ -15,10 +15,14 @@ export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
   formData: FormData,
+  replyTarget: {
+    id: string | number
+    type: 'postId' | 'parentCommentId'
+  },
+  fromPost: string,
+  authorId: string,
 ): Promise<ESResponse<number>> {
   const content = formData.get('content')?.toString()
-  const authorId = formData.get('author-id')?.toString()
-  const targetId = formData.get('target-id')?.toString()
 
   if (!content || !authorId) {
     return {
@@ -28,18 +32,20 @@ export async function postComment(
   }
 
   try {
+    const target = { [replyTarget.type]: replyTarget.id }
+
     const createComment: Comment = await prisma.comment.create({
       data: {
+        ...target,
         content,
         authorId,
-        postId: targetId,
         isEdited: false,
         createdAt: new Date(Date.now()),
       },
     })
 
     const updateTarget: Post = await prisma.post.update({
-      where: { id: targetId },
+      where: { id: fromPost },
       // NOTE - Push new comment into post
       data: { comments: { connect: { id: createComment.id } } },
     })

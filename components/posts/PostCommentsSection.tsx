@@ -1,6 +1,5 @@
 'use client'
 
-import { postComment } from '@/app/(feed)/_serverActions'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -41,6 +40,7 @@ export default function PostCommentsSection({
 
   function handleFacadeCommentDeletion(id: number) {
     setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
+
     router.replace(`${pathName}?update-comment=${id}`)
   }
 
@@ -49,8 +49,9 @@ export default function PostCommentsSection({
       <div id="form-container">
         <NewCommentDialog
           currentUserId={currentUserId}
-          postId={post.id}
+          target={{ id: post.id, type: 'postId' }}
           handleFacadeCommentSubmit={handleFacadeCommentSubmit}
+          fromPost={post.id}
         />
       </div>
 
@@ -62,10 +63,10 @@ export default function PostCommentsSection({
         {comments.length > 0 &&
           comments.map((comment, index) => (
             <Comment
-              postId={post.id}
               key={index}
               comment={comment}
               currentUserId={currentUserId}
+              fromPost={post.id}
               handleFacadeCommentDeletion={handleFacadeCommentDeletion}
             />
           ))}

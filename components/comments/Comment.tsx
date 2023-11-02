@@ -9,17 +9,17 @@ import ReplyDialog from './ReplyDialog'
 import { useDisclosure } from '@chakra-ui/react'
 
 type Props = {
-  postId: string
   comment: Partial<TDisplayComment>
   currentUserId?: string
   handleFacadeCommentDeletion?: (id: number) => void
+  fromPost: string
 }
 
 export default function Comment({
-  postId,
   comment,
   currentUserId,
   handleFacadeCommentDeletion,
+  fromPost,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -30,8 +30,9 @@ export default function Comment({
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
-        postId={postId}
+        repliedCommentId={comment.id as number}
         currentUserId={currentUserId}
+        fromPost={fromPost}
       />
 
       <button
@@ -78,10 +79,10 @@ export default function Comment({
             <h1>subComments</h1>
 
             <Comment
-              postId={postId}
               comment={reply}
               currentUserId={currentUserId}
               handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+              fromPost={fromPost}
             />
           </div>
         ))}
