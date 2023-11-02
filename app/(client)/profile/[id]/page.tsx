@@ -15,6 +15,9 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, handleFollowingCheckage } from '../_actions'
 import { $Enums } from '@prisma/client'
+import ProfileCardSkeleton from '../components/ProfileCardSkeleton'
+import UserInfoSkeleton from '../components/UserInfoSkeleton'
+import UserPostsSkeleton from '../components/UserPostsSkeleton'
 
 type Props = {
   params: { id: string }
@@ -44,38 +47,44 @@ export default async function Profile({ params }: Props) {
 
   return (
     <>
-      {/* TODO - Add skeleton */}
-      <Suspense fallback={<div>Loading profile card...</div>}>
+      {/* NOTE - Profile Card Skeleton */}
+      <Suspense fallback={<ProfileCardSkeleton />}>
         {user && <ProfileCard user={user} isOwner={isOwner} />}
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
-        <div className="flex flex-col w-[90%] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
-          {/* TODO - Add skeleton */}
-          <Suspense fallback={<div>Loading userInfo...</div>}>
+        <div className="flex flex-col w-[90%] min-h-[calc(100vh-296px)] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
+          {/* NOTE - Profile User Info Skeleton */}
+          <Suspense fallback={<UserInfoSkeleton />}>
             {user && (
-              <UserInfo
-                isOwner={isOwner}
-                isFollowing={isFollowing}
-                currentUserId={session?.user.id}
-                user={user}
-              />
+              // NOTE - This wrapper div prevents UserInfo container expansion
+              <div>
+                <UserInfo
+                  isOwner={isOwner}
+                  isFollowing={isFollowing}
+                  currentUserId={session?.user.id}
+                  user={user}
+                />
+              </div>
             )}
           </Suspense>
 
-          {/* TODO - Add skeleton */}
-          <Suspense fallback={<div>Loading userPosts...</div>}>
-            <UserPosts
-              authorID={params.id}
-              currentUserData={
-                session
-                  ? {
-                      id: session?.user.id as string,
-                      position: session?.user.position as $Enums.Positions,
-                    }
-                  : undefined
-              }
-            />
+          {/* NOTE - Profile User Post Skeleton */}
+          <Suspense fallback={<UserPostsSkeleton />}>
+            {/*  NOTE - This Wrapper Div defines post width */}
+            <div className="lg:w-[680px] x1:w-[800px]">
+              <UserPosts
+                authorID={params.id}
+                currentUserData={
+                  session
+                    ? {
+                        id: session?.user.id as string,
+                        position: session?.user.position as $Enums.Positions,
+                      }
+                    : undefined
+                }
+              />
+            </div>
           </Suspense>
         </div>
       </div>

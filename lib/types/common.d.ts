@@ -59,6 +59,29 @@ export type UserData = Partial<User> & {
 
 export type PublicationComment = Comment & {
   author: { name: string }
+  replies: (Comment & { author: { name: string } })[]
+}
+
+type TDisplayComment = Comment & {
+  author: {
+    name: string
+  }
+
+  likes: {
+    id: number
+    userId: string
+  }[]
+
+  replies: (Comment & {
+    author: {
+      name: string
+    }
+
+    likes: {
+      id: number
+      userId: string
+    }[]
+  })[]
 }
 
 /**
@@ -80,15 +103,7 @@ export type PublicationsDefaultData = {
     userId: string
   }[]
 
-  comments: {
-    id: number
-    content: string
-
-    likes: {
-      id: number
-      userId: string
-    }[]
-  }[]
+  comments: TDisplayComment[]
 }
 
 /**
