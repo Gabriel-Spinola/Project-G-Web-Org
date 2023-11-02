@@ -1,3 +1,1 @@
-export async function name(params:type) {
-  
-}
+export async function name(params: type) {}
