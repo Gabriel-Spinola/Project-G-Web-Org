@@ -205,7 +205,6 @@ model Comment {
 
   parentComment Comment? @relation("Replies", fields: [parentCommentId], references: [id])
   parentCommentId Int?
-
 }
 
 model Like {

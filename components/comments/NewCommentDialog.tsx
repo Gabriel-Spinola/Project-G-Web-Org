@@ -9,7 +9,11 @@ import { usePathname, useRouter } from 'next/navigation'
 
 type Props = {
   currentUserId?: string
-  postId: string
+  target: {
+    id: string | number
+    type: 'postId' | 'parentCommentId'
+  }
+  fromPost: string
   handleFacadeCommentSubmit: (
     id: number,
     content: string,
@@ -19,7 +23,8 @@ type Props = {
 
 export default function NewCommentDialog({
   currentUserId,
-  postId,
+  target,
+  fromPost,
   handleFacadeCommentSubmit,
 }: Props) {
   const router = useRouter()
@@ -47,7 +52,12 @@ export default function NewCommentDialog({
       return
     }
 
-    const { data, error } = await postComment(validatedData.data)
+    const { data, error } = await postComment(
+      validatedData.data,
+      target,
+      fromPost,
+      currentUserId,
+    )
 
     if (error || !data) {
       alert('failed to create comment')
@@ -66,9 +76,6 @@ export default function NewCommentDialog({
 
   return (
     <form action={handleFormSubimission}>
-      <input type="hidden" name="author-id" value={currentUserId} />
-      <input type="hidden" name="target-id" value={postId} />
-
       <label htmlFor="content"></label>
       <textarea
         name="content"
