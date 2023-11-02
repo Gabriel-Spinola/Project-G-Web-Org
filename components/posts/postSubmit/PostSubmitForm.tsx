@@ -31,7 +31,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
     images: null,
   })
   const [images, setImages] = useState<File[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const pathName = usePathname()
 
