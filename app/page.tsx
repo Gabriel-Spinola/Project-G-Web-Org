@@ -12,7 +12,7 @@
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { AuthOptions } from '@/lib/auth'
-import { FullPost } from '@/lib/types/common'
+import { ESResponse, FullPost } from '@/lib/types/common'
 import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
 import { $Enums } from '@prisma/client'
