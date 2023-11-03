@@ -10,7 +10,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import PostCommentsSection from './PostCommentsSection'
+import PostCommentsSection from './PostCommentSection'
 
 interface Props {
   commentNumber: number
