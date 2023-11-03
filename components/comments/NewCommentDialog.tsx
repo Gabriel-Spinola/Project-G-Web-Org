@@ -71,7 +71,7 @@ export default function NewCommentDialog({
       currentUserId,
     )
 
-    router.replace(`${pathName}?update-comment=${data}`)
+    router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
   return (

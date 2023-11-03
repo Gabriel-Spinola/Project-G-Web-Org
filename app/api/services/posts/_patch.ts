@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/database/prisma'
 import { Post } from '@prisma/client'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 async function tryUpdatePost(
@@ -12,6 +13,7 @@ async function tryUpdatePost(
       data: newPost,
     })
 
+    revalidateTag('revalidate-feed')
     return data
   } catch (e: unknown) {
     console.warn(

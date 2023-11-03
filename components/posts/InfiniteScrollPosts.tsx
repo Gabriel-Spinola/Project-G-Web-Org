@@ -5,10 +5,12 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import { User } from '@prisma/client'
 import { CircularProgress } from '@chakra-ui/react'
+import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 // TODO: Generalize Feed - Incomplete
 type Params<Publication extends FullPost = FullPost> = {
@@ -28,11 +30,51 @@ export default function InfiniteScrollPosts<
   const [ref, inView] = useInView()
 
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
   const updateComment = searchParams.get('update-comment')
+
+  const updatePost = async function (post: FullPost) {
+    async function fetchUpdate(
+      id: string,
+    ): Promise<ESResponse<FullPost, string>> {
+      try {
+        const response = await fetch(
+          `${API_URL}${API_ENDPOINTS.services.posts}only/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              'X-API-Key': process.env.API_SECRET as string,
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+
+        if (!response.ok) {
+          throw new Error('Response not okay')
+        }
+
+        const { data }: { data: FullPost } = await response.json()
+
+        return ESSucceed(data)
+      } catch (error: unknown) {
+        return ESFailed('failed to fetch updated post')
+      }
+    }
+
+    const { data, error } = await fetchUpdate(post.id)
+
+    if (error || !data) {
+      console.error(error)
+
+      return
+    }
+
+    return data
+  }
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
@@ -70,6 +112,22 @@ export default function InfiniteScrollPosts<
     const controller = new AbortController()
     const signal = controller.signal
 
+    if (updateComment) {
+      //  idon'tknoiwbro
+      // setPosts((prev) => [
+      //   ...(prev
+      //     ?.filter(async (post) => {
+      //       return post.id === updateComment
+      //     })
+      //     .forEach(async (post) => {
+      //       const data = await updatePost(post)
+      //       console.log(data?.comments.length)
+      //       return data
+      //     }) ?? []),
+      // ])
+      // router.refresh()
+    }
+
     // If the spinner is in the client view load more posts.
     if (inView) {
       loadMorePosts(signal)
@@ -79,7 +137,7 @@ export default function InfiniteScrollPosts<
     return (): void => {
       controller.abort()
     }
-  }, [inView, loadMorePosts])
+  }, [inView, loadMorePosts, router, updateComment])
 
   // NOTE - Handles url callbacks for any feed data update
   useEffect(() => {
@@ -87,13 +145,19 @@ export default function InfiniteScrollPosts<
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
-    if (createdPost || updateComment) {
-      setPosts(initialPublication)
+    // FIXME - Should add the actual new post from the current user to the first index of the pubs array
+    if (createdPost) {
+      const newPub = initialPublication?.at(0)
+      if (newPub) {
+        setPosts((prev) => [newPub, ...(prev ?? [])])
+      }
+
+      router.refresh()
     }
 
     // Update feed state
     return (): void => {
-      router.refresh()
+      router.replace(pathname, { scroll: false })
     }
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
