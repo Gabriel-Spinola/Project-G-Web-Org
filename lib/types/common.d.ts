@@ -71,6 +71,17 @@ type TDisplayComment = Comment & {
     id: number
     userId: string
   }[]
+
+  replies: (Comment & {
+    author: {
+      name: string
+    }
+
+    likes: {
+      id: number
+      userId: string
+    }[]
+  })[]
 }
 
 /**
