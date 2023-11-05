@@ -43,6 +43,7 @@ import { useRouter } from 'next/navigation'
 import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
 import { getProfilePicImageUrl } from '@/lib/storage/supabase'
+import Graduations from './Graduations'
 
 interface Params {
   user: Partial<User>
@@ -54,11 +55,13 @@ const defaultEditFormValues = {
 }
 
 function getProfilePicURL(user: Pick<User, 'profilePic' | 'image'>): string {
-  if (user.profilePic) {
-    return getProfilePicImageUrl(user.profilePic)
+  const profilePicture = user?.profilePic as string
+
+  if (profilePicture !== null || profilePicture !== undefined) {
+    return getProfilePicImageUrl(profilePicture)
   }
 
-  return user.image ?? ''
+  return ''
 }
 
 export default function ProfileCard({ user, isOwner }: Params) {
@@ -154,75 +157,84 @@ export default function ProfileCard({ user, isOwner }: Params) {
         </div>
       </div>
 
-      {/* NOTE - Card info editing */}
-      {isOwner && (
-        <div className="max-w-[10%]">
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              icon={<BsFillGearFill />}
-              variant="outline"
-              color={'white'}
-              className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
-            />
+      {/* NOTE - Card info editing and Graduation card */}
+      <section className="h-full flex items-end flex-col-reverse justify-evenly">
+        {user.graduations ?? (
+          <Graduations
+            Graduation={
+              'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Harvard_University_logo.svg/800px-Harvard_University_logo.svg.png'
+            }
+          />
+        )}
+        {isOwner && (
+          <div>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                icon={<BsFillGearFill />}
+                variant="outline"
+                color={'white'}
+                className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
+              />
 
-            <MenuList>
-              <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
-                Editar Perfil
-              </MenuItem>
-              <MenuItem icon={<BsFillGearFill color="black" />}>
-                Configurações
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </div>
-      )}
+              <MenuList>
+                <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
+                  Editar Perfil
+                </MenuItem>
+                <MenuItem icon={<BsFillGearFill color="black" />}>
+                  Configurações
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+        )}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
 
-        <ModalContent>
-          <ModalHeader>Modifique seu perfil</ModalHeader>
-          <ModalCloseButton />
+          <ModalContent>
+            <ModalHeader>Modifique seu perfil</ModalHeader>
+            <ModalCloseButton />
 
-          <form onSubmit={handleFormSubmission}>
-            <ModalBody>
-              <FormLabel>Nome de Exibição</FormLabel>
-              <Editable defaultValue={user.name}>
-                <EditablePreview />
-                <EditableTextarea name="display-name" id="display-name" />
-              </Editable>
+            <form onSubmit={handleFormSubmission}>
+              <ModalBody>
+                <FormLabel>Nome de Exibição</FormLabel>
+                <Editable defaultValue={user.name}>
+                  <EditablePreview />
+                  <EditableTextarea name="display-name" id="display-name" />
+                </Editable>
 
-              <FormLabel>Título</FormLabel>
-              <Editable
-                defaultValue={user.title || defaultEditFormValues.title}
-                isPreviewFocusable={true}
-              >
-                <EditablePreview />
-                <EditableInput
-                  display="insira um título"
-                  type="text"
-                  name="title"
-                  id="title"
-                />
-              </Editable>
+                <FormLabel>Título</FormLabel>
+                <Editable
+                  defaultValue={user.title || defaultEditFormValues.title}
+                  isPreviewFocusable={true}
+                >
+                  <EditablePreview />
+                  <EditableInput
+                    display="insira um título"
+                    type="text"
+                    name="title"
+                    id="title"
+                  />
+                </Editable>
 
-              <Divider />
-            </ModalBody>
+                <Divider />
+              </ModalBody>
 
-            <ModalFooter>
-              <Button variant="ghost" onClick={onClose}>
-                Cancelar
-              </Button>
+              <ModalFooter>
+                <Button variant="ghost" onClick={onClose}>
+                  Cancelar
+                </Button>
 
-              <Button colorScheme="blue" mr={3} type="submit">
-                Salvar
-              </Button>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
+                <Button colorScheme="blue" mr={3} type="submit">
+                  Salvar
+                </Button>
+              </ModalFooter>
+            </form>
+          </ModalContent>
+        </Modal>
+      </section>
     </section>
   )
 }

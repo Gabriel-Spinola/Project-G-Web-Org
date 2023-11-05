@@ -18,6 +18,7 @@ import { $Enums } from '@prisma/client'
 import ProfileCardSkeleton from '../components/ProfileCardSkeleton'
 import UserInfoSkeleton from '../components/UserInfoSkeleton'
 import UserPostsSkeleton from '../components/UserPostsSkeleton'
+import UserProjects from '../components/UserProjects'
 
 type Props = {
   params: { id: string }
@@ -58,13 +59,14 @@ export default async function Profile({ params }: Props) {
           <Suspense fallback={<UserInfoSkeleton />}>
             {user && (
               // NOTE - This wrapper div prevents UserInfo container expansion
-              <div>
+              <div className="flex flex-col gap-8">
                 <UserInfo
                   isOwner={isOwner}
                   isFollowing={isFollowing}
                   currentUserId={session?.user.id}
                   user={user}
                 />
+                <UserProjects />
               </div>
             )}
           </Suspense>
@@ -73,6 +75,7 @@ export default async function Profile({ params }: Props) {
           <div className="lg:w-[680px] x1:w-[800px]">
             {session ? (
               <UserPosts
+                isOwner={isOwner}
                 authorID={params.id}
                 currentUserData={
                   session

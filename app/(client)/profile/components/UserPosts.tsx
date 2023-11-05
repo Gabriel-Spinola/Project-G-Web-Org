@@ -7,9 +7,14 @@ import { User } from '@prisma/client'
 type Params = {
   authorID: string
   currentUserData?: Pick<User, 'id' | 'position'>
+  isOwner: boolean
 }
 
-export default async function UserPosts({ authorID, currentUserData }: Params) {
+export default async function UserPosts({
+  authorID,
+  currentUserData,
+  isOwner,
+}: Params) {
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
     1,
     undefined,
@@ -18,7 +23,7 @@ export default async function UserPosts({ authorID, currentUserData }: Params) {
 
   return (
     <section id="PostWrapper" className="flex flex-col">
-      <PostSubmitFragment currentUserId={authorID} />
+      {isOwner ? <PostSubmitFragment currentUserId={authorID} /> : undefined}
 
       {!error ? (
         <div className="flex flex-col justify-center">
