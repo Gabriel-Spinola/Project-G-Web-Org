@@ -11,7 +11,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import NewCommentDialog from '../comments/NewCommentDialog'
-import { usePathname, useRouter } from 'next/navigation'
 import Comment from '../comments/Comment'
 
 interface Props {
@@ -26,8 +25,6 @@ export default function CommentModal({
   currentUserId,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const router = useRouter()
-  const pathName = usePathname()
 
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
     post.comments,
@@ -54,8 +51,7 @@ export default function CommentModal({
 
   function handleFacadeCommentDeletion(id: number) {
     setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
-
-    router.replace(`${pathName}?update-comment=${id}`)
+    setCommentsCount((prev) => prev - 1)
   }
 
   return (
