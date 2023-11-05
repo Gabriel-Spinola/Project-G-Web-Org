@@ -26,7 +26,7 @@ export default function PostSettings({
   currentUserPosition,
 }: Props) {
   function CopyLink() {
-    const postUrl = window.location.hostname + `/posts/${post.id}`
+    const postUrl = `https://${window.location.hostname}/posts/${post.id}`
     navigator.clipboard.writeText(postUrl)
     alert('Link da publicação copiado')
   }
