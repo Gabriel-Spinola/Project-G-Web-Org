@@ -3,7 +3,7 @@
 import React from 'react'
 import { deleteProject } from '../_actions'
 
-export default function TempButtons({ id }: { id: string }) {
+export function DeleteProject({ id }: { id: string }) {
   return (
     <button
       type="button"
@@ -18,6 +18,25 @@ export default function TempButtons({ id }: { id: string }) {
       }}
     >
       Delete project
+    </button>
+  )
+}
+
+export function UpdateProject({ id }: { id: string }) {
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        const { data, error } = await deleteProject(id)
+
+        if (error || !data) {
+          console.log(error)
+        }
+
+        console.log(data)
+      }}
+    >
+      Update Project
     </button>
   )
 }
