@@ -112,22 +112,6 @@ export default function InfiniteScrollPosts<
     const controller = new AbortController()
     const signal = controller.signal
 
-    if (updateComment) {
-      //  idon'tknoiwbro
-      // setPosts((prev) => [
-      //   ...(prev
-      //     ?.filter(async (post) => {
-      //       return post.id === updateComment
-      //     })
-      //     .forEach(async (post) => {
-      //       const data = await updatePost(post)
-      //       console.log(data?.comments.length)
-      //       return data
-      //     }) ?? []),
-      // ])
-      // router.refresh()
-    }
-
     // If the spinner is in the client view load more posts.
     if (inView) {
       loadMorePosts(signal)
