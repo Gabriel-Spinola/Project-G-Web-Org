@@ -103,7 +103,7 @@ export default function InfiniteScrollPosts<
       router.replace(pathname, { scroll: false })
     }
 
-    // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
+    // REVIEW - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     deletedPost,
