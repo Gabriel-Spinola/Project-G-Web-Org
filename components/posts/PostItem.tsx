@@ -14,10 +14,10 @@ import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '../Buttons/LikeButton'
 import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
-import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from './CommentModal'
+import TwoImageDisplay from './images/TwoImageDisplay'
 
 interface Params {
   post: FullPost

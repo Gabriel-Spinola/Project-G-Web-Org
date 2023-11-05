@@ -47,7 +47,7 @@ export default function FollowButton({
   }
 
   return (
-    <Button onClick={handleFollow}>
+    <Button marginY={4} colorScheme="orange" onClick={handleFollow}>
       {_isFollowing ? 'deixar de seguir' : 'seguir'}
     </Button>
   )

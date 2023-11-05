@@ -25,13 +25,13 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
-      <div className="feed flex flex-col items-center">
+      <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
         <PostSubmitFragment currentUserId={session?.user.id} />
 
         {!posts.error ? (
           <>
             {posts.data && posts.data?.length > 0 ? (
-              <div className="w-800px">
+              <div className="min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
                 <InfiniteScrollPosts
                   initialPublication={posts.data}
                   currentUserData={

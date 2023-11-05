@@ -118,7 +118,7 @@ export default function InfiniteScrollPosts<
 
       {/* loading spinner */}
       {isNoPostFound ? (
-        <span className="w-full text-center">
+        <span className="w-full text-center m-16">
           Ops, parece que você chegou ao fim!
         </span>
       ) : (
@@ -126,7 +126,12 @@ export default function InfiniteScrollPosts<
           ref={ref}
           className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          <CircularProgress isIndeterminate color="black" size={8} />
+          <CircularProgress
+            isIndeterminate
+            color="black"
+            size={8}
+            marginBottom={8}
+          />
         </div>
       )}
     </>

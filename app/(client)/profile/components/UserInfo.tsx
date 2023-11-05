@@ -3,28 +3,11 @@
 import FollowButton from '@/components/Buttons/FollowButton'
 import styles from './profile.module.scss'
 import { UserData } from '@/lib/types/common'
-import { BellIcon, EditIcon } from '@chakra-ui/icons'
-import {
-  Button,
-  Divider,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  FormLabel,
-  Icon,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Icon } from '@chakra-ui/react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { MdWork } from 'react-icons/md'
 import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
+import EditUserInfo from './EditUserInfo'
 interface Params {
   isOwner: boolean
   currentUserId?: string
@@ -33,93 +16,47 @@ interface Params {
 }
 
 export default function UserInfo(params: Params) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
     <section
       id={styles.userInfo}
-      className="flex flex-col w-80% w-full x1:w-[312px] p-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray"
+      className="flex flex-col w-full lg:w-[272px] x1:max-w-[312px] px-4 pb-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray"
     >
-      <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-      <p id="description">{params.user.description}</p>
-
-      {!params.isOwner && (
-        <FollowButton
-          authorId={params.currentUserId}
-          isFollowing={params.isFollowing}
-          targetId={params.user.id as string}
-        />
-      )}
-
-      <hr />
-
       <div className="flex flex-col h-full py-2 gap-2">
-        {params.isOwner && (
-          <Button leftIcon={<EditIcon />} onClick={onOpen}>
-            Editar meus dados
-          </Button>
+        <div className="flex flex-row w-full justify-around">
+          <span>
+            Seguidores:{' '}
+            <span className="font-bold">
+              {params.user._count?.followers ?? 0}
+            </span>
+          </span>
+          <span>
+            Seguindo:{' '}
+            <span className="font-bold">
+              {params.user._count?.following ?? 0}
+            </span>
+          </span>
+        </div>
+
+        <hr />
+
+        <div className="flex flex-row justify-evenly items-center m-4">
+          <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
+          <EditUserInfo isOwner={params.isOwner} user={params.user} />
+        </div>
+        <p id="description">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, tenetur
+          modi fuga delectus, inventore, debitis adipisci voluptates magnam
+          corrupti minima aliquid eveniet totam obcaecati quos. Dicta sunt
+          temporibus atque maxime?
+        </p>
+
+        {!params.isOwner && (
+          <FollowButton
+            authorId={params.currentUserId}
+            isFollowing={params.isFollowing}
+            targetId={params.user.id as string}
+          />
         )}
-
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-
-          <ModalContent>
-            <ModalHeader>Edite seus dados</ModalHeader>
-            <ModalCloseButton />
-
-            <form>
-              <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
-                <FormLabel>Telefone</FormLabel>
-
-                <Editable
-                  defaultValue={
-                    params.user.contactPhone?.toString() ?? '(xx) xxxx-xxxx'
-                  }
-                  isPreviewFocusable={true}
-                >
-                  <EditablePreview />
-                  <EditableInput
-                    display="Seu núemro de celular"
-                    type="text"
-                    name="title"
-                    id="title"
-                  />
-                </Editable>
-
-                <FormLabel>Localização</FormLabel>
-                <Editable defaultValue={'Sua localização'}>
-                  <EditablePreview />
-                </Editable>
-
-                <Divider />
-              </ModalBody>
-
-              <ModalFooter>
-                <Button variant="ghost" onClick={onClose}>
-                  Cancelar
-                </Button>
-
-                <Button colorScheme="blue" mr={3} type="submit">
-                  Salvar
-                </Button>
-              </ModalFooter>
-            </form>
-          </ModalContent>
-        </Modal>
-
-        <span>
-          <BellIcon w={6} h={6} /> Seguidores:{' '}
-          <span className="font-bold">
-            {params.user._count?.followers ?? 0}
-          </span>
-        </span>
-
-        <span>
-          <BellIcon w={6} h={6} /> Seguindo:{' '}
-          <span className="font-bold">
-            {params.user._count?.following ?? 0}
-          </span>
-        </span>
 
         <span>
           <Icon as={RiGraduationCapFill} w={6} h={6} /> Graduação:{' '}
@@ -138,11 +75,6 @@ export default function UserInfo(params: Params) {
         <span>
           <Icon as={BsFillPinMapFill} w={6} h={6} /> Em:{' '}
           <span className="font-bold">{params.user.location}</span>
-        </span>
-
-        <span>
-          <Icon as={MdWork} w={6} h={6} /> Trabalho:{' '}
-          <span className="font-bold">Senai CTTI</span>
         </span>
 
         <span>
