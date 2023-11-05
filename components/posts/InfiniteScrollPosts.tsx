@@ -33,7 +33,6 @@ export default function InfiniteScrollPosts<
 
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
-  const updateComment = searchParams.get('update-comment')
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(
@@ -80,7 +79,7 @@ export default function InfiniteScrollPosts<
     return (): void => {
       controller.abort()
     }
-  }, [inView, loadMorePosts, router, updateComment])
+  }, [inView, loadMorePosts])
 
   // NOTE - Handles url callbacks for any feed data update
   useEffect(() => {
@@ -109,7 +108,7 @@ export default function InfiniteScrollPosts<
     deletedPost,
     router,
     createdPost,
-    updateComment /*, initialPublication */,
+    /*, initialPublication */
   ])
 
   return (
