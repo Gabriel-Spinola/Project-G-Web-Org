@@ -16,7 +16,7 @@ import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
-import CommentModal from './CommentModal'
+import CommentModal from '../comments/CommentModal'
 import TwoImageDisplay from './images/TwoImageDisplay'
 
 interface Params {
