@@ -48,6 +48,7 @@ export default function PostItem({
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
         {post?.content}
       </article>
+
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay

@@ -30,7 +30,7 @@ export default function NewCommentDialog({
   const router = useRouter()
   const pathName = usePathname()
 
-  async function handleFormSubimission(formData: FormData) {
+  async function handleFormSubmission(formData: FormData) {
     if (!currentUserId) {
       signIn()
 
@@ -71,11 +71,11 @@ export default function NewCommentDialog({
       currentUserId,
     )
 
-    router.replace(`${pathName}?update-comment=${data}`)
+    router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
   return (
-    <form action={handleFormSubimission}>
+    <form action={handleFormSubmission}>
       <label htmlFor="content"></label>
       <textarea
         name="content"
