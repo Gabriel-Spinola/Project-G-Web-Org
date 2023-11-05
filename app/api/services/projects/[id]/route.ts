@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import handlePost from '../_post'
 
-async function handler(req: Request, { params }: { params: { id: string } }) {
+async function handler(
+  req: Request,
+  { params }: { params: { id: string } },
+): Promise<NextResponse<Record<'data', unknown>>> {
   const { id } = params
 
   switch (req.method) {

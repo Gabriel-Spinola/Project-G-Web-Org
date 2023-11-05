@@ -5,7 +5,7 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import React, { useCallback, useEffect, useState } from 'react'
 import PostItem from './PostItem'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import { User } from '@prisma/client'
 import { CircularProgress } from '@chakra-ui/react'
@@ -28,6 +28,7 @@ export default function InfiniteScrollPosts<
   const [ref, inView] = useInView()
 
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
 
   const deletedPost = searchParams.get('delete')
@@ -79,7 +80,7 @@ export default function InfiniteScrollPosts<
     return (): void => {
       controller.abort()
     }
-  }, [inView, loadMorePosts])
+  }, [inView, loadMorePosts, router, updateComment])
 
   // NOTE - Handles url callbacks for any feed data update
   useEffect(() => {
@@ -87,13 +88,19 @@ export default function InfiniteScrollPosts<
       setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
     }
 
-    if (createdPost || updateComment) {
-      setPosts(initialPublication)
+    // FIXME - Should add the actual new post from the current user to the first index of the pubs array
+    if (createdPost) {
+      const newPub = initialPublication?.at(0)
+      if (newPub) {
+        setPosts((prev) => [newPub, ...(prev ?? [])])
+      }
+
+      router.refresh()
     }
 
     // Update feed state
     return (): void => {
-      router.refresh()
+      router.replace(pathname, { scroll: false })
     }
 
     // FIXME - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.

@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import { Post } from '@prisma/client'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // REVIEW - Need to make sure that the posts images are actually deleted after the post
@@ -23,6 +24,8 @@ export async function handleDelete(postId: string): Promise<NextResponse> {
     if (deletedPost) {
       return NextResponse.json({ data: deletedPost }, { status: 200 })
     }
+
+    revalidateTag('revalidate-feed')
 
     return NextResponse.json(
       {
