@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/database/prisma'
-import { storeFile, storeMultipleFiles } from '@/lib/storage/actions'
-import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
+import { storeMultipleFiles } from '@/lib/storage/actions'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { $Enums, Project } from '@prisma/client'
