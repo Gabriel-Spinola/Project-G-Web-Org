@@ -9,8 +9,8 @@
 
 import { Project } from '@prisma/client'
 import React from 'react'
-import { deleteProject, fetchProject } from '../_actions'
-import TempButtons from '../components/TempButtons'
+import { fetchProject } from '../_actions'
+import { DeleteProject, UpdateProject } from '../components/TempButtons'
 
 type Props = {
   params: { id: string }
@@ -30,8 +30,11 @@ export default async function Project({ params }: Props) {
     <main>
       <h1>{data.title}</h1>
 
-      <TempButtons id={id} />
-      <button type="button">Update Project</button>
+      <br />
+      <br />
+      <DeleteProject id={id} />
+      <br />
+      <UpdateProject id={id} />
     </main>
   )
 }

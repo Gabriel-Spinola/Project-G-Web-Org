@@ -96,7 +96,7 @@ export default function InfiniteScrollPosts<
         }
       }
 
-      router.refresh()
+      router.replace(pathname, { scroll: false })
     }
 
     // Update feed state
