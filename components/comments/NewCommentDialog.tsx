@@ -30,7 +30,7 @@ export default function NewCommentDialog({
   const router = useRouter()
   const pathName = usePathname()
 
-  async function handleFormSubmission(formData: FormData) {
+  async function handleFormSubimission(formData: FormData) {
     if (!currentUserId) {
       signIn()
 
@@ -75,7 +75,7 @@ export default function NewCommentDialog({
   }
 
   return (
-    <form action={handleFormSubmission}>
+    <form action={handleFormSubimission}>
       <label htmlFor="content"></label>
       <textarea
         name="content"
