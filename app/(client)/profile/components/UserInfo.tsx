@@ -19,8 +19,13 @@ export default function UserInfo(params: Params) {
   return (
     <section
       id={styles.userInfo}
-      className="flex flex-col w-full lg:w-[272px] x1:max-w-[312px] px-4 pb-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray"
+      className="flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 pb-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray"
     >
+      <div className="flex flex-row justify-evenly items-center m-4">
+        <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
+        <EditUserInfo isOwner={params.isOwner} user={params.user} />
+      </div>
+
       <div className="flex flex-col h-full py-2 gap-2">
         <div className="flex flex-row w-full justify-around">
           <span>
@@ -38,17 +43,7 @@ export default function UserInfo(params: Params) {
         </div>
 
         <hr />
-
-        <div className="flex flex-row justify-evenly items-center m-4">
-          <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-          <EditUserInfo isOwner={params.isOwner} user={params.user} />
-        </div>
-        <p id="description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, tenetur
-          modi fuga delectus, inventore, debitis adipisci voluptates magnam
-          corrupti minima aliquid eveniet totam obcaecati quos. Dicta sunt
-          temporibus atque maxime?
-        </p>
+        <p id="description">{params.user.description}</p>
 
         {!params.isOwner && (
           <FollowButton

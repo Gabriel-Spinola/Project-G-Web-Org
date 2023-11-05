@@ -54,7 +54,7 @@ export default async function Profile({ params }: Props) {
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
-        <div className="flex flex-col w-[90%] min-h-[calc(100vh-296px)] lg:w-auto lg:flex-row-reverse gap-x-8 lg:gap-x-16 ">
+        <div className="flex flex-col w-[90%] min-h-[calc(100vh-296px)] lg:w-auto lg:flex-row-reverse gap-x-4 lg:gap-x-8 ">
           {/* NOTE - Profile User Info Skeleton */}
           <Suspense fallback={<UserInfoSkeleton />}>
             {user && (

@@ -1,25 +1,15 @@
 import React from 'react'
-import { $Enums } from '@prisma/client'
+import { $Enums, User } from '@prisma/client'
 import { FullPost } from '@/lib/types/common'
 import { Avatar } from '@chakra-ui/avatar'
 import PostSettings from './PostSettings'
 import Link from 'next/link'
-import { getProfilePicImageUrl } from '@/lib/storage/supabase'
+import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 
 interface Props {
   post: FullPost
   currentUserPosition?: $Enums.Positions
   isOwner: boolean
-}
-
-function getProfilePicURL(post: FullPost): string {
-  const profilePicture = post.author?.profilePic as string
-
-  if (profilePicture !== null || profilePicture !== undefined) {
-    return getProfilePicImageUrl(profilePicture)
-  }
-
-  return ''
 }
 
 export default function PostHeader({
@@ -32,7 +22,7 @@ export default function PostHeader({
       <div id="Author" className="flex gap-2">
         <Link href={`/profile/${post.authorId}`}>
           <div>
-            <Avatar size={'lg'} src={getProfilePicURL(post)} />
+            <Avatar size={'lg'} src={getProfilePicURL(post.author as User)} />
           </div>
         </Link>
 

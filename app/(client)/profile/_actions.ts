@@ -13,6 +13,7 @@ export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
  * @param requestData the specific data from the user you want to request.
  * @returns the requested data from the user or, if failed, null.
  */
+
 export async function getUserData(
   id: string,
   requestData: UserSelectedData,
