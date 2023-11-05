@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BiComment } from 'react-icons/bi'
-import { FullPost } from '@/lib/types/common'
+import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
   Modal,
   ModalBody,
@@ -10,7 +10,9 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import PostCommentsSection from './PostCommentSection'
+import NewCommentDialog from '../comments/NewCommentDialog'
+import { usePathname, useRouter } from 'next/navigation'
+import Comment from '../comments/Comment'
 
 interface Props {
   commentNumber: number
@@ -24,23 +26,87 @@ export default function CommentModal({
   currentUserId,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
+  const pathName = usePathname()
+
+  const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
+    post.comments,
+  )
+  const [commentsCount, setCommentsCount] = useState(commentNumber)
+
+  function handleFacadeCommentSubmit(
+    id: number,
+    content: string,
+    authorName: string,
+  ) {
+    setCommentsCount((prev) => prev + 1)
+
+    setComments((prev) => [
+      ...prev,
+      {
+        id,
+        content,
+        author: {
+          name: authorName,
+        },
+      },
+    ])
+  }
+
+  function handleFacadeCommentDeletion(id: number) {
+    setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
+
+    router.replace(`${pathName}?update-comment=${id}`)
+  }
+
   return (
-    <button
-      className="flex flex-col justify-center items-center hover:text-medium-primary"
-      onClick={onOpen}
-    >
-      <BiComment size={24} />
-      <span>{commentNumber}</span>
+    <div>
+      <button
+        className="flex flex-col justify-center items-center hover:text-medium-primary"
+        onClick={onOpen}
+      >
+        <BiComment size={24} />
+
+        <span>{commentsCount}</span>
+      </button>
+
       <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Comentários</ModalHeader>
           <ModalCloseButton />
+
           <ModalBody>
-            <PostCommentsSection post={post} currentUserId={currentUserId} />
+            <section>
+              <div id="form-container">
+                <NewCommentDialog
+                  currentUserId={currentUserId}
+                  target={{ id: post.id, type: 'postId' }}
+                  handleFacadeCommentSubmit={handleFacadeCommentSubmit}
+                  fromPost={post.id}
+                />
+              </div>
+
+              <hr />
+
+              <div id="display">
+                <h2>Comments</h2>
+
+                {comments.length > 0 &&
+                  comments.map((comment, index) => (
+                    <Comment
+                      key={index}
+                      comment={comment}
+                      currentUserId={currentUserId}
+                      fromPost={post.id}
+                      handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+                    />
+                  ))}
+              </div>
+            </section>
           </ModalBody>
         </ModalContent>
       </Modal>
-    </button>
+    </div>
   )
 }
