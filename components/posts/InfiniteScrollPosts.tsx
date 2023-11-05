@@ -91,7 +91,9 @@ export default function InfiniteScrollPosts<
     if (createdPost) {
       const newPub = initialPublication?.at(0)
       if (newPub) {
-        setPosts((prev) => [newPub, ...(prev ?? [])])
+        if (posts?.some((post) => post.id !== newPub.id)) {
+          setPosts((prev) => [newPub, ...(prev ?? [])])
+        }
       }
 
       router.refresh()
