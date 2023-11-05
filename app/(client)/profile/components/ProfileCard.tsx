@@ -42,8 +42,8 @@ import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
-import { getProfilePicImageUrl } from '@/lib/storage/supabase'
 import Graduations from './Graduations'
+import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 
 interface Params {
   user: Partial<User>
@@ -52,16 +52,6 @@ interface Params {
 
 const defaultEditFormValues = {
   title: 'Insira seu titulo',
-}
-
-function getProfilePicURL(user: Pick<User, 'profilePic' | 'image'>): string {
-  const profilePicture = user?.profilePic as string
-
-  if (profilePicture !== null || profilePicture !== undefined) {
-    return getProfilePicImageUrl(profilePicture)
-  }
-
-  return ''
 }
 
 export default function ProfileCard({ user, isOwner }: Params) {
