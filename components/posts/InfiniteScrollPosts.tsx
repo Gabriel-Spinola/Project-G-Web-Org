@@ -9,8 +9,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import { User } from '@prisma/client'
 import { CircularProgress } from '@chakra-ui/react'
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 // TODO: Generalize Feed - Incomplete
 type Params<Publication extends FullPost = FullPost> = {
@@ -36,45 +34,6 @@ export default function InfiniteScrollPosts<
   const deletedPost = searchParams.get('delete')
   const createdPost = searchParams.get('create')
   const updateComment = searchParams.get('update-comment')
-
-  const updatePost = async function (post: FullPost) {
-    async function fetchUpdate(
-      id: string,
-    ): Promise<ESResponse<FullPost, string>> {
-      try {
-        const response = await fetch(
-          `${API_URL}${API_ENDPOINTS.services.posts}only/${id}`,
-          {
-            method: 'GET',
-            headers: {
-              'X-API-Key': process.env.API_SECRET as string,
-              'Content-Type': 'application/json',
-            },
-          },
-        )
-
-        if (!response.ok) {
-          throw new Error('Response not okay')
-        }
-
-        const { data }: { data: FullPost } = await response.json()
-
-        return ESSucceed(data)
-      } catch (error: unknown) {
-        return ESFailed('failed to fetch updated post')
-      }
-    }
-
-    const { data, error } = await fetchUpdate(post.id)
-
-    if (error || !data) {
-      console.error(error)
-
-      return
-    }
-
-    return data
-  }
 
   // NOTE - Memoize all loaded posts
   const loadMorePosts = useCallback(

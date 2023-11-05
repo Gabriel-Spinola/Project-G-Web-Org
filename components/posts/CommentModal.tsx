@@ -40,7 +40,6 @@ export default function CommentModal({
     authorName: string,
   ) {
     setCommentsCount((prev) => prev + 1)
-
     setComments((prev) => [
       ...prev,
       {
