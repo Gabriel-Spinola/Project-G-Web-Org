@@ -5,6 +5,7 @@ export default function Projects() {
   return (
     <main>
       <div>New Post</div>
+      {/* <Searchbar /> */}
       {/* <InfiniteScrollPosts> */}
     </main>
   )

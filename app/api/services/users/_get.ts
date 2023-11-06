@@ -6,7 +6,7 @@ export default async function handleGet(): Promise<
   NextResponse<Record<'data', User[] | string>>
 > {
   try {
-    const users = await prisma.user.findMany()
+    const users: User[] = await prisma.user.findMany()
 
     if (users.length <= 0) {
       console.warn('no user found')

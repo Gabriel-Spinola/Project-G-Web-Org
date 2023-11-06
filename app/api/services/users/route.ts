@@ -50,4 +50,4 @@ async function handler(
   )
 }
 
-export { handler as POST, handler as PATCH }
+export { handler as POST, handler as PATCH, handler as GET }
