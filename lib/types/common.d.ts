@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { Comment, Follows, Post, Project, User } from '@prisma/client'
+=======
+import { Comment, Like, Post, Project, User } from '@prisma/client'
+>>>>>>> Stashed changes
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -50,6 +54,8 @@ export type ESResponse<DataType, CustomError = string | unknown> =
       error: CustomError
     }
 
+export type PublicationAuthor = Pick<User, 'name' | 'image' | 'profilePic'>
+
 export type UserData = Partial<User> & {
   _count: {
     followers: number
@@ -57,8 +63,27 @@ export type UserData = Partial<User> & {
   }
 }
 
+export type Likes = Pick<Like, 'id' | 'userId'>[]
+
 export type PublicationComment = Comment & {
+<<<<<<< Updated upstream
   author: { name: string }
+=======
+  author: PublicationAuthor
+  replies: (Comment & {
+    author: PublicationAuthor
+  })[]
+}
+
+type TDisplayComment = Comment & {
+  author: PublicationAuthor
+  likes: Likes
+
+  replies: (Comment & {
+    author: PublicationAuthor
+    likes: Likes
+  })[]
+>>>>>>> Stashed changes
 }
 
 /**
@@ -66,6 +91,7 @@ export type PublicationComment = Comment & {
  * @summary Describes the data that is recurrent in publications
  */
 export type PublicationsDefaultData = {
+<<<<<<< Updated upstream
   author: {
     name: string | null
     title: string | null
@@ -89,6 +115,12 @@ export type PublicationsDefaultData = {
       userId: string
     }[]
   }[]
+=======
+  author: PublicationAuthor | null
+  contributor: Pick<User, 'name'>[]
+  comments: TDisplayComment[]
+  likes: Likes
+>>>>>>> Stashed changes
 }
 
 /**
