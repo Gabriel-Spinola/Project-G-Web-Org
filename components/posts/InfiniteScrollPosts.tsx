@@ -111,7 +111,7 @@ export default function InfiniteScrollPosts<
 
       {/* loading spinner */}
       {isNoPostFound ? (
-        <span className="w-full text-center m-16">
+        <span className="col-span-1 mt-8 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4">
           Ops, parece que você chegou ao fim!
         </span>
       ) : (
