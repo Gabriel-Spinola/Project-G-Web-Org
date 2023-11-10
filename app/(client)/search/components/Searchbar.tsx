@@ -1,11 +1,10 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function Searchbar() {
   const router = useRouter()
-  const pathname = usePathname()
 
   return (
     <div>
@@ -13,10 +12,13 @@ export default function Searchbar() {
         method="GET"
         onSubmit={(event) => {
           event.preventDefault()
+
           const formData = new FormData(event.currentTarget)
           const searchQuery = formData.get('search-query')
 
-          router.push(pathname + searchQuery)
+          router.replace(`/search/${searchQuery?.toString() ?? ''}`, {
+            scroll: false,
+          })
         }}
       >
         <input type="text" name="search-query" required />
