@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import { Icon, Image } from '@chakra-ui/react'
+import { Icon, Img } from '@chakra-ui/react'
 import { MdOutlineKeyboardDoubleArrowDown } from 'react-icons/md'
 import styles from './exploreCarousel.module.scss'
 
@@ -23,8 +23,8 @@ export default function Carousel() {
           id="item-1"
           className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1562185363-aa9551ce00d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+          <Img
+            src="/assets/explore/photo-1562185363-aa9551ce00d4.webp"
             className="h-full w-full object-cover rounded-xl"
             alt="Rounded Building"
           />
@@ -37,8 +37,8 @@ export default function Carousel() {
           id="item-1"
           className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1612387290123-34af734b5f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
+          <Img
+            src="/assets/explore/photo-1612387290123-34af734b5f61.webp"
             className="h-full w-full object-cover rounded-xl"
             alt="Garden Pool"
           />
@@ -51,8 +51,8 @@ export default function Carousel() {
           id="item-1"
           className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1591874204276-1ebd20fb8db6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+          <Img
+            src="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
             className="h-full w-full object-cover rounded-xl"
             alt="Kobra Graffiti"
           />
