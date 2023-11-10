@@ -16,12 +16,8 @@ export async function GET(req: Request) {
     try {
       const data: PublicationComment[] = await prisma.comment.findMany({
         where: { postId },
-        include: { author: { select: { name: true } } },
         skip,
         take,
-<<<<<<< Updated upstream
-=======
-        where: { postId },
         include: {
           author: { select: { name: true, profilePic: true, image: true } },
           replies: {
@@ -31,7 +27,6 @@ export async function GET(req: Request) {
             },
           },
         },
->>>>>>> Stashed changes
       })
 
       return NextResponse.json({ data }, { status: 200 })
