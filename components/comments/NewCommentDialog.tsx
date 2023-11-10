@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn } from 'next-auth/react'
@@ -9,7 +8,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { TDisplayComment } from '@/lib/types/common'
 
 type Props = {
-  currentUser?: string
+  currentUserId?: string
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'
@@ -19,7 +18,7 @@ type Props = {
 }
 
 export default function NewCommentDialog({
-  currentUser: currentUserId,
+  currentUserId,
   target,
   fromPost,
   handleFacadeCommentSubmit,
