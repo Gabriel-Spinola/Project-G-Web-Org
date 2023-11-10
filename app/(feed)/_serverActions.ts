@@ -5,7 +5,7 @@ import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment, Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
-import { ESResponse } from '@/lib/types/common'
+import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -21,7 +21,7 @@ export async function postComment(
   },
   fromPost: string,
   authorId: string,
-): Promise<ESResponse<number>> {
+): Promise<ESResponse<Partial<TDisplayComment>>> {
   const content = formData.get('content')?.toString()
 
   if (!content || !authorId) {
@@ -34,31 +34,34 @@ export async function postComment(
   try {
     const target = { [replyTarget.type]: replyTarget.id }
 
-    const createComment: Comment = await prisma.comment.create({
+    const newComment: Partial<TDisplayComment> = await prisma.comment.create({
       data: {
-        ...target,
         content,
         authorId,
+        ...target,
         isEdited: false,
         createdAt: new Date(Date.now()),
+      },
+      include: {
+        author: { select: { name: true, profilePic: true, image: true } },
       },
     })
 
     const updateTarget: Post = await prisma.post.update({
       where: { id: fromPost },
       // NOTE - Push new comment into post
-      data: { comments: { connect: { id: createComment.id } } },
+      data: { comments: { connect: { id: newComment.id } } },
     })
 
     console.log(
       'sucess' +
-        JSON.stringify(createComment) +
+        JSON.stringify(newComment) +
         '\n' +
         JSON.stringify(updateTarget),
     )
 
     return {
-      data: createComment.id,
+      data: newComment,
       error: null,
     }
   } catch (error: unknown) {
@@ -87,7 +90,7 @@ export async function increaseLikeCount(
 
     console.log('POST? ' + JSON.stringify(updateUser))
   } catch (error: unknown) {
-    // REVIEW - check for possible optimizations for this solution
+    // REVIEW - check of possible optimizations for this solution
     if (error instanceof PrismaClientKnownRequestError) {
       console.warn('cannot like the same post twice thrown\n', error)
 
