@@ -1,24 +1,20 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
+import { RedirectType, redirect } from 'next/navigation'
 import React from 'react'
 
 export default function Searchbar() {
-  const router = useRouter()
-
   return (
     <div>
       <form
         method="GET"
-        onSubmit={(event) => {
-          event.preventDefault()
+        action={async function (formData: FormData) {
+          'use server'
 
-          const formData = new FormData(event.currentTarget)
           const searchQuery = formData.get('search-query')
 
-          router.replace(`/search/${searchQuery?.toString() ?? ''}`, {
-            scroll: false,
-          })
+          redirect(
+            `/search/${searchQuery?.toString() ?? ''}`,
+            RedirectType.replace,
+          )
         }}
       >
         <input type="text" name="search-query" required />
