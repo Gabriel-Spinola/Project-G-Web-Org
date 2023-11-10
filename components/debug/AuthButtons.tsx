@@ -32,8 +32,8 @@ export const RegisterButton = () => {
 
 export const LogoutButton = () => {
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="w-[270px] text-center text-2xl text-pure-white">
+    <div className="flex flex-col w-full h-full gap-8 justify-center p-32">
+      <h1 className="w-full text-center text-2xl text-pure-white">
         Parece que você já está logado!
       </h1>
       <button
@@ -56,5 +56,7 @@ export const LogoutButton = () => {
 export const ProfileButton = () => {
   const session = useSession()
 
-  return <Link href={`/client/profile/${session.data?.user.id}`}>Profile</Link>
+  return (
+    <Link href={`/(client)/profile/${session.data?.user.id}`}>Profile</Link>
+  )
 }

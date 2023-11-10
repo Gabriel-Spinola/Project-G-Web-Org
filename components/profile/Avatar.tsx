@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Avatar } from '@chakra-ui/react'
 
 interface Props {

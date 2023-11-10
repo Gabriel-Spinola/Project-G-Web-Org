@@ -13,8 +13,8 @@ import { NextResponse } from 'next/server'
 // TODO - add all paths that need authentication
 const onlyAuthenticatedPages = [
   '/admin/',
-  '/client/profile/',
-  '/client/temp/',
+  '/(client)/profile/',
+  '/(client)/temp/',
   '/api/handlers/',
   '/api/session/',
 ]

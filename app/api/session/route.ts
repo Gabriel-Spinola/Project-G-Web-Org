@@ -11,9 +11,7 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
-type SessionResponse = NextResponse<Record<string, any>>
-
-export async function GET(): Promise<SessionResponse> {
+export async function GET() {
   const session = await getServerSession(AuthOptions)
 
   if (!session) {

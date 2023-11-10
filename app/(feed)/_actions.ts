@@ -1,5 +1,6 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
 
@@ -30,6 +31,13 @@ export async function handlePostDeletion(
   }
 }
 
+/**
+ * Fetch multiple posts
+ * @param page
+ * @param signal
+ * @param authorId
+ * @returns array of posts
+ */
 export async function fetchPosts<T extends FullPost = FullPost>(
   page = 1,
   signal?: AbortSignal,
@@ -51,7 +59,9 @@ export async function fetchPosts<T extends FullPost = FullPost>(
     })
 
     if (!response.ok) {
-      throw new Error("Response's not okay")
+      const { data }: { data: string } = await response.json()
+
+      throw new Error("Response's not okay " + data)
     }
 
     const { data }: { data: T[] } = await response.json()
@@ -74,5 +84,68 @@ export async function fetchPosts<T extends FullPost = FullPost>(
       data: null,
       error: 'Failed to fetch posts',
     }
+  }
+}
+
+/**
+ * Fetch single post
+ * @param postId
+ * @returns post
+ */
+export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.users}/only/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+          'Content-Type': 'application/json',
+        },
+        next: { tags: ['revalidate-post'] },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error("Response's not okay")
+    }
+
+    const { data }: { data: FullPost } = await response.json()
+
+    return ESSucceed(data)
+  } catch (error: unknown) {
+    console.error(error)
+
+    return ESFailed(error)
+  }
+}
+
+export async function createNewPost(
+  id: string,
+  formData: FormData,
+): Promise<ESResponse<string>> {
+  try {
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.services.posts}?id=${id}`,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+        },
+      },
+    )
+
+    const { data }: { data: string } = await response.json()
+
+    if (!response.ok) {
+      throw new Error('response not ok' + JSON.stringify(data))
+    }
+
+    return ESSucceed(data)
+  } catch (error: unknown) {
+    console.error(error)
+
+    return ESFailed(error)
   }
 }

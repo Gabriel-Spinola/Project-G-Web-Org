@@ -59,6 +59,7 @@ model Project {
   title       String
   description String?
   images      String[]
+  files       String[]
 
   projectType ProjectType
   tags        String[]
@@ -115,6 +116,7 @@ enum Positions {
 model User {
   id       String  @id @default(cuid())
   name     String
+  displayName String?
   password String?
   image String?
 
@@ -198,6 +200,11 @@ model Comment {
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String? 
+
+  replies Comment[] @relation("Replies")
+
+  parentComment Comment? @relation("Replies", fields: [parentCommentId], references: [id])
+  parentCommentId Int?
 }
 
 model Like {
