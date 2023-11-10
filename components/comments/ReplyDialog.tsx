@@ -43,7 +43,7 @@ export default function ReplyDialog({
 
         <ModalBody height={'100%'}>
           <NewCommentDialog
-            currentUser={currentUserId}
+            currentUserId={currentUserId}
             target={{ id: repliedCommentId, type: 'parentCommentId' }}
             handleFacadeCommentSubmit={(_id: Partial<TDisplayComment>) =>
               console.log(_id)

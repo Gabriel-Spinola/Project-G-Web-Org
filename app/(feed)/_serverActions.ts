@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { Post } from '@prisma/client'
+import { Comment, Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
@@ -114,5 +114,19 @@ export async function decreaseLikeCount(
     console.log('DELETE? ' + JSON.stringify(deleteLike))
   } catch (error: unknown) {
     console.error('Like Failed ' + error)
+  }
+}
+
+export async function deleteComment(id: number): Promise<void | null> {
+  try {
+    const deletedComment: Comment = await prisma.comment.delete({
+      where: { id },
+    })
+
+    console.log(JSON.stringify(deletedComment))
+  } catch (error: unknown) {
+    console.error('Failed to delete comment')
+
+    return null
   }
 }

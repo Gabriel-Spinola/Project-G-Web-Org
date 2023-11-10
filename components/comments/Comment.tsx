@@ -6,6 +6,7 @@ import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import ReplyDialog from './ReplyDialog'
 import { useDisclosure } from '@chakra-ui/react'
+import { deleteComment } from '@/app/(feed)/_serverActions'
 
 type Props = {
   comment: Partial<TDisplayComment>
