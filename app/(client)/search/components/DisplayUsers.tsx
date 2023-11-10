@@ -4,15 +4,15 @@ import React from 'react'
 
 export default function DisplayUsers({ users }: { users: User[] }) {
   return (
-    <div id="users-container">
+    <section id="users-container">
       {users.map((user) => (
-        <>
+        <div key={user.id}>
           <Link href={`/profile/${user.id}`}>Link: </Link>
           <span key={user.id}>{user.name} - </span>
 
           <br />
-        </>
+        </div>
       ))}
-    </div>
+    </section>
   )
 }
