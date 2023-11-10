@@ -19,12 +19,27 @@ async function getPosts(
       take,
       include: {
         author: {
-          select: { name: true, title: true, location: true, profilePic: true },
+          select: { name: true, image: true, profilePic: true },
         },
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
         comments: {
+<<<<<<< Updated upstream
           select: { id: true, content: true, likes: true },
+=======
+          include: {
+            author: { select: { name: true, profilePic: true, image: true } },
+            likes: { select: { id: true, userId: true } },
+            replies: {
+              include: {
+                author: {
+                  select: { name: true, profilePic: true, image: true },
+                },
+                likes: { select: { id: true, userId: true } },
+              },
+            },
+          },
+>>>>>>> Stashed changes
         },
       },
     })

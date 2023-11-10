@@ -5,7 +5,7 @@ import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment, Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
-import { ESResponse } from '@/lib/types/common'
+import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -15,7 +15,17 @@ export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
   formData: FormData,
+<<<<<<< Updated upstream
 ): Promise<ESResponse<number>> {
+=======
+  replyTarget: {
+    id: string | number
+    type: 'postId' | 'parentCommentId'
+  },
+  fromPost: string,
+  authorId: string,
+): Promise<ESResponse<Partial<TDisplayComment>>> {
+>>>>>>> Stashed changes
   const content = formData.get('content')?.toString()
   const authorId = formData.get('author-id')?.toString()
   const targetId = formData.get('target-id')?.toString()
@@ -28,7 +38,13 @@ export async function postComment(
   }
 
   try {
+<<<<<<< Updated upstream
     const createComment: Comment = await prisma.comment.create({
+=======
+    const target = { [replyTarget.type]: replyTarget.id }
+
+    const newComment: Partial<TDisplayComment> = await prisma.comment.create({
+>>>>>>> Stashed changes
       data: {
         content,
         authorId,
@@ -36,23 +52,26 @@ export async function postComment(
         isEdited: false,
         createdAt: new Date(Date.now()),
       },
+      include: {
+        author: { select: { name: true, profilePic: true, image: true } },
+      },
     })
 
     const updateTarget: Post = await prisma.post.update({
       where: { id: targetId },
       // NOTE - Push new comment into post
-      data: { comments: { connect: { id: createComment.id } } },
+      data: { comments: { connect: { id: newComment.id } } },
     })
 
     console.log(
       'sucess' +
-        JSON.stringify(createComment) +
+        JSON.stringify(newComment) +
         '\n' +
         JSON.stringify(updateTarget),
     )
 
     return {
-      data: createComment.id,
+      data: newComment,
       error: null,
     }
   } catch (error: unknown) {

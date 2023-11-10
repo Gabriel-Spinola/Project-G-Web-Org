@@ -19,6 +19,19 @@ export async function GET(req: Request) {
         include: { author: { select: { name: true } } },
         skip,
         take,
+<<<<<<< Updated upstream
+=======
+        where: { postId },
+        include: {
+          author: { select: { name: true, profilePic: true, image: true } },
+          replies: {
+            select: { id: true, content: true, isEdited: true },
+            include: {
+              author: { select: { name: true, profilePic: true, image: true } },
+            },
+          },
+        },
+>>>>>>> Stashed changes
       })
 
       return NextResponse.json({ data }, { status: 200 })
