@@ -3,6 +3,7 @@ import { $Enums } from '@prisma/client'
 import { FullPost } from '@/lib/types/common'
 import UserPhoto from '@/components/profile/Avatar'
 import PostSettings from './PostSettings'
+import Link from 'next/link'
 
 interface Props {
   post: FullPost
@@ -25,16 +26,6 @@ export default function PostHeader({
           />
         </a>
 
-<<<<<<< Updated upstream
-        <a className="flex flex-col" href={`/client/profile/${post.authorId}`}>
-          <h1
-            className={`text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary`}
-          >
-            {post.author?.name ?? '):'}
-          </h1>
-          <small className=" text-base">{post.author?.location}</small>
-        </a>
-=======
         <Link href={`/profile/${post.authorId}`}>
           <div className="flex flex-col">
             <h1 className="text-light-primary font-normal text-2xl hover:underline hover:text-darker-primary">
@@ -43,11 +34,10 @@ export default function PostHeader({
             <small className=" text-base">placeholder for something</small>
           </div>
         </Link>
->>>>>>> Stashed changes
       </div>
 
       <PostSettings
-        postId={post.id}
+        post={post}
         isOwner={isOwner}
         currentUserPosition={currentUserPosition}
       />

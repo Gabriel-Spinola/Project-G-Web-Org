@@ -62,7 +62,7 @@ export default function CommentModal({
             <section>
               <div id="form-container">
                 <NewCommentDialog
-                  currentUser={currentUserId}
+                  currentUserId={currentUserId}
                   target={{ id: post.id, type: 'postId' }}
                   handleFacadeCommentSubmit={handleFacadeCommentSubmit}
                   fromPost={post.id}

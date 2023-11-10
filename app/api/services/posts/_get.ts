@@ -24,9 +24,6 @@ async function getPosts(
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
         comments: {
-<<<<<<< Updated upstream
-          select: { id: true, content: true, likes: true },
-=======
           include: {
             author: { select: { name: true, profilePic: true, image: true } },
             likes: { select: { id: true, userId: true } },
@@ -39,7 +36,6 @@ async function getPosts(
               },
             },
           },
->>>>>>> Stashed changes
         },
       },
     })

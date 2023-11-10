@@ -15,9 +15,6 @@ export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
   formData: FormData,
-<<<<<<< Updated upstream
-): Promise<ESResponse<number>> {
-=======
   replyTarget: {
     id: string | number
     type: 'postId' | 'parentCommentId'
@@ -25,7 +22,6 @@ export async function postComment(
   fromPost: string,
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
->>>>>>> Stashed changes
   const content = formData.get('content')?.toString()
   const authorId = formData.get('author-id')?.toString()
   const targetId = formData.get('target-id')?.toString()
@@ -38,13 +34,9 @@ export async function postComment(
   }
 
   try {
-<<<<<<< Updated upstream
-    const createComment: Comment = await prisma.comment.create({
-=======
     const target = { [replyTarget.type]: replyTarget.id }
 
     const newComment: Partial<TDisplayComment> = await prisma.comment.create({
->>>>>>> Stashed changes
       data: {
         content,
         authorId,
