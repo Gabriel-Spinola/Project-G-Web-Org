@@ -6,6 +6,7 @@ import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { TDisplayComment } from '@/lib/types/common'
+import CreateCommentButton from '../Buttons/CreateCommentButton'
 
 type Props = {
   currentUserId?: string

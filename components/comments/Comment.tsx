@@ -2,7 +2,6 @@
 
 import { TDisplayComment } from '@/lib/types/common'
 import React from 'react'
-import { deleteComment } from '@/app/(feed)/_serverActions'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import ReplyDialog from './ReplyDialog'
