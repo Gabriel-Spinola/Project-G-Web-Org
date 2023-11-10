@@ -75,45 +75,28 @@ export default function InfiniteScrollPosts<
       loadMorePosts(signal)
     }
 
-    // Abort api fetch when needed
-    return (): void => {
-      controller.abort()
-    }
-  }, [inView, loadMorePosts])
-
-  // NOTE - Handles url callbacks for any feed data update
-  useEffect(() => {
-    if (deletedPost) {
-      setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
-    }
-
-    // FIXME - Should add the actual new post from the current user to the first index of the pubs array
     if (createdPost) {
-      const newPub = initialPublication?.at(0)
-      if (newPub) {
-        if (posts?.some((post) => post.id !== newPub.id)) {
-          setPosts((prev) => [newPub, ...(prev ?? [])])
-        }
-      }
+      setPages(0)
+      setPosts([])
+      loadMorePosts(signal)
 
       router.replace(pathname, { scroll: false })
     }
 
-    // Update feed state
+    // Abort api fetch when needed
     return (): void => {
-      if (createdPost || deletedPost) {
-        router.replace(pathname, { scroll: false })
-      }
+      controller.abort()
     }
+  }, [createdPost, inView, initialPublication, loadMorePosts, pathname, router])
 
-    // REVIEW - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    deletedPost,
-    router,
-    createdPost,
-    /*, initialPublication */
-  ])
+  // NOTE - Handles url callbacks for any non-api-related feed update
+  useEffect(() => {
+    if (deletedPost) {
+      setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
+
+      router.replace(pathname, { scroll: false })
+    }
+  }, [deletedPost, router, pathname])
 
   return (
     <>
