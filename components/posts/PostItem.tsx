@@ -14,10 +14,10 @@ import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '../Buttons/LikeButton'
 import { $Enums, Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
-import TwoImageDisplay from './images/TwoImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
-import FullPostModal from './FullPostModal'
 import PostHeader from './PostHeader'
+import CommentModal from '../comments/CommentModal'
+import TwoImageDisplay from './images/TwoImageDisplay'
 
 interface Params {
   post: FullPost
@@ -36,6 +36,7 @@ export default function PostItem({
   const isLiked: boolean = post.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+
   return (
     <div className={styles.post}>
       <PostHeader
@@ -47,6 +48,7 @@ export default function PostItem({
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
         {post?.content}
       </article>
+
       {post.images.length === 1 ? (
         <>
           <OneImageDisplay
@@ -78,7 +80,7 @@ export default function PostItem({
       ) : null}
 
       {/* Likes */}
-      <div id="reacts" className="w-[100%] h-[48px] mt-4 flex flex-row">
+      <div id="reacts" className="w-[100%] h-[48px] gap-4 mt-4 flex flex-row">
         <LikeButton
           params={{
             option: 'postId',
@@ -90,24 +92,11 @@ export default function PostItem({
         />
 
         {/* Comments */}
-        <button className="comment  flex flex-col justify-center items-center ml-8  hover:text-medium-primary w-[48px]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M9 22a1 1 0 0 1-1-1v-3H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6.1l-3.7 3.71c-.2.19-.45.29-.7.29H9m1-6v3.08L13.08 16H20V4H4v12h6Z"
-            />
-          </svg>
-
-          <span>{post.comments?.length ?? 0}</span>
-        </button>
-
-        <a href={`/client/posts/${post.id}`}>Check Post</a>
-        <FullPostModal post={post} currentUserId={currentUserId} />
+        <CommentModal
+          commentNumber={post.comments?.length ?? 0}
+          post={post}
+          currentUserId={currentUserId}
+        />
       </div>
     </div>
   )

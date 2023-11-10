@@ -11,7 +11,7 @@
  * Helpful functions for database actions
  */
 
-import { API_ENDPOINTS, API_URL, ModelsApiCode } from '../apiConfig'
+import { API_ENDPOINTS, API_URL } from '../apiConfig'
 
 export type ResponseError = {
   data: {
@@ -22,30 +22,6 @@ export type ResponseError = {
 
 export type ResponseData = {
   data: unknown
-}
-
-/**
- * @param rowID A String storing the unique cuid of the row
- * @param modelCode A unique string of numbers that store the model "id". i.e. "0": Project Model; "1": Post Model
- * @returns a response from database, this response contains not only the row data,
- * but also fetch information
- */
-export async function getRowDataFromAPI(
-  rowID: string,
-  modelCode: ModelsApiCode,
-  signal: AbortSignal | null | undefined = null,
-): Promise<Response> {
-  return await fetch(
-    `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${rowID}&modelCode=${modelCode}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': process.env.API_SECRET as string,
-      },
-      cache: 'no-cache',
-    },
-  )
 }
 
 /**
@@ -74,35 +50,5 @@ export async function createNewProjectApiCall(
     })
   } catch (error: unknown) {
     return null
-  }
-}
-
-export async function tryGetUserDataFromApi(
-  id: string,
-): Promise<ResponseData | ResponseError> {
-  try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.findUnique}?id=${id}&modelCode=${ModelsApiCode.User}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.API_SECRET as string,
-        },
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error(`Response in not OK ${response.json()}`)
-    }
-
-    return response.json()
-  } catch (error: unknown) {
-    return {
-      data: {
-        errorType: 'Failed to get response',
-        error: process.env.NODE_ENV === 'development' ? error : '',
-      },
-    }
   }
 }

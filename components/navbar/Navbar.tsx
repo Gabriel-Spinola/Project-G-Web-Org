@@ -1,13 +1,14 @@
 'use client'
+
 import '@/app/styles/navbar.css'
 import { StaticImage } from '../Image'
-import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { MdClose } from 'react-icons/md'
+import Link from 'next/link'
+import NavBarSettings from './NavBarSettings'
 
-export default function Navbar() {
-  const { data: session } = useSession()
+export default function Navbar({ userSession }: { userSession?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   function ToggleMenu() {
@@ -18,23 +19,25 @@ export default function Navbar() {
     <>
       <nav
         id="navDesktop"
-        className="flex h-[88px] w-full justify-around shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl"
+        className="flex justify-end p-8 h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl"
       >
-        <ul className="flex flex-row">
+        {userSession ? <NavBarSettings className="z-[100]" /> : null}
+
+        <ul className="absolute flex flex-row w-full items-center justify-center">
           <li>
-            <a href="../client/explore">
+            <Link href="/explore">
               Explorar
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="../client/projects">
+            <Link href="/projects">
               Projetos
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/">
+            <Link href="/">
               <StaticImage
                 url={
                   'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/logo.png'
@@ -42,25 +45,25 @@ export default function Navbar() {
                 alt={'logo'}
                 className={''}
               />
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="../client/search">
+            <Link href="/search">
               Busca
               <div></div>
-            </a>
+            </Link>
           </li>
           <li>
-            {session ? (
-              <a href={`../client/profile/${session?.user.id}`}>
+            {userSession ? (
+              <Link href={`/profile/${userSession}`}>
                 Perfil
                 <div></div>
-              </a>
+              </Link>
             ) : (
-              <a href="/auth">
+              <Link href="/login">
                 Logar
                 <div></div>
-              </a>
+              </Link>
             )}
           </li>
         </ul>
@@ -98,34 +101,31 @@ export default function Navbar() {
             menuOpen ? 'displayMenu' : 'hideMenu'
           } + text-xl sm:text-2xl md:text-3xl`}
         >
-          <a href="/" className="w-full">
+          <Link href="/" className="w-full">
             <li className="p-4 hover:bg-darker-white">Feed</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/explore" className="w-full">
+          <Link href="/explore" className="w-full">
             <li className="p-4 hover:bg-darker-white">Explorar</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/projects" className="w-full">
+          <Link href="/projects" className="w-full">
             <li className="p-4 hover:bg-darker-white">Projetos</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <a href="../client/search" className="w-full">
+          <Link href="/search" className="w-full">
             <li className="p-4 hover:bg-darker-white">Busca</li>
-          </a>
+          </Link>
           <hr className="h-px bg-black/25 border-0" />
 
-          {session ? (
-            <a
-              href={`../client/profile/${session?.user.id}`}
-              className="w-full"
-            >
+          {userSession ? (
+            <Link href={`/profile/${userSession}`} className="w-full">
               <li className="p-4 hover:bg-darker-white">Perfil</li>
-            </a>
+            </Link>
           ) : (
-            <a href="/auth" className="w-full">
+            <Link href="/login" className="w-full">
               <li className="p-4 hover:bg-darker-white">Logar</li>
-            </a>
+            </Link>
           )}
         </ul>
       </nav>
