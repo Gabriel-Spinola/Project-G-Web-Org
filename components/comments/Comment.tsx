@@ -20,6 +20,7 @@ import {
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import ReplyDialog from './ReplyDialog'
+import Link from 'next/link'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -38,7 +39,7 @@ export default function Comment({
   const isOwner = currentUserId === comment.authorId
 
   return (
-    <div className="w-full flex bg-darker-white rounded-lg my-4 items-center justify-center p-4">
+    <div className="w-full flex bg-darker-white rounded-lg my-4 items-center justify-center p-2">
       {/* <button onClick={onOpen}>opendialogo</button>
       <ReplyDialog
         isOpen={isOpen}
@@ -49,22 +50,25 @@ export default function Comment({
         fromPost={fromPost}
       /> */}
 
-      <Avatar size={'md'} src={getProfilePicURL(comment.author as User)} />
+      <Avatar size={'lg'} src={getProfilePicURL(comment.author as User)} />
       <div className="flex flex-col w-full">
-        <span className="capitalize px-2 font-semibold">
+        <Link
+          href={`/profile/${comment.authorId}`}
+          className="capitalize px-2 font-semibold"
+        >
           {comment.author?.name}
-        </span>
+        </Link>
 
         <label htmlFor="content"></label>
         <article
           title="content"
           id="content"
-          className="resize-none w-full bg-darker-white rounded-lg p-2"
+          className="resize-none w-full bg-darker-white rounded-lg p-2 ml-2"
         >
           {comment.content}
         </article>
       </div>
-      <div>
+      <div className="flex flex-col items-center justify-center">
         {isOwner ? (
           <Menu>
             <MenuButton
