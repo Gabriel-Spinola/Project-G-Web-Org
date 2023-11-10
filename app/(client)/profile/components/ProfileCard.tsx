@@ -44,6 +44,7 @@ import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
 import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import { PublicationAuthor } from '@/lib/types/common'
 
 interface Params {
   user: Partial<User>
@@ -121,13 +122,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
           />
         ) : (
           <div>
-            <Avatar
-              size={'2xl'}
-              src={getProfilePicURL({
-                profilePic: user.profilePic as string | null,
-                image: user.image as string | null,
-              })}
-            />
+            <Avatar size={'2xl'} src={getProfilePicURL(user as User)} />
           </div>
         )}
       </div>
