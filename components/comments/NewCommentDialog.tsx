@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
-import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
+import { TDisplayComment } from '@/lib/types/common'
+import CreateCommentButton from '../Buttons/CreateCommentButton'
 
 type Props = {
   currentUserId?: string
@@ -14,11 +15,7 @@ type Props = {
     type: 'postId' | 'parentCommentId'
   }
   fromPost: string
-  handleFacadeCommentSubmit: (
-    id: number,
-    content: string,
-    authorName: string,
-  ) => void
+  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
 }
 
 export default function NewCommentDialog({
@@ -30,7 +27,7 @@ export default function NewCommentDialog({
   const router = useRouter()
   const pathName = usePathname()
 
-  async function handleFormSubmission(formData: FormData) {
+  async function handleFormSubimission(formData: FormData) {
     if (!currentUserId) {
       signIn()
 
@@ -65,17 +62,13 @@ export default function NewCommentDialog({
       return
     }
 
-    handleFacadeCommentSubmit(
-      data,
-      formData.get('content') as string,
-      currentUserId,
-    )
+    handleFacadeCommentSubmit(data)
 
     router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
   return (
-    <form action={handleFormSubmission}>
+    <form action={handleFormSubimission}>
       <label htmlFor="content"></label>
       <textarea
         name="content"

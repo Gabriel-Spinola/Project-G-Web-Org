@@ -32,22 +32,9 @@ export default function CommentModal({
   )
   const [commentsCount, setCommentsCount] = useState(commentNumber)
 
-  function handleFacadeCommentSubmit(
-    id: number,
-    content: string,
-    authorName: string,
-  ) {
+  function handleFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
     setCommentsCount((prev) => prev + 1)
-    setComments((prev) => [
-      ...prev,
-      {
-        id,
-        content,
-        author: {
-          name: authorName,
-        },
-      },
-    ])
+    setComments((prev) => [...prev, commentData])
   }
 
   function handleFacadeCommentDeletion(id: number) {

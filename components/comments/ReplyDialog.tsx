@@ -10,6 +10,7 @@ import {
 import React from 'react'
 import NewCommentDialog from './NewCommentDialog'
 import { usePathname, useRouter } from 'next/navigation'
+import { TDisplayComment } from '@/lib/types/common'
 
 type Props = {
   isOpen: boolean
@@ -44,7 +45,9 @@ export default function ReplyDialog({
           <NewCommentDialog
             currentUserId={currentUserId}
             target={{ id: repliedCommentId, type: 'parentCommentId' }}
-            handleFacadeCommentSubmit={(_id: number) => console.log(_id)}
+            handleFacadeCommentSubmit={(_id: Partial<TDisplayComment>) =>
+              console.log(_id)
+            }
             fromPost={fromPost}
           />
         </ModalBody>

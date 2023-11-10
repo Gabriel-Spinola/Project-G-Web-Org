@@ -1,4 +1,4 @@
-import { Comment, Post, Project, User } from '@prisma/client'
+import { Comment, Like, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -50,6 +50,8 @@ export type ESResponse<DataType, CustomError = string | unknown> =
       error: CustomError
     }
 
+export type PublicationAuthor = Pick<User, 'name' | 'image' | 'profilePic'>
+
 export type UserData = Partial<User> & {
   _count: {
     followers: number
@@ -57,30 +59,22 @@ export type UserData = Partial<User> & {
   }
 }
 
+export type Likes = Pick<Like, 'id' | 'userId'>[]
+
 export type PublicationComment = Comment & {
-  author: { name: string }
-  replies: (Comment & { author: { name: string } })[]
+  author: PublicationAuthor
+  replies: (Comment & {
+    author: PublicationAuthor
+  })[]
 }
 
 type TDisplayComment = Comment & {
-  author: {
-    name: string
-  }
-
-  likes: {
-    id: number
-    userId: string
-  }[]
+  author: PublicationAuthor
+  likes: Likes
 
   replies: (Comment & {
-    author: {
-      name: string
-    }
-
-    likes: {
-      id: number
-      userId: string
-    }[]
+    author: PublicationAuthor
+    likes: Likes
   })[]
 }
 
@@ -89,21 +83,10 @@ type TDisplayComment = Comment & {
  * @summary Describes the data that is recurrent in publications
  */
 export type PublicationsDefaultData = {
-  author: {
-    name: string | null
-    title: string | null
-    location: string | null
-    profilePic: string | null
-  } | null
-
-  contributor: { name: string }[]
-
-  likes: {
-    id: number
-    userId: string
-  }[]
-
+  author: PublicationAuthor | null
+  contributor: Pick<User, 'name'>[]
   comments: TDisplayComment[]
+  likes: Likes
 }
 
 /**

@@ -19,17 +19,19 @@ async function getPosts(
       take,
       include: {
         author: {
-          select: { name: true, title: true, location: true, profilePic: true },
+          select: { name: true, image: true, profilePic: true },
         },
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
         comments: {
           include: {
-            author: { select: { name: true } },
+            author: { select: { name: true, profilePic: true, image: true } },
             likes: { select: { id: true, userId: true } },
             replies: {
               include: {
-                author: { select: { name: true } },
+                author: {
+                  select: { name: true, profilePic: true, image: true },
+                },
                 likes: { select: { id: true, userId: true } },
               },
             },
@@ -39,10 +41,10 @@ async function getPosts(
     })
 
     return data
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Error occurred:', error)
 
-    return null
+    throw new Error('Failed to fetch posts from the database.')
   }
 }
 
