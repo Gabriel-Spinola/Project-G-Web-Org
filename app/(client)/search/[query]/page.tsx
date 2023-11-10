@@ -8,7 +8,7 @@
  */
 
 import React from 'react'
-import Searchbar from '../components/Searchbar'
+import Searchbar from '@/components/Searchbar'
 import DisplayUsers from '../components/DisplayUsers'
 import { searchForUser } from '../_actions'
 

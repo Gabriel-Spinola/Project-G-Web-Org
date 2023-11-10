@@ -1,6 +1,6 @@
 import { fetchUsers } from './_actions'
 import DisplayUsers from './components/DisplayUsers'
-import Searchbar from './components/Searchbar'
+import Searchbar from '@/components/Searchbar'
 
 export default async function SearchPage() {
   const { data, error } = await fetchUsers()
