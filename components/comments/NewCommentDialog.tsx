@@ -67,17 +67,23 @@ export default function NewCommentDialog({
     router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
+  function inputReplace() {
+    const formInput = document.getElementById('contentk') as HTMLInputElement
+    const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+    formInput.value = editableDiv.innerHTML
+    console.log(formInput.value)
+    formInput.value.replace(/&nbsp;/g, ' ')
+  }
   return (
     <form action={handleFormSubimission}>
-      <label htmlFor="content"></label>
-      <textarea
-        name="content"
-        title="content"
-        id="contentk"
-        cols={30}
-        rows={3}
-        placeholder="Faça seu comentário"
-      ></textarea>
+      <input type="hidden" id="contentk" name="content" value="" />
+      <div
+        contentEditable
+        id="editablediv"
+        onInput={() => {
+          inputReplace()
+        }}
+      ></div>
 
       <CreateCommentButton />
     </form>
