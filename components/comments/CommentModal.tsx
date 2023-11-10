@@ -6,6 +6,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -65,7 +66,12 @@ export default function CommentModal({
         <span>{commentsCount}</span>
       </button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        size={'2xl'}
+        scrollBehavior="inside"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Comentários</ModalHeader>
@@ -73,20 +79,7 @@ export default function CommentModal({
 
           <ModalBody>
             <section>
-              <div id="form-container">
-                <NewCommentDialog
-                  currentUserId={currentUserId}
-                  target={{ id: post.id, type: 'postId' }}
-                  handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                  fromPost={post.id}
-                />
-              </div>
-
-              <hr />
-
               <div id="display">
-                <h2>Comments</h2>
-
                 {comments.length > 0 &&
                   comments.map((comment, index) => (
                     <Comment
@@ -100,6 +93,16 @@ export default function CommentModal({
               </div>
             </section>
           </ModalBody>
+          <ModalFooter>
+            <div id="form-container" className="w-full">
+              <NewCommentDialog
+                currentUserId={currentUserId}
+                target={{ id: post.id, type: 'postId' }}
+                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
+                fromPost={post.id}
+              />
+            </div>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
