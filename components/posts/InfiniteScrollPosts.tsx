@@ -101,7 +101,9 @@ export default function InfiniteScrollPosts<
 
     // Update feed state
     return (): void => {
-      router.replace(pathname, { scroll: false })
+      if (createdPost || deletedPost) {
+        router.replace(pathname, { scroll: false })
+      }
     }
 
     // REVIEW - Removing the initialPublication variable from the effect deps fix the infinite refetching problem, but that's not the most optimal solution.
