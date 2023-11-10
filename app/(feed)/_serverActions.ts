@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { Comment, Post } from '@prisma/client'
+import { Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
@@ -23,8 +23,6 @@ export async function postComment(
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
   const content = formData.get('content')?.toString()
-  const authorId = formData.get('author-id')?.toString()
-  const targetId = formData.get('target-id')?.toString()
 
   if (!content || !authorId) {
     return {
@@ -40,7 +38,7 @@ export async function postComment(
       data: {
         content,
         authorId,
-        postId: targetId,
+        ...target,
         isEdited: false,
         createdAt: new Date(Date.now()),
       },
@@ -50,7 +48,7 @@ export async function postComment(
     })
 
     const updateTarget: Post = await prisma.post.update({
-      where: { id: targetId },
+      where: { id: fromPost },
       // NOTE - Push new comment into post
       data: { comments: { connect: { id: newComment.id } } },
     })
