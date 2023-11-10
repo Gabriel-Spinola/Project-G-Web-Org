@@ -8,47 +8,17 @@
  */
 
 import React from 'react'
-import Searchbar from '../components/Searchbar'
-import { API_URL } from '@/lib/apiConfig'
-import { User } from '@prisma/client'
-import { ESResponse } from '@/lib/types/common'
-import { ESFailed, ESSucceed } from '@/lib/types/helpers'
+import Searchbar from '@/components/Searchbar'
+import DisplayUsers from '../components/DisplayUsers'
+import { searchForUser } from '../_actions'
 
 type Props = {
   params: { query: string }
 }
 
-async function fetchUsers(query: string): Promise<ESResponse<User[]>> {
-  try {
-    const response = await fetch(
-      `${API_URL}api/services/users/search/${query}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.API_SECRET as string,
-        },
-        next: { tags: ['user-data'] },
-      },
-    )
-
-    if (!response.ok) {
-      const { data }: { data: string } = await response.json()
-
-      throw new Error('Response not ok ' + data)
-    }
-
-    const { data }: { data: User[] } = await response.json()
-
-    return ESSucceed(data)
-  } catch (error: unknown) {
-    return ESFailed(error)
-  }
-}
-
 export default async function SearchPage({ params }: Props) {
   const { query } = params
-  const { data, error } = await fetchUsers(query)
+  const { data, error } = await searchForUser(query)
   if (error || !data) {
     console.error(error, 'Failed to fetch users')
   }
@@ -57,13 +27,10 @@ export default async function SearchPage({ params }: Props) {
     <main>
       <Searchbar />
 
-      {!error ? (
-        <>
-          {data &&
-            data.map((user) => <span key={user.id}>{user.name} - </span>)}
-        </>
+      {!error && data ? (
+        <DisplayUsers users={data} />
       ) : (
-        <h1>Failed to load user</h1>
+        <>Failed to load feed</>
       )}
     </main>
   )

@@ -1,6 +1,7 @@
 import { FullPost } from '@/lib/types/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
+import { tempIncludeForUser } from './_utils'
 
 async function getPosts(
   where: { authorId?: string; published?: boolean },
@@ -17,27 +18,7 @@ async function getPosts(
       where,
       skip,
       take,
-      include: {
-        author: {
-          select: { name: true, image: true, profilePic: true },
-        },
-        contributor: { select: { name: true } },
-        likes: { select: { id: true, userId: true } },
-        comments: {
-          include: {
-            author: { select: { name: true, profilePic: true, image: true } },
-            likes: { select: { id: true, userId: true } },
-            replies: {
-              include: {
-                author: {
-                  select: { name: true, profilePic: true, image: true },
-                },
-                likes: { select: { id: true, userId: true } },
-              },
-            },
-          },
-        },
-      },
+      ...tempIncludeForUser,
     })
 
     return data
