@@ -36,6 +36,7 @@ export default function ReplyDialog({
   return (
     <div>
       <button onClick={onOpen}>opendialogo</button>
+
       <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
