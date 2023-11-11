@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import NewCommentDialog from './NewCommentDialog'
 import { usePathname, useRouter } from 'next/navigation'
