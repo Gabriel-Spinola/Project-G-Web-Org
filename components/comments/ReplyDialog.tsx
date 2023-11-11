@@ -5,6 +5,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -39,7 +40,9 @@ export default function ReplyDialog({
     <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
       <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
       <ModalContent>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalCloseButton />
+        </ModalHeader>
 
         <ModalBody height={'100%'}>
           <NewCommentDialog

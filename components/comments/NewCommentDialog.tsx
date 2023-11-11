@@ -70,16 +70,8 @@ export default function NewCommentDialog({
   function inputReplace() {
     const formInput = document.getElementById('contentk') as HTMLInputElement
     const editableDiv = document.getElementById('editablediv') as HTMLDivElement
-    editableDiv.innerHTML = editableDiv.innerHTML.replace(/&nbsp;/g, '')
-    formInput.value = editableDiv.innerHTML
+    formInput.value = editableDiv.innerText
     console.log(formInput.value)
-  }
-
-  function removePlaceHolder() {
-    const placeHolder = document.getElementById(
-      'commentPlaceHolder',
-    ) as HTMLSpanElement
-    placeHolder.innerHTML = ''
   }
 
   return (
@@ -95,12 +87,7 @@ export default function NewCommentDialog({
         onInput={() => {
           inputReplace()
         }}
-        onClick={removePlaceHolder}
-      >
-        <span className="opacity-75" id="commentPlaceHolder">
-          Faça um comentário
-        </span>
-      </div>
+      ></div>
 
       <CreateCommentButton />
     </form>
