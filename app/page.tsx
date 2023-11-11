@@ -12,10 +12,11 @@
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { AuthOptions } from '@/lib/auth'
-import { ESResponse, FullPost } from '@/lib/types/common'
+import { FullPost } from '@/lib/types/common'
 import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
 import { $Enums } from '@prisma/client'
+import { Suspense } from 'react'
 
 export default async function Home() {
   const sessionPromise = getServerSession(AuthOptions)
@@ -28,29 +29,25 @@ export default async function Home() {
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
         <PostSubmitFragment currentUserId={session?.user.id} />
 
-        {!posts.error ? (
-          <>
-            {posts.data && posts.data?.length > 0 ? (
-              <div className="min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
-                <InfiniteScrollPosts
-                  initialPublication={posts.data}
-                  currentUserData={
-                    session
-                      ? {
-                          id: session?.user.id as string,
-                          position: session?.user.position as $Enums.Positions,
-                        }
-                      : undefined
-                  }
-                />
-              </div>
-            ) : (
-              <>Oops você chegou ao fim!</>
-            )}
-          </>
-        ) : (
-          <h1>Feed Failed to load</h1>
-        )}
+        <Suspense fallback={<span>loading feed...</span>}>
+          {!posts.error ? (
+            <div className="min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
+              <InfiniteScrollPosts
+                initialPublication={posts.data ?? undefined}
+                currentUserData={
+                  session
+                    ? {
+                        id: session?.user.id as string,
+                        position: session?.user.position as $Enums.Positions,
+                      }
+                    : undefined
+                }
+              />
+            </div>
+          ) : (
+            <h1>Feed Failed to load</h1>
+          )}
+        </Suspense>
       </div>
     </main>
   )

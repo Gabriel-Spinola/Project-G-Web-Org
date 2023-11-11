@@ -27,7 +27,7 @@ export default function NewCommentDialog({
   const router = useRouter()
   const pathName = usePathname()
 
-  async function handleFormSubimission(formData: FormData) {
+  async function handleFormSubmission(formData: FormData) {
     if (!currentUserId) {
       signIn()
 
@@ -70,13 +70,21 @@ export default function NewCommentDialog({
   function inputReplace() {
     const formInput = document.getElementById('contentk') as HTMLInputElement
     const editableDiv = document.getElementById('editablediv') as HTMLDivElement
-    formInput.value = editableDiv.innerText
-    console.log(formInput.value)
+
+    formInput.value = editableDiv.innerHTML
+  }
+
+  function removePlaceHolder() {
+    const placeHolder = document.getElementById(
+      'commentPlaceHolder',
+    ) as HTMLSpanElement
+
+    placeHolder.innerHTML = ''
   }
 
   return (
     <form
-      action={handleFormSubimission}
+      action={handleFormSubmission}
       className="flex flex-col justify-end items-end gap-4"
     >
       <input type="hidden" id="contentk" name="content" value="" />
@@ -84,9 +92,8 @@ export default function NewCommentDialog({
         className="bg-darker-white w-full p-2 rounded-md outline-black/25"
         contentEditable
         id="editablediv"
-        onInput={() => {
-          inputReplace()
-        }}
+        onInput={inputReplace}
+        onClick={removePlaceHolder}
       ></div>
 
       <CreateCommentButton />
