@@ -13,27 +13,38 @@ import SendImageButton from '@/components/Buttons/SendImageButton'
 import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
 import { ChangeEvent, useState } from 'react'
-import { createNewProject } from '../_actions'
+import { createNewProject } from '../../create-project/_actions'
 import Image from 'next/image'
 
 interface ProjectFormState {
   title: string
-  description: string
-  files: File[] | null
-  images: File[] | null
+  description: string | null
+}
+
+type Props = {
+  currentUserId: string
+
+  // NOTE - Editing data
+  content?: ProjectFormState
+  files?: string[]
+  projectImages?: string[]
 }
 
 export default function CreateProjectForm({
   currentUserId,
-}: {
-  currentUserId: string
-}) {
-  const [form, setForm] = useState<ProjectFormState | null>({
-    title: '',
-    description: '',
-    files: null,
-    images: null,
-  })
+  content,
+  projectImages,
+}: Props) {
+  const isEditing = !!content
+
+  const [form, setForm] = useState<ProjectFormState | null>(
+    isEditing
+      ? content
+      : {
+          title: '',
+          description: '',
+        },
+  )
   const [images, setImages] = useState<File[] | undefined>(undefined)
 
   function handleStateChange(
@@ -111,6 +122,8 @@ export default function CreateProjectForm({
       return
     }
 
+    console.log(validatedForm.data)
+
     const { error } = await createNewProject(currentUserId, validatedForm.data)
 
     if (error) {
@@ -141,7 +154,7 @@ export default function CreateProjectForm({
             id="description"
             cols={30}
             rows={10}
-            value={form?.description}
+            value={form?.description ?? undefined}
             placeholder="textare"
             onChange={(event) =>
               handleStateChange('description', event.target.value)
@@ -153,7 +166,7 @@ export default function CreateProjectForm({
 
           <SendImageButton onChange={onImageChanges} />
 
-          <input type="submit" value="submit" />
+          <input type="submit" value={isEditing ? 'update' : 'create'} />
         </form>
       </section>
 

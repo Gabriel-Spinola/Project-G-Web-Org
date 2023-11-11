@@ -25,17 +25,7 @@ type Props = {
 }
 
 export default async function Profile({ params }: Props) {
-  const userData = getUserData(params.id, {
-    id: true,
-    name: true,
-    title: true,
-    description: true,
-    graduations: true,
-    profilePic: true,
-    location: true,
-    image: true,
-  })
-
+  const userData = getUserData(params.id)
   const sessionData = getServerSession(AuthOptions)
 
   const [user, session] = await Promise.all([userData, sessionData])
