@@ -6,6 +6,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -87,6 +88,17 @@ export default function CommentModal({
               </div>
             </section>
           </ModalBody>
+
+          <ModalFooter>
+            <div id="form-container" className="w-full">
+              <NewCommentDialog
+                currentUserId={currentUserId}
+                target={{ id: post.id, type: 'postId' }}
+                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
+                fromPost={post.id}
+              />
+            </div>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>

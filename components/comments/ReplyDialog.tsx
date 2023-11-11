@@ -6,6 +6,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react'
 import React from 'react'
 import NewCommentDialog from './NewCommentDialog'
@@ -13,21 +14,18 @@ import { usePathname, useRouter } from 'next/navigation'
 import { TDisplayComment } from '@/lib/types/common'
 
 type Props = {
-  isOpen: boolean
-  onOpen: () => void
-  onClose: () => void
   currentUserId?: string
   repliedCommentId: number
   fromPost: string
 }
 
 export default function ReplyDialog({
-  isOpen,
-  onClose,
   currentUserId,
   repliedCommentId,
   fromPost,
 }: Props) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const router = useRouter()
   const pathname = usePathname()
 
@@ -36,22 +34,25 @@ export default function ReplyDialog({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
-      <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
-      <ModalContent>
-        <ModalCloseButton />
+    <div>
+      <button onClick={onOpen}>opendialogo</button>
+      <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
+        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
+        <ModalContent>
+          <ModalCloseButton />
 
-        <ModalBody height={'100%'}>
-          <NewCommentDialog
-            currentUserId={currentUserId}
-            target={{ id: repliedCommentId, type: 'parentCommentId' }}
-            handleFacadeCommentSubmit={(_id: Partial<TDisplayComment>) =>
-              console.log(_id)
-            }
-            fromPost={fromPost}
-          />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+          <ModalBody height={'100%'}>
+            <NewCommentDialog
+              currentUserId={currentUserId}
+              target={{ id: repliedCommentId, type: 'parentCommentId' }}
+              handleFacadeCommentSubmit={(_id: Partial<TDisplayComment>) =>
+                console.log(_id)
+              }
+              fromPost={fromPost}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </div>
   )
 }
