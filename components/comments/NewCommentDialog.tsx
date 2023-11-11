@@ -4,7 +4,6 @@ import React, { useContext } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
-import { usePathname, useRouter } from 'next/navigation'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { CommentContext } from './CommentModal'
 import { PublicationContext } from '../posts/InfiniteScrollPosts'
@@ -59,6 +58,7 @@ export default function NewCommentDialog({ target }: Props) {
 
     if (context.handleFacadeCommentSubmit) {
       context.handleFacadeCommentSubmit(data)
+      console.log(data)
     }
   }
 
@@ -81,6 +81,7 @@ export default function NewCommentDialog({ target }: Props) {
         id="editablediv"
         onInput={inputReplace}
       ></div>
+
       <CreateCommentButton />
     </form>
   )

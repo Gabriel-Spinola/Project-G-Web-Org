@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import {
   decreaseLikeCount,
   increaseLikeCount,
@@ -15,19 +15,20 @@ type LikeButtonParams = {
     option: LikeOptions
     likes: number
     targetId: string | number
-    authorId?: string
     isLiked: boolean
   }
 }
 
 export function LikeButton({ params }: LikeButtonParams) {
+  const { data: session } = useSession()
+
   const [isLiked, setIsLiked] = useState<boolean>(params.isLiked)
   const [optimisticLikes, setOptimisticLikes] = useState<number>(
     params.likes || 0,
   )
 
   async function handleLike() {
-    if (!params.authorId) {
+    if (!session?.user.id) {
       signIn()
 
       return
@@ -39,7 +40,7 @@ export function LikeButton({ params }: LikeButtonParams) {
     setOptimisticLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1))
 
     if (!isLiked) {
-      await increaseLikeCount(params.option, params.authorId, params.targetId)
+      await increaseLikeCount(params.option, session.user.id, params.targetId)
     } else {
       await decreaseLikeCount(params.option, params.targetId)
     }

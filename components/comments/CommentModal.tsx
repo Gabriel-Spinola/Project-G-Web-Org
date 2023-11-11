@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import Comment from '../comments/Comment'
+import MenuSettings from './MenuSettings'
 
 export const CommentContext = createContext<{
   handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
@@ -77,14 +78,16 @@ export default function CommentModal({
             <ModalCloseButton />
 
             <ModalBody>
-              <section>
-                <div id="display">
-                  {comments.length > 0 &&
-                    comments.map((comment, index) => (
-                      <Comment key={index} comment={comment} />
-                    ))}
-                </div>
-              </section>
+              <div id="display">
+                {comments.length > 0 &&
+                  comments.map((comment) => (
+                    <Comment
+                      key={comment.id}
+                      comment={comment}
+                      settings={<MenuSettings comment={comment} />}
+                    />
+                  ))}
+              </div>
             </ModalBody>
 
             <ModalFooter shadow={'dark-lg'}>{newCommentDialog}</ModalFooter>

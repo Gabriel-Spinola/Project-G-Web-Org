@@ -29,6 +29,11 @@ export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
 
   const context = useContext(CommentContext)
+
+  const isLiked =
+    comment.likes?.some(
+      (like: Partial<Like>) => like.userId === session?.user.id,
+    ) ?? false
   const isOwner = session?.user.id === comment.authorId
 
   return (
@@ -63,7 +68,7 @@ export default function CommentReply({ comment }: Props) {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {isOwner ? (
+            {isOwner ?? (
               <Menu>
                 <MenuButton
                   as={IconButton}
@@ -94,17 +99,14 @@ export default function CommentReply({ comment }: Props) {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            ) : null}
+            )}
 
             <LikeButton
               params={{
                 option: 'commentId',
                 likes: comment.likes?.length ?? 0,
                 targetId: comment.id as number,
-                isLiked:
-                  comment.likes?.some(
-                    (like: Partial<Like>) => like.userId === session?.user.id,
-                  ) ?? false,
+                isLiked,
               }}
             />
           </div>

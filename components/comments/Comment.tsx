@@ -1,26 +1,29 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React, { useContext } from 'react'
+import React, { ReactNode } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import { Avatar } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Link from 'next/link'
-import ReplyDialog from './ReplyDialog'
 import CommentReply from './CommentReply'
-import MenuSettings from './MenuSettings'
 import { useSession } from 'next-auth/react'
-import { PublicationContext } from '../posts/InfiniteScrollPosts'
+import NewCommentDialog from './NewCommentDialog'
 
 type Props = {
+  settings: ReactNode
   comment: Partial<TDisplayComment>
 }
 
-export default function Comment({ comment }: Props) {
+export default function Comment({ comment, settings }: Props) {
   const { data: session } = useSession()
 
   const isOwner = session?.user.id === comment.authorId
+  const isLiked =
+    comment.likes?.some(
+      (like: Partial<Like>) => like.userId === session?.user.id,
+    ) ?? false
 
   return (
     <div className="flex flex-col items-end">
@@ -54,17 +57,14 @@ export default function Comment({ comment }: Props) {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {isOwner ? <MenuSettings comment={comment} /> : null}
+            {isOwner ?? settings}
+
             <LikeButton
               params={{
                 option: 'commentId',
                 likes: comment.likes?.length ?? 0,
                 targetId: comment.id as number,
-                authorId: session?.user.id,
-                isLiked:
-                  comment.likes?.some(
-                    (like: Partial<Like>) => like.userId === session?.user.id,
-                  ) ?? false,
+                isLiked,
               }}
             />
           </div>
@@ -74,13 +74,16 @@ export default function Comment({ comment }: Props) {
       <section className="w-[95%] p-2 mb-4 rounded-md">
         <div id="replies">
           {comment.replies?.map((reply, index) => (
-            <div key={index}>
-              <CommentReply comment={reply} />
-            </div>
+            <CommentReply key={index} comment={reply} />
           ))}
         </div>
 
-        <ReplyDialog repliedCommentId={comment.id as number} />
+        <NewCommentDialog
+          target={{
+            id: comment.id as number,
+            type: 'parentCommentId',
+          }}
+        />
       </section>
     </div>
   )
