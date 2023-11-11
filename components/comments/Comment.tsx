@@ -2,11 +2,11 @@
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
 import React from 'react'
-// import { deleteComment } from '@/app/(feed)/_serverActions'
+import { deleteComment } from '@/app/(feed)/_serverActions'
 import { LikeButton } from '../Buttons/LikeButton'
 import { BsThreeDots } from 'react-icons/bs'
 import { Like } from '@prisma/client'
-// import ReplyDialog from './ReplyDialog'
+import ReplyDialog from './ReplyDialog'
 import {
   Avatar,
   Button,
@@ -18,8 +18,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { deleteComment } from '@/app/(feed)/_serverActions'
-import ReplyDialog from './ReplyDialog'
+
 import Link from 'next/link'
 
 type Props = {

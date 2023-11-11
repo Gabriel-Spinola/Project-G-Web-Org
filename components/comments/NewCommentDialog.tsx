@@ -70,7 +70,9 @@ export default function NewCommentDialog({
   function inputReplace() {
     const formInput = document.getElementById('contentk') as HTMLInputElement
     const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+    editableDiv.innerHTML = editableDiv.innerHTML.replace(/&nbsp;/g, '')
     formInput.value = editableDiv.innerHTML
+    console.log(formInput.value)
   }
 
   function removePlaceHolder() {
