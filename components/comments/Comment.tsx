@@ -5,7 +5,6 @@ import React from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { BsThreeDots } from 'react-icons/bs'
 import { Like, User } from '@prisma/client'
-// import ReplyDialog from './ReplyDialog'
 import {
   Avatar,
   Button,
@@ -17,9 +16,8 @@ import {
 } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
+import Link from 'next/link'
 import ReplyDialog from './ReplyDialog'
-import { useDisclosure } from '@chakra-ui/react'
-import { deleteComment } from '@/app/(feed)/_serverActions'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -44,20 +42,7 @@ export default function Comment({
         fromPost={fromPost}
       />
 
-      <button
-        type="button"
-        onClick={async () => {
-          if (handleFacadeCommentDeletion) {
-            handleFacadeCommentDeletion(comment.id as number)
-          }
-
-          await deleteComment(comment.id as number)
-        }}
-      >
-        delete
-      </button>
       <Avatar size={'lg'} src={getProfilePicURL(comment.author as User)} />
-
       <div className="flex flex-col w-full">
         <Link
           href={`/profile/${comment.authorId}`}
@@ -75,7 +60,6 @@ export default function Comment({
           {comment.content}
         </article>
       </div>
-
       <div className="flex flex-col items-center justify-center">
         {isOwner ? (
           <Menu>
@@ -87,7 +71,6 @@ export default function Comment({
               color={'#242424'}
               className="bg-opacity-25 absolute hover:text-darker-gray"
             ></MenuButton>
-
             <MenuList>
               <MenuItem padding={0}>
                 <Button
@@ -97,35 +80,30 @@ export default function Comment({
                     if (handleFacadeCommentDeletion) {
                       handleFacadeCommentDeletion(comment.id as number)
                     }
-                  </Button>
-                  </MenuItem >
-                  </MenuList>
-        )
 
-      <span>{comment.author?.name}</span>
+                    await deleteComment(comment.id as number)
+                  }}
+                >
+                  Excluir Comentário
+                </Button>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ) : null}
 
-      <label htmlFor="content"></label>
-      <textarea
-        title="content"
-        id="content"
-        cols={30}
-        rows={2}
-        value={comment.content}
-        readOnly
-      ></textarea>
-
-      <LikeButton
-        params={{
-          option: 'commentId',
-          likes: comment.likes?.length ?? 0,
-          targetId: comment.id as number,
-          authorId: currentUserId,
-          isLiked:
-            comment.likes?.some(
-              (like: Partial<Like>) => like.userId === currentUserId,
-            ) ?? false,
-        }}
-      />
+        <LikeButton
+          params={{
+            option: 'commentId',
+            likes: comment.likes?.length ?? 0,
+            targetId: comment.id as number,
+            authorId: currentUserId,
+            isLiked:
+              comment.likes?.some(
+                (like: Partial<Like>) => like.userId === currentUserId,
+              ) ?? false,
+          }}
+        />
+      </div>
 
       <div id="replies">
         {comment.replies?.map((reply, index) => (

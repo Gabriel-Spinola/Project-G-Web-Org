@@ -43,3 +43,7 @@ setnode.bat
 Project-G-Web.code-workspace
 .vscode/settings.json
 poke.exe
+
+.git-old/*
+/.git-old/
+.git-old/

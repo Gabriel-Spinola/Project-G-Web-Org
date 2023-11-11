@@ -1,6 +1,5 @@
 'use client'
 
-// import { fetchPosts } from '@/app/(feed)/_feedActions'
 import React from 'react'
 import PostItem from './PostItem'
 import { User } from '@prisma/client'
