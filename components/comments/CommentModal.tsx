@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
@@ -75,11 +77,13 @@ export default function CommentModal({
                       currentUserId={currentUserId}
                       fromPost={post.id}
                       handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+                      handleFacadeCommentSubmit={handleFacadeCommentSubmit}
                     />
                   ))}
               </div>
             </section>
           </ModalBody>
+
           <ModalFooter>
             <div id="form-container" className="w-full">
               <NewCommentDialog

@@ -17,12 +17,14 @@ type Props = {
   currentUserId?: string
   repliedCommentId: number
   fromPost: string
+  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
 }
 
 export default function ReplyDialog({
   currentUserId,
   repliedCommentId,
   fromPost,
+  handleFacadeCommentSubmit,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -46,9 +48,7 @@ export default function ReplyDialog({
             <NewCommentDialog
               currentUserId={currentUserId}
               target={{ id: repliedCommentId, type: 'parentCommentId' }}
-              handleFacadeCommentSubmit={(_id: Partial<TDisplayComment>) =>
-                console.log(_id)
-              }
+              handleFacadeCommentSubmit={handleFacadeCommentSubmit}
               fromPost={fromPost}
             />
           </ModalBody>

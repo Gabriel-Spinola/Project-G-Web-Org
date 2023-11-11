@@ -23,6 +23,7 @@ type Props = {
   comment: Partial<TDisplayComment>
   currentUserId?: string
   handleFacadeCommentDeletion?: (id: number) => void
+  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
   fromPost: string
 }
 
@@ -30,6 +31,7 @@ export default function Comment({
   comment,
   currentUserId,
   handleFacadeCommentDeletion,
+  handleFacadeCommentSubmit,
   fromPost,
 }: Props) {
   const isOwner = currentUserId === comment.authorId
@@ -40,6 +42,7 @@ export default function Comment({
         repliedCommentId={comment.id as number}
         currentUserId={currentUserId}
         fromPost={fromPost}
+        handleFacadeCommentSubmit={handleFacadeCommentSubmit}
       />
 
       <Avatar size={'lg'} src={getProfilePicURL(comment.author as User)} />
@@ -114,6 +117,7 @@ export default function Comment({
               comment={reply}
               currentUserId={currentUserId}
               handleFacadeCommentDeletion={handleFacadeCommentDeletion}
+              handleFacadeCommentSubmit={handleFacadeCommentSubmit}
               fromPost={fromPost}
             />
           </div>
