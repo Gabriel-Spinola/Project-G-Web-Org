@@ -40,7 +40,7 @@ export default function Comment({
 
   return (
     <section className="w-full flex flex-col bg-darker-white rounded-lg my-4 items-start justify-center p-2">
-      <div className="flex">
+      <div className="flex w-full">
         <Avatar
           size={'lg'}
           src={getProfilePicURL(comment.author as PublicationAuthor)}
