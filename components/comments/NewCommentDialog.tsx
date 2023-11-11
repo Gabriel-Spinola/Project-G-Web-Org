@@ -71,19 +71,34 @@ export default function NewCommentDialog({
     const formInput = document.getElementById('contentk') as HTMLInputElement
     const editableDiv = document.getElementById('editablediv') as HTMLDivElement
     formInput.value = editableDiv.innerHTML
-    console.log(formInput.value)
-    formInput.value.replace(/&nbsp;/g, ' ')
   }
+
+  function removePlaceHolder() {
+    const placeHolder = document.getElementById(
+      'commentPlaceHolder',
+    ) as HTMLSpanElement
+    placeHolder.innerHTML = ''
+  }
+
   return (
-    <form action={handleFormSubimission}>
+    <form
+      action={handleFormSubimission}
+      className="flex flex-col justify-end items-end gap-4"
+    >
       <input type="hidden" id="contentk" name="content" value="" />
       <div
+        className="bg-darker-white w-full p-2 rounded-md outline-black/25"
         contentEditable
         id="editablediv"
         onInput={() => {
           inputReplace()
         }}
-      ></div>
+        onClick={removePlaceHolder}
+      >
+        <span className="opacity-75" id="commentPlaceHolder">
+          Faça um comentário
+        </span>
+      </div>
 
       <CreateCommentButton />
     </form>
