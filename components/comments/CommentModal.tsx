@@ -84,7 +84,7 @@ export default function CommentModal({
             </section>
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter shadow={'dark-lg'}>
             <div id="form-container" className="w-full">
               <NewCommentDialog
                 currentUserId={currentUserId}
