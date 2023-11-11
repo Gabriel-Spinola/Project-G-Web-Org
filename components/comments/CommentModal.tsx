@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useState } from 'react'
+import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
@@ -13,14 +13,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import NewCommentDialog from '../comments/NewCommentDialog'
 import Comment from '../comments/Comment'
-
-interface Props {
-  commentNumber: number
-  post: FullPost
-  currentUserId?: string
-}
 
 export const CommentContext = createContext<{
   handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
@@ -30,7 +23,17 @@ export const CommentContext = createContext<{
   handleFacadeCommentSubmit: undefined,
 })
 
-export default function CommentModal({ commentNumber, post }: Props) {
+interface Props {
+  commentNumber: number
+  post: FullPost
+  newCommentDialog: ReactNode
+}
+
+export default function CommentModal({
+  commentNumber,
+  post,
+  newCommentDialog,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
@@ -78,24 +81,13 @@ export default function CommentModal({ commentNumber, post }: Props) {
                 <div id="display">
                   {comments.length > 0 &&
                     comments.map((comment, index) => (
-                      <Comment
-                        key={index}
-                        comment={comment}
-                        fromPost={post.id}
-                      />
+                      <Comment key={index} comment={comment} />
                     ))}
                 </div>
               </section>
             </ModalBody>
 
-            <ModalFooter shadow={'dark-lg'}>
-              <div id="form-container" className="w-full">
-                <NewCommentDialog
-                  target={{ id: post.id, type: 'postId' }}
-                  fromPost={post.id}
-                />
-              </div>
-            </ModalFooter>
+            <ModalFooter shadow={'dark-lg'}>{newCommentDialog}</ModalFooter>
           </ModalContent>
         </Modal>
       </CommentContext.Provider>

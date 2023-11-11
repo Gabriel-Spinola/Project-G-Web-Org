@@ -23,7 +23,6 @@ import { useSession } from 'next-auth/react'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  fromPost: string
 }
 
 export default function CommentReply({ comment }: Props) {

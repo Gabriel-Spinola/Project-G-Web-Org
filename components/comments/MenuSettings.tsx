@@ -1,3 +1,5 @@
+'use client'
+
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { TDisplayComment } from '@/lib/types/common'
 import {

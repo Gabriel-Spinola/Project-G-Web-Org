@@ -9,25 +9,29 @@
 
 'use client'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
-import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '../Buttons/LikeButton'
-import { $Enums, Like } from '@prisma/client'
+import { Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import TwoImageDisplay from './images/TwoImageDisplay'
 import { useSession } from 'next-auth/react'
+import NewCommentDialog from '../comments/NewCommentDialog'
+import { PublicationContext } from './InfiniteScrollPosts'
 
-interface Params {
-  post: FullPost
-}
-
-export default function PostItem({ post }: Params) {
+export default function PostItem() {
   const { data: session } = useSession()
+
+  const post = useContext(PublicationContext)
+
+  if (!post) {
+    return <></>
+  }
+
   const isOwner = session?.user.id === post.authorId
 
   // Check if the current user liked the post
@@ -85,7 +89,15 @@ export default function PostItem({ post }: Params) {
         />
 
         {/* Comments */}
-        <CommentModal commentNumber={post.comments?.length ?? 0} post={post} />
+        <CommentModal
+          commentNumber={post.comments?.length ?? 0}
+          post={post}
+          newCommentDialog={
+            <div id="form-container" className="w-full">
+              <NewCommentDialog target={{ id: post.id, type: 'postId' }} />
+            </div>
+          }
+        />
       </div>
     </div>
   )

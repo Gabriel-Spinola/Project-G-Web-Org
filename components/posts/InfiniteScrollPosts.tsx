@@ -1,10 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { createContext } from 'react'
 import PostItem from './PostItem'
 import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
+
+export const PublicationContext = createContext<FullPost | null>(null)
 
 type Params = {
   initialPublication: FullPost[] | undefined
@@ -19,7 +21,13 @@ export default function InfiniteScrollPosts({
 
   return (
     <section id="feed">
-      {posts?.map((post: FullPost) => <PostItem key={post.id} post={post} />)}
+      {posts?.map((post: FullPost) => (
+        <>
+          <PublicationContext.Provider key={post.id} value={post}>
+            <PostItem />
+          </PublicationContext.Provider>
+        </>
+      ))}
 
       {/* loading spinner */}
       {noPostFound ? (

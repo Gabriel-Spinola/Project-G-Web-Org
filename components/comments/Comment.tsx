@@ -11,13 +11,13 @@ import ReplyDialog from './ReplyDialog'
 import CommentReply from './CommentReply'
 import MenuSettings from './MenuSettings'
 import { useSession } from 'next-auth/react'
+import { PublicationContext } from '../posts/InfiniteScrollPosts'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  fromPost: string
 }
 
-export default function Comment({ comment, fromPost }: Props) {
+export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
 
   const isOwner = session?.user.id === comment.authorId
@@ -75,15 +75,12 @@ export default function Comment({ comment, fromPost }: Props) {
         <div id="replies">
           {comment.replies?.map((reply, index) => (
             <div key={index}>
-              <CommentReply comment={reply} fromPost={fromPost} />
+              <CommentReply comment={reply} />
             </div>
           ))}
         </div>
 
-        <ReplyDialog
-          repliedCommentId={comment.id as number}
-          fromPost={fromPost}
-        />
+        <ReplyDialog repliedCommentId={comment.id as number} />
       </section>
     </div>
   )

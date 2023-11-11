@@ -7,21 +7,20 @@ import { signIn, useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { CommentContext } from './CommentModal'
+import { PublicationContext } from '../posts/InfiniteScrollPosts'
 
 type Props = {
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'
   }
-  fromPost: string
 }
 
-export default function NewCommentDialog({ target, fromPost }: Props) {
+export default function NewCommentDialog({ target }: Props) {
   const { data: session } = useSession()
 
   const context = useContext(CommentContext)
-  const router = useRouter()
-  const pathName = usePathname()
+  const post = useContext(PublicationContext)
 
   async function handleFormSubmission(formData: FormData) {
     if (!session?.user.id) {
@@ -48,7 +47,7 @@ export default function NewCommentDialog({ target, fromPost }: Props) {
     const { data, error } = await postComment(
       validatedData.data,
       target,
-      fromPost,
+      post?.id as string,
       session?.user.id,
     )
 
@@ -61,8 +60,6 @@ export default function NewCommentDialog({ target, fromPost }: Props) {
     if (context.handleFacadeCommentSubmit) {
       context.handleFacadeCommentSubmit(data)
     }
-
-    router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
   function inputReplace() {
