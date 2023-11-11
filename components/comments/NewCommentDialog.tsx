@@ -27,7 +27,7 @@ export default function NewCommentDialog({
   const router = useRouter()
   const pathName = usePathname()
 
-  async function handleFormSubimission(formData: FormData) {
+  async function handleFormSubmission(formData: FormData) {
     if (!currentUserId) {
       signIn()
 
@@ -67,17 +67,34 @@ export default function NewCommentDialog({
     router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
 
+  function inputReplace() {
+    const formInput = document.getElementById('contentk') as HTMLInputElement
+    const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+
+    formInput.value = editableDiv.innerHTML
+  }
+
+  function removePlaceHolder() {
+    const placeHolder = document.getElementById(
+      'commentPlaceHolder',
+    ) as HTMLSpanElement
+
+    placeHolder.innerHTML = ''
+  }
+
   return (
-    <form action={handleFormSubimission}>
-      <label htmlFor="content"></label>
-      <textarea
-        name="content"
-        title="content"
-        id="contentk"
-        cols={30}
-        rows={3}
-        placeholder="Faça seu comentário"
-      ></textarea>
+    <form
+      action={handleFormSubmission}
+      className="flex flex-col justify-end items-end gap-4"
+    >
+      <input type="hidden" id="contentk" name="content" value="" />
+      <div
+        className="bg-darker-white w-full p-2 rounded-md outline-black/25"
+        contentEditable
+        id="editablediv"
+        onInput={inputReplace}
+        onClick={removePlaceHolder}
+      ></div>
 
       <CreateCommentButton />
     </form>
