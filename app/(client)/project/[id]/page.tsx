@@ -9,7 +9,7 @@
 
 import { Project } from '@prisma/client'
 import React from 'react'
-import { fetchProject } from '../_actions'
+import { fetchProjectById } from '../_actions'
 import { DeleteProject, UpdateProject } from '../components/TempButtons'
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 export default async function Project({ params }: Props) {
   const { id } = params
 
-  const { data, error } = await fetchProject(id)
+  const { data, error } = await fetchProjectById(id)
   if (error || !data) {
     console.error(error)
 

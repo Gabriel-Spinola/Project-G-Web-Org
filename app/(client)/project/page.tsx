@@ -1,4 +1,4 @@
-// import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
+import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import React from 'react'
 
 export default function Projects() {
