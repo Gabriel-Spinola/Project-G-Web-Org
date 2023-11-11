@@ -1,34 +1,30 @@
 'use client'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
-import { TDisplayComment } from '@/lib/types/common'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
+import { CommentContext } from './CommentModal'
 
 type Props = {
-  currentUserId?: string
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'
   }
   fromPost: string
-  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
 }
 
-export default function NewCommentDialog({
-  currentUserId,
-  target,
-  fromPost,
-  handleFacadeCommentSubmit,
-}: Props) {
+export default function NewCommentDialog({ target, fromPost }: Props) {
+  const { data: session } = useSession()
+
+  const context = useContext(CommentContext)
   const router = useRouter()
   const pathName = usePathname()
 
   async function handleFormSubmission(formData: FormData) {
-    if (!currentUserId) {
+    if (!session?.user.id) {
       signIn()
 
       return
@@ -53,7 +49,7 @@ export default function NewCommentDialog({
       validatedData.data,
       target,
       fromPost,
-      currentUserId,
+      session?.user.id,
     )
 
     if (error || !data) {
@@ -62,7 +58,9 @@ export default function NewCommentDialog({
       return
     }
 
-    handleFacadeCommentSubmit(data)
+    if (context.handleFacadeCommentSubmit) {
+      context.handleFacadeCommentSubmit(data)
+    }
 
     router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
   }
@@ -70,8 +68,8 @@ export default function NewCommentDialog({
   function inputReplace() {
     const formInput = document.getElementById('contentk') as HTMLInputElement
     const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+
     formInput.value = editableDiv.innerText
-    console.log(formInput.value)
   }
 
   return (

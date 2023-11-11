@@ -8,18 +8,17 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsThreeDots } from 'react-icons/bs'
+import { CommentContext } from './CommentModal'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  handleFacadeCommentDeletion?: (id: number) => void
 }
 
-export default function MenuSettings({
-  comment,
-  handleFacadeCommentDeletion,
-}: Props) {
+export default function MenuSettings({ comment }: Props) {
+  const context = useContext(CommentContext)
+
   return (
     <Menu>
       <MenuButton
@@ -37,8 +36,8 @@ export default function MenuSettings({
             className="w-full"
             type="button"
             onClick={async () => {
-              if (handleFacadeCommentDeletion) {
-                handleFacadeCommentDeletion(comment.id as number)
+              if (context.handleFacadeCommentDeletion) {
+                context.handleFacadeCommentDeletion(comment.id as number)
               }
 
               await deleteComment(comment.id as number)

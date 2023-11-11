@@ -7,6 +7,8 @@
  * @license GPL 3.0
  */
 
+'use client'
+
 import React from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { FullPost } from '@/lib/types/common'
@@ -18,32 +20,24 @@ import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import TwoImageDisplay from './images/TwoImageDisplay'
+import { useSession } from 'next-auth/react'
 
 interface Params {
   post: FullPost
-  currentUserId?: string
-  currentUserPosition?: $Enums.Positions
 }
 
-export default function PostItem({
-  post,
-  currentUserId,
-  currentUserPosition,
-}: Params) {
-  const isOwner = currentUserId === post.authorId
+export default function PostItem({ post }: Params) {
+  const { data: session } = useSession()
+  const isOwner = session?.user.id === post.authorId
 
   // Check if the current user liked the post
   const isLiked: boolean = post.likes.some(
-    (like: Partial<Like>) => like.userId === currentUserId,
+    (like: Partial<Like>) => like.userId === session?.user.id,
   )
 
   return (
     <div className={styles.post}>
-      <PostHeader
-        post={post}
-        currentUserPosition={currentUserPosition}
-        isOwner={isOwner}
-      />
+      <PostHeader post={post} isOwner={isOwner} />
 
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
         {post?.content}
@@ -86,17 +80,12 @@ export default function PostItem({
             option: 'postId',
             likes: post.likes?.length ?? 0,
             targetId: post.id,
-            authorId: currentUserId,
             isLiked,
           }}
         />
 
         {/* Comments */}
-        <CommentModal
-          commentNumber={post.comments?.length ?? 0}
-          post={post}
-          currentUserId={currentUserId}
-        />
+        <CommentModal commentNumber={post.comments?.length ?? 0} post={post} />
       </div>
     </div>
   )

@@ -2,34 +2,24 @@
 
 import React from 'react'
 import PostItem from './PostItem'
-import { User } from '@prisma/client'
 import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
 
 type Params = {
   initialPublication: FullPost[] | undefined
-  currentUserData?: Pick<User, 'id' | 'position'>
   profileId?: string
 }
 
 export default function InfiniteScrollPosts({
   initialPublication,
-  currentUserData,
   profileId,
 }: Params) {
   const { posts, noPostFound, ref } = useFeed(initialPublication, profileId)
 
   return (
     <section id="feed">
-      {posts?.map((post: FullPost) => (
-        <PostItem
-          key={post.id}
-          post={post}
-          currentUserId={currentUserData?.id}
-          currentUserPosition={currentUserData?.position}
-        />
-      ))}
+      {posts?.map((post: FullPost) => <PostItem key={post.id} post={post} />)}
 
       {/* loading spinner */}
       {noPostFound ? (

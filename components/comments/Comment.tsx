@@ -1,7 +1,7 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React from 'react'
+import React, { useContext } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import { Avatar } from '@chakra-ui/react'
@@ -10,23 +10,17 @@ import Link from 'next/link'
 import ReplyDialog from './ReplyDialog'
 import CommentReply from './CommentReply'
 import MenuSettings from './MenuSettings'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  currentUserId?: string
-  handleFacadeCommentDeletion?: (id: number) => void
-  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
   fromPost: string
 }
 
-export default function Comment({
-  comment,
-  currentUserId,
-  handleFacadeCommentDeletion,
-  handleFacadeCommentSubmit,
-  fromPost,
-}: Props) {
-  const isOwner = currentUserId === comment.authorId
+export default function Comment({ comment, fromPost }: Props) {
+  const { data: session } = useSession()
+
+  const isOwner = session?.user.id === comment.authorId
 
   return (
     <div className="flex flex-col items-end">
@@ -60,21 +54,16 @@ export default function Comment({
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {isOwner ? (
-              <MenuSettings
-                comment={comment}
-                handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-              />
-            ) : null}
+            {isOwner ? <MenuSettings comment={comment} /> : null}
             <LikeButton
               params={{
                 option: 'commentId',
                 likes: comment.likes?.length ?? 0,
                 targetId: comment.id as number,
-                authorId: currentUserId,
+                authorId: session?.user.id,
                 isLiked:
                   comment.likes?.some(
-                    (like: Partial<Like>) => like.userId === currentUserId,
+                    (like: Partial<Like>) => like.userId === session?.user.id,
                   ) ?? false,
               }}
             />
@@ -86,22 +75,14 @@ export default function Comment({
         <div id="replies">
           {comment.replies?.map((reply, index) => (
             <div key={index}>
-              <CommentReply
-                comment={reply}
-                currentUserId={currentUserId}
-                handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                fromPost={fromPost}
-              />
+              <CommentReply comment={reply} fromPost={fromPost} />
             </div>
           ))}
         </div>
 
         <ReplyDialog
           repliedCommentId={comment.id as number}
-          currentUserId={currentUserId}
           fromPost={fromPost}
-          handleFacadeCommentSubmit={handleFacadeCommentSubmit}
         />
       </section>
     </div>

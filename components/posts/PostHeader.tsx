@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react'
-import { $Enums, User } from '@prisma/client'
+import { User } from '@prisma/client'
 import { FullPost } from '@/lib/types/common'
 import UserPhoto from '@/components/profile/Avatar'
 import PostSettings from './PostSettings'
@@ -8,21 +10,16 @@ import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 
 interface Props {
   post: FullPost
-  currentUserPosition?: $Enums.Positions
   isOwner: boolean
 }
 
-export default function PostHeader({
-  post,
-  currentUserPosition,
-  isOwner,
-}: Props) {
+export default function PostHeader({ post, isOwner }: Props) {
   return (
     <section className="flex flex-row justify-between mb-4">
       <div id="Author" className="flex gap-2">
-        <a href={`/client/profile/${post.authorId}`}>
+        <Link href={`/client/profile/${post.authorId}`}>
           <UserPhoto size={'lg'} src={getProfilePicURL(post.author as User)} />
-        </a>
+        </Link>
 
         <Link href={`/profile/${post.authorId}`}>
           <div className="flex flex-col">
@@ -34,11 +31,7 @@ export default function PostHeader({
         </Link>
       </div>
 
-      <PostSettings
-        post={post}
-        isOwner={isOwner}
-        currentUserPosition={currentUserPosition}
-      />
+      <PostSettings post={post} isOwner={isOwner} />
     </section>
   )
 }

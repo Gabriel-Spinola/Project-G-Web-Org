@@ -1,7 +1,7 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React from 'react'
+import React, { useContext } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { BsThreeDots } from 'react-icons/bs'
 import { Like } from '@prisma/client'
@@ -17,24 +17,20 @@ import {
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import Link from 'next/link'
-import ReplyDialog from './ReplyDialog'
+
+import { CommentContext } from './CommentModal'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  currentUserId?: string
-  handleFacadeCommentDeletion?: (id: number) => void
-  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
   fromPost: string
 }
 
-export default function CommentReply({
-  comment,
-  currentUserId,
-  handleFacadeCommentDeletion,
-  handleFacadeCommentSubmit,
-  fromPost,
-}: Props) {
-  const isOwner = currentUserId === comment.authorId
+export default function CommentReply({ comment }: Props) {
+  const { data: session } = useSession()
+
+  const context = useContext(CommentContext)
+  const isOwner = session?.user.id === comment.authorId
 
   return (
     <div className="flex flex-col items-end">
@@ -85,8 +81,10 @@ export default function CommentReply({
                       className="w-full"
                       type="button"
                       onClick={async () => {
-                        if (handleFacadeCommentDeletion) {
-                          handleFacadeCommentDeletion(comment.id as number)
+                        if (context.handleFacadeCommentDeletion) {
+                          context.handleFacadeCommentDeletion(
+                            comment.id as number,
+                          )
                         }
 
                         await deleteComment(comment.id as number)
@@ -104,10 +102,9 @@ export default function CommentReply({
                 option: 'commentId',
                 likes: comment.likes?.length ?? 0,
                 targetId: comment.id as number,
-                authorId: currentUserId,
                 isLiked:
                   comment.likes?.some(
-                    (like: Partial<Like>) => like.userId === currentUserId,
+                    (like: Partial<Like>) => like.userId === session?.user.id,
                   ) ?? false,
               }}
             />

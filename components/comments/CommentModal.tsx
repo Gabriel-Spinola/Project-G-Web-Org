@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
@@ -22,11 +22,15 @@ interface Props {
   currentUserId?: string
 }
 
-export default function CommentModal({
-  commentNumber,
-  post,
-  currentUserId,
-}: Props) {
+export const CommentContext = createContext<{
+  handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
+  handleFacadeCommentDeletion?: (id: number) => void
+}>({
+  handleFacadeCommentDeletion: undefined,
+  handleFacadeCommentSubmit: undefined,
+})
+
+export default function CommentModal({ commentNumber, post }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
@@ -46,56 +50,55 @@ export default function CommentModal({
 
   return (
     <div>
-      <button
-        className="flex flex-col justify-center items-center hover:text-medium-primary"
-        onClick={onOpen}
+      <CommentContext.Provider
+        value={{ handleFacadeCommentDeletion, handleFacadeCommentSubmit }}
       >
-        <BiComment size={24} />
+        <button
+          className="flex flex-col justify-center items-center hover:text-medium-primary"
+          onClick={onOpen}
+        >
+          <BiComment size={24} />
 
-        <span>{commentsCount}</span>
-      </button>
+          <span>{commentsCount}</span>
+        </button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'2xl'}
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Comentários</ModalHeader>
-          <ModalCloseButton />
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          size={'2xl'}
+          scrollBehavior="inside"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Comentários</ModalHeader>
+            <ModalCloseButton />
 
-          <ModalBody>
-            <section>
-              <div id="display">
-                {comments.length > 0 &&
-                  comments.map((comment, index) => (
-                    <Comment
-                      key={index}
-                      comment={comment}
-                      currentUserId={currentUserId}
-                      fromPost={post.id}
-                      handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-                      handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                    />
-                  ))}
+            <ModalBody>
+              <section>
+                <div id="display">
+                  {comments.length > 0 &&
+                    comments.map((comment, index) => (
+                      <Comment
+                        key={index}
+                        comment={comment}
+                        fromPost={post.id}
+                      />
+                    ))}
+                </div>
+              </section>
+            </ModalBody>
+
+            <ModalFooter shadow={'dark-lg'}>
+              <div id="form-container" className="w-full">
+                <NewCommentDialog
+                  target={{ id: post.id, type: 'postId' }}
+                  fromPost={post.id}
+                />
               </div>
-            </section>
-          </ModalBody>
-
-          <ModalFooter shadow={'dark-lg'}>
-            <div id="form-container" className="w-full">
-              <NewCommentDialog
-                currentUserId={currentUserId}
-                target={{ id: post.id, type: 'postId' }}
-                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                fromPost={post.id}
-              />
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </CommentContext.Provider>
     </div>
   )
 }
