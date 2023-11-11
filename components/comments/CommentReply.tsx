@@ -3,13 +3,21 @@
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
 import React from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
+import { BsThreeDots } from 'react-icons/bs'
 import { Like } from '@prisma/client'
-import { Avatar } from '@chakra-ui/react'
+import {
+  Avatar,
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import { deleteComment } from '@/app/(feed)/_serverActions'
 import Link from 'next/link'
 import ReplyDialog from './ReplyDialog'
-import CommentReply from './CommentReply'
-import MenuSettings from './MenuSettings'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -19,7 +27,7 @@ type Props = {
   fromPost: string
 }
 
-export default function Comment({
+export default function CommentReply({
   comment,
   currentUserId,
   handleFacadeCommentDeletion,
@@ -37,7 +45,7 @@ export default function Comment({
             className="capitalize px-2 font-semibold"
           >
             <Avatar
-              size={'lg'}
+              size={'md'}
               src={getProfilePicURL(comment.author as PublicationAuthor)}
             />
           </Link>
@@ -61,11 +69,36 @@ export default function Comment({
 
           <div className="flex flex-col items-center justify-center">
             {isOwner ? (
-              <MenuSettings
-                comment={comment}
-                handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-              />
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<BsThreeDots size={20} />}
+                  variant="ghost"
+                  color={'#242424'}
+                  className="bg-opacity-25 absolute hover:text-darker-gray"
+                ></MenuButton>
+
+                <MenuList>
+                  <MenuItem padding={0}>
+                    <Button
+                      className="w-full"
+                      type="button"
+                      onClick={async () => {
+                        if (handleFacadeCommentDeletion) {
+                          handleFacadeCommentDeletion(comment.id as number)
+                        }
+
+                        await deleteComment(comment.id as number)
+                      }}
+                    >
+                      Excluir Comentário
+                    </Button>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             ) : null}
+
             <LikeButton
               params={{
                 option: 'commentId',
@@ -80,29 +113,6 @@ export default function Comment({
             />
           </div>
         </div>
-      </section>
-
-      <section className="w-[95%] p-2 mb-4 rounded-md">
-        <div id="replies">
-          {comment.replies?.map((reply, index) => (
-            <div key={index}>
-              <CommentReply
-                comment={reply}
-                currentUserId={currentUserId}
-                handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                fromPost={fromPost}
-              />
-            </div>
-          ))}
-        </div>
-
-        <ReplyDialog
-          repliedCommentId={comment.id as number}
-          currentUserId={currentUserId}
-          fromPost={fromPost}
-          handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-        />
       </section>
     </div>
   )
