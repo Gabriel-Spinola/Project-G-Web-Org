@@ -34,14 +34,6 @@ export default async function Home() {
             <div className="min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts
                 initialPublication={posts.data ?? undefined}
-                currentUserData={
-                  session
-                    ? {
-                        id: session?.user.id as string,
-                        position: session?.user.position as $Enums.Positions,
-                      }
-                    : undefined
-                }
               />
             </div>
           ) : (

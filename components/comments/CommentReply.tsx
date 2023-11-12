@@ -20,6 +20,7 @@ import Link from 'next/link'
 
 import { CommentContext } from './CommentModal'
 import { useSession } from 'next-auth/react'
+import NewCommentDialog from './NewCommentDialog'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -38,6 +39,20 @@ export default function CommentReply({ comment }: Props) {
 
   return (
     <div className="flex flex-col items-end">
+      <Button
+        className="w-full"
+        type="button"
+        onClick={async () => {
+          if (context.handleFacadeCommentDeletion) {
+            context.handleFacadeCommentDeletion(comment.id as number)
+          }
+
+          await deleteComment(comment.id as number)
+        }}
+      >
+        Excluir Comentário
+      </Button>
+
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
         <div className="flex w-full">
           <Link
@@ -111,6 +126,21 @@ export default function CommentReply({ comment }: Props) {
             />
           </div>
         </div>
+
+        <section className="w-[95%] p-2 mb-4 rounded-md">
+          <div id="replies">
+            {comment.replies?.map((reply) => (
+              <CommentReply key={reply.id} comment={reply} />
+            ))}
+          </div>
+
+          <NewCommentDialog
+            target={{
+              id: comment.id as number,
+              type: 'parentCommentId',
+            }}
+          />
+        </section>
       </section>
     </div>
   )

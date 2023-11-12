@@ -2,19 +2,13 @@ import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
-import { User } from '@prisma/client'
 
 type Params = {
   authorID: string
-  currentUserData?: Pick<User, 'id' | 'position'>
   isOwner: boolean
 }
 
-export default async function UserPosts({
-  authorID,
-  currentUserData,
-  isOwner,
-}: Params) {
+export default async function UserPosts({ authorID, isOwner }: Params) {
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
     1,
     undefined,
@@ -30,7 +24,6 @@ export default async function UserPosts({
           {data && data?.length > 0 ? (
             <InfiniteScrollPosts
               initialPublication={data}
-              currentUserData={currentUserData}
               profileId={authorID}
             />
           ) : (

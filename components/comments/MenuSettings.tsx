@@ -30,7 +30,7 @@ export default function MenuSettings({ comment }: Props) {
         variant="ghost"
         color={'#242424'}
         className="bg-opacity-25 absolute hover:text-darker-gray"
-      ></MenuButton>
+      />
 
       <MenuList>
         <MenuItem padding={0}>

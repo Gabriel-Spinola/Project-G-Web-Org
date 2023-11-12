@@ -14,10 +14,7 @@ export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
  * @returns the requested data from the user or, if failed, null.
  */
 
-export async function getUserData(
-  id: string,
-  requestData: UserSelectedData,
-): Promise<UserData | null> {
+export async function getUserData(id: string): Promise<UserData | null> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.users}/only/${id}`,

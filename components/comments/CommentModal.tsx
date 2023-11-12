@@ -4,6 +4,12 @@ import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,6 +21,8 @@ import {
 } from '@chakra-ui/react'
 import Comment from '../comments/Comment'
 import MenuSettings from './MenuSettings'
+import { deleteComment } from '@/app/(feed)/_serverActions'
+import { BsThreeDots } from 'react-icons/bs'
 
 export const CommentContext = createContext<{
   handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
@@ -81,11 +89,11 @@ export default function CommentModal({
               <div id="display">
                 {comments.length > 0 &&
                   comments.map((comment) => (
-                    <Comment
-                      key={comment.id}
-                      comment={comment}
-                      settings={<MenuSettings comment={comment} />}
-                    />
+                    <div key={comment.id}>
+                      {!comment.parentCommentId ? (
+                        <Comment comment={comment} />
+                      ) : null}
+                    </div>
                   ))}
               </div>
             </ModalBody>

@@ -1,24 +1,26 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React, { ReactNode } from 'react'
+import React, { useContext } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
-import { Avatar } from '@chakra-ui/react'
+import { Avatar, Button } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Link from 'next/link'
 import CommentReply from './CommentReply'
 import { useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
+import { deleteComment } from '@/app/(feed)/_serverActions'
+import { CommentContext } from './CommentModal'
 
 type Props = {
-  settings: ReactNode
   comment: Partial<TDisplayComment>
 }
 
-export default function Comment({ comment, settings }: Props) {
+export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
 
+  const context = useContext(CommentContext)
   const isOwner = session?.user.id === comment.authorId
   const isLiked =
     comment.likes?.some(
@@ -27,6 +29,20 @@ export default function Comment({ comment, settings }: Props) {
 
   return (
     <div className="flex flex-col items-end">
+      <Button
+        className="w-full"
+        type="button"
+        onClick={async () => {
+          if (context.handleFacadeCommentDeletion) {
+            context.handleFacadeCommentDeletion(comment.id as number)
+          }
+
+          await deleteComment(comment.id as number)
+        }}
+      >
+        Excluir Comentário
+      </Button>
+
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
         <div className="flex w-full">
           <Link
@@ -38,6 +54,7 @@ export default function Comment({ comment, settings }: Props) {
               src={getProfilePicURL(comment.author as PublicationAuthor)}
             />
           </Link>
+
           <div className="flex flex-col w-full">
             <Link
               href={`/profile/${comment.authorId}`}
@@ -57,8 +74,6 @@ export default function Comment({ comment, settings }: Props) {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {isOwner ?? settings}
-
             <LikeButton
               params={{
                 option: 'commentId',
@@ -73,8 +88,8 @@ export default function Comment({ comment, settings }: Props) {
 
       <section className="w-[95%] p-2 mb-4 rounded-md">
         <div id="replies">
-          {comment.replies?.map((reply, index) => (
-            <CommentReply key={index} comment={reply} />
+          {comment.replies?.map((reply) => (
+            <CommentReply key={reply.id} comment={reply} />
           ))}
         </div>
 

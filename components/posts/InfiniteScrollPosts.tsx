@@ -22,11 +22,11 @@ export default function InfiniteScrollPosts({
   return (
     <section id="feed">
       {posts?.map((post: FullPost) => (
-        <>
-          <PublicationContext.Provider key={post.id} value={post}>
+        <div key={post.id}>
+          <PublicationContext.Provider value={post}>
             <PostItem />
           </PublicationContext.Provider>
-        </>
+        </div>
       ))}
 
       {/* loading spinner */}

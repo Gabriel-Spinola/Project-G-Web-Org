@@ -28,7 +28,10 @@ export default function NewCommentDialog({ target }: Props) {
       return
     }
 
-    const validatedData = validateForm(formData)
+    const a = new FormData()
+    a.append('content', formData.get(`content-${target.id}`)?.toString() ?? '')
+
+    const validatedData = validateForm(a)
 
     if (validatedData.error) {
       let errorMessage = ''
@@ -58,15 +61,21 @@ export default function NewCommentDialog({ target }: Props) {
 
     if (context.handleFacadeCommentSubmit) {
       context.handleFacadeCommentSubmit(data)
+
       console.log(data)
     }
   }
 
   function inputReplace() {
-    const formInput = document.getElementById('contentk') as HTMLInputElement
-    const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+    const formInput = document.getElementById(
+      `content-${target.id}`,
+    ) as HTMLInputElement
+    const editableDiv = document.getElementById(
+      `editable-container-${target.id}`,
+    ) as HTMLDivElement
 
     formInput.value = editableDiv.innerText
+    console.log(editableDiv.id + ': ' + editableDiv.innerText)
   }
 
   return (
@@ -74,11 +83,16 @@ export default function NewCommentDialog({ target }: Props) {
       action={handleFormSubmission}
       className="flex justify-end items-end gap-4"
     >
-      <input type="hidden" id="contentk" name="content" value="" />
+      <input
+        type="hidden"
+        id={`content-${target.id}`}
+        name={`content-${target.id}`}
+      />
+
       <div
         className="bg-darker-white w-[75%] p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
         contentEditable
-        id="editablediv"
+        id={`editable-container-${target.id}`}
         onInput={inputReplace}
       ></div>
 
