@@ -1,3 +1,5 @@
+'use client'
+
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiSolidShare } from 'react-icons/bi'
 import { AiFillWarning } from 'react-icons/ai'
@@ -13,21 +15,21 @@ import {
 } from '@chakra-ui/react'
 import { FullPost } from '@/lib/types/common'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 interface Props {
   post: FullPost
   isOwner: boolean
-  currentUserPosition: $Enums.Positions | undefined
 }
 
-export default function PostSettings({
-  post,
-  isOwner,
-  currentUserPosition,
-}: Props) {
+export default function PostSettings({ post, isOwner }: Props) {
+  const { data: session } = useSession()
+
   function CopyLink() {
     const postUrl = `https://${window.location.hostname}/posts/${post.id}`
+
     navigator.clipboard.writeText(postUrl)
+
     alert('Link da publicação copiado')
   }
 
@@ -39,6 +41,7 @@ export default function PostSettings({
       >
         <GiExpand size={20} color={'#242424'} />
       </Link>
+
       <Menu>
         <MenuButton
           as={IconButton}
@@ -48,6 +51,7 @@ export default function PostSettings({
           color={'#242424'}
           className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
         ></MenuButton>
+
         <MenuList
           paddingY={2}
           width={72}
@@ -61,13 +65,15 @@ export default function PostSettings({
               Compartilhar publicação
             </span>
           </MenuItem>
+
           {!isOwner ? (
             <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }} gap={'16px'}>
               <AiFillWarning size={20} />
               Denunciar publicação
             </MenuItem>
           ) : null}
-          {isOwner || currentUserPosition === $Enums.Positions.Admin ? (
+
+          {isOwner || session?.user.position === $Enums.Positions.Admin ? (
             <>
               <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }}>
                 <DeletePostButton postId={post.id} />

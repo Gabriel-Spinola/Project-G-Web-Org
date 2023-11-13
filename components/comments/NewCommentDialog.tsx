@@ -1,40 +1,37 @@
 'use client'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
-import { signIn } from 'next-auth/react'
-import { usePathname, useRouter } from 'next/navigation'
-import { TDisplayComment } from '@/lib/types/common'
+import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
+import { CommentContext } from './CommentModal'
+import { PublicationContext } from '../posts/InfiniteScrollPosts'
 
 type Props = {
-  currentUserId?: string
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'
   }
-  fromPost: string
-  handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
 }
 
-export default function NewCommentDialog({
-  currentUserId,
-  target,
-  fromPost,
-  handleFacadeCommentSubmit,
-}: Props) {
-  const router = useRouter()
-  const pathName = usePathname()
+export default function NewCommentDialog({ target }: Props) {
+  const { data: session } = useSession()
+
+  const context = useContext(CommentContext)
+  const post = useContext(PublicationContext)
 
   async function handleFormSubmission(formData: FormData) {
-    if (!currentUserId) {
+    if (!session?.user.id) {
       signIn()
 
       return
     }
 
-    const validatedData = validateForm(formData)
+    const a = new FormData()
+    a.append('content', formData.get(`content-${target.id}`)?.toString() ?? '')
+
+    const validatedData = validateForm(a)
 
     if (validatedData.error) {
       let errorMessage = ''
@@ -52,8 +49,8 @@ export default function NewCommentDialog({
     const { data, error } = await postComment(
       validatedData.data,
       target,
-      fromPost,
-      currentUserId,
+      post?.id as string,
+      session?.user.id,
     )
 
     if (error || !data) {
@@ -62,16 +59,23 @@ export default function NewCommentDialog({
       return
     }
 
-    handleFacadeCommentSubmit(data)
+    if (context.handleFacadeCommentSubmit) {
+      context.handleFacadeCommentSubmit(data)
 
-    router.replace(`${pathName}?update-comment=${fromPost}`, { scroll: false })
+      console.log(data)
+    }
   }
 
   function inputReplace() {
-    const formInput = document.getElementById('contentk') as HTMLInputElement
-    const editableDiv = document.getElementById('editablediv') as HTMLDivElement
+    const formInput = document.getElementById(
+      `content-${target.id}`,
+    ) as HTMLInputElement
+    const editableDiv = document.getElementById(
+      `editable-container-${target.id}`,
+    ) as HTMLDivElement
+
     formInput.value = editableDiv.innerText
-    console.log(formInput.value)
+    console.log(editableDiv.id + ': ' + editableDiv.innerText)
   }
 
   return (
@@ -79,13 +83,19 @@ export default function NewCommentDialog({
       action={handleFormSubmission}
       className="flex justify-end items-end gap-4"
     >
-      <input type="hidden" id="contentk" name="content" value="" />
+      <input
+        type="hidden"
+        id={`content-${target.id}`}
+        name={`content-${target.id}`}
+      />
+
       <div
         className="bg-darker-white w-[75%] p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
         contentEditable
-        id="editablediv"
+        id={`editable-container-${target.id}`}
         onInput={inputReplace}
       ></div>
+
       <CreateCommentButton />
     </form>
   )

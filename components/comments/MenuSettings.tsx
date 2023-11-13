@@ -1,3 +1,5 @@
+'use client'
+
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { TDisplayComment } from '@/lib/types/common'
 import {
@@ -8,18 +10,17 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsThreeDots } from 'react-icons/bs'
+import { CommentContext } from './CommentModal'
 
 type Props = {
   comment: Partial<TDisplayComment>
-  handleFacadeCommentDeletion?: (id: number) => void
 }
 
-export default function MenuSettings({
-  comment,
-  handleFacadeCommentDeletion,
-}: Props) {
+export default function MenuSettings({ comment }: Props) {
+  const context = useContext(CommentContext)
+
   return (
     <Menu>
       <MenuButton
@@ -29,7 +30,7 @@ export default function MenuSettings({
         variant="ghost"
         color={'#242424'}
         className="bg-opacity-25 absolute hover:text-darker-gray"
-      ></MenuButton>
+      />
 
       <MenuList>
         <MenuItem padding={0}>
@@ -37,8 +38,8 @@ export default function MenuSettings({
             className="w-full"
             type="button"
             onClick={async () => {
-              if (handleFacadeCommentDeletion) {
-                handleFacadeCommentDeletion(comment.id as number)
+              if (context.handleFacadeCommentDeletion) {
+                context.handleFacadeCommentDeletion(comment.id as number)
               }
 
               await deleteComment(comment.id as number)

@@ -7,43 +7,41 @@
  * @license GPL 3.0
  */
 
-import React from 'react'
+'use client'
+
+import React, { useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
-import { FullPost } from '@/lib/types/common'
 import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '../Buttons/LikeButton'
-import { $Enums, Like } from '@prisma/client'
+import { Like } from '@prisma/client'
 import OneImageDisplay from './images/OneImageDisplay'
 import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import TwoImageDisplay from './images/TwoImageDisplay'
+import { useSession } from 'next-auth/react'
+import NewCommentDialog from '../comments/NewCommentDialog'
+import { PublicationContext } from './InfiniteScrollPosts'
 
-interface Params {
-  post: FullPost
-  currentUserId?: string
-  currentUserPosition?: $Enums.Positions
-}
+export default function PostItem() {
+  const { data: session } = useSession()
 
-export default function PostItem({
-  post,
-  currentUserId,
-  currentUserPosition,
-}: Params) {
-  const isOwner = currentUserId === post.authorId
+  const post = useContext(PublicationContext)
+
+  if (!post) {
+    return <></>
+  }
+
+  const isOwner = session?.user.id === post.authorId
 
   // Check if the current user liked the post
   const isLiked: boolean = post.likes.some(
-    (like: Partial<Like>) => like.userId === currentUserId,
+    (like: Partial<Like>) => like.userId === session?.user.id,
   )
 
   return (
     <div className={styles.post}>
-      <PostHeader
-        post={post}
-        currentUserPosition={currentUserPosition}
-        isOwner={isOwner}
-      />
+      <PostHeader post={post} isOwner={isOwner} />
 
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
         {post?.content}
@@ -86,7 +84,6 @@ export default function PostItem({
             option: 'postId',
             likes: post.likes?.length ?? 0,
             targetId: post.id,
-            authorId: currentUserId,
             isLiked,
           }}
         />
@@ -95,7 +92,11 @@ export default function PostItem({
         <CommentModal
           commentNumber={post.comments?.length ?? 0}
           post={post}
-          currentUserId={currentUserId}
+          newCommentDialog={
+            <div id="form-container" className="w-full">
+              <NewCommentDialog target={{ id: post.id, type: 'postId' }} />
+            </div>
+          }
         />
       </div>
     </div>

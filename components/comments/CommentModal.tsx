@@ -1,9 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,19 +19,29 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import NewCommentDialog from '../comments/NewCommentDialog'
 import Comment from '../comments/Comment'
+import MenuSettings from './MenuSettings'
+import { deleteComment } from '@/app/(feed)/_serverActions'
+import { BsThreeDots } from 'react-icons/bs'
+
+export const CommentContext = createContext<{
+  handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
+  handleFacadeCommentDeletion?: (id: number) => void
+}>({
+  handleFacadeCommentDeletion: undefined,
+  handleFacadeCommentSubmit: undefined,
+})
 
 interface Props {
   commentNumber: number
   post: FullPost
-  currentUserId?: string
+  newCommentDialog: ReactNode
 }
 
 export default function CommentModal({
   commentNumber,
   post,
-  currentUserId,
+  newCommentDialog,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -46,56 +62,46 @@ export default function CommentModal({
 
   return (
     <div>
-      <button
-        className="flex flex-col justify-center items-center hover:text-medium-primary"
-        onClick={onOpen}
+      <CommentContext.Provider
+        value={{ handleFacadeCommentDeletion, handleFacadeCommentSubmit }}
       >
-        <BiComment size={24} />
+        <button
+          className="flex flex-col justify-center items-center hover:text-medium-primary"
+          onClick={onOpen}
+        >
+          <BiComment size={24} />
 
-        <span>{commentsCount}</span>
-      </button>
+          <span>{commentsCount}</span>
+        </button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'2xl'}
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Comentários</ModalHeader>
-          <ModalCloseButton />
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          size={'2xl'}
+          scrollBehavior="inside"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Comentários</ModalHeader>
+            <ModalCloseButton />
 
-          <ModalBody>
-            <section>
+            <ModalBody>
               <div id="display">
                 {comments.length > 0 &&
-                  comments.map((comment, index) => (
-                    <Comment
-                      key={index}
-                      comment={comment}
-                      currentUserId={currentUserId}
-                      fromPost={post.id}
-                      handleFacadeCommentDeletion={handleFacadeCommentDeletion}
-                      handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                    />
+                  comments.map((comment) => (
+                    <div key={comment.id}>
+                      {!comment.parentCommentId ? (
+                        <Comment comment={comment} />
+                      ) : null}
+                    </div>
                   ))}
               </div>
-            </section>
-          </ModalBody>
+            </ModalBody>
 
-          <ModalFooter shadow={'dark-lg'}>
-            <div id="form-container" className="w-full">
-              <NewCommentDialog
-                currentUserId={currentUserId}
-                target={{ id: post.id, type: 'postId' }}
-                handleFacadeCommentSubmit={handleFacadeCommentSubmit}
-                fromPost={post.id}
-              />
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <ModalFooter shadow={'dark-lg'}>{newCommentDialog}</ModalFooter>
+          </ModalContent>
+        </Modal>
+      </CommentContext.Provider>
     </div>
   )
 }
