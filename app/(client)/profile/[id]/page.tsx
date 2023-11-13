@@ -64,18 +64,7 @@ export default async function Profile({ params }: Props) {
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
             {session ? (
-              <UserPosts
-                isOwner={isOwner}
-                authorID={params.id}
-                currentUserData={
-                  session
-                    ? {
-                        id: session?.user.id as string,
-                        position: session?.user.position as $Enums.Positions,
-                      }
-                    : undefined
-                }
-              />
+              <UserPosts isOwner={isOwner} authorID={params.id} />
             ) : (
               <UserPostsSkeleton />
             )}
