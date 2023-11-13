@@ -15,15 +15,16 @@ export default function Searchbar() {
           RedirectType.replace,
         )
       }}
-      className=""
+      className="flex items-center justify-end w-full h-full rounded-xl shadow-sm"
     >
       <input
         type="text"
         name="search-query"
-        className="bg-medium-primary"
-        required
+        className="bg-pure-white w-full h-full p-2 rounded-xl"
       />
-      <button type="submit">Pesquisar</button>
+      <button type="submit" className="absolute px-2">
+        Pesquisar
+      </button>
     </form>
   )
 }

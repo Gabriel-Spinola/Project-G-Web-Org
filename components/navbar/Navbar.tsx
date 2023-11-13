@@ -17,7 +17,7 @@ export default function Navbar({ userSession }: { userSession?: string }) {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, []) // O array vazio como segundo argumento executa o useEffect apenas uma vez
+  }, [])
 
   return (
     <section id="navbar" className="max-h-[88px]">
