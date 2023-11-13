@@ -14,9 +14,10 @@ import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, handleFollowingCheckage } from '../_actions'
-import ProfileCardSkeleton from '../components/ProfileCardSkeleton'
-import UserInfoSkeleton from '../components/UserInfoSkeleton'
-import UserPostsSkeleton from '../components/UserPostsSkeleton'
+import { $Enums } from '@prisma/client'
+import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
+import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
+import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
 import UserProjects from '../components/UserProjects'
 
 type Props = {
@@ -63,7 +64,18 @@ export default async function Profile({ params }: Props) {
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
             {session ? (
-              <UserPosts isOwner={isOwner} authorID={params.id} />
+              <UserPosts
+                isOwner={isOwner}
+                authorID={params.id}
+                currentUserData={
+                  session
+                    ? {
+                        id: session?.user.id as string,
+                        position: session?.user.position as $Enums.Positions,
+                      }
+                    : undefined
+                }
+              />
             ) : (
               <UserPostsSkeleton />
             )}

@@ -3,7 +3,7 @@
 import { Image } from '@chakra-ui/react'
 import React from 'react'
 
-export default function page() {
+export function ProfileSkeleton() {
   return (
     <main className="bg-darker-white">
       <div className="w-full h-[calc(100vh-88px)] bg-light-secundary">

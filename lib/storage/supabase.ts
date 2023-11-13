@@ -27,13 +27,9 @@ export const getPostImageUrl = (image: string): string =>
   supabase.storage.from(SUPABASE_PUBLIC_BUCKET_NAME).getPublicUrl(image).data
     .publicUrl
 
-export const getProjectImageUrl = (
-  projectId: string,
-  imageId: string,
-): string =>
-  supabase.storage
-    .from(SUPABASE_PUBLIC_BUCKET_NAME)
-    .getPublicUrl(`project/${projectId}/${imageId}`).data.publicUrl
+export const getProjectImageUrl = (path: string): string =>
+  supabase.storage.from(SUPABASE_PUBLIC_BUCKET_NAME).getPublicUrl(path).data
+    .publicUrl
 
 export const getProfilePicImageUrl = (url: string): string =>
   supabase.storage.from(SUPABASE_PUBLIC_BUCKET_NAME).getPublicUrl(url).data
