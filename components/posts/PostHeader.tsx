@@ -20,7 +20,7 @@ export default function PostHeader({
   return (
     <section className="flex flex-row justify-between mb-4">
       <div id="Author" className="flex gap-2">
-        <a href={`/client/profile/${post.authorId}`}>
+        <a href={`profile/${post.authorId}`}>
           <UserPhoto size={'lg'} src={getProfilePicURL(post.author as User)} />
         </a>
 

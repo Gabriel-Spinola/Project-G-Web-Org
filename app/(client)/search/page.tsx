@@ -9,13 +9,15 @@ export default async function SearchPage() {
   }
 
   return (
-    <main>
-      <Searchbar />
+    <main className="bg-darker-white">
+      <section className="w-full flex items-center justify-center p-8">
+        <Searchbar />
+      </section>
 
       {!error && data ? (
         <DisplayUsers users={data} />
       ) : (
-        <>Failed to load feed</>
+        <>Nenhum resultado foi encontrado</>
       )}
     </main>
   )

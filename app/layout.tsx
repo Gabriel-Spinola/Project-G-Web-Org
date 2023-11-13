@@ -23,10 +23,6 @@ export default async function RootLayout({
 
   return (
     <>
-      <head>
-        <meta charSet="UTF-8" />
-        <title>ProjectG</title>
-      </head>
       <html lang="en">
         <body className={inter.className}>
           <Providers>
