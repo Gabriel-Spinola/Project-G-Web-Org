@@ -61,7 +61,7 @@ export default function MobileNavbar({
             <li className="p-4 hover:bg-darker-white">Explorar</li>
           </Link>
           <hr className="h-px bg-black/25 border-0" />
-          <Link href="/projects" className="w-full">
+          <Link href="/project" className="w-full">
             <li className="p-4 hover:bg-darker-white">Projetos</li>
           </Link>
           <hr className="h-px bg-black/25 border-0" />

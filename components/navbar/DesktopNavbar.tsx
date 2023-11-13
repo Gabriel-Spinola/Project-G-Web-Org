@@ -26,7 +26,7 @@ export default function DesktopNavbar({
           </Link>
         </li>
         <li>
-          <Link href="/projects">
+          <Link href="/project">
             Projetos
             <div></div>
           </Link>
