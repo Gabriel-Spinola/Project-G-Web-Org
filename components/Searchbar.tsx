@@ -1,4 +1,5 @@
 import { RedirectType, redirect } from 'next/navigation'
+import { HiSearch } from 'react-icons/hi'
 import React from 'react'
 
 export default function Searchbar() {
@@ -20,10 +21,14 @@ export default function Searchbar() {
       <input
         type="text"
         name="search-query"
-        className="bg-pure-white w-full h-full p-2 rounded-xl"
+        className="bg-pure-white w-full h-full p-2 rounded-l-xl"
       />
-      <button type="submit" className="absolute px-2">
+      <button
+        type="submit"
+        className="h-full px-2 flex items-center justify-center gap-1 bg-pure-white hover:brightness-95 hover:text-medium-primary rounded-r-xl"
+      >
         Pesquisar
+        <HiSearch size={20} />
       </button>
     </form>
   )
