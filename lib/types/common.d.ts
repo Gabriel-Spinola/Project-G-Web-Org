@@ -63,19 +63,14 @@ export type Likes = Pick<Like, 'id' | 'userId'>[]
 
 export type PublicationComment = Comment & {
   author: PublicationAuthor
-  replies: (Comment & {
-    author: PublicationAuthor
-  })[]
+  replies?: PublicationComment[]
 }
 
 type TDisplayComment = Comment & {
   author: PublicationAuthor
   likes: Likes
 
-  replies: (Comment & {
-    author: PublicationAuthor
-    likes: Likes
-  })[]
+  replies?: TDisplayComment[]
 }
 
 /**

@@ -29,7 +29,9 @@ type Props = {
 export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
 
-  const context = useContext(CommentContext)
+  const parentComment = useContext(CommentContext)
+
+  console.log(comment.replies?.length)
 
   const isLiked =
     comment.likes?.some(
@@ -43,8 +45,8 @@ export default function CommentReply({ comment }: Props) {
         className="w-full"
         type="button"
         onClick={async () => {
-          if (context.handleFacadeCommentDeletion) {
-            context.handleFacadeCommentDeletion(comment.id as number)
+          if (parentComment.handleFacadeCommentDeletion) {
+            parentComment.handleFacadeCommentDeletion(comment.id as number)
           }
 
           await deleteComment(comment.id as number)
@@ -100,8 +102,8 @@ export default function CommentReply({ comment }: Props) {
                       className="w-full"
                       type="button"
                       onClick={async () => {
-                        if (context.handleFacadeCommentDeletion) {
-                          context.handleFacadeCommentDeletion(
+                        if (parentComment.handleFacadeCommentDeletion) {
+                          parentComment.handleFacadeCommentDeletion(
                             comment.id as number,
                           )
                         }
