@@ -21,6 +21,8 @@ export default function NewCommentDialog({ target }: Props) {
   const context = useContext(CommentContext)
   const post = useContext(PublicationContext)
 
+  console.log(context.handleFacadeCommentSubmit)
+
   async function handleFormSubmission(formData: FormData) {
     if (!session?.user.id) {
       signIn()
