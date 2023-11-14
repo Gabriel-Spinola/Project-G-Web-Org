@@ -45,7 +45,6 @@ export default function CreateProjectForm({
           description: '',
         },
   )
-  const [images, setImages] = useState<File[] | undefined>(undefined)
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
