@@ -13,9 +13,10 @@ import SendImageButton from '@/components/Buttons/SendImageButton'
 import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
 import { ChangeEvent, useState } from 'react'
-import { createNewProject } from '../../create-project/_actions'
+import { createNewProject, updateProject } from '../../create-project/_actions'
 import Image from 'next/image'
 import { useImages } from './hooks/useImagesFetch'
+import { useSession } from 'next-auth/react'
 
 interface ProjectFormState {
   title: string
@@ -23,19 +24,19 @@ interface ProjectFormState {
 }
 
 type Props = {
-  currentUserId: string
-
-  // NOTE - Editing data
+  projectId?: string
   content?: ProjectFormState
   files?: string[]
   projectImages?: string[]
 }
 
 export default function CreateProjectForm({
-  currentUserId,
+  projectId,
   content,
   projectImages,
 }: Props) {
+  const { data: session } = useSession()
+
   const isEditing = !!content
 
   const [form, setForm] = useState<ProjectFormState | null>(
@@ -47,10 +48,7 @@ export default function CreateProjectForm({
         },
   )
 
-  const [images, setImages] = useImages(
-    projectImages,
-    'cloa3inqn00073faazslqde1w',
-  )
+  const [images, setImages] = useImages(projectImages, session?.user.id)
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
@@ -129,7 +127,10 @@ export default function CreateProjectForm({
 
     console.log(validatedForm.data)
 
-    const { error } = await createNewProject(currentUserId, validatedForm.data)
+    // NOTE - if projectId exist create new project otherwise we're updating a project
+    const { error } = !projectId
+      ? await createNewProject(session?.user.id as string, validatedForm.data)
+      : await updateProject(projectId, validatedForm.data)
 
     if (error) {
       alert('Failed to create post')

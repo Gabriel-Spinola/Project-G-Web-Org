@@ -1,8 +1,4 @@
-import {
-  SUPABASE_PUBLIC_BUCKET_NAME,
-  getProjectImageUrl,
-  supabase,
-} from '@/lib/storage/supabase'
+import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
 import {
   Dispatch,
   SetStateAction,
@@ -17,16 +13,13 @@ export function useImages(
 ): [File[] | undefined, Dispatch<SetStateAction<File[] | undefined>>] {
   const [images, setImages] = useState<File[] | undefined>(undefined)
 
-  const fetchImage = useCallback(async (paths: string[], projectId: string) => {
+  const fetchImage = useCallback(async (paths: string[], ownerId: string) => {
     try {
       const files = await Promise.all(
         paths.map(async (path: string) => {
-          console.log(
-            getProjectImageUrl(`projects/${projectId}/images/${path}`),
-          )
           const { data, error } = await supabase.storage
             .from(SUPABASE_PUBLIC_BUCKET_NAME)
-            .download(`projects/${projectId}/images/${path}`)
+            .download(`projects/${ownerId}/images/${path}`)
 
           if (error) {
             console.error(error)
