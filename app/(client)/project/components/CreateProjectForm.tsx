@@ -47,7 +47,10 @@ export default function CreateProjectForm({
         },
   )
 
-  const [images, setImages] = useImages()
+  const [images, setImages] = useImages(
+    projectImages,
+    'cloa3inqn00073faazslqde1w',
+  )
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,

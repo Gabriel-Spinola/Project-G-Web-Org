@@ -21,7 +21,9 @@ export function useImages(
     try {
       const files = await Promise.all(
         paths.map(async (path: string) => {
-          console.log(getProjectImageUrl(path))
+          console.log(
+            getProjectImageUrl(`projects/${projectId}/images/${path}`),
+          )
           const { data, error } = await supabase.storage
             .from(SUPABASE_PUBLIC_BUCKET_NAME)
             .download(`projects/${projectId}/images/${path}`)
@@ -38,7 +40,7 @@ export function useImages(
 
       setImages(files)
     } catch (error: unknown) {
-      console.error('Failed to fetch images')
+      console.error('Failed to fetch images' + error)
     }
   }, [])
 
