@@ -15,6 +15,7 @@ import { validateForm } from '@/lib/schemas/newProject.schema'
 import { ChangeEvent, useState } from 'react'
 import { createNewProject } from '../../create-project/_actions'
 import Image from 'next/image'
+import { useImages } from './hooks/useImagesFetch'
 
 interface ProjectFormState {
   title: string
@@ -45,6 +46,8 @@ export default function CreateProjectForm({
           description: '',
         },
   )
+
+  const [images, setImages] = useImages()
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,

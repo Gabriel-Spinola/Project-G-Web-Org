@@ -3,13 +3,21 @@ import {
   getProjectImageUrl,
   supabase,
 } from '@/lib/storage/supabase'
-import { ESFailed } from '@/lib/types/helpers'
-import { useCallback, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 
-export function useImagesFetch(paths: string[], projectId: string) {
+export function useImages(
+  paths?: string[],
+  projectId?: string,
+): [File[] | undefined, Dispatch<SetStateAction<File[] | undefined>>] {
   const [images, setImages] = useState<File[] | undefined>(undefined)
 
-  useCallback(async () => {
+  const fetchImage = useCallback(async (paths: string[], projectId: string) => {
     try {
       const files = await Promise.all(
         paths.map(async (path: string) => {
@@ -30,9 +38,15 @@ export function useImagesFetch(paths: string[], projectId: string) {
 
       setImages(files)
     } catch (error: unknown) {
-      return ESFailed(error)
+      console.error('Failed to fetch images')
     }
-  }, [paths, projectId])
+  }, [])
+
+  useEffect(() => {
+    if (paths && projectId) {
+      fetchImage(paths, projectId)
+    }
+  }, [fetchImage, paths, projectId])
 
   return [images, setImages]
 }
