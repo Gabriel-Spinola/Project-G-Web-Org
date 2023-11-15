@@ -36,7 +36,6 @@ export async function updateProject(
   id: string,
   formData: FormData,
 ): Promise<ESResponse<string>> {
-  console.log('updaing')
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,

@@ -1,29 +1,25 @@
 import { prisma } from '@/lib/database/prisma'
 import { Project } from '@prisma/client'
-import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { APIResponse } from '../../_utils'
 import { storeMultipleFiles } from '@/lib/storage/actions'
+import { ESResponse } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
-async function tryUpdateProject(
+async function updateProject(
   newProject: Partial<Project>,
   projectId: string,
-): Promise<Project | null> {
+): Promise<ESResponse<Project, string>> {
   try {
     const data = await prisma.project.update({
       where: { id: projectId },
       data: newProject,
     })
 
-    revalidateTag('revalidate-feed')
-    return data
+    // revalidateTag('revalidate-feed')
+    return ESSucceed(data)
   } catch (error: unknown) {
-    console.warn(
-      'SERVICES/CREATE-ProjectS::failed to create Project (database level): ',
-      error,
-    )
-
-    return null
+    return ESFailed('Failed to update user' + JSON.stringify(error))
   }
 }
 
@@ -37,14 +33,10 @@ export async function handlePatch(
   const projectDescription = formData.get('description')?.toString() as
     | string
     | null
+
+  // NOTE - Filter is here for, iIf for some reason, any blob type file get into the api it'll be removed.
   const projectImages = (formData.getAll('images') as File[] | null)?.filter(
-    (img) => {
-      if (img.type !== 'application/octet-stream') {
-        return img
-      }
-      console.log('failed at: ' + img.name + ' ' + img.type)
-      return null
-    },
+    (img) => img.type !== 'application/octet-stream',
   )
 
   console.log(projectImages)
@@ -55,7 +47,15 @@ export async function handlePatch(
     images: projectImages ? projectImages.map((image) => image.name) : [],
   }
 
-  const data = await tryUpdateProject(newProject, projectId)
+  const { data, error } = await updateProject(newProject, projectId)
+  if (error) {
+    console.error(error)
+
+    return NextResponse.json(
+      { data: 'Failed to update user in database' },
+      { status: 500 },
+    )
+  }
 
   if (projectImages && projectImages.length > 0) {
     const { error } = await storeMultipleFiles(

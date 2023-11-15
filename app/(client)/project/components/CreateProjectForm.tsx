@@ -9,7 +9,6 @@
 
 'use client'
 
-import SendImageButton from '@/components/Buttons/SendImageButton'
 import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
 import { ChangeEvent, useState } from 'react'
@@ -88,7 +87,8 @@ export default function CreateProjectForm({
   }
 
   function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
+    // REVIEW - Revoking the image for performance
+    // URL.revokeObjectURL(images[index])
 
     setImages(
       (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
@@ -103,18 +103,12 @@ export default function CreateProjectForm({
     const formData = new FormData(event.currentTarget)
 
     if (images && images?.length > 0) {
-      console.log('all imgs: ' + images.map((img) => img.name))
-
       images.forEach((img: File) => {
-        console.log(img.name)
         formData.append('images', img)
       })
-      console.log(images.map((imt) => imt.name))
     } else {
       formData.delete('images')
     }
-
-    console.log('not validated form: ' + formData.getAll('images').length)
 
     const validatedForm = validateForm(formData)
 
@@ -130,8 +124,6 @@ export default function CreateProjectForm({
 
       return
     }
-
-    console.log('validated form: ' + validatedForm.data.getAll('images').length)
 
     // NOTE - if projectId exist create new project otherwise we're updating a project
     const { error } = !projectId
