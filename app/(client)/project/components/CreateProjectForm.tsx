@@ -11,7 +11,7 @@
 
 import { validateForm } from '@/lib/schemas/newProject.schema'
 import { useState } from 'react'
-import { createNewProject, updateProject } from '../../create-project/_actions'
+import { createNewProject, updateProject } from '../_actions'
 import Image from 'next/image'
 import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
 import { useSession } from 'next-auth/react'
