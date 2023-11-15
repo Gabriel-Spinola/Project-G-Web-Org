@@ -6,5 +6,5 @@ import { NextResponse } from 'next/server'
 export async function handleGet(
   id: string,
 ): Promise<APIResponse<Project[] | string>> {
-  return NextResponse.json({ data: 'aasas' }, { status: 200 })
+  return NextResponse.json({ data: 'aasas' + id }, { status: 200 })
 }

@@ -20,4 +20,4 @@ export const tempIncludeForUser = {
       },
     },
   },
-}
+} as const

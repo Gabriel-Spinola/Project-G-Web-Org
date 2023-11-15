@@ -21,7 +21,6 @@ export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
 
   const context = useContext(CommentContext)
-  const isOwner = session?.user.id === comment.authorId
   const isLiked =
     comment.likes?.some(
       (like: Partial<Like>) => like.userId === session?.user.id,
