@@ -7,11 +7,11 @@
  * @license i.e. MIT
  */
 
-import CreateProjectForm from '../components/CreateProjectForm'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import { Suspense } from 'react'
 import Link from 'next/link'
+import CreateProjectForm from '../components/CreateProjectForm'
 
 export default async function CreateProject() {
   const session = await getServerSession(AuthOptions)
@@ -23,7 +23,7 @@ export default async function CreateProject() {
   return (
     <main>
       <Suspense fallback={<div>loading...</div>}>
-        <CreateProjectForm currentUserId={session.user.id} />
+        <CreateProjectForm />
       </Suspense>
     </main>
   )

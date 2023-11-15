@@ -20,8 +20,6 @@ type Props = {
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
 
-  console.log('super: ' + comment.replies?.at(0)?.replies?.length)
-
   const context = useContext(CommentContext)
   const isLiked =
     comment.likes?.some(

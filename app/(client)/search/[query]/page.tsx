@@ -30,6 +30,7 @@ export default async function SearchPage({ params }: Props) {
           <Searchbar />
         </div>
       </section>
+
       {!error && data ? (
         <DisplayUsers users={data} />
       ) : (

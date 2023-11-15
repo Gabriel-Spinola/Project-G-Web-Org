@@ -69,7 +69,6 @@ export type PublicationComment = Comment & {
 type TDisplayComment = Comment & {
   author: PublicationAuthor
   likes: Likes
-
   replies?: TDisplayComment[]
 }
 

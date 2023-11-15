@@ -13,44 +13,9 @@ import { AuthOptions } from '@/lib/auth'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { fetchProjectById } from '../../_actions'
-import {
-  SUPABASE_PUBLIC_BUCKET_NAME,
-  getProjectImageUrl,
-  supabase,
-} from '@/lib/storage/supabase'
-import { ESResponse } from '@/lib/types/common'
-import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 type Props = {
   params: { id: string }
-}
-
-async function getImageFiles(
-  projectId: string,
-  paths: string[],
-): Promise<ESResponse<File[]>> {
-  try {
-    const files = await Promise.all(
-      paths.map(async (path: string) => {
-        console.log(getProjectImageUrl(path))
-        const { data, error } = await supabase.storage
-          .from(SUPABASE_PUBLIC_BUCKET_NAME)
-          .download(`projects/${projectId}/images/${path}`)
-
-        if (error) {
-          console.error(error)
-
-          throw new Error('failed to get image')
-        }
-
-        return data as File
-      }),
-    )
-
-    return ESSucceed(files)
-  } catch (error: unknown) {
-    return ESFailed(error)
-  }
 }
 
 export default async function CreateProject({ params }: Props) {
@@ -68,16 +33,11 @@ export default async function CreateProject({ params }: Props) {
     return <h1>Failed to fetch data</h1>
   }
 
-  const images = await getImageFiles(session.user.id, data.images)
-  if (images.error) {
-    console.error('image failed: ' + error)
-  }
-
   return (
     <main>
       <Suspense fallback={<div>loading...</div>}>
         <CreateProjectForm
-          currentUserId={session.user.id}
+          projectId={id}
           content={{ ...data }}
           projectImages={data.images}
         />

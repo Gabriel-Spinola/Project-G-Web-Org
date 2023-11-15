@@ -41,3 +41,29 @@ export async function storeMultipleFiles(
 
   return {} as never
 }
+
+/**
+ * @param relativePath
+ * @param fileName
+ * @returns the downloaded file
+ *
+ * ! Can throw errors
+ * REVIEW - fileName is not really necessary
+ */
+export async function downloadFile(relativePath: string, fileName: string) {
+  const { data, error } = await supabase.storage
+    .from(SUPABASE_PUBLIC_BUCKET_NAME)
+    .download(relativePath)
+
+  if (error) {
+    console.error(error)
+
+    throw new Error('failed to get image')
+  }
+
+  const file = new File([data], fileName, {
+    type: `image/${fileName.substring(fileName.indexOf('.'))}`,
+  })
+
+  return file
+}
