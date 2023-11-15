@@ -1,7 +1,7 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
-import { Post } from '@prisma/client'
+import { Post, Project } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
 
 export async function handlePostDeletion(
@@ -28,6 +28,55 @@ export async function handlePostDeletion(
     routeCallback()
   } catch (error: unknown) {
     console.error(error)
+  }
+}
+
+export async function fetchPublication<Publication extends FullPost | Project>(
+  page = 1,
+  signal?: AbortSignal,
+  authorId?: string,
+): Promise<ESResponse<Publication[]>> {
+  try {
+    const apiRequestURL = !authorId
+      ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
+      : `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}&id=${authorId}`
+
+    const response = await fetch(apiRequestURL, {
+      method: 'GET',
+      headers: {
+        'X-API-Key': process.env.API_SECRET as string,
+        'Content-Type': 'application/json',
+      },
+      next: { tags: ['revalidate-feed'] },
+      signal,
+    })
+
+    if (!response.ok) {
+      const { data }: { data: string } = await response.json()
+
+      throw new Error("Response's not okay " + data)
+    }
+
+    const { data }: { data: Publication[] } = await response.json()
+
+    return {
+      data,
+      error: null,
+    }
+  } catch (error: unknown) {
+    if (isAbortError(error)) {
+      return {
+        data: null,
+        error: 'Feed fetch aborted',
+      }
+    }
+
+    console.error(error)
+
+    return {
+      data: null,
+      error: 'Failed to fetch posts',
+    }
   }
 }
 

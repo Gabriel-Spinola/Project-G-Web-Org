@@ -1,23 +1,23 @@
-import { fetchPosts } from '@/app/(feed)/_actions'
+import { fetchPublication } from '@/app/(feed)/_actions'
 import { ESResponse, FullPost } from '@/lib/types/common'
-import { useInView } from 'react-intersection-observer'
+import { Project } from '@prisma/client'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-
 import { useState, useCallback, useEffect } from 'react'
 
 // TODO: Generalize Feed - Incomplete
-export function useFeed(
-  initialPublication: FullPost[] | undefined,
+export function useFeed<Publication extends FullPost | Project>(
+  initialPublication: Publication[] | undefined,
+  shouldFetch: boolean,
   profileId?: string,
 ): {
-  posts: FullPost[] | undefined
-  noPostFound: boolean
-  ref: (node?: Element | null | undefined) => void
+  publication: Publication[] | undefined
+  noPublicationFound: boolean
 } {
-  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
+  const [posts, setPosts] = useState<Publication[] | undefined>(
+    initialPublication,
+  )
   const [page, setPages] = useState<number>(1)
   const [noPostFound, setNoPostFound] = useState<boolean>(false)
-  const [ref, inView] = useInView()
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -30,7 +30,7 @@ export function useFeed(
   const loadMorePosts = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
-      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+      const { data, error }: ESResponse<Publication[]> = await fetchPublication(
         next,
         signal,
         profileId,
@@ -49,7 +49,7 @@ export function useFeed(
       }
 
       setPages((prevPage) => prevPage + 1)
-      setPosts((prevPost: FullPost[] | undefined) => [
+      setPosts((prevPost: Publication[] | undefined) => [
         ...(prevPost?.length ? prevPost : []),
         ...data,
       ])
@@ -63,7 +63,7 @@ export function useFeed(
     const signal = controller.signal
 
     // If the spinner is in the client view load more posts.
-    if (inView) {
+    if (shouldFetch) {
       loadMorePosts(signal)
     }
 
@@ -81,7 +81,7 @@ export function useFeed(
     return (): void => {
       controller.abort()
     }
-  }, [createdPost, inView, loadMorePosts, pathname, router])
+  }, [createdPost, shouldFetch, loadMorePosts, pathname, router])
 
   // NOTE - Handles url callbacks for any non-api-related feed update
   useEffect(() => {
@@ -92,5 +92,5 @@ export function useFeed(
     }
   }, [deletedPost, router, pathname])
 
-  return { posts, noPostFound, ref }
+  return { publication: posts, noPublicationFound: noPostFound }
 }

@@ -15,7 +15,6 @@ import { AuthOptions } from '@/lib/auth'
 import { FullPost } from '@/lib/types/common'
 import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
-import { $Enums } from '@prisma/client'
 import { Suspense } from 'react'
 
 export default async function Home() {

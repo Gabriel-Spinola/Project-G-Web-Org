@@ -5,6 +5,7 @@ import PostItem from './PostItem'
 import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
+import { useInView } from 'react-intersection-observer'
 
 export const PublicationContext = createContext<FullPost | null>(null)
 
@@ -17,7 +18,9 @@ export default function InfiniteScrollPosts({
   initialPublication,
   profileId,
 }: Params) {
-  const { posts, noPostFound, ref } = useFeed(initialPublication, profileId)
+  const [ref, inView] = useInView()
+  const { publication: posts, noPublicationFound: noPostFound } =
+    useFeed<FullPost>(initialPublication, inView, profileId)
 
   return (
     <section id="feed">
