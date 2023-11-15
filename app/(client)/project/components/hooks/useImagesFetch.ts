@@ -9,7 +9,7 @@ import {
 
 export function useImages(
   paths?: string[],
-  projectId?: string,
+  ownerId?: string,
 ): [File[] | undefined, Dispatch<SetStateAction<File[] | undefined>>] {
   const [images, setImages] = useState<File[] | undefined>(undefined)
 
@@ -27,7 +27,10 @@ export function useImages(
             throw new Error('failed to get image')
           }
 
-          return data as File
+          const file = new File([data], path, {
+            type: `image/${path.substring(path.indexOf('.'))}`,
+          })
+          return file
         }),
       )
 
@@ -38,10 +41,10 @@ export function useImages(
   }, [])
 
   useEffect(() => {
-    if (paths && projectId) {
-      fetchImage(paths, projectId)
+    if (paths && ownerId) {
+      fetchImage(paths, ownerId)
     }
-  }, [fetchImage, paths, projectId])
+  }, [fetchImage, paths, ownerId])
 
   return [images, setImages]
 }

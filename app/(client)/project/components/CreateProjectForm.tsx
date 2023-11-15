@@ -17,6 +17,7 @@ import { createNewProject, updateProject } from '../../create-project/_actions'
 import Image from 'next/image'
 import { useImages } from './hooks/useImagesFetch'
 import { useSession } from 'next-auth/react'
+import { AiOutlineFileImage } from 'react-icons/ai'
 
 interface ProjectFormState {
   title: string
@@ -101,14 +102,19 @@ export default function CreateProjectForm({
 
     const formData = new FormData(event.currentTarget)
 
-    if (images && images?.length >= 0) {
-      images?.pop()
-      images?.forEach((img) => {
+    if (images && images?.length > 0) {
+      console.log('all imgs: ' + images.map((img) => img.name))
+
+      images.forEach((img: File) => {
+        console.log(img.name)
         formData.append('images', img)
       })
+      console.log(images.map((imt) => imt.name))
     } else {
       formData.delete('images')
     }
+
+    console.log('not validated form: ' + formData.getAll('images').length)
 
     const validatedForm = validateForm(formData)
 
@@ -125,7 +131,7 @@ export default function CreateProjectForm({
       return
     }
 
-    console.log(validatedForm.data)
+    console.log('validated form: ' + validatedForm.data.getAll('images').length)
 
     // NOTE - if projectId exist create new project otherwise we're updating a project
     const { error } = !projectId
@@ -170,7 +176,23 @@ export default function CreateProjectForm({
 
           <input type="file" accept="application/pdf" id="file" name="file" />
 
-          <SendImageButton onChange={onImageChanges} />
+          <div className="img-btn hover:cursor-pointer z-50">
+            <input
+              type="file"
+              name="display-images"
+              id="images"
+              accept=".png, .jpg, .jpeg, .webp"
+              className="hidden"
+              onChange={onImageChanges}
+            />
+            <label
+              htmlFor="images"
+              className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
+            >
+              <AiOutlineFileImage size={28} />
+              Envie uma Imagem
+            </label>
+          </div>
 
           <input type="submit" value={isEditing ? 'update' : 'create'} />
         </form>

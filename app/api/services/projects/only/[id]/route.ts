@@ -27,9 +27,7 @@ async function handler(
         )
       }
 
-      const bodyData: Partial<Project> = await req.json()
-
-      return handlePatch(id, bodyData)
+      return handlePatch(id, req)
     }
     case 'DELETE':
       return handleDelete(id)
