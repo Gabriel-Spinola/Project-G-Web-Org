@@ -5,9 +5,13 @@ import DesktopNavbar from './DesktopNavbar'
 import MobileNavbar from './MobileNavbar'
 
 export default function Navbar({ userSession }: { userSession?: string }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [windowWidth, setWindowWidth] = useState<number | null>(null)
 
   useEffect(() => {
+    if (typeof window === undefined) {
+      return
+    }
+
     const handleResize = () => {
       setWindowWidth(window.innerWidth)
     }
@@ -21,7 +25,7 @@ export default function Navbar({ userSession }: { userSession?: string }) {
 
   return (
     <section id="navbar" className="max-h-[88px]">
-      {windowWidth > 1024 ? (
+      {windowWidth !== null && windowWidth > 1024 ? (
         <DesktopNavbar userSession={userSession} />
       ) : (
         <MobileNavbar userSession={userSession} />

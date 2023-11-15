@@ -28,21 +28,20 @@ export default function Comment({ comment }: Props) {
 
   return (
     <div className="flex flex-col items-end">
-      <Button
-        className="w-full"
-        type="button"
-        onClick={async () => {
-          if (context.handleFacadeCommentDeletion) {
-            context.handleFacadeCommentDeletion(comment.id as number)
-          }
-
-          await deleteComment(comment.id as number)
-        }}
-      >
-        Excluir Comentário
-      </Button>
-
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
+        <Button
+          className="w-full"
+          type="button"
+          onClick={async () => {
+            if (context.handleFacadeCommentDeletion) {
+              context.handleFacadeCommentDeletion(comment.id as number)
+            }
+
+            await deleteComment(comment.id as number)
+          }}
+        >
+          Excluir Comentário
+        </Button>
         <div className="flex w-full">
           <Link
             href={`/profile/${comment.authorId}`}
