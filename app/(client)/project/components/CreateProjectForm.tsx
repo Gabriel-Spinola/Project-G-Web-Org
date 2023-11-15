@@ -9,12 +9,11 @@
 
 'use client'
 
-import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import { createNewProject, updateProject } from '../../create-project/_actions'
 import Image from 'next/image'
-import { useImages } from './hooks/useImagesFetch'
+import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
 import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 
@@ -49,6 +48,13 @@ export default function CreateProjectForm({
   )
 
   const [images, setImages] = useImages(projectImages, session?.user.id)
+  const { onImageChanges, onImageRemovedFromPreview } = useImagesCallbacks(
+    {
+      images,
+      setImages,
+    },
+    3,
+  )
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
@@ -61,38 +67,6 @@ export default function CreateProjectForm({
 
       return null
     })
-  }
-
-  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
-
-    if (!event.target.files || event.target.files.length <= 0) {
-      return
-    }
-
-    const { error } = validateImageInput(event.target.files[0], images?.length)
-
-    if (error) {
-      alert(error)
-
-      return
-    }
-
-    const newImage = event.target.files[0]
-    setImages((prevImages) => {
-      if (prevImages) return [...prevImages, newImage]
-
-      return [newImage]
-    })
-  }
-
-  function removeImageFromPreviewByIndex(index: number) {
-    // REVIEW - Revoking the image for performance
-    // URL.revokeObjectURL(images[index])
-
-    setImages(
-      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
-    )
   }
 
   async function handleFormSubmission(
@@ -198,7 +172,7 @@ export default function CreateProjectForm({
               <div key={index}>
                 {/* Remove Img Button */}
                 <button
-                  onClick={() => removeImageFromPreviewByIndex(index)}
+                  onClick={() => onImageRemovedFromPreview(index)}
                   type="button"
                 >
                   <span>X</span>

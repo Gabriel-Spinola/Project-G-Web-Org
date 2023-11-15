@@ -23,7 +23,7 @@ export default async function CreateProject() {
   return (
     <main>
       <Suspense fallback={<div>loading...</div>}>
-        <CreateProjectForm currentUserId={session.user.id} />
+        <CreateProjectForm />
       </Suspense>
     </main>
   )
