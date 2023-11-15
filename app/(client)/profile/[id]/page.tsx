@@ -14,9 +14,10 @@ import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, handleFollowingCheckage } from '../_actions'
-import ProfileCardSkeleton from '../components/ProfileCardSkeleton'
-import UserInfoSkeleton from '../components/UserInfoSkeleton'
-import UserPostsSkeleton from '../components/UserPostsSkeleton'
+import { $Enums } from '@prisma/client'
+import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
+import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
+import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
 import UserProjects from '../components/UserProjects'
 
 type Props = {

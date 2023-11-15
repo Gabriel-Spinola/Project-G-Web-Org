@@ -8,7 +8,7 @@ export async function createNewProject(
 ): Promise<ESResponse<string>> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.projects}${id}`,
+      `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,
       {
         method: 'POST',
         body: formData,

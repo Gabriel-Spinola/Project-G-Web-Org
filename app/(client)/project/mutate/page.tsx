@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import CreateProjectForm from '../project/components/CreateProjectForm'
+import CreateProjectForm from '../components/CreateProjectForm'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import { Suspense } from 'react'

@@ -9,8 +9,10 @@
 
 import { Project } from '@prisma/client'
 import React from 'react'
-import { fetchProject } from '../_actions'
+import { fetchProjectById } from '../_actions'
 import { DeleteProject, UpdateProject } from '../components/TempButtons'
+import { getServerSession } from 'next-auth'
+import { AuthOptions } from '@/lib/auth'
 
 type Props = {
   params: { id: string }
@@ -19,22 +21,29 @@ type Props = {
 export default async function Project({ params }: Props) {
   const { id } = params
 
-  const { data, error } = await fetchProject(id)
+  const session = await getServerSession(AuthOptions)
+  const { data, error } = await fetchProjectById(id)
   if (error || !data) {
     console.error(error)
 
     return <h1>Failed to fetch data</h1>
   }
 
+  const isOwner = session?.user.id === data.authorId
+
   return (
     <main>
       <h1>{data.title}</h1>
 
-      <br />
-      <br />
-      <DeleteProject id={id} />
-      <br />
-      <UpdateProject id={id} />
+      {isOwner ? (
+        <>
+          <DeleteProject id={id} />
+          <br />
+          <UpdateProject id={id} />
+        </>
+      ) : (
+        <></>
+      )}
     </main>
   )
 }
