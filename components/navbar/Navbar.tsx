@@ -8,7 +8,7 @@ export default function Navbar({ userSession }: { userSession?: string }) {
   const [windowWidth, setWindowWidth] = useState<number | null>(null)
 
   useEffect(() => {
-    if (typeof window === undefined) {
+    if (typeof window === null) {
       return
     }
 
@@ -21,14 +21,14 @@ export default function Navbar({ userSession }: { userSession?: string }) {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  })
 
   return (
     <section id="navbar" className="max-h-[88px]">
-      {windowWidth !== null && windowWidth > 1024 ? (
-        <DesktopNavbar userSession={userSession} />
-      ) : (
+      {windowWidth !== null && windowWidth < 1024 ? (
         <MobileNavbar userSession={userSession} />
+      ) : (
+        <DesktopNavbar userSession={userSession} />
       )}
     </section>
   )
