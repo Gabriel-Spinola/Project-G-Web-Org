@@ -13,6 +13,7 @@ export const MAX_FILE_SIZE = 5000000
 export function validateImageInput(
   file: File,
   qtyImages?: number,
+  limit?: number,
 ): ESResponse<never> {
   // const specialCharacters = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   const notLatin = '/[\\p{IsLatin}]+$'
@@ -35,7 +36,7 @@ export function validateImageInput(
     return { data: null, error: 'O tamanho máximo de arquivos é de 5mb' }
   }
 
-  if (qtyImages && qtyImages >= 3) {
+  if (qtyImages && limit && qtyImages >= limit) {
     return { data: null, error: 'O número máximo de imagens por post é 3' }
   }
 

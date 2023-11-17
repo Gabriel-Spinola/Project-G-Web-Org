@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import handlePost from '../_post'
 import { handleDelete } from '../_delete'
 import { handleGet } from '../_get'
+import { handlePatch } from '../_patch'
+import { Project } from '@prisma/client'
 
 async function handler(
   req: Request,
@@ -15,6 +17,18 @@ async function handler(
       return handleGet(id)
     case 'POST':
       return handlePost(id, req)
+    case 'PATCH': {
+      if (!id) {
+        return NextResponse.json(
+          {
+            data: `FAILED:SERVICES/${req.method}-Post::failed: authorId Can't be null`,
+          },
+          { status: 400 },
+        )
+      }
+
+      return handlePatch(id, req)
+    }
     case 'DELETE':
       return handleDelete(id)
     default:
@@ -25,4 +39,4 @@ async function handler(
   }
 }
 
-export { handler as POST, handler as GET, handler as DELETE }
+export { handler as POST, handler as GET, handler as DELETE, handler as PATCH }

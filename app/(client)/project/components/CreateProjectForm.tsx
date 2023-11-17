@@ -9,12 +9,13 @@
 
 'use client'
 
-import SendImageButton from '@/components/Buttons/SendImageButton'
-import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { validateForm } from '@/lib/schemas/newProject.schema'
-import { ChangeEvent, useState } from 'react'
-import { createNewProject } from '../../create-project/_actions'
+import { useState } from 'react'
+import { createNewProject, updateProject } from '../_actions'
 import Image from 'next/image'
+import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
+import { useSession } from 'next-auth/react'
+import { AiOutlineFileImage } from 'react-icons/ai'
 
 interface ProjectFormState {
   title: string
@@ -22,19 +23,19 @@ interface ProjectFormState {
 }
 
 type Props = {
-  currentUserId: string
-
-  // NOTE - Editing data
+  projectId?: string
   content?: ProjectFormState
   files?: string[]
   projectImages?: string[]
 }
 
 export default function CreateProjectForm({
-  currentUserId,
+  projectId,
   content,
   projectImages,
 }: Props) {
+  const { data: session } = useSession()
+
   const isEditing = !!content
 
   const [form, setForm] = useState<ProjectFormState | null>(
@@ -45,7 +46,15 @@ export default function CreateProjectForm({
           description: '',
         },
   )
-  const [images, setImages] = useState<File[] | undefined>(undefined)
+
+  const [images, setImages] = useImages(projectImages, session?.user.id)
+  const { onImageChanges, onImageRemovedFromPreview } = useImagesCallbacks(
+    {
+      images,
+      setImages,
+    },
+    3,
+  )
 
   function handleStateChange(
     fieldName: keyof ProjectFormState,
@@ -60,37 +69,6 @@ export default function CreateProjectForm({
     })
   }
 
-  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
-
-    if (!event.target.files || event.target.files.length <= 0) {
-      return
-    }
-
-    const { error } = validateImageInput(event.target.files[0], images?.length)
-
-    if (error) {
-      alert(error)
-
-      return
-    }
-
-    const newImage = event.target.files[0]
-    setImages((prevImages) => {
-      if (prevImages) return [...prevImages, newImage]
-
-      return [newImage]
-    })
-  }
-
-  function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
-
-    setImages(
-      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
-    )
-  }
-
   async function handleFormSubmission(
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> {
@@ -98,9 +76,8 @@ export default function CreateProjectForm({
 
     const formData = new FormData(event.currentTarget)
 
-    if (images && images?.length >= 0) {
-      images?.pop()
-      images?.forEach((img) => {
+    if (images && images?.length > 0) {
+      images.forEach((img: File) => {
         formData.append('images', img)
       })
     } else {
@@ -122,9 +99,10 @@ export default function CreateProjectForm({
       return
     }
 
-    console.log(validatedForm.data)
-
-    const { error } = await createNewProject(currentUserId, validatedForm.data)
+    // NOTE - if projectId exist create new project otherwise we're updating a project
+    const { error } = !projectId
+      ? await createNewProject(session?.user.id as string, validatedForm.data)
+      : await updateProject(projectId, validatedForm.data)
 
     if (error) {
       alert('Failed to create post')
@@ -164,7 +142,23 @@ export default function CreateProjectForm({
 
           <input type="file" accept="application/pdf" id="file" name="file" />
 
-          <SendImageButton onChange={onImageChanges} />
+          <div className="img-btn hover:cursor-pointer z-50">
+            <input
+              type="file"
+              name="display-images"
+              id="images"
+              accept=".png, .jpg, .jpeg, .webp"
+              className="hidden"
+              onChange={onImageChanges}
+            />
+            <label
+              htmlFor="images"
+              className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
+            >
+              <AiOutlineFileImage size={28} />
+              Envie uma Imagem
+            </label>
+          </div>
 
           <input type="submit" value={isEditing ? 'update' : 'create'} />
         </form>
@@ -178,7 +172,7 @@ export default function CreateProjectForm({
               <div key={index}>
                 {/* Remove Img Button */}
                 <button
-                  onClick={() => removeImageFromPreviewByIndex(index)}
+                  onClick={() => onImageRemovedFromPreview(index)}
                   type="button"
                 >
                   <span>X</span>
