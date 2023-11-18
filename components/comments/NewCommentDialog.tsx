@@ -21,8 +21,6 @@ export default function NewCommentDialog({ target }: Props) {
   const context = useContext(CommentContext)
   const post = useContext(PublicationContext)
 
-  console.log(context.handleFacadeCommentSubmit)
-
   async function handleFormSubmission(formData: FormData) {
     if (!session?.user.id) {
       signIn()
@@ -63,8 +61,6 @@ export default function NewCommentDialog({ target }: Props) {
 
     if (context.handleFacadeCommentSubmit) {
       context.handleFacadeCommentSubmit(data)
-
-      console.log(data)
     }
   }
 
@@ -77,7 +73,6 @@ export default function NewCommentDialog({ target }: Props) {
     ) as HTMLDivElement
 
     formInput.value = editableDiv.innerText
-    console.log(editableDiv.id + ': ' + editableDiv.innerText)
   }
 
   return (
@@ -92,7 +87,7 @@ export default function NewCommentDialog({ target }: Props) {
       />
 
       <div
-        className="bg-darker-white w-[75%] p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
+        className="bg-darker-white w-full p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
         contentEditable
         id={`editable-container-${target.id}`}
         onInput={inputReplace}
