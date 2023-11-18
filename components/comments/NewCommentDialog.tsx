@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
@@ -21,12 +21,16 @@ export default function NewCommentDialog({ target }: Props) {
   const context = useContext(CommentContext)
   const post = useContext(PublicationContext)
 
-  console.log(context.handleFacadeCommentSubmit)
+  const [isLoading, setIsLoading] = useState(false)
 
   async function handleFormSubmission(formData: FormData) {
     if (!session?.user.id) {
       signIn()
 
+      return
+    }
+
+    if (isLoading) {
       return
     }
 
@@ -55,6 +59,8 @@ export default function NewCommentDialog({ target }: Props) {
       session?.user.id,
     )
 
+    setIsLoading(false)
+
     if (error || !data) {
       alert('failed to create comment')
 
@@ -63,8 +69,6 @@ export default function NewCommentDialog({ target }: Props) {
 
     if (context.handleFacadeCommentSubmit) {
       context.handleFacadeCommentSubmit(data)
-
-      console.log(data)
     }
   }
 
@@ -77,12 +81,12 @@ export default function NewCommentDialog({ target }: Props) {
     ) as HTMLDivElement
 
     formInput.value = editableDiv.innerText
-    console.log(editableDiv.id + ': ' + editableDiv.innerText)
   }
 
   return (
     <form
       action={handleFormSubmission}
+      onSubmit={() => setIsLoading(true)}
       className="flex justify-end items-end gap-4"
     >
       <input
@@ -98,7 +102,7 @@ export default function NewCommentDialog({ target }: Props) {
         onInput={inputReplace}
       ></div>
 
-      <CreateCommentButton />
+      <CreateCommentButton isLoading={isLoading} />
     </form>
   )
 }

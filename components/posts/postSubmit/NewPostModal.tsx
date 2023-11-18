@@ -17,8 +17,6 @@ export default function NewPostModal() {
   const { data: session } = useSession()
   const { isOpen, onClose } = useContext(NewPostContext)
 
-  console.log(isOpen)
-
   return (
     <div>
       <Modal

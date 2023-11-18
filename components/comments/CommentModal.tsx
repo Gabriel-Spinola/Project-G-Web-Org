@@ -20,9 +20,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import Comment from '../comments/Comment'
-import MenuSettings from './MenuSettings'
-import { deleteComment } from '@/app/(feed)/_serverActions'
-import { BsThreeDots } from 'react-icons/bs'
 
 export const CommentContext = createContext<{
   handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
