@@ -114,10 +114,12 @@ export default function ProfileCard({ user, isOwner }: Params) {
         {isOwner ? (
           <EditableAvatar
             profileId={user.id as string}
-            profilePicUrl={getProfilePicURL({
-              profilePic: user.profilePic as string | null,
-              image: user.image as string | null,
-            })}
+            profilePicUrl={
+              getProfilePicURL({
+                profilePic: user.profilePic as string | null,
+                image: user.image as string | null,
+              }) ?? ''
+            }
           />
         ) : (
           <div>
