@@ -1,17 +1,19 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import { Avatar, Button } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Link from 'next/link'
 import CommentReply from './CommentReply'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { CommentContext } from './CommentModal'
+import { BiComment, BiSolidComment } from 'react-icons/bi'
+import { FaTrash } from 'react-icons/fa'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -19,6 +21,16 @@ type Props = {
 
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
+  const [openReplies, setOpenReplies] = useState<boolean>(false)
+  const isOwner = session?.user.id === comment.authorId
+
+  async function handleComment() {
+    if (!session?.user.id) {
+      signIn()
+    } else {
+      setOpenReplies(!openReplies)
+    }
+  }
 
   const context = useContext(CommentContext)
   const isLiked =
@@ -28,20 +40,6 @@ export default function Comment({ comment }: Props) {
 
   return (
     <div className="flex flex-col items-end">
-      <Button
-        className="w-full"
-        type="button"
-        onClick={async () => {
-          if (context.handleFacadeCommentDeletion) {
-            context.handleFacadeCommentDeletion(comment.id as number)
-          }
-
-          await deleteComment(comment.id as number)
-        }}
-      >
-        Excluir Comentário
-      </Button>
-
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
         <div className="flex w-full">
           <Link
@@ -55,12 +53,28 @@ export default function Comment({ comment }: Props) {
           </Link>
 
           <div className="flex flex-col w-full">
-            <Link
-              href={`/profile/${comment.authorId}`}
-              className="capitalize px-2 font-semibold"
-            >
-              {comment.author?.name}
-            </Link>
+            <div className="flex justify-between w-full">
+              <Link
+                href={`/profile/${comment.authorId}`}
+                className="capitalize px-2 font-semibold"
+              >
+                {comment.author?.name}
+              </Link>
+              {isOwner ? (
+                <Button
+                  variant={'ghost'}
+                  type="button"
+                  onClick={async () => {
+                    if (context.handleFacadeCommentDeletion) {
+                      context.handleFacadeCommentDeletion(comment.id as number)
+                    }
+                    await deleteComment(comment.id as number)
+                  }}
+                >
+                  <FaTrash />
+                </Button>
+              ) : null}
+            </div>
 
             <label htmlFor="content"></label>
             <article
@@ -71,34 +85,52 @@ export default function Comment({ comment }: Props) {
               {comment.content}
             </article>
           </div>
+        </div>
 
-          <div className="flex flex-col items-center justify-center">
-            <LikeButton
-              params={{
-                option: 'commentId',
-                likes: comment.likes?.length ?? 0,
-                targetId: comment.id as number,
-                isLiked,
+        <section className="flex flex-row items-center justify-center pt-4">
+          <LikeButton
+            params={{
+              option: 'commentId',
+              likes: comment.likes?.length ?? 0,
+              targetId: comment.id as number,
+              isLiked,
+            }}
+          />
+          <button
+            onClick={handleComment}
+            className={`like flex flex-col hover:text-medium-primary text-darker-gray justify-center items-center w-[48px] ${
+              openReplies ? 'text-medium-primary' : 'text-darker-gray'
+            }`}
+          >
+            {!openReplies ? (
+              <BiComment size={24} />
+            ) : (
+              <BiSolidComment size={24} />
+            )}
+            <span>{comment.replies?.length ?? 0}</span>
+          </button>
+        </section>
+      </section>
+
+      {openReplies ? (
+        <>
+          <div className="w-full">
+            <NewCommentDialog
+              target={{
+                id: comment.id as number,
+                type: 'parentCommentId',
               }}
             />
           </div>
-        </div>
-      </section>
-
-      <section className="w-[95%] p-2 mb-4 rounded-md">
-        <div id="replies">
-          {comment.replies?.map((reply) => (
-            <CommentReply key={reply.id} comment={reply} />
-          ))}
-        </div>
-
-        <NewCommentDialog
-          target={{
-            id: comment.id as number,
-            type: 'parentCommentId',
-          }}
-        />
-      </section>
+          <section className="w-[95%] py-2 mb-4 rounded-md">
+            <div id="replies">
+              {comment.replies?.map((reply) => (
+                <CommentReply key={reply.id} comment={reply} />
+              ))}
+            </div>
+          </section>
+        </>
+      ) : null}
     </div>
   )
 }

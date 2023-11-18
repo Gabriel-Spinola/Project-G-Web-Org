@@ -4,12 +4,6 @@ import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
 import { FullPost, TDisplayComment } from '@/lib/types/common'
 import {
-  Button,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
