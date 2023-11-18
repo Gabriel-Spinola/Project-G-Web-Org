@@ -22,6 +22,7 @@ type Props = {
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
   const [openReplies, setOpenReplies] = useState<boolean>(false)
+  const isOwner = session?.user.id === comment.authorId
 
   async function handleComment() {
     if (!session?.user.id) {
@@ -38,7 +39,7 @@ export default function Comment({ comment }: Props) {
     ) ?? false
 
   return (
-    <div className="flex flex-col start">
+    <div className="flex flex-col items-end">
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
         <div className="flex w-full">
           <Link
@@ -59,18 +60,20 @@ export default function Comment({ comment }: Props) {
               >
                 {comment.author?.name}
               </Link>
-              <Button
-                variant={'ghost'}
-                type="button"
-                onClick={async () => {
-                  if (context.handleFacadeCommentDeletion) {
-                    context.handleFacadeCommentDeletion(comment.id as number)
-                  }
-                  await deleteComment(comment.id as number)
-                }}
-              >
-                <FaTrash />
-              </Button>
+              {isOwner ? (
+                <Button
+                  variant={'ghost'}
+                  type="button"
+                  onClick={async () => {
+                    if (context.handleFacadeCommentDeletion) {
+                      context.handleFacadeCommentDeletion(comment.id as number)
+                    }
+                    await deleteComment(comment.id as number)
+                  }}
+                >
+                  <FaTrash />
+                </Button>
+              ) : null}
             </div>
 
             <label htmlFor="content"></label>
@@ -119,7 +122,7 @@ export default function Comment({ comment }: Props) {
               }}
             />
           </div>
-          <section className="w-[95%] p-2 mb-4 rounded-md">
+          <section className="w-[95%] py-2 mb-4 rounded-md">
             <div id="replies">
               {comment.replies?.map((reply) => (
                 <CommentReply key={reply.id} comment={reply} />
