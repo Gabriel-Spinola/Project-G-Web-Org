@@ -9,28 +9,24 @@
 
 'use client'
 
-import React from 'react'
+import React, { ReactNode, createContext } from 'react'
 
 import styles from './PostSubmitFragment.module.scss'
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Button,
-} from '@chakra-ui/react'
-import { NewPostModal } from './PostSubmitForm'
-import { signIn } from 'next-auth/react'
+import { useDisclosure } from '@chakra-ui/react'
 
 type Props = {
-  revalidate?: () => void
-  currentUserId?: string
+  modal: ReactNode
 }
 
-export default function PostSubmitFragment({ currentUserId }: Props) {
+type Disclosure = {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export const NewPostContext = createContext<Disclosure>({})
+
+export default function PostSubmitFragment({ modal }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -44,29 +40,9 @@ export default function PostSubmitFragment({ currentUserId }: Props) {
         <div id={styles.textSub}></div>
       </button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'4xl'}>
-        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
-        <ModalContent>
-          <ModalCloseButton />
-
-          <ModalBody height={'100%'}>
-            {currentUserId ? (
-              <NewPostModal
-                closeModal={onClose}
-                currentUserId={currentUserId}
-              />
-            ) : (
-              <>
-                <h2>Primeiro faça login para espalhar sua criatividade!</h2>
-
-                <Button onClick={() => signIn(undefined, { callbackUrl: '/' })}>
-                  Login
-                </Button>
-              </>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <NewPostContext.Provider value={{ isOpen, onClose }}>
+        {modal}
+      </NewPostContext.Provider>
     </>
   )
 }

@@ -10,7 +10,7 @@ export default function SendImageButton({ onChange }: Props) {
     <div className="img-btn hover:cursor-pointer z-50">
       <input
         type="file"
-        name="images"
+        name="display-images"
         id="images"
         accept=".png, .jpg, .jpeg, .webp"
         className="hidden"

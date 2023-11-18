@@ -9,15 +9,15 @@ import {
   useState,
 } from 'react'
 
+export type ImageStateObj = {
+  images: File[] | undefined
+  setImages: Dispatch<SetStateAction<File[] | undefined>>
+}
+
 type ImageState = [
   File[] | undefined,
   Dispatch<SetStateAction<File[] | undefined>>,
 ]
-
-type ImageStateObj = {
-  images: File[] | undefined
-  setImages: Dispatch<SetStateAction<File[] | undefined>>
-}
 
 type Callbacks = {
   /**
