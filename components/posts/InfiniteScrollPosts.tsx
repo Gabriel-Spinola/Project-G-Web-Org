@@ -6,15 +6,19 @@ import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
 
-export const PublicationContext = createContext<FullPost | null>(null)
+export const PublicationContext = createContext<
+  (FullPost & { session: string }) | null
+>(null)
 
 type Params = {
   initialPublication: FullPost[] | undefined
+  session: string
   profileId?: string
 }
 
 export default function InfiniteScrollPosts({
   initialPublication,
+  session,
   profileId,
 }: Params) {
   const { posts, noPostFound, ref } = useFeed(initialPublication, profileId)
@@ -23,7 +27,7 @@ export default function InfiniteScrollPosts({
     <section id="feed">
       {posts?.map((post: FullPost) => (
         <div key={post.id}>
-          <PublicationContext.Provider value={post}>
+          <PublicationContext.Provider value={{ ...post, session }}>
             <PostItem />
           </PublicationContext.Provider>
         </div>

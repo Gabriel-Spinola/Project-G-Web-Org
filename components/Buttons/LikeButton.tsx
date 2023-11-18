@@ -11,15 +11,13 @@ import styles from './buttons.module.scss'
 import { LikeOptions } from '@/app/(feed)/_constants'
 
 type LikeButtonParams = {
-  params: {
-    option: LikeOptions
-    likes: number
-    targetId: string | number
-    isLiked: boolean
-  }
+  option: LikeOptions
+  likes: number
+  targetId: string | number
+  isLiked: boolean
 }
 
-export function LikeButton({ params }: LikeButtonParams) {
+export function LikeButton({ params }: { params: LikeButtonParams }) {
   const { data: session } = useSession()
 
   const [isLiked, setIsLiked] = useState<boolean>(params.isLiked)

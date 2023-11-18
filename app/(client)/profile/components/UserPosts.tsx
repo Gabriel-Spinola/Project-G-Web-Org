@@ -3,13 +3,19 @@ import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPost
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
+import { Suspense } from 'react'
 
 type Params = {
   authorID: string
   isOwner: boolean
+  currentUserId: string
 }
 
-export default async function UserPosts({ authorID, isOwner }: Params) {
+export default async function UserPosts({
+  authorID,
+  isOwner,
+  currentUserId,
+}: Params) {
   const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
     1,
     undefined,
@@ -20,20 +26,19 @@ export default async function UserPosts({ authorID, isOwner }: Params) {
     <section id="PostWrapper" className="flex flex-col">
       {isOwner ? <PostSubmitFragment modal={<NewPostModal />} /> : undefined}
 
-      {!error ? (
-        <div className="flex flex-col justify-center">
-          {data && data?.length > 0 ? (
+      <Suspense fallback={<span>loading feed...</span>}>
+        {!error ? (
+          <div className="flex flex-col justify-center">
             <InfiniteScrollPosts
-              initialPublication={data}
+              initialPublication={data ?? undefined}
               profileId={authorID}
+              session={currentUserId}
             />
-          ) : (
-            <span className="w-full text-center">Oops você chegou ao fim!</span>
-          )}
-        </div>
-      ) : (
-        <span className="w-full text-center">Feed Failed to load</span>
-      )}
+          </div>
+        ) : (
+          <span className="w-full text-center">Feed Failed to load</span>
+        )}
+      </Suspense>
     </section>
   )
 }
