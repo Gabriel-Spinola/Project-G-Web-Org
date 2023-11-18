@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-// FIXME - Chakra Modals may be adding too much memory cost.
+// REVIEW - Chakra Modals may be adding too much memory cost.
 
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'

@@ -6,6 +6,7 @@ import Providers from '@/utils/Providers'
 import './styles/main.scss'
 import { Session, getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import { ToastContainer } from 'react-toastify'
 
 const inter = Inter({ subsets: ['latin'] })
 

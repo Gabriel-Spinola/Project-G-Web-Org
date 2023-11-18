@@ -21,6 +21,7 @@ import TextBox from '../components/TextBox'
 import { FcGoogle } from 'react-icons/fc'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
+import { ToastContainer, toast } from 'react-toastify'
 
 export default function RegisterPage() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
@@ -32,11 +33,17 @@ export default function RegisterPage() {
     // Server function to verify captcha
     await verifyCaptcha(token)
       .then(() => setIsVerified(true))
-      .catch(() => setIsVerified(false))
+      .catch(() => {
+        setIsVerified(false)
+
+        toast('Preencha corretamente o captcha: ', {
+          position: toast.POSITION.TOP_CENTER,
+          className: 'toast-message',
+        })
+      })
   }
 
   /**
-   * TODO - Instead of alerts add customized error messages for the user
    *
    * @param formData
    * @returns If something wrong happens: alert the user & reset the form. Otherwise resets the form
@@ -54,7 +61,11 @@ export default function RegisterPage() {
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      // alert('aaaa')
+      toast('Algo no fomulário é invalido no campo: ' + errorMessage + '\n', {
+        position: toast.POSITION.TOP_CENTER,
+        className: 'toast-message',
+      })
 
       return
     }
@@ -65,7 +76,10 @@ export default function RegisterPage() {
     )
 
     if (error) {
-      alert('user creation failed')
+      // NOTE - Toast
+      toast.error('user creation failed', {
+        position: toast.POSITION.TOP_CENTER,
+      })
 
       formRef.current?.reset()
       return
@@ -88,8 +102,12 @@ export default function RegisterPage() {
           url="https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/wolfgang-hasselmann-eSLZXmnw0e8-unsplash.jpg"
           alt="House Image"
         />
+
         {/* Background Image darker overlay */}
         <div className="absolute w-full h-full bg-gradient-to-r from-black via-black/60 via-50% to-black/25 rounded-xl">
+          {/* FIXME - Desculpa lucão mas eu não vou estilizar os toasts (: */}
+          <ToastContainer />
+
           {/* Form Container */}
           <div className="absolute w-full md:w-[65%] x1:w-[45%] 2x1:w-[35%] float-left h-full rounded-xl text-darker-white">
             <form
