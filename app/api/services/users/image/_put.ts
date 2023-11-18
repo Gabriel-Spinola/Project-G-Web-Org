@@ -29,7 +29,7 @@ async function updateUser(
 export default async function handlePut(id: string, req: Request) {
   const formData = await req.formData()
 
-  const newImage = formData.get('images') as File | null
+  const newImage = formData.get('display-images') as File | null
 
   if (!newImage) {
     return NextResponse.json(
@@ -46,7 +46,7 @@ export default async function handlePut(id: string, req: Request) {
     console.error(error)
 
     return NextResponse.json(
-      { data: 'Failed to update ser prfile pic' },
+      { data: 'Failed to update user profile pic' },
       { status: 400 },
     )
   }

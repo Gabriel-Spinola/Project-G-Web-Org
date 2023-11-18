@@ -26,19 +26,17 @@ export default async function UserPosts({
     <section id="PostWrapper" className="flex flex-col">
       {isOwner ? <PostSubmitFragment modal={<NewPostModal />} /> : undefined}
 
-      <Suspense fallback={<span>loading feed...</span>}>
-        {!error ? (
-          <div className="flex flex-col justify-center">
-            <InfiniteScrollPosts
-              initialPublication={data ?? undefined}
-              profileId={authorID}
-              session={currentUserId}
-            />
-          </div>
-        ) : (
-          <span className="w-full text-center">Feed Failed to load</span>
-        )}
-      </Suspense>
+      {!error ? (
+        <div className="flex flex-col justify-center">
+          <InfiniteScrollPosts
+            initialPublication={data ?? undefined}
+            profileId={authorID}
+            session={currentUserId}
+          />
+        </div>
+      ) : (
+        <span className="w-full text-center">Feed Failed to load</span>
+      )}
     </section>
   )
 }

@@ -17,7 +17,7 @@ export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
 export async function getUserData(id: string): Promise<UserData | null> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.users}/only/${id}`,
+      `${API_URL}${API_ENDPOINTS.services.users}only/${id}`,
       {
         method: 'GET',
         headers: {
@@ -46,7 +46,7 @@ export async function changeProfilePic(
 ): Promise<ESResponse<string>> {
   try {
     const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.users}/image/${id}`,
+      `${API_URL}${API_ENDPOINTS.services.users}image/${id}`,
       {
         method: 'PUT',
         body: formData,
@@ -61,8 +61,6 @@ export async function changeProfilePic(
     if (!response.ok || !data) {
       throw new Error('response not ok' + JSON.stringify(data))
     }
-
-    console.log('worked ' + JSON.stringify(data))
 
     return ESSucceed(data)
   } catch (error: unknown) {
