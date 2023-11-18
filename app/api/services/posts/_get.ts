@@ -87,6 +87,8 @@ export async function handleGet(
     )
   }
 
+  console.log(data)
+
   return NextResponse.json(
     { data: JSON.parse(JSON.stringify(data)) },
     { status: 200 },
