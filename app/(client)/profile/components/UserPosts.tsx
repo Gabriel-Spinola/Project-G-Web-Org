@@ -2,6 +2,7 @@ import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
+import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 
 type Params = {
   authorID: string
@@ -17,7 +18,7 @@ export default async function UserPosts({ authorID, isOwner }: Params) {
 
   return (
     <section id="PostWrapper" className="flex flex-col">
-      {isOwner ? <PostSubmitFragment currentUserId={authorID} /> : undefined}
+      {isOwner ? <PostSubmitFragment modal={<NewPostModal />} /> : undefined}
 
       {!error ? (
         <div className="flex flex-col justify-center">
