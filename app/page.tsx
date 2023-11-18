@@ -18,6 +18,7 @@ import { fetchPosts } from './(feed)/_actions'
 import { $Enums } from '@prisma/client'
 import { Suspense } from 'react'
 
+// init
 export default async function Home() {
   const sessionPromise = getServerSession(AuthOptions)
   const postsPromise = fetchPosts<FullPost>()
