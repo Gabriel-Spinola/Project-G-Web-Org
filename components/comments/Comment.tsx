@@ -13,6 +13,7 @@ import NewCommentDialog from './NewCommentDialog'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import { CommentContext } from './CommentModal'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
+import { FaTrash } from 'react-icons/fa'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -39,19 +40,6 @@ export default function Comment({ comment }: Props) {
   return (
     <div className="flex flex-col start">
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
-        <Button
-          className="w-full"
-          type="button"
-          onClick={async () => {
-            if (context.handleFacadeCommentDeletion) {
-              context.handleFacadeCommentDeletion(comment.id as number)
-            }
-
-            await deleteComment(comment.id as number)
-          }}
-        >
-          Excluir Comentário
-        </Button>
         <div className="flex w-full">
           <Link
             href={`/profile/${comment.authorId}`}
@@ -64,12 +52,26 @@ export default function Comment({ comment }: Props) {
           </Link>
 
           <div className="flex flex-col w-full">
-            <Link
-              href={`/profile/${comment.authorId}`}
-              className="capitalize px-2 font-semibold"
-            >
-              {comment.author?.name}
-            </Link>
+            <div className="flex justify-between w-full">
+              <Link
+                href={`/profile/${comment.authorId}`}
+                className="capitalize px-2 font-semibold"
+              >
+                {comment.author?.name}
+              </Link>
+              <Button
+                variant={'ghost'}
+                type="button"
+                onClick={async () => {
+                  if (context.handleFacadeCommentDeletion) {
+                    context.handleFacadeCommentDeletion(comment.id as number)
+                  }
+                  await deleteComment(comment.id as number)
+                }}
+              >
+                <FaTrash />
+              </Button>
+            </div>
 
             <label htmlFor="content"></label>
             <article
