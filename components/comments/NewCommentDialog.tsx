@@ -9,7 +9,7 @@ import { CommentContext } from './CommentModal'
 import { PublicationContext } from '../posts/InfiniteScrollPosts'
 
 type Props = {
-  thisId: number
+  thisId: number | string
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'

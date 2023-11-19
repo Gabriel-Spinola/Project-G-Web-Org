@@ -1,4 +1,3 @@
-import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import React from 'react'
 import ProjectPost from './components/ProjectPost'
 

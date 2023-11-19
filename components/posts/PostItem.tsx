@@ -93,6 +93,7 @@ export default function PostItem() {
             <div id="form-container" className="w-full">
               <NewCommentDialog
                 target={{ id: publicationCtx.id, type: 'postId' }}
+                thisId={publicationCtx.id}
               />
             </div>
           }

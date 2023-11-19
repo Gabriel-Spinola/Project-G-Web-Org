@@ -81,10 +81,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
       getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
     )
 
-    const { data, error } = await updateUserPageData(
-      formData,
-      user.id as string,
-    )
+    const { error } = await updateUserPageData(formData, user.id as string)
 
     if (error) {
       console.error('failed')

@@ -3,7 +3,6 @@ import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPost
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
-import { Suspense } from 'react'
 
 type Params = {
   authorID: string
