@@ -12,7 +12,7 @@ export function DeleteProject({ id }: { id: string }) {
         const { data, error } = await deleteProject(id)
 
         if (error || !data) {
-          console.log(error)
+          console.error(error)
         }
 
         console.log(data)

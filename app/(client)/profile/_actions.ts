@@ -125,7 +125,7 @@ export async function handleFollowingCheckage(
   const { data, error } = await isFollowing(authorId, targetId)
 
   if (error) {
-    console.log('Failed to check following')
+    console.error('Failed to check following')
 
     return false
   }

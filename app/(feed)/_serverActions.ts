@@ -14,7 +14,7 @@ import { ESResponse, TDisplayComment } from '@/lib/types/common'
 export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
-  formData: FormData,
+  content: string | undefined,
   replyTarget: {
     id: string | number
     type: 'postId' | 'parentCommentId'
@@ -22,8 +22,6 @@ export async function postComment(
   fromPost: string,
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
-  const content = formData.get('content')?.toString()
-
   if (!content || !authorId) {
     return {
       data: null,

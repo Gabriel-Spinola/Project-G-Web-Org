@@ -9,13 +9,14 @@ import { CommentContext } from './CommentModal'
 import { PublicationContext } from '../posts/InfiniteScrollPosts'
 
 type Props = {
+  thisId: number
   target: {
     id: string | number
     type: 'postId' | 'parentCommentId'
   }
 }
 
-export default function NewCommentDialog({ target }: Props) {
+export default function NewCommentDialog({ thisId, target }: Props) {
   const { data: session } = useSession()
 
   const context = useContext(CommentContext)
@@ -34,10 +35,13 @@ export default function NewCommentDialog({ target }: Props) {
       return
     }
 
-    const a = new FormData()
-    a.append('content', formData.get(`content-${target.id}`)?.toString() ?? '')
+    const convertedData = new FormData()
+    convertedData.append(
+      'content',
+      formData.get(`content-${thisId}`)?.toString() ?? '',
+    )
 
-    const validatedData = validateForm(a)
+    const validatedData = validateForm(convertedData)
 
     if (validatedData.error) {
       let errorMessage = ''
@@ -53,7 +57,7 @@ export default function NewCommentDialog({ target }: Props) {
     }
 
     const { data, error } = await postComment(
-      validatedData.data,
+      convertedData.get('content')?.toString(),
       target,
       post?.id as string,
       session?.user.id,
@@ -74,10 +78,10 @@ export default function NewCommentDialog({ target }: Props) {
 
   function inputReplace() {
     const formInput = document.getElementById(
-      `content-${target.id}`,
+      `content-${thisId}`,
     ) as HTMLInputElement
     const editableDiv = document.getElementById(
-      `editable-container-${target.id}`,
+      `editable-container-${thisId}`,
     ) as HTMLDivElement
 
     formInput.value = editableDiv.innerText
@@ -91,14 +95,14 @@ export default function NewCommentDialog({ target }: Props) {
     >
       <input
         type="hidden"
-        id={`content-${target.id}`}
-        name={`content-${target.id}`}
+        id={`content-${thisId}`}
+        name={`content-${thisId}`}
       />
 
       <div
         className="bg-darker-white w-full p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
         contentEditable
-        id={`editable-container-${target.id}`}
+        id={`editable-container-${thisId}`}
         onInput={inputReplace}
       ></div>
 

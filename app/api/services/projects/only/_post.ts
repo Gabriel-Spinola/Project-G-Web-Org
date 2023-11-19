@@ -38,7 +38,6 @@ export default async function handlePost(id: string, req: Request) {
     | null
   const projectFile = formData.get('file') as File | null
   const projectImages = formData.getAll('images') as File[] | null
-  console.log(projectImages)
 
   if (!projectTitle) {
     return NextResponse.json(

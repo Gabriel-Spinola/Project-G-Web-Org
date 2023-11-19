@@ -18,10 +18,9 @@ import Comment from '../comments/Comment'
 export const CommentContext = createContext<{
   handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
   handleFacadeCommentDeletion?: (id: number) => void
-}>({
-  handleFacadeCommentDeletion: undefined,
-  handleFacadeCommentSubmit: undefined,
-})
+}>({})
+
+export const CommentIdContext = createContext<number | undefined>(undefined)
 
 interface Props {
   commentNumber: number
@@ -81,9 +80,11 @@ export default function CommentModal({
                 {comments.length > 0 &&
                   comments.map((comment) => (
                     <div key={comment.id}>
-                      {!comment.parentCommentId ? (
-                        <Comment comment={comment} />
-                      ) : null}
+                      <CommentIdContext.Provider value={comment.id}>
+                        {!comment.parentCommentId ? (
+                          <Comment comment={comment} />
+                        ) : null}
+                      </CommentIdContext.Provider>
                     </div>
                   ))}
               </div>

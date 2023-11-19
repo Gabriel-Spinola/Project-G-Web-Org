@@ -90,7 +90,6 @@ export default function ProfileCard({ user, isOwner }: Params) {
       console.error('failed')
     }
 
-    console.log(data)
     router.refresh()
   }
 

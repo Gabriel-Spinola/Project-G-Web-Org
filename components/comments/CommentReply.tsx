@@ -9,7 +9,7 @@ import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import Link from 'next/link'
 
-import { CommentContext } from './CommentModal'
+import { CommentContext, CommentIdContext } from './CommentModal'
 import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
 import { FaTrash } from 'react-icons/fa'
@@ -22,6 +22,7 @@ type Props = {
 export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
   const firstCommentCtx = useContext(CommentContext)
+  const fitstCommentId = useContext(CommentIdContext)
   const [openReplies, setOpenReplies] = useState<boolean>(false)
 
   async function handleComment() {
@@ -125,11 +126,13 @@ export default function CommentReply({ comment }: Props) {
           ) : null}
         </section>
       </section>
+
       {openReplies ? (
         <div className="w-full">
           <NewCommentDialog
+            thisId={comment.id as number}
             target={{
-              id: comment.id as number,
+              id: fitstCommentId as number,
               type: 'parentCommentId',
             }}
           />

@@ -116,12 +116,14 @@ export default function Comment({ comment }: Props) {
         <>
           <div className="w-full">
             <NewCommentDialog
+              thisId={comment.id as number}
               target={{
                 id: comment.id as number,
                 type: 'parentCommentId',
               }}
             />
           </div>
+
           <section className="w-[95%] py-2 mb-4 rounded-md">
             <div id="replies">
               {comment.replies?.map((reply) => (
