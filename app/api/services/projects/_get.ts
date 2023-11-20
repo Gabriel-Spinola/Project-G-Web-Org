@@ -4,7 +4,8 @@ import { NextResponse } from 'next/server'
 
 // TODO - Add pagination + get features
 export async function handleGet(
-  id: string,
+  take: string,
+  id?: string,
 ): Promise<APIResponse<Project[] | string>> {
-  return NextResponse.json({ data: id }, { status: 200 })
+  return NextResponse.json({ data: take }, { status: 200 })
 }

@@ -3,7 +3,6 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 import { useState, useCallback, useEffect } from 'react'
 
-// TODO: Generalize Feed - Incomplete
 export function useFeed<Publication extends FullPost | FullProject>(
   initialPublication: Publication[] | undefined,
   shouldLoadMore: boolean,

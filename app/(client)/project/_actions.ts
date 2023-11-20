@@ -2,7 +2,11 @@ import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
 import { ESResponse, FullProject } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
-export async function fetchProjects(): Promise<ESResponse<FullProject[]>> {
+export async function fetchProjects(
+  page = 1,
+  signal?: AbortSignal,
+  authorId?: string,
+): Promise<ESResponse<FullProject[]>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}`,
@@ -13,6 +17,7 @@ export async function fetchProjects(): Promise<ESResponse<FullProject[]>> {
           'X-API-Key': process.env.API_SECRET as string,
         },
         next: { tags: ['revalidate-project'] },
+        signal,
       },
     )
 
