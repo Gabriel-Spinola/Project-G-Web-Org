@@ -1,7 +1,6 @@
 import React from 'react'
-import ProjectPost from './components/ProjectPost'
 import { fetchProjects } from './_actions'
-import { FullProject } from '@/lib/types/common'
+import ProjectFeed from './components/ProjectFeed'
 
 export default async function Projects() {
   const { data: projects, error } = await fetchProjects()
@@ -13,9 +12,7 @@ export default async function Projects() {
   return (
     <main className="mt-16 flex ml-5">
       <div className="w-full flex-col items-center justify-center">
-        {projects.map((project: FullProject) => (
-          <ProjectPost key={project.id} project={project} />
-        ))}
+        <ProjectFeed initialPublication={projects} />
       </div>
 
       {/* <Searchbar /> */}

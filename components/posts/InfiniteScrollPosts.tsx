@@ -6,7 +6,7 @@ import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
-import { fetchPost, fetchPosts } from '@/app/(feed)/_actions'
+import { fetchPosts } from '@/app/(feed)/_actions'
 
 export const PublicationContext = createContext<
   (FullPost & { session: string }) | null

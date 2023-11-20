@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { LikeProjectButton } from './LikeProjectButton'
 import { Avatar } from '@chakra-ui/avatar'
@@ -5,17 +7,16 @@ import CommentModal from '@/components/comments/CommentModal'
 import { FullProject } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { Like, User } from '@prisma/client'
-import { getServerSession } from 'next-auth'
-import { AuthOptions } from '@/lib/auth'
 import { MdComment } from 'react-icons/md'
 import PostSettings from '@/components/posts/PostSettings'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   project: FullProject
 }
 
-export default async function ProjectPost({ project }: Props) {
-  const session = await getServerSession(AuthOptions)
+export default function ProjectPost({ project }: Props) {
+  const { data: session } = useSession()
 
   const isOwner = session?.user.id === project.authorId
   const isLiked: boolean = project.likes.some(
