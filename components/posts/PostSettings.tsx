@@ -13,20 +13,20 @@ import {
   MenuItem,
   IconButton,
 } from '@chakra-ui/react'
-import { FullPost } from '@/lib/types/common'
+import { FullPost, FullProject } from '@/lib/types/common'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
 interface Props {
-  post: FullPost
+  publication: FullPost | FullProject
   isOwner: boolean
 }
 
-export default function PostSettings({ post, isOwner }: Props) {
+export default function PostSettings({ publication, isOwner }: Props) {
   const { data: session } = useSession()
 
   function CopyLink() {
-    const postUrl = `https://${window.location.hostname}/posts/${post.id}`
+    const postUrl = `https://${window.location.hostname}/posts/${publication.id}`
 
     navigator.clipboard.writeText(postUrl)
 
@@ -37,7 +37,7 @@ export default function PostSettings({ post, isOwner }: Props) {
     <div className="flex">
       <Link
         className="flex p-2 w-[40px] h-[40px] items-center justify-center hover:bg-[#EDF2F7] rounded-md"
-        href={`/posts/${post.id}`}
+        href={`/posts/${publication.id}`}
       >
         <GiExpand size={20} color={'#242424'} />
       </Link>
@@ -76,7 +76,7 @@ export default function PostSettings({ post, isOwner }: Props) {
           {isOwner || session?.user.position === $Enums.Positions.Admin ? (
             <>
               <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }}>
-                <DeletePostButton postId={post.id} />
+                <DeletePostButton postId={publication.id} />
               </MenuItem>
             </>
           ) : null}

@@ -11,7 +11,7 @@ import { TDisplayComment } from '@/lib/types/common'
 type Props = {
   target: {
     id: string | number
-    type: 'postId' | 'parentCommentId'
+    type: 'postId' | 'parentCommentId' | 'projectId'
   }
   thisId: number | string
   onSubmit?: (data: Partial<TDisplayComment>) => void

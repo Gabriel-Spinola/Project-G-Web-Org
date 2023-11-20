@@ -2,7 +2,7 @@
 
 import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
-import { FullPost, TDisplayComment } from '@/lib/types/common'
+import { FullPost, FullProject, TDisplayComment } from '@/lib/types/common'
 import {
   Modal,
   ModalBody,
@@ -28,19 +28,21 @@ export const CommentIdContext = createContext<number | undefined>(undefined)
 
 interface Props {
   commentNumber: number
-  post: FullPost
-  newCommentDialog: ReactNode
+  publication: FullPost | FullProject
+  targetType: 'projectId' | 'postId'
+  icon?: ReactNode
 }
 
 export default function CommentModal({
   commentNumber,
-  post,
-  newCommentDialog,
+  publication,
+  targetType,
+  icon,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
-    post.comments,
+    publication.comments,
   )
   const [commentsCount, setCommentsCount] = useState(commentNumber)
 
@@ -65,7 +67,7 @@ export default function CommentModal({
           className="flex flex-col justify-center items-center hover:text-medium-primary"
           onClick={onOpen}
         >
-          <BiComment size={24} />
+          {icon ?? <BiComment size={24} />}
 
           <span>{commentsCount}</span>
         </button>
@@ -99,8 +101,8 @@ export default function CommentModal({
             <ModalFooter shadow={'dark-lg'}>
               <div id="form-container" className="w-full">
                 <NewCommentDialog
-                  target={{ id: post.id, type: 'postId' }}
-                  thisId={post.id}
+                  target={{ id: publication.id, type: targetType }}
+                  thisId={publication.id}
                   onSubmit={handleFacadeCommentSubmit}
                 />
               </div>

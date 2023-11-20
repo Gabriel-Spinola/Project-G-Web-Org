@@ -17,7 +17,7 @@ export async function postComment(
   content: string | undefined,
   replyTarget: {
     id: string | number
-    type: 'postId' | 'parentCommentId'
+    type: 'postId' | 'parentCommentId' | 'projectId'
   },
   fromPost: string,
   authorId: string,
@@ -45,18 +45,7 @@ export async function postComment(
       },
     })
 
-    const updateTarget: Post = await prisma.post.update({
-      where: { id: fromPost },
-      // NOTE - Push new comment into post
-      data: { comments: { connect: { id: newComment.id } } },
-    })
-
-    console.log(
-      'sucess' +
-        JSON.stringify(newComment) +
-        '\n' +
-        JSON.stringify(updateTarget),
-    )
+    console.log('sucess' + JSON.stringify(newComment) + '\n')
 
     return {
       data: newComment,

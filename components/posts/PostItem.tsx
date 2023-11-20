@@ -19,7 +19,6 @@ import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import TwoImageDisplay from './images/TwoImageDisplay'
-import NewCommentDialog from '../comments/NewCommentDialog'
 import { PublicationContext } from './InfiniteScrollPosts'
 
 export default function PostItem() {
@@ -88,15 +87,8 @@ export default function PostItem() {
         {/* Comments */}
         <CommentModal
           commentNumber={publicationCtx.comments?.length ?? 0}
-          post={publicationCtx}
-          newCommentDialog={
-            <div id="form-container" className="w-full">
-              <NewCommentDialog
-                target={{ id: publicationCtx.id, type: 'postId' }}
-                thisId={publicationCtx.id}
-              />
-            </div>
-          }
+          publication={publicationCtx}
+          targetType="postId"
         />
       </div>
     </div>

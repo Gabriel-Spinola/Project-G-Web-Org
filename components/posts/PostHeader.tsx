@@ -31,7 +31,7 @@ export default function PostHeader({ post, isOwner }: Props) {
         </Link>
       </div>
 
-      <PostSettings post={post} isOwner={isOwner} />
+      <PostSettings publication={post} isOwner={isOwner} />
     </section>
   )
 }
