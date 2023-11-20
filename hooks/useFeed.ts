@@ -26,11 +26,11 @@ export function useFeed<Publication extends FullPost | FullProject>(
   const pathname = usePathname()
   const router = useRouter()
 
-  const deletedPost = searchParams.get('delete')
-  const createdPost = searchParams.get('create')
+  const deletedPublication = searchParams.get('delete')
+  const createdPublication = searchParams.get('create')
 
-  // NOTE - Memoize all loaded posts
-  const loadMorePosts = useCallback(
+  // NOTE - Memoize all loaded publications
+  const loadMorePublications = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
       const { data, error }: ESResponse<Publication[]> = await fetchFunction(
@@ -52,8 +52,8 @@ export function useFeed<Publication extends FullPost | FullProject>(
       }
 
       setPages((prevPage) => prevPage + 1)
-      setPublications((prevPost) => [
-        ...(prevPost?.length ? prevPost : []),
+      setPublications((prevPublication) => [
+        ...(prevPublication?.length ? prevPublication : []),
         ...data,
       ])
     },
@@ -65,17 +65,17 @@ export function useFeed<Publication extends FullPost | FullProject>(
     const controller = new AbortController()
     const signal = controller.signal
 
-    // If the spinner is in the client view load more posts.
+    // If the spinner is in the client view load more publications.
     if (shouldLoadMore) {
-      loadMorePosts(signal)
+      loadMorePublications(signal)
     }
 
-    if (createdPost) {
+    if (createdPublication) {
       setPages(0)
       setPublications([])
       setNoPublicationFound(false)
 
-      loadMorePosts(signal)
+      loadMorePublications(signal)
 
       router.replace(pathname, { scroll: false })
     }
@@ -84,16 +84,25 @@ export function useFeed<Publication extends FullPost | FullProject>(
     return (): void => {
       controller.abort()
     }
-  }, [createdPost, shouldLoadMore, loadMorePosts, pathname, router])
+  }, [
+    createdPublication,
+    shouldLoadMore,
+    loadMorePublications,
+    pathname,
+    router,
+  ])
 
   // NOTE - Handles url callbacks for any non-api-related feed update
   useEffect(() => {
-    if (deletedPost) {
-      setPublications((prev) => prev?.filter((post) => post.id !== deletedPost))
+    if (deletedPublication) {
+      setPublications(
+        (prev) =>
+          prev?.filter((publication) => publication.id !== deletedPublication),
+      )
 
       router.replace(pathname, { scroll: false })
     }
-  }, [deletedPost, router, pathname])
+  }, [deletedPublication, router, pathname])
 
   return { publications, noPublicationFound }
 }
