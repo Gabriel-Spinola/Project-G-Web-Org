@@ -9,11 +9,12 @@ import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import Link from 'next/link'
 
-import { CommentContext, CommentIdContext } from './CommentModal'
+import { CommentIdContext } from './CommentModal'
 import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
 import { FaTrash } from 'react-icons/fa'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
+import { ReplyFunctions } from './Comment'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -21,8 +22,8 @@ type Props = {
 
 export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
-  const firstCommentCtx = useContext(CommentContext)
-  const fitstCommentId = useContext(CommentIdContext)
+  const firstCommentId = useContext(CommentIdContext)
+  const replyCtx = useContext(ReplyFunctions)
   const [openReplies, setOpenReplies] = useState<boolean>(false)
 
   async function handleComment() {
@@ -65,11 +66,7 @@ export default function CommentReply({ comment }: Props) {
                   variant={'ghost'}
                   type="button"
                   onClick={async () => {
-                    if (firstCommentCtx.handleFacadeCommentDeletion) {
-                      firstCommentCtx.handleFacadeCommentDeletion(
-                        comment.id as number,
-                      )
-                    }
+                    replyCtx?.replyDeletion(comment.id as number)
 
                     await deleteComment(comment.id as number)
                   }}
@@ -113,28 +110,18 @@ export default function CommentReply({ comment }: Props) {
             <span>{comment.replies?.length ?? 0}</span>
           </button>
         </section>
-
-        <section className="w-[95%] mb-4 rounded-md">
-          {openReplies ? (
-            <>
-              <div id="replies">
-                {comment.replies?.map((reply) => (
-                  <CommentReply key={reply.id} comment={reply} />
-                ))}
-              </div>
-            </>
-          ) : null}
-        </section>
       </section>
 
       {openReplies ? (
         <div className="w-full">
           <NewCommentDialog
-            thisId={comment.id as number}
             target={{
-              id: fitstCommentId as number,
+              id: firstCommentId as number,
               type: 'parentCommentId',
             }}
+            thisId={comment.id as number}
+            defaultValue={comment.author?.name}
+            onSubmit={replyCtx?.replySubmit}
           />
         </div>
       ) : null}

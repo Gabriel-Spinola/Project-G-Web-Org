@@ -123,7 +123,7 @@ export async function deleteComment(id: number): Promise<void | null> {
 
     console.log(JSON.stringify(deletedComment))
   } catch (error: unknown) {
-    console.error('Failed to delete comment')
+    console.error('Failed to delete comment' + error)
 
     return null
   }

@@ -14,11 +14,15 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import Comment from '../comments/Comment'
+import NewCommentDialog from './NewCommentDialog'
 
-export const CommentContext = createContext<{
-  handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
-  handleFacadeCommentDeletion?: (id: number) => void
-}>({})
+export const CommentContext = createContext<
+  | {
+      handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
+      handleFacadeCommentDeletion: (id: number) => void
+    }
+  | undefined
+>(undefined)
 
 export const CommentIdContext = createContext<number | undefined>(undefined)
 
@@ -42,7 +46,9 @@ export default function CommentModal({
 
   function handleFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
     setCommentsCount((prev) => prev + 1)
-    setComments((prev) => [...prev, commentData])
+    setComments((prev) => {
+      return [...prev, commentData]
+    })
   }
 
   function handleFacadeCommentDeletion(id: number) {
@@ -90,7 +96,15 @@ export default function CommentModal({
               </div>
             </ModalBody>
 
-            <ModalFooter shadow={'dark-lg'}>{newCommentDialog}</ModalFooter>
+            <ModalFooter shadow={'dark-lg'}>
+              <div id="form-container" className="w-full">
+                <NewCommentDialog
+                  target={{ id: post.id, type: 'postId' }}
+                  thisId={post.id}
+                  onSubmit={handleFacadeCommentSubmit}
+                />
+              </div>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       </CommentContext.Provider>

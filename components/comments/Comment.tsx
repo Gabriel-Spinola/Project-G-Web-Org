@@ -1,7 +1,7 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React, { useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import { Avatar, Button } from '@chakra-ui/react'
@@ -19,9 +19,31 @@ type Props = {
   comment: Partial<TDisplayComment>
 }
 
+type ReplyFunctionType = {
+  replySubmit: (data: Partial<TDisplayComment>) => void
+  replyDeletion: (id: number) => void
+}
+
+export const ReplyFunctions = createContext<ReplyFunctionType | undefined>(
+  undefined,
+)
+
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
   const [openReplies, setOpenReplies] = useState<boolean>(false)
+
+  const [replies, setReplies] = useState<Partial<TDisplayComment>[]>(
+    comment.replies ?? [],
+  )
+
+  function handleFacadeReplySubmit(commentData: Partial<TDisplayComment>) {
+    setReplies((prev) => [...prev, commentData])
+  }
+
+  function handleFacadeCommentDeletion(id: number) {
+    setReplies((prev) => prev?.filter((prevComment) => prevComment?.id !== id))
+  }
+
   const isOwner = session?.user.id === comment.authorId
 
   async function handleComment() {
@@ -65,9 +87,8 @@ export default function Comment({ comment }: Props) {
                   variant={'ghost'}
                   type="button"
                   onClick={async () => {
-                    if (context.handleFacadeCommentDeletion) {
-                      context.handleFacadeCommentDeletion(comment.id as number)
-                    }
+                    context?.handleFacadeCommentDeletion(comment.id as number)
+
                     await deleteComment(comment.id as number)
                   }}
                 >
@@ -96,6 +117,7 @@ export default function Comment({ comment }: Props) {
               isLiked,
             }}
           />
+
           <button
             onClick={handleComment}
             className={`like flex flex-col hover:text-medium-primary text-darker-gray justify-center items-center w-[48px] ${
@@ -113,7 +135,12 @@ export default function Comment({ comment }: Props) {
       </section>
 
       {openReplies ? (
-        <>
+        <ReplyFunctions.Provider
+          value={{
+            replySubmit: handleFacadeReplySubmit,
+            replyDeletion: handleFacadeCommentDeletion,
+          }}
+        >
           <div className="w-full">
             <NewCommentDialog
               thisId={comment.id as number}
@@ -121,17 +148,18 @@ export default function Comment({ comment }: Props) {
                 id: comment.id as number,
                 type: 'parentCommentId',
               }}
+              onSubmit={handleFacadeReplySubmit}
             />
           </div>
 
           <section className="w-[95%] py-2 mb-4 rounded-md">
             <div id="replies">
-              {comment.replies?.map((reply) => (
+              {replies.map((reply) => (
                 <CommentReply key={reply.id} comment={reply} />
               ))}
             </div>
           </section>
-        </>
+        </ReplyFunctions.Provider>
       ) : null}
     </div>
   )
