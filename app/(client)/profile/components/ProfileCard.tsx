@@ -44,7 +44,6 @@ import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
 import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { PublicationAuthor } from '@/lib/types/common'
 
 interface Params {
   user: Partial<User>
@@ -82,16 +81,12 @@ export default function ProfileCard({ user, isOwner }: Params) {
       getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
     )
 
-    const { data, error } = await updateUserPageData(
-      formData,
-      user.id as string,
-    )
+    const { error } = await updateUserPageData(formData, user.id as string)
 
     if (error) {
       console.error('failed')
     }
 
-    console.log(data)
     router.refresh()
   }
 
@@ -115,10 +110,12 @@ export default function ProfileCard({ user, isOwner }: Params) {
         {isOwner ? (
           <EditableAvatar
             profileId={user.id as string}
-            profilePicUrl={getProfilePicURL({
-              profilePic: user.profilePic as string | null,
-              image: user.image as string | null,
-            })}
+            profilePicUrl={
+              getProfilePicURL({
+                profilePic: user.profilePic as string | null,
+                image: user.image as string | null,
+              }) ?? ''
+            }
           />
         ) : (
           <div>

@@ -1,12 +1,21 @@
-import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import React from 'react'
 import ProjectPost from './components/ProjectPost'
+import { fetchProjects } from './_actions'
+import { FullProject } from '@/lib/types/common'
 
-export default function Projects() {
+export default async function Projects() {
+  const { data: projects, error } = await fetchProjects()
+
+  if (error || !projects) {
+    return <>Failed to load projects</>
+  }
+
   return (
-    <main className="mt-16">
-      <div className="w-full flex items-center justify-center">
-        <ProjectPost />
+    <main className="mt-16 flex ml-5">
+      <div className="w-full flex-col items-center justify-center">
+        {projects.map((project: FullProject) => (
+          <ProjectPost key={project.id} project={project} />
+        ))}
       </div>
 
       {/* <Searchbar /> */}

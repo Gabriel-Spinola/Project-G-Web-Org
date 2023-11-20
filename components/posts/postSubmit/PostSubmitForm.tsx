@@ -7,127 +7,30 @@
  * @license i.e. MIT
  */
 
+'use client'
+
 import SendImageButton from '@/components/Buttons/SendImageButton'
-import React, { ChangeEvent, useState } from 'react'
+import React from 'react'
 import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
-import { usePathname, useRouter } from 'next/navigation'
-import { validateForm } from '@/lib/schemas/post.schema'
-import { createNewPost } from '@/app/(feed)/_actions'
-import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
+import { useSession } from 'next-auth/react'
+import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
+import { usePostSubmit } from '../hooks/usePostSubmit'
 
-interface PostFormState {
-  content: string
-  images: File[] | null
-}
+export function PostSubmitForm() {
+  const { data: session } = useSession()
 
-type Props = {
-  closeModal: () => void
-  currentUserId: string
-}
+  const [images, setImages] = useImages(undefined, session?.user.id)
 
-export function NewPostModal({ closeModal, currentUserId }: Props) {
-  const [form, setForm] = useState<PostFormState | null>({
-    content: '',
-    images: null,
-  })
-  const [images, setImages] = useState<File[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const router = useRouter()
-  const pathName = usePathname()
+  const { onImageChanges, onImageRemovedFromPreview } = useImagesCallbacks(
+    { images, setImages },
+    3,
+  )
+  const { form, handlers, isLoading } = usePostSubmit(
+    { images, setImages },
+    session,
+  )
 
-  function handleStateChange(
-    fieldName: keyof PostFormState,
-    value: string,
-  ): void {
-    setForm((prevForm) => {
-      if (prevForm) {
-        return { ...prevForm, [fieldName]: value }
-      }
-
-      return null
-    })
-  }
-
-  function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
-
-    if (!event.target.files || event.target.files.length <= 0) {
-      return
-    }
-
-    const { error } = validateImageInput(event.target.files[0], images?.length)
-
-    if (error) {
-      alert(error)
-
-      return
-    }
-
-    const newImage = event.target.files[0]
-    setImages((prevImages) => {
-      if (prevImages) return [...prevImages, newImage]
-
-      return [newImage]
-    })
-  }
-
-  async function handleFormSubmission(
-    event: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> {
-    event.preventDefault()
-
-    if (isLoading) {
-      return
-    }
-
-    const formData = new FormData(event.currentTarget)
-
-    if (images && images?.length >= 0) {
-      images?.pop()
-      images?.forEach((img) => {
-        formData.append('images', img)
-      })
-    } else {
-      formData.delete('images')
-    }
-
-    const validatedForm = validateForm(formData)
-
-    if (validatedForm.error) {
-      let errorMessage = ''
-
-      validatedForm.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
-
-      return
-    }
-
-    setIsLoading(true)
-    const { error } = await createNewPost(currentUserId, validatedForm.data)
-
-    if (error) {
-      alert('Failed to create post')
-
-      return
-    }
-
-    setImages(undefined)
-    setIsLoading(false)
-    closeModal()
-    router.push(pathName + '?create=1', { scroll: false })
-  }
-
-  function removeImageFromPreviewByIndex(index: number) {
-    // URL.revokeObjectURL(images[index]) REVIEW - Revoking the image for performance
-
-    setImages(
-      (prevImages) => prevImages?.filter((_, prevIndex) => prevIndex !== index),
-    )
-  }
+  const { onFormSubmit, onStateChange } = handlers
 
   return (
     <section>
@@ -136,11 +39,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
         id="post-form"
         className="notClose z-1 drop-shadow-sm text-xl p-8 rounded-[8px]"
       >
-        <form
-          method="POST"
-          onSubmit={handleFormSubmission}
-          className="notClose"
-        >
+        <form method="POST" onSubmit={onFormSubmit} className="notClose">
           {/* Content */}
           <div className="notClose flex flex-row">
             <textarea
@@ -148,9 +47,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
               placeholder="Faça uma publicação"
               className="notClose w-full pb-[192px] text-xl margin-none text-start outline-none resize-none"
               value={form?.content}
-              onChange={(event) =>
-                handleStateChange('content', event.target.value)
-              }
+              onChange={(event) => onStateChange('content', event.target.value)}
               required
             ></textarea>
           </div>
@@ -171,7 +68,7 @@ export function NewPostModal({ closeModal, currentUserId }: Props) {
               <div key={index}>
                 {/* Remove Img Button */}
                 <button
-                  onClick={() => removeImageFromPreviewByIndex(index)}
+                  onClick={() => onImageRemovedFromPreview(index)}
                   type="button"
                 >
                   <span>X</span>

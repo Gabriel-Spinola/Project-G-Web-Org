@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react'
 import DesktopNavbar from './DesktopNavbar'
 import MobileNavbar from './MobileNavbar'
 
-export default function Navbar({ userSession }: { userSession?: string }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+export default function Navbar() {
+  const [windowWidth, setWindowWidth] = useState<number | null>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -17,14 +17,14 @@ export default function Navbar({ userSession }: { userSession?: string }) {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  })
 
   return (
     <section id="navbar" className="max-h-[88px]">
-      {windowWidth > 1024 ? (
-        <DesktopNavbar userSession={userSession} />
+      {windowWidth !== null && windowWidth < 1024 ? (
+        <MobileNavbar />
       ) : (
-        <MobileNavbar userSession={userSession} />
+        <DesktopNavbar />
       )}
     </section>
   )

@@ -6,12 +6,10 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import { StaticImage } from '../Image'
 import Link from 'next/link'
 import './styles/mobileNavbar.css'
+import { useSession } from 'next-auth/react'
 
-export default function MobileNavbar({
-  userSession,
-}: {
-  userSession?: string
-}) {
+export default function MobileNavbar() {
+  const { data: session } = useSession()
   const [menuOpen, setMenuOpen] = useState(false)
 
   function ToggleMenu() {
@@ -53,31 +51,50 @@ export default function MobileNavbar({
             menuOpen ? 'displayMenu' : 'hideMenu'
           } + text-xl sm:text-2xl md:text-3xl max-h-screen`}
         >
-          <Link href="/" className="w-full">
-            <li className="p-4 hover:bg-darker-white">Feed</li>
-          </Link>
-          <hr className="h-px bg-black/25 border-0" />
-          <Link href="/explore" className="w-full">
-            <li className="p-4 hover:bg-darker-white">Explorar</li>
-          </Link>
-          <hr className="h-px bg-black/25 border-0" />
-          <Link href="/project" className="w-full">
-            <li className="p-4 hover:bg-darker-white">Projetos</li>
-          </Link>
-          <hr className="h-px bg-black/25 border-0" />
-          <Link href="/search" className="w-full">
-            <li className="p-4 hover:bg-darker-white">Busca</li>
-          </Link>
+          <li className="p-4 hover:bg-darker-white">
+            <Link href="/" className="w-full">
+              Feed
+            </Link>
+          </li>
+
           <hr className="h-px bg-black/25 border-0" />
 
-          {userSession ? (
-            <Link href={`/profile/${userSession}`} className="w-full">
-              <li className="p-4 hover:bg-darker-white">Perfil</li>
+          <li className="p-4 hover:bg-darker-white">
+            <Link href="/explore" className="w-full">
+              Explorar
             </Link>
+          </li>
+
+          <hr className="h-px bg-black/25 border-0" />
+
+          <li className="p-4 hover:bg-darker-white">
+            <Link href="/project" className="w-full">
+              Projetos
+            </Link>
+          </li>
+
+          <hr className="h-px bg-black/25 border-0" />
+
+          <li className="p-4 hover:bg-darker-white">
+            <Link href="/search" className="w-full">
+              Busca
+            </Link>
+          </li>
+
+          <hr className="h-px bg-black/25 border-0" />
+
+          {session ? (
+            <li className="p-4 hover:bg-darker-white">
+              <Link href={`/profile/${session.user.id}`} className="w-full">
+                Perfil
+              </Link>
+            </li>
           ) : (
-            <Link href="/login" className="w-full">
-              <li className="p-4 hover:bg-darker-white">Logar</li>
-            </Link>
+            <li className="p-4 hover:bg-darker-white">
+              <Link href="/login" className="w-full">
+                Logar
+              </Link>
+            </li>
           )}
         </ul>
       </section>

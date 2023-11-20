@@ -2,14 +2,8 @@
 
 import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
-import { FullPost, TDisplayComment } from '@/lib/types/common'
+import { FullPost, FullProject, TDisplayComment } from '@/lib/types/common'
 import {
-  Button,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,39 +14,43 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import Comment from '../comments/Comment'
-import MenuSettings from './MenuSettings'
-import { deleteComment } from '@/app/(feed)/_serverActions'
-import { BsThreeDots } from 'react-icons/bs'
+import NewCommentDialog from './NewCommentDialog'
 
-export const CommentContext = createContext<{
-  handleFacadeCommentSubmit?: (commentData: Partial<TDisplayComment>) => void
-  handleFacadeCommentDeletion?: (id: number) => void
-}>({
-  handleFacadeCommentDeletion: undefined,
-  handleFacadeCommentSubmit: undefined,
-})
+export const CommentContext = createContext<
+  | {
+      handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
+      handleFacadeCommentDeletion: (id: number) => void
+    }
+  | undefined
+>(undefined)
+
+export const CommentIdContext = createContext<number | undefined>(undefined)
 
 interface Props {
   commentNumber: number
-  post: FullPost
-  newCommentDialog: ReactNode
+  publication: FullPost | FullProject
+  targetType: 'projectId' | 'postId'
+  icon?: ReactNode
 }
 
 export default function CommentModal({
   commentNumber,
-  post,
-  newCommentDialog,
+  publication,
+  targetType,
+  icon,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
-    post.comments,
+    publication.comments,
   )
   const [commentsCount, setCommentsCount] = useState(commentNumber)
 
   function handleFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
     setCommentsCount((prev) => prev + 1)
-    setComments((prev) => [...prev, commentData])
+    setComments((prev) => {
+      return [...prev, commentData]
+    })
   }
 
   function handleFacadeCommentDeletion(id: number) {
@@ -69,7 +67,7 @@ export default function CommentModal({
           className="flex flex-col justify-center items-center hover:text-medium-primary"
           onClick={onOpen}
         >
-          <BiComment size={24} />
+          {icon ?? <BiComment size={24} />}
 
           <span>{commentsCount}</span>
         </button>
@@ -90,15 +88,25 @@ export default function CommentModal({
                 {comments.length > 0 &&
                   comments.map((comment) => (
                     <div key={comment.id}>
-                      {!comment.parentCommentId ? (
-                        <Comment comment={comment} />
-                      ) : null}
+                      <CommentIdContext.Provider value={comment.id}>
+                        {!comment.parentCommentId ? (
+                          <Comment comment={comment} />
+                        ) : null}
+                      </CommentIdContext.Provider>
                     </div>
                   ))}
               </div>
             </ModalBody>
 
-            <ModalFooter shadow={'dark-lg'}>{newCommentDialog}</ModalFooter>
+            <ModalFooter shadow={'dark-lg'}>
+              <div id="form-container" className="w-full">
+                <NewCommentDialog
+                  target={{ id: publication.id, type: targetType }}
+                  thisId={publication.id}
+                  onSubmit={handleFacadeCommentSubmit}
+                />
+              </div>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       </CommentContext.Provider>

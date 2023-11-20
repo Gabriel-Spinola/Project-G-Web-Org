@@ -11,29 +11,28 @@
 
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
-import { AuthOptions } from '@/lib/auth'
 import { FullPost } from '@/lib/types/common'
-import { getServerSession } from 'next-auth'
 import { fetchPosts } from './(feed)/_actions'
-import { $Enums } from '@prisma/client'
 import { Suspense } from 'react'
+import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
+import { getServerSession } from 'next-auth'
+import { AuthOptions } from '@/lib/auth'
 
 export default async function Home() {
-  const sessionPromise = getServerSession(AuthOptions)
-  const postsPromise = fetchPosts<FullPost>()
-
-  const [session, posts] = await Promise.all([sessionPromise, postsPromise])
+  const posts = await fetchPosts<FullPost>()
+  const session = await getServerSession(AuthOptions)
 
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
-        <PostSubmitFragment currentUserId={session?.user.id} />
+        <PostSubmitFragment modal={<NewPostModal />} />
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (
             <div className="min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts
                 initialPublication={posts.data ?? undefined}
+                session={session?.user.id as string}
               />
             </div>
           ) : (

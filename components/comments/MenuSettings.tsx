@@ -38,9 +38,7 @@ export default function MenuSettings({ comment }: Props) {
             className="w-full"
             type="button"
             onClick={async () => {
-              if (context.handleFacadeCommentDeletion) {
-                context.handleFacadeCommentDeletion(comment.id as number)
-              }
+              context?.handleFacadeCommentDeletion(comment.id as number)
 
               await deleteComment(comment.id as number)
             }}

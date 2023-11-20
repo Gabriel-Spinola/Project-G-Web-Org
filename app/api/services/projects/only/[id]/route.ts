@@ -4,7 +4,6 @@ import handlePost from '../_post'
 import { handleDelete } from '../_delete'
 import { handleGet } from '../_get'
 import { handlePatch } from '../_patch'
-import { Project } from '@prisma/client'
 
 async function handler(
   req: Request,

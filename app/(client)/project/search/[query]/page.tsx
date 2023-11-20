@@ -1,5 +1,11 @@
 import React from 'react'
 
-export default function SearchProject({ query }: { query: string }) {
+type Props = {
+  params: { query: string }
+}
+
+export default function SearchProject({ params }: Props) {
+  const { query } = params
+
   return <div>SearchProject</div>
 }
