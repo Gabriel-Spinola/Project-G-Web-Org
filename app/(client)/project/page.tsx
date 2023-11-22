@@ -5,6 +5,8 @@ import ProjectFeed from './components/ProjectFeed'
 export default async function Projects() {
   const { data: projects, error } = await fetchProjects()
 
+  console.log(projects?.length)
+
   if (error || !projects) {
     return <>Failed to load projects</>
   }

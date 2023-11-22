@@ -3,15 +3,15 @@ import { handleGet } from '../../_get'
 
 export async function handler(
   req: Request,
-  { params }: { params: { take: string; id: string } },
+  { params }: { params: { page: string; id: string } },
 ) {
-  const { data, error } = await handleGet(Number(params.take), params.id)
+  const { data, error } = await handleGet(Number(params.page), params.id)
 
   if (error) {
     console.error(error)
 
     return NextResponse.json(
-      { data: 'Failed to take projects' },
+      { data: 'Failed to fetch projects' },
       { status: 500 },
     )
   }

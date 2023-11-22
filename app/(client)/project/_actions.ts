@@ -5,21 +5,22 @@ import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 export async function fetchProjects(
   page = 1,
   signal?: AbortSignal,
-  authorId?: string,
+  profileId?: string,
 ): Promise<ESResponse<FullProject[]>> {
+  const endpoint = profileId
+    ? `${API_URL}${API_ENDPOINTS.services.projects}/${page}/`
+    : `${API_URL}${API_ENDPOINTS.services.projects}/${page}/${profileId}/`
+
   try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.projects}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.API_SECRET as string,
-        },
-        next: { tags: ['revalidate-project'] },
-        signal,
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_SECRET as string,
       },
-    )
+      next: { tags: ['revalidate-project'] },
+      signal,
+    })
 
     if (!response.ok) {
       const { data }: { data: string } = await response.json()
