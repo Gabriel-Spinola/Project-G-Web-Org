@@ -7,66 +7,46 @@
  * @license i.e. MIT
  */
 
-import { Icon, Img } from '@chakra-ui/react'
-import { MdOutlineKeyboardDoubleArrowDown } from 'react-icons/md'
-import styles from './exploreCarousel.module.scss'
+import { Img } from '@chakra-ui/react'
+import Link from 'next/link'
 
-export default function Carousel() {
+type CarouselData = {
+  content: string
+  imgUrl: string
+}
+
+const carouselData: Array<CarouselData> = [
+  {
+    content: 'Engenharia',
+    imgUrl: '/assets/explore/photo-1562185363-aa9551ce00d4.webp',
+  },
+  {
+    content: 'Arquitetura',
+    imgUrl: '/assets/explore/photo-1612387290123-34af734b5f61.webp',
+  },
+  {
+    content: 'Arte Urbana',
+    imgUrl: '/assets/explore/photo-1591874204276-1ebd20fb8db6.webp',
+  },
+]
+
+export default function CarouselItems() {
   return (
-    <div className="flex flex-col gap-32 items-center">
-      <section
-        id="carousel"
-        className="flex flex-col md:flex-row gap-4 items-center"
-      >
-        <a
+    <>
+      {carouselData.map((data, index) => (
+        <Link
+          key={index}
           href="/"
           id="item-1"
-          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
+          className="max-w-[500px] bg-darker-white rounded-xl md:w-[28vw]"
         >
           <Img
-            src="/assets/explore/photo-1562185363-aa9551ce00d4.webp"
-            className="h-full w-full object-cover rounded-xl"
-            alt="Rounded Building"
-          />
-          <div className={styles.hoverAnimation}>
-            <p>ENGENHARIA</p>
-          </div>
-        </a>
-        <a
-          href="/"
-          id="item-1"
-          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
-        >
-          <Img
-            src="/assets/explore/photo-1612387290123-34af734b5f61.webp"
-            className="h-full w-full object-cover rounded-xl"
-            alt="Garden Pool"
-          />
-          <div className={styles.hoverAnimation}>
-            <p>ARQUITETURA</p>
-          </div>
-        </a>
-        <a
-          href="/"
-          id="item-1"
-          className="h-[25vh] flex bg-darker-white rounded-xl md:w-[28vw]"
-        >
-          <Img
-            src="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
-            className="h-full w-full object-cover rounded-xl"
+            src={data.imgUrl}
+            className={`h-full w-full object-cover rounded-xl duration-300 hover:brightness-50 hover:after:content-[${data.content}]`}
             alt="Kobra Graffiti"
           />
-          <div className={styles.hoverAnimation}>
-            <p>ARTE URBANA</p>
-          </div>
-        </a>
-      </section>
-      <Icon
-        as={MdOutlineKeyboardDoubleArrowDown}
-        color={'#ebebeb'}
-        w={12}
-        h={12}
-      />
-    </div>
+        </Link>
+      ))}
+    </>
   )
 }
