@@ -32,13 +32,13 @@ const carouselData: Array<CarouselData> = [
 
 export default function CarouselItems() {
   return (
-    <>
+    <div className="flex gap-10 align-middle justify-center">
       {carouselData.map((data, index) => (
         <Link
           key={index}
           href="/"
           id="item-1"
-          className="max-w-[500px] bg-darker-white rounded-xl md:w-[28vw]"
+          className="max-w-[500px] md:w-[28vw] max-h-[260px] bg-darker-white rounded-xl "
         >
           <Img
             src={data.imgUrl}
@@ -47,6 +47,6 @@ export default function CarouselItems() {
           />
         </Link>
       ))}
-    </>
+    </div>
   )
 }

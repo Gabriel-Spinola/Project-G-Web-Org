@@ -27,9 +27,7 @@ export default function ExplorePage() {
           {/* NOTE - Upper Sction Text and SeachBar */}
           <ExploreSearchBar />
           {/* NOTE - Upper Seection Carousl */}
-          <section className="w-full h-[300px] flex justify-evenly">
-            <CarouselItems />
-          </section>
+          <CarouselItems />
         </div>
       </section>
 
