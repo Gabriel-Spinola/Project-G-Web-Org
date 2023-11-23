@@ -7,6 +7,7 @@ import UserPhoto from '@/components/profile/Avatar'
 import PostSettings from './PostSettings'
 import Link from 'next/link'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import DeletePostButton from '../Buttons/DeletePostButton'
 
 interface Props {
   post: FullPost
@@ -31,7 +32,11 @@ export default function PostHeader({ post, isOwner }: Props) {
         </Link>
       </div>
 
-      <PostSettings publication={post} isOwner={isOwner} />
+      <PostSettings
+        publication={post}
+        isOwner={isOwner}
+        deleteButton={<DeletePostButton postId={post.id} />}
+      />
     </section>
   )
 }

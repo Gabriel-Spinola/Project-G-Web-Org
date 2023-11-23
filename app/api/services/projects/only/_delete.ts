@@ -9,6 +9,8 @@ export async function handleDelete(
   try {
     const deleteProject = await prisma.project.delete({ where: { id } })
 
+    console.log('deletion succeeded')
+
     return NextResponse.json(
       { data: 'Deleted: ' + deleteProject.id },
       { status: 200 },

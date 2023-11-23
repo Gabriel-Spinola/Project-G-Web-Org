@@ -11,9 +11,14 @@ import { CircularProgress } from '@chakra-ui/react'
 type Props = {
   initialPublication: FullProject[] | undefined
   profileId?: string
+  currentUserId?: string
 }
 
-export default function ProjectFeed({ initialPublication, profileId }: Props) {
+export default function ProjectFeed({
+  initialPublication,
+  profileId,
+  currentUserId,
+}: Props) {
   const [ref, inView] = useInView()
 
   const { publications: projects, noPublicationFound: noProjectFound } =
@@ -22,7 +27,11 @@ export default function ProjectFeed({ initialPublication, profileId }: Props) {
   return (
     <section id="feed">
       {projects?.map((project: FullProject) => (
-        <ProjectPost key={project.id} project={project} />
+        <ProjectPost
+          key={project.id}
+          project={project}
+          currentUserId={currentUserId}
+        />
       ))}
 
       {/* loading spinner */}

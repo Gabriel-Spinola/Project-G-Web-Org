@@ -9,25 +9,51 @@ import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { Like, User } from '@prisma/client'
 import { MdComment } from 'react-icons/md'
 import PostSettings from '@/components/posts/PostSettings'
-import { useSession } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
+import { deleteProject } from '../_actions'
 
 type Props = {
   project: FullProject
+  currentUserId?: string
 }
 
-export default function ProjectPost({ project }: Props) {
-  const { data: session } = useSession()
+export default function ProjectPost({ project, currentUserId }: Props) {
+  const router = useRouter()
+  const pathName = usePathname()
 
-  const isOwner = session?.user.id === project.authorId
+  const isOwner = currentUserId === project.authorId
+  console.log(currentUserId)
   const isLiked: boolean = project.likes.some(
-    (like: Partial<Like>) => like.userId === session?.user.id,
+    (like: Partial<Like>) => like.userId === currentUserId,
   )
 
   return (
     // NOTE - PROJECT POST
     <section className="w-full flex flex-row-reverse md:w-[90%] h-[480px] md:h-[612px] rounded-xl bg-medium-tertiary mb-5">
       <section className="w-16 h-full flex flex-col items-center justify-evenly bg-medium-gray rounded-r-xl">
-        <PostSettings publication={project} isOwner={isOwner} />
+        <PostSettings
+          publication={project}
+          isOwner={isOwner}
+          deleteButton={
+            <button
+              onClick={async () => {
+                const { error } = await deleteProject(project.id)
+
+                if (error) {
+                  alert('Falha ao deleter projeto')
+
+                  return
+                }
+
+                router.replace(`${pathName}?delete=${project.id}`, {
+                  scroll: false,
+                })
+              }}
+            >
+              deletar
+            </button>
+          }
+        />
 
         <LikeProjectButton
           params={{
