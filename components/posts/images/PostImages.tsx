@@ -27,11 +27,13 @@ export default function PostImagesCarousel({ ImagesSrc }: ImagesData) {
         <Image alt="" src={getPostImageUrl(currentImage)} className="w-full" />
       </div>
 
+      {/* {currentImageIndex === } */}
+
       {currentImageIndex + 1 !== ImagesSrc.length && (
         <button onClick={handleImageChangeAdd}>PRox</button>
       )}
 
-      {currentImageIndex > 0 && (
+      {currentImageIndex + 1 > 0 && (
         <button onClick={handleImageChangeSubtract}>Voltar</button>
       )}
     </div>
