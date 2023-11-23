@@ -15,8 +15,9 @@ type Props = {
 
 export default function ProjectFeed({ initialPublication, profileId }: Props) {
   const [ref, inView] = useInView()
+
   const { publications: projects, noPublicationFound: noProjectFound } =
-    useFeed(initialPublication, inView, fetchProjects, profileId)
+    useFeed(initialPublication, inView, fetchProjects)
 
   return (
     <section id="feed">

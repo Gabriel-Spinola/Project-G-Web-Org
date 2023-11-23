@@ -3,13 +3,17 @@ import { prisma } from '@/lib/database/prisma'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 export async function handleGet(
-  take = 3,
+  page = 1,
   id?: string,
+  take = 3,
 ): Promise<ESResponse<FullProject[]>> {
+  const skip = (page - 1) * take
+
   try {
     const data: FullProject[] = await prisma.project.findMany({
       where: id ? { authorId: id } : undefined,
       take,
+      skip,
       include: {
         author: {
           select: { name: true, image: true, profilePic: true },

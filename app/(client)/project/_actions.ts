@@ -8,8 +8,8 @@ export async function fetchProjects(
   profileId?: string,
 ): Promise<ESResponse<FullProject[]>> {
   const endpoint = profileId
-    ? `${API_URL}${API_ENDPOINTS.services.projects}/${page}/`
-    : `${API_URL}${API_ENDPOINTS.services.projects}/${page}/${profileId}/`
+    ? `${API_URL}${API_ENDPOINTS.services.projects}${page}/${profileId}`
+    : `${API_URL}${API_ENDPOINTS.services.projects}${page}/`
 
   try {
     const response = await fetch(endpoint, {
