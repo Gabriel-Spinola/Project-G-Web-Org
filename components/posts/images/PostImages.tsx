@@ -48,19 +48,22 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
 
         <div id="selectors">
           {imagesSrc.map((_, index) => (
-            <button
+            <div
+              key={index}
               className={`rounded-full ${
                 currentImageIndex === index
                   ? ' bg-medium-primary'
                   : 'bg-medium-gray'
               } p-1 h-2`}
-              key={index}
-              onClick={() => {
-                setCurrentImageIndex(index)
-              }}
             >
-              {index}
-            </button>
+              <button
+                onClick={() => {
+                  setCurrentImageIndex(index)
+                }}
+              >
+                {index}
+              </button>
+            </div>
           ))}
         </div>
       </div>
