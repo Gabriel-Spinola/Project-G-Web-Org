@@ -57,7 +57,7 @@ export function useFeed<Publication extends FullPost | FullProject>(
         ...data,
       ])
     },
-    [page, profileId],
+    [fetchFunction, page, profileId],
   )
 
   // NOTE - Handles feed data fetching

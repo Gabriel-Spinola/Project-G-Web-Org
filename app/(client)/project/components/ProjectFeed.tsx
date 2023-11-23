@@ -17,7 +17,7 @@ export default function ProjectFeed({ initialPublication, profileId }: Props) {
   const [ref, inView] = useInView()
 
   const { publications: projects, noPublicationFound: noProjectFound } =
-    useFeed(initialPublication, inView, fetchProjects)
+    useFeed(initialPublication, inView, fetchProjects, profileId)
 
   return (
     <section id="feed">

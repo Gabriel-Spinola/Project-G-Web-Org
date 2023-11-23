@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { handleGet } from '../../_get'
 
-export async function handler(
+export async function GET(
   req: Request,
   { params }: { params: { page: string; id: string } },
 ) {
@@ -16,9 +16,5 @@ export async function handler(
     )
   }
 
-  console.log(data?.length)
-
   return NextResponse.json({ data }, { status: 200 })
 }
-
-export { handler as GET }
