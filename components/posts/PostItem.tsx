@@ -11,15 +11,12 @@
 
 import React, { useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
-import { getPostImageUrl } from '@/lib/storage/supabase'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
-import OneImageDisplay from './images/OneImageDisplay'
-import ThreeImageDisplay from './images/ThreeImageDisplay'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
-import TwoImageDisplay from './images/TwoImageDisplay'
 import { PublicationContext } from './InfiniteScrollPosts'
+import PostImagesCarousel from './images/PostImages'
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -43,35 +40,9 @@ export default function PostItem() {
         {publicationCtx?.content}
       </article>
 
-      {publicationCtx.images.length === 1 ? (
-        <>
-          <OneImageDisplay
-            imgSrc={getPostImageUrl(publicationCtx.images[0])}
-            width={776}
-            height={776}
-          />
-        </>
-      ) : publicationCtx.images.length === 2 ? (
-        <>
-          <TwoImageDisplay
-            imgSrc={getPostImageUrl(publicationCtx.images[0])}
-            secondImgSrc={getPostImageUrl(publicationCtx.images[1])}
-            width={384}
-            height={480}
-          />
-        </>
-      ) : publicationCtx.images.length === 3 ? (
-        <>
-          <ThreeImageDisplay
-            imgSrc={getPostImageUrl(publicationCtx.images[0])}
-            secondImgSrc={getPostImageUrl(publicationCtx.images[1])}
-            thirdImgSrc={getPostImageUrl(publicationCtx.images[2])}
-            width={384}
-            height={240}
-            heightOne={480}
-          />
-        </>
-      ) : null}
+      {publicationCtx.images ?? (
+        <PostImagesCarousel ImagesSrc={publicationCtx.images} />
+      )}
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] gap-4 mt-4 flex flex-row">
