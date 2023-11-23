@@ -40,9 +40,9 @@ export default function PostItem() {
         {publicationCtx?.content}
       </article>
 
-      {publicationCtx.images ?? (
-        <PostImagesCarousel ImagesSrc={publicationCtx.images} />
-      )}
+      {publicationCtx.images && publicationCtx.images.length > 0 ? (
+        <PostImagesCarousel imagesSrc={publicationCtx.images} />
+      ) : undefined}
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] gap-4 mt-4 flex flex-row">

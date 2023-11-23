@@ -5,13 +5,13 @@ import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 
 type ImagesData = {
-  ImagesSrc: string[]
+  imagesSrc: string[]
 }
 
-export default function PostImagesCarousel({ ImagesSrc }: ImagesData) {
+export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  const currentImage = ImagesSrc[currentImageIndex]
+  const currentImage = imagesSrc.at(currentImageIndex)
 
   function handleImageChangeAdd() {
     setCurrentImageIndex((current) => current + 1)
@@ -24,16 +24,46 @@ export default function PostImagesCarousel({ ImagesSrc }: ImagesData) {
   return (
     <div>
       <div className="overflow-hidden rounded-lg">
-        <Image alt="" src={getPostImageUrl(currentImage)} className="w-full" />
+        {currentImage && (
+          <Image
+            alt=""
+            src={getPostImageUrl(currentImage)}
+            className="w-full"
+          />
+        )}
       </div>
 
-      {currentImageIndex + 1 !== ImagesSrc.length && (
-        <button onClick={handleImageChangeAdd}>PRox</button>
-      )}
+      <div id="controllers">
+        {currentImageIndex >= 0 && (
+          <button className="text-4xl" onClick={handleImageChangeSubtract}>
+            &lt;
+          </button>
+        )}
 
-      {currentImageIndex > 0 && (
-        <button onClick={handleImageChangeSubtract}>Voltar</button>
-      )}
+        {currentImageIndex + 1 <= imagesSrc.length && (
+          <button className="text-4xl" onClick={handleImageChangeAdd}>
+            &gt;
+          </button>
+        )}
+
+        <div id="selectors">
+          {imagesSrc.map((_, index) => (
+            <button
+              className={`rounded-full ${
+                currentImageIndex === index
+                  ? ' bg-medium-primary'
+                  : 'bg-medium-gray'
+              } p-1 h-2`}
+              key={index}
+              onClick={() => {
+                setCurrentImageIndex(index)
+              }}
+            >
+              {index}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
