@@ -5,7 +5,6 @@ import React from 'react'
 export default function Searchbar() {
   return (
     <form
-      method="GET"
       action={async function (formData: FormData) {
         'use server'
 
