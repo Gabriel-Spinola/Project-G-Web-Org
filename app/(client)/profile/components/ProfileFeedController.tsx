@@ -28,16 +28,14 @@ export default async function ProfileFeedController({
   }
 
   return (
-    <Suspense>
-      <ProfileFeed
-        mustServerFetched={{
-          startupProjects: projects ?? undefined,
-          startupPosts: posts ?? undefined,
-          currentUserId: session?.user.id,
-        }}
-        authorId={authorId}
-        isOwner={isOwner}
-      />
-    </Suspense>
+    <ProfileFeed
+      mustServerFetched={{
+        startupProjects: projects ?? undefined,
+        startupPosts: posts ?? undefined,
+        currentUserId: session?.user.id,
+      }}
+      authorId={authorId}
+      isOwner={isOwner}
+    />
   )
 }

@@ -7,7 +7,6 @@
  * @license i.e. MIT
  */
 
-import UserPosts from '@/app/(client)/profile/components/UserPosts'
 import ProfileCard from '@/app/(client)/profile/components/ProfileCard'
 import React, { Suspense } from 'react'
 import UserInfo from '@/app/(client)/profile/components/UserInfo'
@@ -64,11 +63,9 @@ export default async function Profile({ params }: Props) {
 
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
-            {session ? (
+            <Suspense fallback={<UserPostsSkeleton />}>
               <ProfileFeedController authorId={userId} isOwner={isOwner} />
-            ) : (
-              <UserPostsSkeleton />
-            )}
+            </Suspense>
           </div>
         </div>
       </div>
