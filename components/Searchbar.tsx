@@ -1,19 +1,21 @@
-import { RedirectType, redirect } from 'next/navigation'
+'use client'
+
 import { HiSearch } from 'react-icons/hi'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Searchbar() {
+  const router = useRouter()
+
   return (
     <form
-      action={async function (formData: FormData) {
-        'use server'
+      onSubmit={async function (event) {
+        event.preventDefault()
 
+        const formData = new FormData(event.currentTarget)
         const searchQuery = formData.get('search-query')
 
-        redirect(
-          `/search/${searchQuery?.toString() ?? ''}`,
-          RedirectType.replace,
-        )
+        router.push(`/search/${searchQuery?.toString() ?? ''}`)
       }}
       className="flex items-center justify-end w-full h-full rounded-xl shadow-sm"
     >

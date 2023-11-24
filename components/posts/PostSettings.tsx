@@ -4,7 +4,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiSolidShare } from 'react-icons/bi'
 import { AiFillWarning } from 'react-icons/ai'
 import { GiExpand } from 'react-icons/gi'
-import DeletePostButton from '../Buttons/DeletePostButton'
 import { $Enums } from '@prisma/client'
 import {
   Menu,
