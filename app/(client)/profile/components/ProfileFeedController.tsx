@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { fetchProjects } from '../../project/_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
