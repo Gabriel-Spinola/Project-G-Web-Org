@@ -1,7 +1,6 @@
 import { fetchPosts } from '@/app/(feed)/_actions'
 import InfiniteScrollPosts from '../../../../components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '../../../../components/posts/postSubmit/PostSubmitFragment'
-import { ESResponse, FullPost } from '@/lib/types/common'
 import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 
 type Params = {
@@ -15,11 +14,7 @@ export default async function UserPosts({
   isOwner,
   currentUserId,
 }: Params) {
-  const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
-    1,
-    undefined,
-    authorID,
-  )
+  const { data, error } = await fetchPosts(1, undefined, authorID)
 
   return (
     <section id="PostWrapper" className="flex flex-col">

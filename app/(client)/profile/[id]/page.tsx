@@ -17,17 +17,20 @@ import { getUserData, handleFollowingCheckage } from '../_actions'
 import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
 import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
 import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
-import UserProjects from '../components/UserProjects'
+import ProfileFeedController from '../components/ProfileFeedController'
 
 type Props = {
   params: { id: string }
 }
 
 export default async function Profile({ params }: Props) {
-  const userData = getUserData(params.id)
+  const { id: userId } = params
+
+  const userData = getUserData(userId)
   const sessionData = getServerSession(AuthOptions)
 
   const [user, session] = await Promise.all([userData, sessionData])
+
   const isOwner = session?.user.id === user?.id
   const isFollowing = await handleFollowingCheckage(
     session?.user.id as string,
@@ -36,7 +39,7 @@ export default async function Profile({ params }: Props) {
   )
 
   return (
-    <>
+    <main>
       {/* NOTE - Profile Card Skeleton */}
       <Suspense fallback={<ProfileCardSkeleton />}>
         {user && <ProfileCard user={user} isOwner={isOwner} />}
@@ -55,7 +58,6 @@ export default async function Profile({ params }: Props) {
                   currentUserId={session?.user.id}
                   user={user}
                 />
-                <UserProjects />
               </div>
             )}
           </Suspense>
@@ -63,17 +65,13 @@ export default async function Profile({ params }: Props) {
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
             {session ? (
-              <UserPosts
-                isOwner={isOwner}
-                authorID={params.id}
-                currentUserId={session.user.id}
-              />
+              <ProfileFeedController authorId={userId} isOwner={isOwner} />
             ) : (
               <UserPostsSkeleton />
             )}
           </div>
         </div>
       </div>
-    </>
+    </main>
   )
 }

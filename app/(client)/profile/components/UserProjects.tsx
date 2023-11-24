@@ -1,17 +1,30 @@
-import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
+import { fetchProjects } from '../../project/_actions'
+import { getServerSession } from 'next-auth'
+import { AuthOptions } from '@/lib/auth'
+import ProjectFeed from '../../project/components/ProjectFeed'
 
-export default function UserProjects() {
+type Props = { authorId: string }
+
+export default async function UserProjects({ authorId }: Props) {
+  const { data: projects, error } = await fetchProjects(1, undefined, authorId)
+  const session = await getServerSession(AuthOptions)
+
+  if (error || !projects) {
+    return <>Failed to load projects</>
+  }
+
   return (
     <section className="w-full flex flex-col gap-8">
       <h2 className=" text-center text-xl font-bold">PROJETOS</h2>
-      <div className="w-full h-full flex lg:flex-col gap-4 lg:gap-8">
-        <div className="h-32 w-full rounded-xl bg-medium-secundary"></div>
-        <div className="h-32 w-full rounded-xl bg-medium-tertiary"></div>
-      </div>
-      <Link href="/">
-        <h2 className="text-center text-xl font-bold underline">Ver Mais</h2>
-      </Link>
+
+      <Suspense fallback={<span>Loading projects feed...</span>}>
+        <ProjectFeed
+          initialPublication={projects}
+          profileId={authorId}
+          currentUserId={session?.user.id}
+        />
+      </Suspense>
     </section>
   )
 }
