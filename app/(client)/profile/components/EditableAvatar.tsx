@@ -17,6 +17,7 @@ import Image from 'next/image'
 import React, { ChangeEvent, useState } from 'react'
 import { changeProfilePic } from '../_actions'
 import { AiFillCamera } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 
 type Props = {
   profileId: string
@@ -35,7 +36,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
     const { error } = await changeProfilePic(profileId, formData)
 
     if (error) {
-      alert('Falha ao atualizar imagem')
+      toast.error('Falha ao atualizar imagem 😔')
       setImages(undefined)
 
       return
@@ -55,7 +56,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
     const { error } = validateImageInput(event.target.files[0], 1)
 
     if (error) {
-      alert(error)
+      toast.warn(error)
 
       return
     }

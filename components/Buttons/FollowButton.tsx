@@ -4,6 +4,7 @@ import { follow, unfollow } from '@/app/(client)/profile/_server-actions'
 import { Button } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 type Params = {
   authorId?: string
@@ -28,21 +29,19 @@ export default function FollowButton({
     setIsFollowing(!_isFollowing)
 
     if (!_isFollowing) {
-      const { data, error } = await follow(authorId, targetId)
+      const { error } = await follow(authorId, targetId)
 
       if (error) {
-        return alert(error)
+        console.error(error)
+        toast.error('Ouve ulguma falha ao seguir o usuário 😔')
       }
-
-      alert(data)
     } else {
-      const { data, error } = await unfollow(authorId, targetId)
+      const { error } = await unfollow(authorId, targetId)
 
       if (error) {
-        return alert(error)
+        console.error(error)
+        toast.error('Ouve ulguma falha ao deixar de seguir o usuário 😔')
       }
-
-      alert(data)
     }
   }
 

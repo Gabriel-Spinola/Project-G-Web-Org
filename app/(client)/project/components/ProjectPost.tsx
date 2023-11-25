@@ -11,6 +11,7 @@ import { MdComment } from 'react-icons/md'
 import PostSettings from '@/components/posts/PostSettings'
 import { usePathname, useRouter } from 'next/navigation'
 import { deleteProject } from '../_actions'
+import { toast } from 'react-toastify'
 
 type Props = {
   project: FullProject
@@ -40,7 +41,7 @@ export default function ProjectPost({ project, currentUserId }: Props) {
                 const { error } = await deleteProject(project.id)
 
                 if (error) {
-                  alert('Falha ao deleter projeto')
+                  toast.error('Falha ao deleter projeto 😔')
 
                   return
                 }

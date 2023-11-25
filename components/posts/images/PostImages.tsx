@@ -62,9 +62,8 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
       >
         <div id="selectors" className="flex flex-row gap-8">
           {imagesSrc.map((_, index) => (
-            <>
+            <div key={index}>
               <button
-                key={index}
                 onClick={() => {
                   setCurrentImageIndex(index)
                 }}
@@ -79,7 +78,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
                   {' '}
                 </div>
               </button>
-            </>
+            </div>
           ))}
         </div>
       </section>

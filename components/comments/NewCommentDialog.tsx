@@ -7,6 +7,7 @@ import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { PublicationContext } from '../posts/InfiniteScrollPosts'
 import { TDisplayComment } from '@/lib/types/common'
+import { toast } from 'react-toastify'
 
 type Props = {
   target: {
@@ -60,22 +61,29 @@ export default function NewCommentDialog({
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Algo no fomulário é invalido no campo: ' + errorMessage)
+      setIsLoading(false)
 
       return
     }
 
-    const { data, error } = await postComment(
-      convertedData.get('content')?.toString(),
-      target,
-      post?.id as string,
-      session?.user.id,
+    const { data, error } = await toast.promise(
+      postComment(
+        convertedData.get('content')?.toString(),
+        target,
+        post?.id as string,
+        session?.user.id,
+      ),
+      {
+        pending: 'Enviando seu comentario...',
+        success: 'Enviado 👌',
+      },
     )
 
     setIsLoading(false)
 
     if (error || !data) {
-      alert('failed to create comment')
+      toast.error('Houve algum erro ao enviar seu comentário 😔')
 
       return
     }

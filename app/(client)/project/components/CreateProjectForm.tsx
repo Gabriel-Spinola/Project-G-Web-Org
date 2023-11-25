@@ -16,6 +16,7 @@ import Image from 'next/image'
 import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
 import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 
 interface ProjectFormState {
   title: string
@@ -94,7 +95,7 @@ export default function CreateProjectForm({
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Algo no fomulário é invalido no campo: ' + errorMessage)
 
       return
     }
@@ -105,7 +106,7 @@ export default function CreateProjectForm({
       : await updateProject(projectId, validatedForm.data)
 
     if (error) {
-      alert('Failed to create post')
+      toast.error('Houve uma falha ao criar seu projeto! 😔')
 
       return
     }

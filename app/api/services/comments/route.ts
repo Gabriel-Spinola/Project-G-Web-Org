@@ -2,7 +2,6 @@ import { prisma } from '@/lib/database/prisma'
 import { PublicationComment } from '@/lib/types/common'
 import { NextResponse } from 'next/server'
 
-// TODO - pagination
 export async function GET(req: Request) {
   const url = new URL(req.url)
 

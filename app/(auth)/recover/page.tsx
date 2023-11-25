@@ -58,6 +58,7 @@ export default function RecoverPage() {
           {/* Form Container */}
           <div className="absolute w-full md:w-[65%] x1:w-[45%] 2x1:w-[35%] float-left h-full rounded-xl text-darker-white">
             <form
+              id="auth-form"
               className={`flex flex-col justify-evenly w-full h-full gap-4 items-center px-8 md:px-16`}
               onSubmit={handleRecoverySubmission}
             >

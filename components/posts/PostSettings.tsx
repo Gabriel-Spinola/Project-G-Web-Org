@@ -16,6 +16,7 @@ import { FullPost, FullProject } from '@/lib/types/common'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { ReactNode } from 'react'
+import { toast } from 'react-toastify'
 
 interface Props {
   publication: FullPost | FullProject
@@ -35,7 +36,7 @@ export default function PostSettings({
 
     navigator.clipboard.writeText(postUrl)
 
-    alert('Link da publicação copiado')
+    toast.success('Link da publicação copiado')
   }
 
   return (

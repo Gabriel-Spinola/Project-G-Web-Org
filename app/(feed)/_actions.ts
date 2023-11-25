@@ -3,6 +3,7 @@ import { ESResponse, FullPost } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
+import { toast } from 'react-toastify'
 
 export async function handlePostDeletion(
   postId: string,
@@ -28,6 +29,8 @@ export async function handlePostDeletion(
     routeCallback()
   } catch (error: unknown) {
     console.error(error)
+
+    toast.error('Houve um erro ao deletar seu post! 🤯')
   }
 }
 

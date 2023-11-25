@@ -21,7 +21,7 @@ import TextBox from '../components/TextBox'
 import { FcGoogle } from 'react-icons/fc'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 export default function RegisterPage() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
@@ -36,10 +36,7 @@ export default function RegisterPage() {
       .catch(() => {
         setIsVerified(false)
 
-        toast('Preencha corretamente o captcha: ', {
-          position: toast.POSITION.TOP_CENTER,
-          className: 'toast-message',
-        })
+        toast.warn('Por favor, preencha o captcha corretamente')
       })
   }
 
@@ -61,25 +58,22 @@ export default function RegisterPage() {
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      // alert('aaaa')
-      toast('Algo no fomulário é invalido no campo: ' + errorMessage + '\n', {
-        position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
-      })
+      toast.warn('Preencha o formulário corretamente.\n' + errorMessage + '\n')
 
       return
     }
 
     // NOTE - 2. Error/Success Pattern for standardized error handling implementation
-    const { error }: ESResponse<string> = await registerNewUser(
-      validatedForm.data,
+    const { error }: ESResponse<string> = await toast.promise(
+      registerNewUser(validatedForm.data),
+      {
+        pending: 'Estamos te registando... 🥱',
+        success: 'Registrado com sucesso. 🤙',
+      },
     )
 
     if (error) {
-      // NOTE - Toast
-      toast.error('user creation failed', {
-        position: toast.POSITION.TOP_CENTER,
-      })
+      toast.error('Houve um erro no cadastro, por favor tente novamente 😔')
 
       formRef.current?.reset()
       return
@@ -105,13 +99,11 @@ export default function RegisterPage() {
 
         {/* Background Image darker overlay */}
         <div className="absolute w-full h-full bg-gradient-to-r from-black via-black/60 via-50% to-black/25 rounded-xl">
-          {/* FIXME - Desculpa lucão mas eu não vou estilizar os toasts (: */}
-          <ToastContainer />
-
           {/* Form Container */}
           <div className="absolute w-full md:w-[65%] x1:w-[45%] 2x1:w-[35%] float-left h-full rounded-xl text-darker-white">
             <form
               ref={formRef}
+              id="auth-form"
               action={handleFormSubmission}
               className={`flex flex-col justify-evenly w-full h-full gap-4 items-center px-8 md:px-16`}
             >
@@ -157,6 +149,7 @@ export default function RegisterPage() {
                   isVerified={isVerified}
                   buttonText={'REGISTRAR'}
                 />
+
                 <button
                   type="button"
                   onClick={() => signIn('google')}

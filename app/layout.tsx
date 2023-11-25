@@ -1,13 +1,13 @@
 import Navbar from '@/components/navbar/Navbar'
-import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/utils/Providers'
-import './styles/main.scss'
-import { Session, getServerSession } from 'next-auth'
-import { AuthOptions } from '@/lib/auth'
 import { ToastContainer } from 'react-toastify'
 import { BiComment } from 'react-icons/bi'
+
+import './globals.css'
+import './styles/main.scss'
+import 'react-toastify/ReactToastify.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +25,20 @@ export default async function RootLayout({
     <>
       <html lang="en">
         <body className={inter.className}>
+          <ToastContainer
+            className="fixed z-10"
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+
           <Providers>
             <Navbar />
             <div
@@ -35,6 +49,7 @@ export default async function RootLayout({
                 <BiComment size={28} />
               </button>
             </div>
+
             {children}
           </Providers>
         </body>

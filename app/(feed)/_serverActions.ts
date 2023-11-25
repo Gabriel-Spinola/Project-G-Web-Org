@@ -93,7 +93,6 @@ export async function decreaseLikeCount(
   targetId: string | number,
 ): Promise<void> {
   try {
-    // REVIEW - Best solution found till now, is to make all Like fields unique
     const deleteLike = await prisma.like.deleteMany({
       where: { [selectedType]: targetId },
     })
