@@ -37,58 +37,30 @@ import {
 import { EditIcon } from '@chakra-ui/icons'
 import { BsFillGearFill } from 'react-icons/bs'
 
-import React, { FormEvent } from 'react'
+import React from 'react'
 import { User } from '@prisma/client'
-import { useRouter } from 'next/navigation'
-import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
 import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import { useProfileCard } from '../hooks/useProfileCard'
+import FollowButton from '@/components/Buttons/FollowButton'
 
-interface Params {
-  user: Partial<User>
-  isOwner: boolean
+export type DefaultFormValuesType = {
+  title: string
 }
 
 const defaultEditFormValues = {
   title: 'Insira seu titulo',
 }
 
-export default function ProfileCard({ user, isOwner }: Params) {
+interface Props {
+  user: Partial<User>
+  isOwner: boolean
+}
+
+export default function ProfileCard({ user, isOwner }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const router = useRouter()
-
-  async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-
-    /**
-     * Helper function to get a field's value or default to an empty string
-     */
-    const getFieldValueOrDefault = (
-      fieldName: string,
-      defaultValue: string,
-    ): string | null => {
-      const fieldValue = formData.get(fieldName) as string | null
-
-      return fieldValue === defaultValue ? '' : fieldValue
-    }
-
-    // Update form data for 'title' field
-    formData.set(
-      'title',
-      getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
-    )
-
-    const { error } = await updateUserPageData(formData, user.id as string)
-
-    if (error) {
-      console.error('failed')
-    }
-
-    router.refresh()
-  }
+  const handleFormSubmission = useProfileCard(user, defaultEditFormValues)
 
   return (
     <section
@@ -137,6 +109,14 @@ export default function ProfileCard({ user, isOwner }: Params) {
             {user.title ?? ''}
           </h2>
         </div>
+        {/* 
+        {!isOwner && (
+          <FollowButton
+            authorId={params.currentUserId}
+            isFollowing={params.isFollowing}
+            targetId={params.user.id as string}
+          />
+        )} */}
       </div>
 
       {/* NOTE - Card info editing and Graduation card */}
@@ -148,6 +128,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
             }
           />
         )}
+
         {isOwner && (
           <div>
             <Menu>
