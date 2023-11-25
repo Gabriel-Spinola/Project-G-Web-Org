@@ -58,7 +58,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
       {/* NOTE - Image controllers dots */}
       <section
         id="controllers"
-        className="flex w-full items-center justify-center max-h-[768px] max-w-[768px]"
+        className="flex w-full items-center justify-center max-h-[768px] max-w-[768px] p-4"
       >
         <div id="selectors" className="flex flex-row gap-8">
           {imagesSrc.map((_, index) => (
