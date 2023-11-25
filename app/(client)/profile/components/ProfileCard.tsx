@@ -44,6 +44,7 @@ import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { useProfileCard } from '../hooks/useProfileCard'
 import FollowButton from '@/components/Buttons/FollowButton'
+import { UserData } from '@/lib/types/common'
 
 export type DefaultFormValuesType = {
   title: string
@@ -54,12 +55,20 @@ const defaultEditFormValues = {
 }
 
 interface Props {
-  user: Partial<User>
   isOwner: boolean
+  isFollowing: boolean
+  user: Partial<UserData>
+  currentUserId?: string
 }
 
-export default function ProfileCard({ user, isOwner }: Props) {
+export default function ProfileCard({
+  isOwner,
+  isFollowing,
+  currentUserId,
+  user,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const handleFormSubmission = useProfileCard(user, defaultEditFormValues)
 
   return (
@@ -102,21 +111,33 @@ export default function ProfileCard({ user, isOwner }: Props) {
         className="flex flex-row items-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
       >
         <div id="info-name-wrapper" className="flex flex-col">
-          <h1 className="text-4xl text-medium-primary font-bold">
+          <h1 className="text-[52px] text-pure-white font-bold">
             {user.name ?? ''}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
             {user.title ?? ''}
           </h2>
+
+          <div className="flex flex-row gap-2">
+            {!isOwner && (
+              <FollowButton
+                authorId={currentUserId}
+                isFollowing={isFollowing}
+                targetId={user.id as string}
+              />
+            )}
+
+            <Button
+              marginY={4}
+              color="#FF7452"
+              bg="white"
+              _hover={{ background: '#FF7452', color: 'white' }}
+              className="rounded-[8px] font-normal"
+            >
+              Enviar mensagem
+            </Button>
+          </div>
         </div>
-        {/* 
-        {!isOwner && (
-          <FollowButton
-            authorId={params.currentUserId}
-            isFollowing={params.isFollowing}
-            targetId={params.user.id as string}
-          />
-        )} */}
       </div>
 
       {/* NOTE - Card info editing and Graduation card */}

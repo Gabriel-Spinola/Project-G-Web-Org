@@ -37,11 +37,22 @@ export default async function Profile({ params }: Props) {
     isOwner,
   )
 
+  if (!user) {
+    return <>User not found!</>
+  }
+
   return (
     <main>
       {/* NOTE - Profile Card Skeleton */}
       <Suspense fallback={<ProfileCardSkeleton />}>
-        {user && <ProfileCard user={user} isOwner={isOwner} />}
+        {user && (
+          <ProfileCard
+            isOwner={isOwner}
+            currentUserId={session?.user.id}
+            user={user}
+            isFollowing={isFollowing}
+          />
+        )}
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
@@ -51,12 +62,7 @@ export default async function Profile({ params }: Props) {
             {user && (
               // NOTE - This wrapper div prevents UserInfo container expansion
               <div className="flex flex-col gap-8">
-                <UserInfo
-                  isOwner={isOwner}
-                  isFollowing={isFollowing}
-                  currentUserId={session?.user.id}
-                  user={user}
-                />
+                <UserInfo isOwner={isOwner} user={user} />
               </div>
             )}
           </Suspense>

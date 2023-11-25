@@ -1,6 +1,5 @@
 'use client'
 
-import FollowButton from '@/components/Buttons/FollowButton'
 import styles from './profile.module.scss'
 import { UserData } from '@/lib/types/common'
 import { Icon } from '@chakra-ui/react'
@@ -12,12 +11,11 @@ import Graduations from './Graduations'
 
 interface Params {
   isOwner: boolean
-  currentUserId?: string
-  isFollowing: boolean
+
   user: Partial<UserData>
 }
 
-export default function UserInfo(params: Params) {
+export default function UserInfo({ isOwner, user }: Params) {
   return (
     <section className="flex flex-col w-full">
       {/* NOTE - Follows container */}
@@ -25,9 +23,7 @@ export default function UserInfo(params: Params) {
         className={`${styles.cardShadow} flex flex-row w-full justify-around lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray`}
       >
         <span className="text-center">
-          <span className="font-bold">
-            {params.user._count?.followers ?? 0}
-          </span>{' '}
+          <span className="font-bold">{user._count?.followers ?? 0}</span>{' '}
           Seguidores
         </span>
 
@@ -35,9 +31,7 @@ export default function UserInfo(params: Params) {
 
         <span className="text-center">
           Seguindo{' '}
-          <span className="font-bold">
-            {params.user._count?.following ?? 0}
-          </span>
+          <span className="font-bold">{user._count?.following ?? 0}</span>
         </span>
       </div>
 
@@ -46,24 +40,16 @@ export default function UserInfo(params: Params) {
       >
         <div className="flex flex-row justify-evenly items-center m-4">
           <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-          <EditUserInfo isOwner={params.isOwner} user={params.user} />
+          <EditUserInfo isOwner={isOwner} user={user} />
         </div>
 
         <div className="flex flex-col h-full py-2 gap-2">
           <hr />
-          <p id="description">{params.user.description}</p>
-
-          {!params.isOwner && (
-            <FollowButton
-              authorId={params.currentUserId}
-              isFollowing={params.isFollowing}
-              targetId={params.user.id as string}
-            />
-          )}
+          <p id="description">{user.description}</p>
 
           <span className="py-2">
             <Icon as={RiGraduationCapFill} w={6} h={6} /> Graduação:{' '}
-            {params.user.graduations?.map((graduation, index) => (
+            {user.graduations?.map((graduation, index) => (
               <span key={index} className="font-bold">
                 {graduation}
               </span>
@@ -72,12 +58,12 @@ export default function UserInfo(params: Params) {
 
           <span className="py-2">
             <Icon as={PiSunHorizonFill} w={6} h={6} /> De:{' '}
-            <span className="font-bold">{params.user.location}</span>
+            <span className="font-bold">{user.location}</span>
           </span>
 
           <span className="py-2">
             <Icon as={BsFillPinMapFill} w={6} h={6} /> Em:{' '}
-            <span className="font-bold">{params.user.location}</span>
+            <span className="font-bold">{user.location}</span>
           </span>
         </div>
       </div>
@@ -88,22 +74,18 @@ export default function UserInfo(params: Params) {
       >
         <span className="py-2">
           <Icon as={BsFillTelephoneFill} w={6} h={6} /> Site:{' '}
-          <span className="font-bold">
-            {params.user.siteUrl?.toString() ?? ''}
-          </span>
+          <span className="font-bold">{user.siteUrl?.toString() ?? ''}</span>
         </span>
 
         <span className="py-2">
           <Icon as={BsFillTelephoneFill} w={6} h={6} /> Email:{' '}
-          <span className="font-bold">
-            {params.user.email?.toString() ?? ''}
-          </span>
+          <span className="font-bold">{user.email?.toString() ?? ''}</span>
         </span>
 
         <span className="py-2">
           <Icon as={BsFillTelephoneFill} w={6} h={6} /> Telefone:{' '}
           <span className="font-bold">
-            {params.user.contactPhone?.toString() ?? ''}
+            {user.contactPhone?.toString() ?? ''}
           </span>
         </span>
       </div>
