@@ -33,7 +33,7 @@ export default function PostItem() {
   )
 
   return (
-    <div className={styles.post}>
+    <div className={`w-full ${styles.post}`}>
       <PostHeader post={publicationCtx} isOwner={isOwner} />
 
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
