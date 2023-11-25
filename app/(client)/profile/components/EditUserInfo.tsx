@@ -24,6 +24,7 @@ interface Params {
 
 export default function EditUserInfo(params: Params) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <>
       {params.isOwner && (

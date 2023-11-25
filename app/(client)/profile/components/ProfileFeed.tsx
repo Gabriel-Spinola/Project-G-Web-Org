@@ -8,7 +8,7 @@ import React, { Suspense, useState } from 'react'
 import ProjectFeed from '../../project/components/ProjectFeed'
 import styles from './profile.module.scss'
 
-type Feed = 'posts' | 'projects'
+type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
   mustServerFetched: {
@@ -28,9 +28,7 @@ export default function ProfileFeed({
 }: Props) {
   const { startupPosts, startupProjects, currentUserId } = mustServerFetched
 
-  const [selectedFeed, setSelectedFeed] = useState<Feed>('posts')
-
-  console.log(isOwner)
+  const [selectedFeed, setSelectedFeed] = useState<FeedSelectOptions>('posts')
 
   return (
     <section id="feed" className="w-full">
@@ -42,6 +40,7 @@ export default function ProfileFeed({
           POSTS
           <div></div>
         </button>
+
         <button
           onClick={() => setSelectedFeed('projects')}
           className={`w-full ${styles.underScore}`}

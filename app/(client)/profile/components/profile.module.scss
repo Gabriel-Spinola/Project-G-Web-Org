@@ -1,32 +1,42 @@
 @import '/app/styles/variables.module.scss';
 
-#userInfo {
-  -webkit-box-shadow: 0 0 8px #00000065;
-  box-shadow: 0 0 8px #00000065;
+.cardShadow {
+  -webkit-box-shadow: 0 0 5px #00000065;
+  box-shadow: 0 0 5px #00000065;
 }
 
 .underScore {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   div {
     width: 120px;
     height: 4px;
     background-color: $medium-primary;
     border-radius: 10px;
+    transition: width 0.5s;
   }
-}
 
-.underScore:hover {
-  div{
+  &:hover div {
     width: 100%;
     animation-name: expandUnderscore;
+    animation-duration: 0.5s;
+  }
+
+  &:not(:hover) div {
+    width: 35%;
+    animation-name: shrinkUnderscore;
     animation-duration: 0.5s;
   }
 }
 
 @keyframes expandUnderscore {
-  0% {width: 120px;}
-  60% {width: 90%;}
-  100% {width: 100%;}
+  0% { width: 35%; }
+  100% { width: 100%; }
+}
+
+@keyframes shrinkUnderscore {
+  0% { width: 100%; }
+  100% { width: 35%; }
 }

@@ -37,58 +37,39 @@ import {
 import { EditIcon } from '@chakra-ui/icons'
 import { BsFillGearFill } from 'react-icons/bs'
 
-import React, { FormEvent } from 'react'
+import React from 'react'
 import { User } from '@prisma/client'
-import { useRouter } from 'next/navigation'
-import { updateUserPageData } from '@/app/(client)/profile/_actions'
 import EditableAvatar from './EditableAvatar'
 import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import { useProfileCard } from '../hooks/useProfileCard'
+import FollowButton from '@/components/Buttons/FollowButton'
+import { UserData } from '@/lib/types/common'
 
-interface Params {
-  user: Partial<User>
-  isOwner: boolean
+export type DefaultFormValuesType = {
+  title: string
 }
 
 const defaultEditFormValues = {
   title: 'Insira seu titulo',
 }
 
-export default function ProfileCard({ user, isOwner }: Params) {
+interface Props {
+  isOwner: boolean
+  isFollowing: boolean
+  user: Partial<UserData>
+  currentUserId?: string
+}
+
+export default function ProfileCard({
+  isOwner,
+  isFollowing,
+  currentUserId,
+  user,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const router = useRouter()
 
-  async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-
-    /**
-     * Helper function to get a field's value or default to an empty string
-     */
-    const getFieldValueOrDefault = (
-      fieldName: string,
-      defaultValue: string,
-    ): string | null => {
-      const fieldValue = formData.get(fieldName) as string | null
-
-      return fieldValue === defaultValue ? '' : fieldValue
-    }
-
-    // Update form data for 'title' field
-    formData.set(
-      'title',
-      getFieldValueOrDefault('title', defaultEditFormValues.title) ?? '',
-    )
-
-    const { error } = await updateUserPageData(formData, user.id as string)
-
-    if (error) {
-      console.error('failed')
-    }
-
-    router.refresh()
-  }
+  const handleFormSubmission = useProfileCard(user, defaultEditFormValues)
 
   return (
     <section
@@ -130,12 +111,32 @@ export default function ProfileCard({ user, isOwner }: Params) {
         className="flex flex-row items-center w-[100%] h-[161px] gap-[75%] text-darker-white z-[1]"
       >
         <div id="info-name-wrapper" className="flex flex-col">
-          <h1 className="text-4xl text-medium-primary font-bold">
+          <h1 className="text-[52px] text-pure-white font-bold">
             {user.name ?? ''}
           </h1>
           <h2 className="text-xl font-thin text-light-white">
             {user.title ?? ''}
           </h2>
+
+          <div className="flex flex-row gap-2">
+            {!isOwner && (
+              <FollowButton
+                authorId={currentUserId}
+                isFollowing={isFollowing}
+                targetId={user.id as string}
+              />
+            )}
+
+            <Button
+              marginY={4}
+              color="#FF7452"
+              bg="white"
+              _hover={{ background: '#FF7452', color: 'white' }}
+              className="rounded-[8px] font-normal"
+            >
+              Enviar mensagem
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -148,6 +149,7 @@ export default function ProfileCard({ user, isOwner }: Params) {
             }
           />
         )}
+
         {isOwner && (
           <div>
             <Menu>
