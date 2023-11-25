@@ -18,20 +18,17 @@ import {
 import React from 'react'
 
 interface Params {
-  isOwner: boolean
   user: Partial<UserData>
 }
 
-export default function EditUserInfo(params: Params) {
+export default function EditUserInfo({ user }: Params) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <>
-      {params.isOwner && (
-        <Button onClick={onOpen} colorScheme="orange">
-          <EditIcon />
-        </Button>
-      )}
+    <div>
+      <Button onClick={onOpen} colorScheme="orange">
+        <EditIcon />
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -39,13 +36,10 @@ export default function EditUserInfo(params: Params) {
         <ModalContent>
           <ModalHeader>Editar meus dados</ModalHeader>
           <form>
-            <ModalBody visibility={params.isOwner ? 'visible' : 'hidden'}>
+            <ModalBody>
               <FormLabel>Telefone</FormLabel>
-
               <Editable
-                defaultValue={
-                  params.user.contactPhone?.toString() ?? '(xx) xxxx-xxxx'
-                }
+                defaultValue={user.contactPhone?.toString() ?? '(xx) xxxx-xxxx'}
                 isPreviewFocusable={true}
               >
                 <EditablePreview />
@@ -77,6 +71,6 @@ export default function EditUserInfo(params: Params) {
           </form>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }

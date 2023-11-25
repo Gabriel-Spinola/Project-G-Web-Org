@@ -8,6 +8,7 @@ import { BiComment } from 'react-icons/bi'
 import './globals.css'
 import './styles/main.scss'
 import 'react-toastify/ReactToastify.css'
+import { StrictMode } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,33 +26,35 @@ export default async function RootLayout({
     <>
       <html lang="en">
         <body className={inter.className}>
-          <ToastContainer
-            className="fixed z-10"
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
+          <StrictMode>
+            <ToastContainer
+              className="fixed z-10"
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
 
-          <Providers>
-            <Navbar />
-            <div
-              id="comment-button"
-              className="fixed bottom-0 right-14 text-pure-white bg-medium-primary p-5 rounded-full mb-6"
-            >
-              <button>
-                <BiComment size={28} />
-              </button>
-            </div>
+            <Providers>
+              <Navbar />
+              <div
+                id="comment-button"
+                className="fixed bottom-0 right-14 text-pure-white bg-medium-primary p-5 rounded-full mb-6"
+              >
+                <button>
+                  <BiComment size={28} />
+                </button>
+              </div>
 
-            {children}
-          </Providers>
+              {children}
+            </Providers>
+          </StrictMode>
         </body>
       </html>
     </>
