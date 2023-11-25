@@ -19,11 +19,15 @@ import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
 import { validateForm } from '@/lib/schemas/login.schema'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
+  const router = useRouter()
+
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const email = useRef('')
   const password = useRef('')
+
   const [isVerified, setIsVerified] = useState<boolean>(false)
 
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
@@ -48,18 +52,28 @@ export default function LoginForm() {
       return
     }
 
-    await toast.promise(
+    const signInResponse = await toast.promise(
       signIn('credentials', {
         email: data.email,
         password: data.password,
-        redirect: true,
-        callbackUrl: '/',
+        redirect: false,
       }),
-      {
-        pending: 'Fazendo login....🥱',
-        success: '🤙',
-      },
+      { pending: 'Fazendo login....🥱' },
     )
+
+    if (signInResponse) {
+      if (signInResponse.error) {
+        toast.error(
+          'Falha ao fazer login, certifique-se de que suas informações estão corretas.',
+        )
+
+        return
+      }
+    }
+
+    toast.success('🤙')
+
+    router.push('/')
   }
 
   async function handleCaptchaSubmission(token: string | null): Promise<void> {
