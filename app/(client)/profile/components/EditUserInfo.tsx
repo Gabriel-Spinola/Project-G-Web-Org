@@ -52,7 +52,33 @@ export default function EditUserInfo({ user }: Params) {
               </Editable>
 
               <FormLabel>Localização</FormLabel>
-              <Editable defaultValue={'Sua localização'}>
+              <Editable
+                defaultValue={user.location?.toString() || 'Sua localização'}
+              >
+                <EditablePreview />
+              </Editable>
+
+              <FormLabel>Site</FormLabel>
+              <Editable
+                defaultValue={user.siteUrl?.toString() || 'Seu website'}
+              >
+                <EditablePreview />
+              </Editable>
+
+              <FormLabel>Email</FormLabel>
+              <Editable
+                defaultValue={user.email?.toString() || 'Seu email de contato'}
+              >
+                <EditablePreview />
+              </Editable>
+
+              <FormLabel>Telefone</FormLabel>
+              <Editable
+                defaultValue={
+                  user.contactPhone?.toString() ||
+                  'Seu telefone ou celular de contato'
+                }
+              >
                 <EditablePreview />
               </Editable>
 

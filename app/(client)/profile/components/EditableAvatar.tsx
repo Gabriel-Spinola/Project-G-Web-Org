@@ -98,6 +98,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
+
         <ModalContent>
           <ModalHeader>
             <ModalCloseButton />
@@ -111,12 +112,13 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
                 type="submit"
                 disabled={isLoading}
                 aria-disabled={isLoading}
+                className="mt-3"
               >
                 {isLoading ? 'Enviando...' : 'Enviar Imagem'}
               </Button>
             </form>
 
-            <div id="image-preview-container">
+            <div id="image-preview-container" className="mt-2">
               {image && (
                 <Image
                   src={URL.createObjectURL(image)}
