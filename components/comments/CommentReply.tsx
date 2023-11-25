@@ -1,26 +1,20 @@
 'use client'
 
 import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
-import { BsThreeDots } from 'react-icons/bs'
 import { Like } from '@prisma/client'
-import {
-  Avatar,
-  Button,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from '@chakra-ui/react'
+import { Avatar, Button } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { deleteComment } from '@/app/(feed)/_serverActions'
 import Link from 'next/link'
 
-import { CommentContext } from './CommentModal'
-import { useSession } from 'next-auth/react'
+import { CommentIdContext } from './CommentModal'
+import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
+import { FaTrash } from 'react-icons/fa'
+import { BiComment, BiSolidComment } from 'react-icons/bi'
+import { ReplyFunctions } from './Comment'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -28,7 +22,17 @@ type Props = {
 
 export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
-  const firstCommentCtx = useContext(CommentContext)
+  const firstCommentId = useContext(CommentIdContext)
+  const replyCtx = useContext(ReplyFunctions)
+  const [openReplies, setOpenReplies] = useState<boolean>(false)
+
+  async function handleComment() {
+    if (!session?.user.id) {
+      signIn()
+    } else {
+      setOpenReplies(!openReplies)
+    }
+  }
 
   const isLiked =
     comment.likes?.some(
@@ -38,20 +42,6 @@ export default function CommentReply({ comment }: Props) {
 
   return (
     <div className="flex flex-col items-end">
-      <Button
-        className="w-full"
-        type="button"
-        onClick={async () => {
-          if (firstCommentCtx.handleFacadeCommentDeletion) {
-            firstCommentCtx.handleFacadeCommentDeletion(comment.id as number)
-          }
-
-          await deleteComment(comment.id as number)
-        }}
-      >
-        Excluir Comentário
-      </Button>
-
       <section className="w-full flex flex-col bg-darker-white rounded-lg my-2 items-start justify-center p-2">
         <div className="flex w-full">
           <Link
@@ -64,12 +54,27 @@ export default function CommentReply({ comment }: Props) {
             />
           </Link>
           <div className="flex flex-col w-full">
-            <Link
-              href={`/profile/${comment.authorId}`}
-              className="capitalize px-2 font-semibold"
-            >
-              {comment.author?.name}
-            </Link>
+            <div className="flex justify-between w-full">
+              <Link
+                href={`/profile/${comment.authorId}`}
+                className="capitalize px-2 font-semibold"
+              >
+                {comment.author?.name}
+              </Link>
+              {isOwner ? (
+                <Button
+                  variant={'ghost'}
+                  type="button"
+                  onClick={async () => {
+                    replyCtx?.replyDeletion(comment.id as number)
+
+                    await deleteComment(comment.id as number)
+                  }}
+                >
+                  <FaTrash />
+                </Button>
+              ) : null}
+            </div>
 
             <label htmlFor="content"></label>
             <article
@@ -80,67 +85,46 @@ export default function CommentReply({ comment }: Props) {
               {comment.content}
             </article>
           </div>
-
-          <div className="flex flex-col items-center justify-center">
-            {isOwner ?? (
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Options"
-                  icon={<BsThreeDots size={20} />}
-                  variant="ghost"
-                  color={'#242424'}
-                  className="bg-opacity-25 absolute hover:text-darker-gray"
-                ></MenuButton>
-
-                <MenuList>
-                  <MenuItem padding={0}>
-                    <Button
-                      className="w-full"
-                      type="button"
-                      onClick={async () => {
-                        if (firstCommentCtx.handleFacadeCommentDeletion) {
-                          firstCommentCtx.handleFacadeCommentDeletion(
-                            comment.id as number,
-                          )
-                        }
-
-                        await deleteComment(comment.id as number)
-                      }}
-                    >
-                      Excluir Comentário
-                    </Button>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            )}
-
-            <LikeButton
-              params={{
-                option: 'commentId',
-                likes: comment.likes?.length ?? 0,
-                targetId: comment.id as number,
-                isLiked,
-              }}
-            />
-          </div>
         </div>
 
-        <section className="w-[95%] p-2 mb-4 rounded-md">
-          <div id="replies">
-            {comment.replies?.map((reply) => (
-              <CommentReply key={reply.id} comment={reply} />
-            ))}
-          </div>
-
-          <NewCommentDialog
-            target={{
-              id: comment.id as number,
-              type: 'parentCommentId',
+        <section className="flex flex-row items-center justify-center pt-4">
+          <LikeButton
+            params={{
+              option: 'commentId',
+              likes: comment.likes?.length ?? 0,
+              targetId: comment.id as number,
+              isLiked,
             }}
           />
+          <button
+            onClick={handleComment}
+            className={`like flex flex-col hover:text-medium-primary text-darker-gray justify-center items-center w-[48px] ${
+              openReplies ? 'text-medium-primary' : 'text-darker-gray'
+            }`}
+          >
+            {!openReplies ? (
+              <BiComment size={24} />
+            ) : (
+              <BiSolidComment size={24} />
+            )}
+            <span>{comment.replies?.length ?? 0}</span>
+          </button>
         </section>
       </section>
+
+      {openReplies ? (
+        <div className="w-full">
+          <NewCommentDialog
+            target={{
+              id: firstCommentId as number,
+              type: 'parentCommentId',
+            }}
+            thisId={comment.id as number}
+            defaultValue={comment.author?.name}
+            onSubmit={replyCtx?.replySubmit}
+          />
+        </div>
+      ) : null}
     </div>
   )
 }

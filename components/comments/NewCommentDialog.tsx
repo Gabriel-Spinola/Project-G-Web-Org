@@ -1,39 +1,56 @@
 'use client'
 
-import React, { useContext } from 'react'
+import React, { FormEvent, useContext, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
-import { CommentContext } from './CommentModal'
 import { PublicationContext } from '../posts/InfiniteScrollPosts'
+import { TDisplayComment } from '@/lib/types/common'
 
 type Props = {
   target: {
     id: string | number
-    type: 'postId' | 'parentCommentId'
+    type: 'postId' | 'parentCommentId' | 'projectId'
   }
+  thisId: number | string
+  onSubmit?: (data: Partial<TDisplayComment>) => void
+  defaultValue?: string
 }
 
-export default function NewCommentDialog({ target }: Props) {
+export default function NewCommentDialog({
+  thisId,
+  target,
+  defaultValue,
+  onSubmit,
+}: Props) {
   const { data: session } = useSession()
-
-  const context = useContext(CommentContext)
   const post = useContext(PublicationContext)
+  const [isLoading, setIsLoading] = useState(false)
 
-  console.log(context.handleFacadeCommentSubmit)
+  async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
 
-  async function handleFormSubmission(formData: FormData) {
+    const formData = new FormData(event.currentTarget)
+    setIsLoading(true)
+
     if (!session?.user.id) {
       signIn()
 
       return
     }
 
-    const a = new FormData()
-    a.append('content', formData.get(`content-${target.id}`)?.toString() ?? '')
+    if (isLoading) {
+      return
+    }
 
-    const validatedData = validateForm(a)
+    const convertedData = new FormData()
+    convertedData.append(
+      'content',
+      formData.get(`content-${thisId}`)?.toString() ?? '',
+    )
+
+    const validatedData = validateForm(convertedData)
 
     if (validatedData.error) {
       let errorMessage = ''
@@ -49,11 +66,13 @@ export default function NewCommentDialog({ target }: Props) {
     }
 
     const { data, error } = await postComment(
-      validatedData.data,
+      convertedData.get('content')?.toString(),
       target,
       post?.id as string,
       session?.user.id,
     )
+
+    setIsLoading(false)
 
     if (error || !data) {
       alert('failed to create comment')
@@ -61,44 +80,46 @@ export default function NewCommentDialog({ target }: Props) {
       return
     }
 
-    if (context.handleFacadeCommentSubmit) {
-      context.handleFacadeCommentSubmit(data)
-
-      console.log(data)
+    if (onSubmit) {
+      onSubmit(data)
     }
   }
 
   function inputReplace() {
     const formInput = document.getElementById(
-      `content-${target.id}`,
+      `content-${thisId}`,
     ) as HTMLInputElement
     const editableDiv = document.getElementById(
-      `editable-container-${target.id}`,
+      `editable-container-${thisId}`,
     ) as HTMLDivElement
 
     formInput.value = editableDiv.innerText
-    console.log(editableDiv.id + ': ' + editableDiv.innerText)
   }
 
   return (
     <form
-      action={handleFormSubmission}
+      onSubmit={handleFormSubmission}
       className="flex justify-end items-end gap-4"
     >
       <input
         type="hidden"
-        id={`content-${target.id}`}
-        name={`content-${target.id}`}
+        id={`content-${thisId}`}
+        name={`content-${thisId}`}
       />
 
       <div
-        className="bg-darker-white w-[75%] p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
+        className="bg-darker-white w-full p-2 rounded-t-md outline-black/25 border-b-2 border-medium-primary"
         contentEditable
-        id={`editable-container-${target.id}`}
+        id={`editable-container-${thisId}`}
         onInput={inputReplace}
-      ></div>
+        suppressContentEditableWarning={true}
+      >
+        <span className="mention">
+          {defaultValue ? `@${defaultValue} ` : null}
+        </span>
+      </div>
 
-      <CreateCommentButton />
+      <CreateCommentButton isLoading={isLoading} />
     </form>
   )
 }

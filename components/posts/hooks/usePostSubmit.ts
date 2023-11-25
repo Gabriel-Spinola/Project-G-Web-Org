@@ -93,6 +93,7 @@ export function usePostSubmit(
       onClose()
     }
 
+    setIsLoading(false)
     router.push(pathName + '?create=1', { scroll: false })
   }
 

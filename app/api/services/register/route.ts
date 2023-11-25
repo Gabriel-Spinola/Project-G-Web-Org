@@ -22,8 +22,6 @@ async function handlePost(req: Request): Promise<RegisterResponse> {
     const email = formData.get('email')?.toString()
     const password = formData.get('password')?.toString()
 
-    console.log(name + ' ' + email + ' ' + password)
-
     if (!name || !email || !password)
       throw new Error("Form fields can't be null")
 
@@ -47,8 +45,6 @@ async function handlePost(req: Request): Promise<RegisterResponse> {
         { status: 500 },
       )
     }
-
-    console.log(JSON.stringify(user))
 
     return NextResponse.json({
       data: {

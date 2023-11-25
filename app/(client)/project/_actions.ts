@@ -1,21 +1,26 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
-import { ESResponse } from '@/lib/types/common'
+import { ESResponse, FullProject } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
-import { Project } from '@prisma/client'
 
-export async function fetchProject(): Promise<ESResponse<Project[]>> {
+export async function fetchProjects(
+  page = 1,
+  signal?: AbortSignal,
+  profileId?: string,
+): Promise<ESResponse<FullProject[]>> {
+  const endpoint = profileId
+    ? `${API_URL}${API_ENDPOINTS.services.projects}${page}/${profileId}`
+    : `${API_URL}${API_ENDPOINTS.services.projects}${page}/`
+
   try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.projects}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.API_SECRET as string,
-        },
-        next: { tags: ['revalidate-project'] },
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_SECRET as string,
       },
-    )
+      next: { tags: ['revalidate-project'] },
+      signal,
+    })
 
     if (!response.ok) {
       const { data }: { data: string } = await response.json()
@@ -23,7 +28,7 @@ export async function fetchProject(): Promise<ESResponse<Project[]>> {
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: Project[] } = await response.json()
+    const { data }: { data: FullProject[] } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {
@@ -33,7 +38,7 @@ export async function fetchProject(): Promise<ESResponse<Project[]>> {
 
 export async function fetchProjectById(
   id: string,
-): Promise<ESResponse<Project>> {
+): Promise<ESResponse<FullProject>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,
@@ -53,7 +58,7 @@ export async function fetchProjectById(
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: Project } = await response.json()
+    const { data }: { data: FullProject } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {
@@ -61,7 +66,9 @@ export async function fetchProjectById(
   }
 }
 
-export async function deleteProject(id: string): Promise<ESResponse<Project>> {
+export async function deleteProject(
+  id: string,
+): Promise<ESResponse<FullProject>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,
@@ -80,7 +87,7 @@ export async function deleteProject(id: string): Promise<ESResponse<Project>> {
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: Project } = await response.json()
+    const { data }: { data: FullProject } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {

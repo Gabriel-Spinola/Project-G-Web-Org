@@ -5,18 +5,17 @@ import NavBarSettings from './NavBarSettings'
 import Link from 'next/link'
 import { StaticImage } from '../Image'
 import './styles/desktopNavbar.css'
+import { useSession } from 'next-auth/react'
 
-export default function DesktopNavbar({
-  userSession,
-}: {
-  userSession?: string
-}) {
+export default function DesktopNavbar() {
+  const { data: session } = useSession()
+
   return (
     <nav
       id="navDesktop"
       className="flex justify-end p-8 h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl"
     >
-      {userSession ? <NavBarSettings className="z-[100]" /> : null}
+      {session ? <NavBarSettings className="z-[100]" /> : null}
 
       <ul className="absolute flex flex-row w-full items-center justify-center">
         <li>
@@ -49,8 +48,8 @@ export default function DesktopNavbar({
           </Link>
         </li>
         <li>
-          {userSession ? (
-            <Link href={`/profile/${userSession}`}>
+          {session ? (
+            <Link href={`/profile/${session.user.id}`}>
               Perfil
               <div></div>
             </Link>

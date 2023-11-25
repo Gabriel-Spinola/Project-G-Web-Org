@@ -7,13 +7,13 @@ interface Params {
   alt: string
 }
 
-export const BgImage = (params: Params) => {
+export const BgImage = ({ url, alt }: Params) => {
   return (
     <section>
       <Image
         className="absolute w-full h-[calc(100vh-88px)] object-cover"
-        src={params.url}
-        alt={params.alt}
+        src={url}
+        alt={alt}
       />
       <div className="absolute w-full h-[calc(100vh-88px)] bg-[black]/75" />
     </section>

@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { Comment, Post } from '@prisma/client'
+import { Comment } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
@@ -14,16 +14,14 @@ import { ESResponse, TDisplayComment } from '@/lib/types/common'
 export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
-  formData: FormData,
+  content: string | undefined,
   replyTarget: {
     id: string | number
-    type: 'postId' | 'parentCommentId'
+    type: 'postId' | 'parentCommentId' | 'projectId'
   },
   fromPost: string,
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
-  const content = formData.get('content')?.toString()
-
   if (!content || !authorId) {
     return {
       data: null,
@@ -47,18 +45,7 @@ export async function postComment(
       },
     })
 
-    const updateTarget: Post = await prisma.post.update({
-      where: { id: fromPost },
-      // NOTE - Push new comment into post
-      data: { comments: { connect: { id: newComment.id } } },
-    })
-
-    console.log(
-      'sucess' +
-        JSON.stringify(newComment) +
-        '\n' +
-        JSON.stringify(updateTarget),
-    )
+    console.log('sucess' + JSON.stringify(newComment) + '\n')
 
     return {
       data: newComment,
@@ -125,7 +112,7 @@ export async function deleteComment(id: number): Promise<void | null> {
 
     console.log(JSON.stringify(deletedComment))
   } catch (error: unknown) {
-    console.error('Failed to delete comment')
+    console.error('Failed to delete comment' + error)
 
     return null
   }

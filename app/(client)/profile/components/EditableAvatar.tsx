@@ -82,6 +82,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
           <ModalHeader>
             <ModalCloseButton />
           </ModalHeader>
+
           <ModalBody>
             <form method="PUT" onSubmit={handleFormSubmission}>
               <SendImageButton onChange={onImageChanges} />

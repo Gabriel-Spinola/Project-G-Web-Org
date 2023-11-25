@@ -3,12 +3,12 @@ import { getProfilePicImageUrl } from '../storage/supabase'
 
 export function getProfilePicURL(
   user: Pick<User, 'profilePic' | 'image'>,
-): string {
-  const profilePicture = user?.profilePic as string
+): string | undefined {
+  const profilePicture = user?.profilePic ?? user?.image ?? undefined
 
-  if (profilePicture !== null || profilePicture !== undefined) {
+  if (profilePicture !== null && profilePicture !== undefined) {
     return getProfilePicImageUrl(profilePicture)
   }
 
-  return ''
+  return undefined
 }
