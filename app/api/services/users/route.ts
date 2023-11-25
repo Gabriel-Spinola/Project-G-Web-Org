@@ -1,10 +1,7 @@
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
-import { handlePost, handlePostWithSelectedData } from './_post'
 import handlePatch from './_patch'
 import handleGet from './_get'
-
-type SelectedData = Record<keyof User, boolean>
 
 async function handler(
   req: Request,
@@ -14,18 +11,6 @@ async function handler(
 
   if (req.method === 'GET') {
     return handleGet()
-  }
-
-  if (req.method === 'POST') {
-    if (id) {
-      const reqData: SelectedData = await req.json()
-
-      return handlePostWithSelectedData(id, reqData)
-    }
-
-    const reqData: Pick<User, 'email' | 'name'> = await req.json()
-
-    return handlePost(reqData)
   }
 
   // ANCHOR - Patch request **will not** handle image updating

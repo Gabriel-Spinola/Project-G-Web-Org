@@ -38,11 +38,11 @@ export async function handlePostDeletion(
  * @param authorId
  * @returns array of posts
  */
-export async function fetchPosts<T extends FullPost = FullPost>(
+export async function fetchPosts(
   page = 1,
   signal?: AbortSignal,
   authorId?: string,
-): Promise<ESResponse<T[]>> {
+): Promise<ESResponse<FullPost[]>> {
   try {
     const apiRequestURL = !authorId
       ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
@@ -64,7 +64,7 @@ export async function fetchPosts<T extends FullPost = FullPost>(
       throw new Error("Response's not okay " + data)
     }
 
-    const { data }: { data: T[] } = await response.json()
+    const { data }: { data: FullPost[] } = await response.json()
 
     return {
       data,

@@ -31,6 +31,7 @@ export const ReplyFunctions = createContext<ReplyFunctionType | undefined>(
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
   const [openReplies, setOpenReplies] = useState<boolean>(false)
+  const context = useContext(CommentContext)
 
   const [replies, setReplies] = useState<Partial<TDisplayComment>[]>(
     comment.replies ?? [],
@@ -44,17 +45,17 @@ export default function Comment({ comment }: Props) {
     setReplies((prev) => prev?.filter((prevComment) => prevComment?.id !== id))
   }
 
-  const isOwner = session?.user.id === comment.authorId
-
-  async function handleComment() {
+  function openCommentReplies() {
     if (!session?.user.id) {
       signIn()
-    } else {
-      setOpenReplies(!openReplies)
+
+      return
     }
+
+    setOpenReplies(!openReplies)
   }
 
-  const context = useContext(CommentContext)
+  const isOwner = session?.user.id === comment.authorId
   const isLiked =
     comment.likes?.some(
       (like: Partial<Like>) => like.userId === session?.user.id,
@@ -82,6 +83,7 @@ export default function Comment({ comment }: Props) {
               >
                 {comment.author?.name}
               </Link>
+
               {isOwner ? (
                 <Button
                   variant={'ghost'}
@@ -119,7 +121,7 @@ export default function Comment({ comment }: Props) {
           />
 
           <button
-            onClick={handleComment}
+            onClick={openCommentReplies}
             className={`like flex flex-col hover:text-medium-primary text-darker-gray justify-center items-center w-[48px] ${
               openReplies ? 'text-medium-primary' : 'text-darker-gray'
             }`}

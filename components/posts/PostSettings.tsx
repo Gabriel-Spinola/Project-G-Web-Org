@@ -4,7 +4,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiSolidShare } from 'react-icons/bi'
 import { AiFillWarning } from 'react-icons/ai'
 import { GiExpand } from 'react-icons/gi'
-import DeletePostButton from '../Buttons/DeletePostButton'
 import { $Enums } from '@prisma/client'
 import {
   Menu,
@@ -16,13 +15,19 @@ import {
 import { FullPost, FullProject } from '@/lib/types/common'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { ReactNode } from 'react'
 
 interface Props {
   publication: FullPost | FullProject
   isOwner: boolean
+  deleteButton: ReactNode
 }
 
-export default function PostSettings({ publication, isOwner }: Props) {
+export default function PostSettings({
+  publication,
+  isOwner,
+  deleteButton,
+}: Props) {
   const { data: session } = useSession()
 
   function CopyLink() {
@@ -76,7 +81,7 @@ export default function PostSettings({ publication, isOwner }: Props) {
           {isOwner || session?.user.position === $Enums.Positions.Admin ? (
             <>
               <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }}>
-                <DeletePostButton postId={publication.id} />
+                {deleteButton}
               </MenuItem>
             </>
           ) : null}
