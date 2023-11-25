@@ -6,6 +6,7 @@ import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment
 import { FullPost, FullProject } from '@/lib/types/common'
 import React, { Suspense, useState } from 'react'
 import ProjectFeed from '../../project/components/ProjectFeed'
+import styles from './profile.module.scss'
 
 type Feed = 'posts' | 'projects'
 
@@ -32,10 +33,22 @@ export default function ProfileFeed({
   console.log(isOwner)
 
   return (
-    <section id="feed">
-      <div id="selectors">
-        <button onClick={() => setSelectedFeed('posts')}>posts</button>
-        <button onClick={() => setSelectedFeed('projects')}>projects</button>
+    <section id="feed" className="w-full">
+      <div id="selectors" className="w-full flex p-4 text-xl">
+        <button
+          onClick={() => setSelectedFeed('posts')}
+          className={`w-full ${styles.underScore}`}
+        >
+          POSTS
+          <div></div>
+        </button>
+        <button
+          onClick={() => setSelectedFeed('projects')}
+          className={`w-full ${styles.underScore}`}
+        >
+          PROJETOS
+          <div></div>
+        </button>
       </div>
 
       {selectedFeed === 'posts' ? (
