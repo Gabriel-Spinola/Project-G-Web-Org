@@ -28,16 +28,18 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
       <div className="absolute flex w-[768px] h-[768px] items-center">
         {currentImageIndex + 1 > 1 && (
           <button
-            className="absolute flex items-center justify-center left-0 h-[768px] w-16 p-2 hover:bg-medium-gray/25"
+            className="absolute flex items-center justify-center left-0 h-[768px] w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
             onClick={handleImageChangeSubtract}
           >
-            <FaArrowCircleLeft size={32} />
+            <div className="shadow-lg">
+              <FaArrowCircleLeft size={32} />
+            </div>
           </button>
         )}
         {/* NOTE - Current Image */}
         {currentImageIndex + 1 < imagesSrc.length && (
           <button
-            className="absolute flex items-center justify-center right-0 h-[768px] w-16 p-2 hover:bg-medium-gray/25"
+            className="absolute flex items-center justify-center right-0 h-[768px] w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
             onClick={handleImageChangeAdd}
           >
             <FaArrowAltCircleRight size={32} />
@@ -50,39 +52,43 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
           <Image
             alt=""
             src={getPostImageUrl(currentImage)}
-            className="overflow-hidden max-h-[768px]"
+            className="overflow-hidden object-contain w-full max-h-[768px]"
           />
         )}
       </div>
 
       {/* NOTE - Image controllers dots */}
-      <section
-        id="controllers"
-        className="flex w-full items-center justify-center max-h-[768px] max-w-[768px] p-4"
-      >
-        <div id="selectors" className="flex flex-row gap-8">
-          {imagesSrc.map((_, index) => (
-            <>
-              <button
-                key={index}
-                onClick={() => {
-                  setCurrentImageIndex(index)
-                }}
-              >
-                <div
-                  className={`rounded-full ${
-                    currentImageIndex === index
-                      ? ' bg-medium-primary'
-                      : 'bg-medium-gray'
-                  } p-2 h-2`}
+      {imagesSrc.length > 1 ? (
+        <section
+          id="controllers"
+          className="flex w-full items-center justify-center max-h-[768px] max-w-[768px] p-4"
+        >
+          <div id="selectors" className="flex flex-row gap-8">
+            {imagesSrc.map((_, index) => (
+              <>
+                <button
+                  key={index}
+                  onClick={() => {
+                    setCurrentImageIndex(index)
+                  }}
                 >
-                  {' '}
-                </div>
-              </button>
-            </>
-          ))}
-        </div>
-      </section>
+                  <div
+                    className={`rounded-full ${
+                      currentImageIndex === index
+                        ? ' bg-medium-primary'
+                        : 'bg-medium-gray'
+                    } p-2 h-2`}
+                  >
+                    {' '}
+                  </div>
+                </button>
+              </>
+            ))}
+          </div>
+        </section>
+      ) : (
+        ''
+      )}
     </section>
   )
 }

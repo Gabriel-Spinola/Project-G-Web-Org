@@ -30,24 +30,27 @@ export default function ProfileFeed({
 
   const [selectedFeed, setSelectedFeed] = useState<Feed>('posts')
 
-  console.log(isOwner)
-
   return (
     <section id="feed" className="w-full">
-      <div id="selectors" className="w-full flex p-4 text-xl">
+      <div id="selectors" className="w-full flex py-4 text-xl">
         <button
           onClick={() => setSelectedFeed('posts')}
-          className={`w-full ${styles.underScore}`}
+          className={`${styles.underScore}`}
         >
           POSTS
-          <div></div>
+          <div
+            className={`${selectedFeed === 'posts' ? 'w-full' : 'w-[120px]'}`}
+          ></div>
         </button>
+
         <button
           onClick={() => setSelectedFeed('projects')}
           className={`w-full ${styles.underScore}`}
         >
           PROJETOS
-          <div></div>
+          <div
+            className={`${selectedFeed !== 'posts' ? 'w-full' : 'w-[120px]'}`}
+          ></div>
         </button>
       </div>
 
