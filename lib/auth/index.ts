@@ -140,22 +140,22 @@ export const AuthOptions: NextAuthOptions = {
       async sendVerificationRequest(params) {
         const { identifier, url, provider } = params
 
-        const newUrl =
-          process.env.NODE_ENV === 'production'
-            ? url.replace(
-                'http://localhost:3000',
-                'https://projectg2.vercel.app',
-              )
-            : url
+        // const newUrl =
+        //   process.env.NODE_ENV === 'production'
+        //     ? url.replace(
+        //         'http://localhost:3000',
+        //         'https://projectg2.vercel.app',
+        //       )
+        //     : url
 
-        const { host } = new URL(newUrl)
+        const { host } = new URL(url)
         const transport = createTransport(provider.server)
         const result = await transport.sendMail({
           to: identifier,
           from: provider.from,
           subject: `Sign in to ${host}`,
-          text: text({ url: newUrl, host }),
-          html: html({ url: newUrl, host }),
+          text: text({ url, host }),
+          html: html({ url, host }),
         })
 
         const failed = result.rejected.concat(result.pending).filter(Boolean)
