@@ -19,7 +19,6 @@ import {
 } from '@chakra-ui/react'
 import React, { FormEvent, useState } from 'react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import { updateUserInfo } from '../_actions'

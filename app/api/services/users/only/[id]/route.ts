@@ -56,10 +56,7 @@ async function handlePatch(userData: Partial<User>) {
   }
 }
 
-export async function handler(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+async function handler(req: Request, { params }: { params: { id: string } }) {
   const { id } = params
 
   switch (req.method) {
