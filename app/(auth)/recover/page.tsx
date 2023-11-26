@@ -17,6 +17,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { signIn } from 'next-auth/react'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 export default function RecoverPage() {
   const email = useRef('')
@@ -35,12 +36,27 @@ export default function RecoverPage() {
   ) {
     event.preventDefault()
 
-    signIn('email', {
-      email: email.current,
-      redirect: true,
-      callbackUrl: '/',
-    })
+    const signInResponse = await toast.promise(
+      signIn('email', {
+        email: email.current,
+        redirect: false,
+      }),
+      { pending: 'Enviando email....🥱' },
+    )
+
+    if (signInResponse) {
+      if (signInResponse.error) {
+        toast.error(
+          'Falha ao enviar email, certifique-se de que suas informações estão corretas.',
+        )
+
+        return
+      }
+    }
+
+    toast('Email enviado faça login por ele!')
   }
+
   return (
     <main className="min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
       {/* Login Container with Background Image */}

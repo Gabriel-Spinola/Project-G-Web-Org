@@ -51,13 +51,15 @@ export default function UserInfo({ isOwner, user }: Params) {
           <hr />
 
           <span className="py-2">
-            <Icon as={BsFillPinMapFill} w={6} h={6} /> Área:{' '}
-            <span className="font-bold">...</span>
+            <Icon as={BsFillPinMapFill} w={6} h={6} />{' '}
+            <span className="font-semibold">Área: </span>
+            <span>{user.title}</span>
           </span>
 
           <span className="py-2">
-            <Icon as={PiSunHorizonFill} w={6} h={6} /> De:{' '}
-            <span className="font-bold">{user.location}</span>
+            <Icon as={PiSunHorizonFill} w={6} h={6} />{' '}
+            <span className="font-semibold">De: </span>
+            <span>{user.location}</span>
           </span>
         </div>
       </div>
@@ -67,27 +69,48 @@ export default function UserInfo({ isOwner, user }: Params) {
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2`}
       >
         <span className="py-2">
-          <Icon as={FaLinkedin} w={6} h={6} /> Linkedin:{' '}
-          <span className="font-bold">
-            {user.linkedinUrl?.toString() ?? ''}
+          <Icon as={FaLinkedin} w={6} h={6} />{' '}
+          <span className="font-semibold">Linkedin: </span>
+          <span className="text-medium-primary hover:underline">
+            {user.linkedinUrl ? (
+              <a href={`${user.linkedinUrl.toString()}`}>
+                {/* displays only the lindekin username */}
+                {user.linkedinUrl.substring(
+                  user.linkedinUrl.indexOf('in/') + 3,
+                  user.linkedinUrl.length - 1,
+                )}
+              </a>
+            ) : (
+              ''
+            )}
           </span>
         </span>
 
         <span className="py-2">
-          <Icon as={TbWorldCode} w={6} h={6} /> Site:{' '}
-          <span className="font-bold">{user.siteUrl?.toString() ?? ''}</span>
-        </span>
-
-        <span className="py-2">
-          <Icon as={IoMailUnread} w={6} h={6} /> Email:{' '}
-          <span className="font-bold">{user.email?.toString() ?? ''}</span>
-        </span>
-
-        <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Telefone:{' '}
-          <span className="font-bold">
-            {user.contactPhone?.toString() ?? ''}
+          <Icon as={TbWorldCode} w={6} h={6} />{' '}
+          <span className="font-semibold">Site: </span>
+          <span className="text-medium-primary hover:underline">
+            {user.siteUrl ? <a href={`${user.siteUrl}`}>{user.siteUrl}</a> : ''}
           </span>
+        </span>
+
+        <span className="py-2">
+          <Icon as={IoMailUnread} w={6} h={6} />{' '}
+          <span className="font-semibold">Email: </span>
+          <span className="text-medium-primary hover:underline">
+            {' '}
+            {user.email ? (
+              <a href={`mailto:${user.email}`}>{user.email}</a>
+            ) : (
+              ''
+            )}
+          </span>
+        </span>
+
+        <span className="py-2">
+          <Icon as={BsFillTelephoneFill} w={6} h={6} />{' '}
+          <span className="font-semibold">Telefone: </span>
+          <span>{user.contactPhone?.toString() ?? ''}</span>
         </span>
       </div>
 
