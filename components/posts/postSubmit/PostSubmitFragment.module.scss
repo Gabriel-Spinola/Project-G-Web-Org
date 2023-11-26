@@ -12,6 +12,7 @@
 #textAnimation {
     -webkit-box-shadow: 0 0 8px #00000065;
     box-shadow: 0 0 8px #00000065;
+    
     div {
         font-family: $nav-font;
         background-color: $darker-white;
@@ -30,11 +31,30 @@
     }
 }
 
+#textAnimation:not(:hover) {
+    div {
+        background-color: $darker-white;
+        height: 2px;
+        width: 16px;
+        animation-name: sub-shrink;
+        animation-duration: 0.5s;
+    }
+}
+
 @keyframes sub-expand {
     0% {
         width: 16px;
     }
     100% {
         width: 182px;
+    }
+}
+
+@keyframes sub-shrink {
+    0% {
+        width: 182px;
+    }
+    100% {
+        width: 16px;
     }
 }
