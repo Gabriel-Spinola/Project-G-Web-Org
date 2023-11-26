@@ -26,6 +26,7 @@ type Props = {
 
 export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [image, setImages] = useState<File | undefined>(undefined)
 
   const [shouldDisplayPreviewImage, setShouldDisplayPreviewImage] =
@@ -91,6 +92,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
         ) : (
           <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
         )}
+
         <div className="absolute bg-darker-white p-2 rounded-full">
           <AiFillCamera color={'#242424'} />
         </div>

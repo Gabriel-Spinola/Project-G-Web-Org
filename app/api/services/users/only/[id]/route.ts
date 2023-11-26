@@ -29,7 +29,6 @@ async function handleGet(id: string) {
       throw new Error('Failed to fetch data')
     }
 
-    revalidateTag('user-data')
     return NextResponse.json({ data }, { status: 200 })
   } catch (e: unknown) {
     console.error(e)
@@ -45,6 +44,7 @@ async function handlePatch(userData: Partial<User>) {
       data: userData,
     })
 
+    revalidateTag('user-data')
     return NextResponse.json(
       { data: `User ${updatedUser.id} updated succesfuly` },
       { status: 200 },

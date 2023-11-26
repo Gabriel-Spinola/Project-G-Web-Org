@@ -24,12 +24,14 @@ import { TbWorldCode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import { updateUserInfo } from '../_actions'
 import { User } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 
 interface Params {
   user: Partial<UserData>
 }
 
 export default function EditUserInfo({ user }: Params) {
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,6 +40,7 @@ export default function EditUserInfo({ user }: Params) {
 
     const formData = new FormData(event.currentTarget)
 
+    const newName = formData.get('name')?.toString()
     const newDescription = formData.get('description')?.toString()
     const newLocation = formData.get('location')?.toString()
     const newSiteUrl = formData.get('site-url')?.toString()
@@ -46,6 +49,7 @@ export default function EditUserInfo({ user }: Params) {
 
     const newUserInfo: Partial<User> = {
       id: user.id,
+      name: newName,
       description: newDescription,
       location: newLocation,
       siteUrl: newSiteUrl,
@@ -68,6 +72,7 @@ export default function EditUserInfo({ user }: Params) {
     }
 
     toast.success('Suas informações foram atualizadas com sucesso! 👌')
+    router.replace(`/profile/${user.id}/`, { scroll: false })
   }
 
   return (
@@ -83,6 +88,18 @@ export default function EditUserInfo({ user }: Params) {
           <ModalHeader>Editar meus dados</ModalHeader>
           <form onSubmit={handleFormSubmission}>
             <ModalBody className="flex flex-col gap-4">
+              <div>
+                <FormLabel>Nome de exibição</FormLabel>
+                <Editable
+                  defaultValue={user.name?.toString()}
+                  isPreviewFocusable={true}
+                >
+                  <EditableTextarea name="name" id="name" />
+
+                  <EditablePreview />
+                </Editable>
+              </div>
+
               <div>
                 <FormLabel>Descrição</FormLabel>
                 <Editable
