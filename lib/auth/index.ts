@@ -47,10 +47,14 @@ function html(params: { url: string; host: string }) {
   return `
   <body style="background: ${color.background};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
-    style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px;">
+    style="background: ${
+      color.mainBackground
+    }; max-width: 600px; margin: auto; border-radius: 10px;">
     <tr>
       <td align="center"
-        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
+          color.text
+        };">
         Faça login no <strong>${escapedHost}</strong>
       </td>
     </tr>
@@ -58,9 +62,19 @@ function html(params: { url: string; host: string }) {
       <td align="center" style="padding: 20px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${url}"
+            <td align="center" style="border-radius: 5px;" bgcolor="${
+              color.buttonBackground
+            }"><a href="${
+              process.env.NODE_ENV === 'production'
+                ? 'https://projectg2.vercel.app/'
+                : 'http://localhost:3000/'
+            }"
                 target="_blank"
-                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Faça
+                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${
+                  color.buttonText
+                }; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${
+                  color.buttonBorder
+                }; display: inline-block; font-weight: bold;">Faça
                 login</a></td>
           </tr>
         </table>
@@ -68,7 +82,9 @@ function html(params: { url: string; host: string }) {
     </tr>
     <tr>
       <td align="center"
-        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
+          color.text
+        };">
         Se você não solicitou este e-mail, pode ignorá-lo com segurança.
       </td>
     </tr>
