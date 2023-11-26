@@ -116,7 +116,6 @@ enum Positions {
 model User {
   id       String  @id @default(cuid())
   name     String
-  displayName String?
   password String?
   image String?
 

@@ -5,11 +5,11 @@ import { UserData } from '@/lib/types/common'
 import { Icon } from '@chakra-ui/react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { PiSunHorizonFill } from 'react-icons/pi'
-import { RiGraduationCapFill } from 'react-icons/ri'
 import EditUserInfo from './EditUserInfo'
 import Graduations from './Graduations'
 import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
+import { FaLinkedin } from 'react-icons/fa'
 
 interface Params {
   isOwner: boolean
@@ -46,25 +46,17 @@ export default function UserInfo({ isOwner, user }: Params) {
         </div>
 
         <div className="flex flex-col h-full py-2 gap-2">
-          <hr />
           <p id="description">{user.description}</p>
 
+          <hr />
+
           <span className="py-2">
-            <Icon as={RiGraduationCapFill} w={6} h={6} /> Graduação:{' '}
-            {user.graduations?.map((graduation, index) => (
-              <span key={index} className="font-bold">
-                {graduation}
-              </span>
-            ))}
+            <Icon as={BsFillPinMapFill} w={6} h={6} /> Área:{' '}
+            <span className="font-bold">...</span>
           </span>
 
           <span className="py-2">
             <Icon as={PiSunHorizonFill} w={6} h={6} /> De:{' '}
-            <span className="font-bold">{user.location}</span>
-          </span>
-
-          <span className="py-2">
-            <Icon as={BsFillPinMapFill} w={6} h={6} /> Em:{' '}
             <span className="font-bold">{user.location}</span>
           </span>
         </div>
@@ -74,6 +66,13 @@ export default function UserInfo({ isOwner, user }: Params) {
         id="contact-info-container"
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2`}
       >
+        <span className="py-2">
+          <Icon as={FaLinkedin} w={6} h={6} /> Linkedin:{' '}
+          <span className="font-bold">
+            {user.linkedinUrl?.toString() ?? ''}
+          </span>
+        </span>
+
         <span className="py-2">
           <Icon as={TbWorldCode} w={6} h={6} /> Site:{' '}
           <span className="font-bold">{user.siteUrl?.toString() ?? ''}</span>

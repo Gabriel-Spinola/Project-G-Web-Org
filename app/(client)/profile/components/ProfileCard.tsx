@@ -14,27 +14,12 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
   Button,
-  Editable,
-  EditablePreview,
-  EditableInput,
-  Divider,
-  FormLabel,
-  EditableTextarea,
   Box,
   IconButton,
   Avatar,
 } from '@chakra-ui/react'
 
-import { EditIcon } from '@chakra-ui/icons'
 import { BsFillGearFill } from 'react-icons/bs'
 
 import React from 'react'
@@ -42,17 +27,12 @@ import { User } from '@prisma/client'
 import EditableAvatar from './EditableAvatar'
 import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { useProfileCard } from '../hooks/useProfileCard'
 import FollowButton from '@/components/Buttons/FollowButton'
 import { UserData } from '@/lib/types/common'
 
 export type DefaultFormValuesType = {
   title: string
 }
-
-const defaultEditFormValues: DefaultFormValuesType = {
-  title: 'Insira seu titulo',
-} as const
 
 interface Props {
   isOwner: boolean
@@ -67,10 +47,6 @@ export default function ProfileCard({
   currentUserId,
   user,
 }: Props) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const handleFormSubmission = useProfileCard(user, defaultEditFormValues)
-
   return (
     <section
       id="Wrapper"
@@ -114,9 +90,6 @@ export default function ProfileCard({
           <h1 className="text-[52px] text-pure-white font-bold">
             {user.name ?? ''}
           </h1>
-          <h2 className="text-xl font-thin text-light-white">
-            {user.title ?? ''}
-          </h2>
 
           <div className="flex flex-row gap-2">
             {!isOwner && (
@@ -165,9 +138,6 @@ export default function ProfileCard({
               />
 
               <MenuList>
-                <MenuItem icon={<EditIcon color="black" />} onClick={onOpen}>
-                  Editar Perfil
-                </MenuItem>
                 <MenuItem icon={<BsFillGearFill color="black" />}>
                   Configurações
                 </MenuItem>
@@ -175,51 +145,6 @@ export default function ProfileCard({
             </Menu>
           </div>
         )}
-
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-
-          <ModalContent>
-            <ModalHeader>Modifique seu perfil</ModalHeader>
-            <ModalCloseButton />
-
-            <form onSubmit={handleFormSubmission}>
-              <ModalBody>
-                <FormLabel>Nome de Exibição</FormLabel>
-                <Editable defaultValue={user.name}>
-                  <EditablePreview />
-                  <EditableTextarea name="display-name" id="display-name" />
-                </Editable>
-
-                <FormLabel>Título</FormLabel>
-                <Editable
-                  defaultValue={user.title || defaultEditFormValues.title}
-                  isPreviewFocusable={true}
-                >
-                  <EditablePreview />
-                  <EditableInput
-                    display="insira um título"
-                    type="text"
-                    name="title"
-                    id="title"
-                  />
-                </Editable>
-
-                <Divider />
-              </ModalBody>
-
-              <ModalFooter>
-                <Button variant="ghost" onClick={onClose}>
-                  Cancelar
-                </Button>
-
-                <Button colorScheme="blue" mr={3} type="submit">
-                  Salvar
-                </Button>
-              </ModalFooter>
-            </form>
-          </ModalContent>
-        </Modal>
       </section>
     </section>
   )
