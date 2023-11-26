@@ -24,11 +24,11 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
 
   return (
     // NOTE - Image and controllers Wrapper
-    <section className="relative lg:h-[768px] w-full">
+    <section className="relative h-full w-full">
       <div className="absolute flex w-full h-full items-center">
         {currentImageIndex + 1 > 1 && (
           <button
-            className="absolute flex items-center justify-center left-0 h-full w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
+            className="absolute flex items-center justify-center rounded-l-lg left-0 h-full w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
             onClick={handleImageChangeSubtract}
           >
             <div className="shadow-lg">
@@ -39,7 +39,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
         {/* NOTE - Current Image */}
         {currentImageIndex + 1 < imagesSrc.length && (
           <button
-            className="absolute flex items-center justify-center right-0 h-full w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
+            className="absolute flex items-center justify-center rounded-r-lg right-0 h-full w-16 p-2 text-darker-primary hover:bg-medium-gray/25"
             onClick={handleImageChangeAdd}
           >
             <FaArrowAltCircleRight size={32} />
