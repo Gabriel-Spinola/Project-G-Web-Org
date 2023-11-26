@@ -43,10 +43,10 @@ export default async function RootLayout({
             <Navbar />
             <div
               id="comment-button"
-              className="fixed bottom-0 right-14 text-pure-white bg-medium-primary p-5 rounded-full mb-6"
+              className="fixed bottom-0 w-12 h-12 flex items-center justify-center right-14 text-pure-white bg-medium-primary p-5 rounded-full mb-6"
             >
               <button>
-                <BiComment size={28} />
+                <BiComment size={24} />
               </button>
             </div>
 

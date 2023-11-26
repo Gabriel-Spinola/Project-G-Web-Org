@@ -7,6 +7,7 @@ import { FullProject } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import ProjectPost from './ProjectPost'
 import { CircularProgress } from '@chakra-ui/react'
+import Link from 'next/link'
 
 type Props = {
   initialPublication: FullProject[] | undefined
@@ -25,7 +26,16 @@ export default function ProjectFeed({
     useFeed(initialPublication, inView, fetchProjects, profileId)
 
   return (
-    <section id="feed">
+    <section
+      id="feed"
+      className="w-full flex flex-col items-center justify-center gap-8 "
+    >
+      <Link
+        className={`w-full mt-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
+        href="/project/mutate"
+      >
+        Adicione um projeto
+      </Link>
       {projects?.map((project: FullProject) => (
         <ProjectPost
           key={project.id}
