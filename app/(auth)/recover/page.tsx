@@ -50,6 +50,8 @@ export default function RecoverPage() {
           'Falha ao enviar email, certifique-se de que suas informações estão corretas.',
         )
 
+        console.error(signInResponse.error)
+
         return
       }
     }
