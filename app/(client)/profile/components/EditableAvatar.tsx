@@ -26,14 +26,26 @@ type Props = {
 
 export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [image, setImages] = useState<File | undefined>(undefined)
+
+  const [shouldDisplayPreviewImage, setShouldDisplayPreviewImage] =
+    useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   async function handleFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
 
-    const { error } = await changeProfilePic(profileId, formData)
+    setIsLoading(true)
+
+    const { error } = await toast.promise(
+      changeProfilePic(profileId, formData),
+      { pending: 'Enviando nova imagem...' },
+    )
+
+    setIsLoading(false)
 
     if (error) {
       toast.error('Falha ao atualizar imagem 😔')
@@ -42,7 +54,8 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
       return
     }
 
-    setImages(undefined)
+    toast.success('Imagem atualizada com sucesso! 👌')
+    setShouldDisplayPreviewImage(true)
     onClose()
   }
 
@@ -71,7 +84,15 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
         onClick={onOpen}
         className="flex justify-end items-end hover:brightness-75 hover:cursor-pointer"
       >
-        <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
+        {shouldDisplayPreviewImage ? (
+          <Avatar
+            size={'2xl'}
+            src={URL.createObjectURL(image as File)}
+          ></Avatar>
+        ) : (
+          <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
+        )}
+
         <div className="absolute bg-darker-white p-2 rounded-full">
           <AiFillCamera color={'#242424'} />
         </div>
@@ -79,6 +100,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
+
         <ModalContent>
           <ModalHeader>
             <ModalCloseButton />
@@ -88,10 +110,17 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
             <form method="PUT" onSubmit={handleFormSubmission}>
               <SendImageButton onChange={onImageChanges} />
 
-              <Button type="submit">Send image</Button>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                aria-disabled={isLoading}
+                className="mt-3"
+              >
+                {isLoading ? 'Enviando...' : 'Enviar Imagem'}
+              </Button>
             </form>
 
-            <div id="image-preview-container">
+            <div id="image-preview-container" className="mt-2">
               {image && (
                 <Image
                   src={URL.createObjectURL(image)}

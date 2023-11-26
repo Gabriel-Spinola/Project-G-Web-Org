@@ -8,7 +8,7 @@ import React, { Suspense, useState } from 'react'
 import ProjectFeed from '../../project/components/ProjectFeed'
 import styles from './profile.module.scss'
 
-type Feed = 'posts' | 'projects'
+type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
   mustServerFetched: {
@@ -28,29 +28,33 @@ export default function ProfileFeed({
 }: Props) {
   const { startupPosts, startupProjects, currentUserId } = mustServerFetched
 
-  const [selectedFeed, setSelectedFeed] = useState<Feed>('posts')
+  const [selectedFeed, setSelectedFeed] = useState<FeedSelectOptions>('posts')
 
   return (
     <section id="feed" className="w-full">
-      <div id="selectors" className="w-full flex py-4 text-xl">
+      <div id="selectors" className="w-full flex p-4 text-xl">
         <button
           onClick={() => setSelectedFeed('posts')}
-          className={`${styles.underScore}`}
+          className={`w-full ${styles.underScore} ${
+            selectedFeed === 'posts'
+              ? 'text-darker-primary font-semibold'
+              : ' text-medium-gray'
+          }`}
         >
           POSTS
-          <div
-            className={`${selectedFeed === 'posts' ? 'w-full' : 'w-[120px]'}`}
-          ></div>
+          <div></div>
         </button>
 
         <button
           onClick={() => setSelectedFeed('projects')}
-          className={`w-full ${styles.underScore}`}
+          className={`w-full ${styles.underScore} ${
+            selectedFeed === 'projects'
+              ? 'text-darker-primary font-semibold'
+              : ' text-medium-gray'
+          }`}
         >
           PROJETOS
-          <div
-            className={`${selectedFeed !== 'posts' ? 'w-full' : 'w-[120px]'}`}
-          ></div>
+          <div></div>
         </button>
       </div>
 

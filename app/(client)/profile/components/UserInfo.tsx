@@ -5,13 +5,14 @@ import { UserData } from '@/lib/types/common'
 import { Icon } from '@chakra-ui/react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { PiSunHorizonFill } from 'react-icons/pi'
-import { RiGraduationCapFill } from 'react-icons/ri'
 import EditUserInfo from './EditUserInfo'
 import Graduations from './Graduations'
+import { IoMailUnread } from 'react-icons/io5'
+import { TbWorldCode } from 'react-icons/tb'
+import { FaLinkedin } from 'react-icons/fa'
 
 interface Params {
   isOwner: boolean
-
   user: Partial<UserData>
 }
 
@@ -40,30 +41,25 @@ export default function UserInfo({ isOwner, user }: Params) {
       >
         <div className="flex flex-row justify-evenly items-center m-4">
           <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-          <EditUserInfo isOwner={isOwner} user={user} />
+
+          {isOwner && <EditUserInfo user={user} />}
         </div>
 
         <div className="flex flex-col h-full py-2 gap-2">
-          <hr />
           <p id="description">{user.description}</p>
 
+          <hr />
+
           <span className="py-2">
-            <Icon as={RiGraduationCapFill} w={6} h={6} /> Graduação:{' '}
-            {user.graduations?.map((graduation, index) => (
-              <span key={index} className="font-bold">
-                {graduation}
-              </span>
-            ))}
+            <Icon as={BsFillPinMapFill} w={6} h={6} />{' '}
+            <span className="font-semibold">Área: </span>
+            <span>{user.title}</span>
           </span>
 
           <span className="py-2">
-            <Icon as={PiSunHorizonFill} w={6} h={6} /> De:{' '}
-            <span className="font-bold">{user.location}</span>
-          </span>
-
-          <span className="py-2">
-            <Icon as={BsFillPinMapFill} w={6} h={6} /> Em:{' '}
-            <span className="font-bold">{user.location}</span>
+            <Icon as={PiSunHorizonFill} w={6} h={6} />{' '}
+            <span className="font-semibold">De: </span>
+            <span>{user.location}</span>
           </span>
         </div>
       </div>
@@ -73,20 +69,48 @@ export default function UserInfo({ isOwner, user }: Params) {
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2`}
       >
         <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Site:{' '}
-          <span className="font-bold">{user.siteUrl?.toString() ?? ''}</span>
-        </span>
-
-        <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Email:{' '}
-          <span className="font-bold">{user.email?.toString() ?? ''}</span>
-        </span>
-
-        <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Telefone:{' '}
-          <span className="font-bold">
-            {user.contactPhone?.toString() ?? ''}
+          <Icon as={FaLinkedin} w={6} h={6} />{' '}
+          <span className="font-semibold">Linkedin: </span>
+          <span className="text-medium-primary hover:underline">
+            {user.linkedinUrl ? (
+              <a href={`${user.linkedinUrl.toString()}`}>
+                {/* displays only the lindekin username */}
+                {user.linkedinUrl.substring(
+                  user.linkedinUrl.indexOf('in/') + 3,
+                  user.linkedinUrl.length - 1,
+                )}
+              </a>
+            ) : (
+              ''
+            )}
           </span>
+        </span>
+
+        <span className="py-2">
+          <Icon as={TbWorldCode} w={6} h={6} />{' '}
+          <span className="font-semibold">Site: </span>
+          <span className="text-medium-primary hover:underline">
+            {user.siteUrl ? <a href={`${user.siteUrl}`}>{user.siteUrl}</a> : ''}
+          </span>
+        </span>
+
+        <span className="py-2">
+          <Icon as={IoMailUnread} w={6} h={6} />{' '}
+          <span className="font-semibold">Email: </span>
+          <span className="text-medium-primary hover:underline">
+            {' '}
+            {user.email ? (
+              <a href={`mailto:${user.email}`}>{user.email}</a>
+            ) : (
+              ''
+            )}
+          </span>
+        </span>
+
+        <span className="py-2">
+          <Icon as={BsFillTelephoneFill} w={6} h={6} />{' '}
+          <span className="font-semibold">Telefone: </span>
+          <span>{user.contactPhone?.toString() ?? ''}</span>
         </span>
       </div>
 
