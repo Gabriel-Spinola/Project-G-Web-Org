@@ -9,6 +9,7 @@ import EditUserInfo from './EditUserInfo'
 import Graduations from './Graduations'
 import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
+import { FaLinkedin } from 'react-icons/fa'
 
 interface Params {
   isOwner: boolean
@@ -66,7 +67,7 @@ export default function UserInfo({ isOwner, user }: Params) {
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2`}
       >
         <span className="py-2">
-          <Icon as={TbWorldCode} w={6} h={6} /> Linkedin:{' '}
+          <Icon as={FaLinkedin} w={6} h={6} /> Linkedin:{' '}
           <span className="font-bold">
             {user.linkedinUrl?.toString() ?? ''}
           </span>

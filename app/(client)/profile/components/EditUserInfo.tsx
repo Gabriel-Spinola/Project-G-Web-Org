@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react'
 import React, { FormEvent, useState } from 'react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
+import { FaLinkedin } from 'react-icons/fa'
 import { TbWorldCode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import { updateUserInfo } from '../_actions'
@@ -114,7 +115,7 @@ export default function EditUserInfo({ user }: Params) {
 
               <div className="py-2">
                 <FormLabel>
-                  <Icon as={TbWorldCode} w={6} h={6} /> Linkedin:
+                  <Icon as={FaLinkedin} w={6} h={6} /> Linkedin:
                 </FormLabel>
 
                 <Editable
