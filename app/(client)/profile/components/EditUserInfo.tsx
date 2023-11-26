@@ -141,7 +141,7 @@ export default function EditUserInfo({ user }: Params) {
                   }
                   isPreviewFocusable={true}
                 >
-                  <EditableInput type="url" name="linkedin" id="linkedin" />
+                  <EditableInput type="text" name="linkedin" id="linkedin" />
                   <EditablePreview />
                 </Editable>
               </div>
