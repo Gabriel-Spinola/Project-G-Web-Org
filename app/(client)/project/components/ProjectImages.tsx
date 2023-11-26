@@ -1,30 +1,36 @@
 'use client'
 
-import { getPostImageUrl } from '@/lib/storage/supabase'
+import { getProjectImageUrl } from '@/lib/storage/supabase'
 import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FaArrowAltCircleRight, FaArrowCircleLeft } from 'react-icons/fa'
 
 type ImagesData = {
   imagesSrc: string[]
+  projectOwner?: string | null
 }
 
-export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
+export default function ProjectImagesCarousel({
+  imagesSrc,
+  projectOwner,
+}: ImagesData) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const currentImage = imagesSrc.at(currentImageIndex)
 
   function handleImageChangeAdd() {
     setCurrentImageIndex((current) => current + 1)
+    console.log(currentImage)
   }
 
   function handleImageChangeSubtract() {
     setCurrentImageIndex((current) => current - 1)
+    console.log(currentImage)
   }
 
   return (
     // NOTE - Image and controllers Wrapper
-    <section className="relative lg:h-[768px] w-full">
+    <section className="relative h-full w-full">
       <div className="absolute flex w-full h-full items-center">
         {currentImageIndex + 1 > 1 && (
           <button
@@ -47,11 +53,13 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
         )}
       </div>
       {/* NOTE - Image Wrapper */}
-      <div className="overflow-hidden flex items-center justify-center bg-darker-gray rounded-lg w-full h-full">
+      <div className="overflow-hidden flex items-center justify-center bg-darker-gray rounded-l-lg w-full h-full">
         {currentImage && (
           <Image
             alt=""
-            src={getPostImageUrl(currentImage)}
+            src={getProjectImageUrl(
+              `projects/${projectOwner}/images/${currentImage}`,
+            )}
             className="overflow-hidden object-contain w-full max-h-full"
           />
         )}
@@ -61,7 +69,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
       {imagesSrc.length > 1 ? (
         <section
           id="controllers"
-          className="flex w-full items-center justify-center max-h-full max-w-full p-4"
+          className="flex w-full items-center justify-center max-h-full max-w-full p-1"
         >
           <div id="selectors" className="flex flex-row gap-8">
             {imagesSrc.map((_, index) => (

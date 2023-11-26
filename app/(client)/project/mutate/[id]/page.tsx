@@ -13,6 +13,7 @@ import { AuthOptions } from '@/lib/auth'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { fetchProjectById } from '../../_actions'
+import CreateProjectFormSkeleton from '../../components/skeletons/CreateProjectFormSkeleton'
 
 type Props = {
   params: { id: string }
@@ -35,7 +36,7 @@ export default async function CreateProject({ params }: Props) {
 
   return (
     <main>
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<CreateProjectFormSkeleton />}>
         <CreateProjectForm
           projectId={id}
           content={{ ...data }}

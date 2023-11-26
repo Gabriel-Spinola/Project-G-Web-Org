@@ -13,8 +13,8 @@ export default async function Projects() {
   }
 
   return (
-    <main className="mt-16 flex ml-5">
-      <div className="w-full flex-col items-center justify-center">
+    <main className="max-w-screen min-w-full min-h-[calc(100vh-88px)] bg-darker-white flex items-center justify-center">
+      <div className="w-full md:w-[70%]">
         <Suspense fallback={<span>Loading feed...</span>}>
           <ProjectFeed
             initialPublication={projects ?? undefined}

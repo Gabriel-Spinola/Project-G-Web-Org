@@ -6,12 +6,23 @@ import { Avatar } from '@chakra-ui/avatar'
 import CommentModal from '@/components/comments/CommentModal'
 import { FullProject } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { Like, User } from '@prisma/client'
+import { $Enums, Like, User } from '@prisma/client'
 import { MdComment } from 'react-icons/md'
-import PostSettings from '@/components/posts/PostSettings'
 import { usePathname, useRouter } from 'next/navigation'
 import { deleteProject } from '../_actions'
 import { toast } from 'react-toastify'
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { BiSolidShare } from 'react-icons/bi'
+import { AiFillWarning } from 'react-icons/ai'
+import { useSession } from 'next-auth/react'
+import ProjectImagesCarousel from './ProjectImages'
 
 type Props = {
   project: FullProject
@@ -19,6 +30,8 @@ type Props = {
 }
 
 export default function ProjectPost({ project, currentUserId }: Props) {
+  const { data: session } = useSession()
+
   const router = useRouter()
   const pathName = usePathname()
 
@@ -28,33 +41,74 @@ export default function ProjectPost({ project, currentUserId }: Props) {
     (like: Partial<Like>) => like.userId === currentUserId,
   )
 
+  function CopyLink() {
+    const postUrl = `https://${window.location.hostname}/project/${project.id}`
+
+    navigator.clipboard.writeText(postUrl)
+
+    toast.success('Link da publicação copiado')
+  }
+
   return (
     // NOTE - PROJECT POST
-    <section className="w-full flex flex-row-reverse md:w-[90%] h-[480px] md:h-[612px] rounded-xl bg-medium-tertiary mb-5">
+    <section className="w-full flex flex-row-reverse h-[480px] md:h-[612px] rounded-xl">
       <section className="w-16 h-full flex flex-col items-center justify-evenly bg-medium-gray rounded-r-xl">
-        <PostSettings
-          publication={project}
-          isOwner={isOwner}
-          deleteButton={
-            <button
-              onClick={async () => {
-                const { error } = await deleteProject(project.id)
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<BsThreeDotsVertical size={20} />}
+            variant="ghost"
+            color={'#242424'}
+            className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
+          ></MenuButton>
 
-                if (error) {
-                  toast.error('Falha ao deleter projeto 😔')
+          <MenuList
+            paddingY={2}
+            width={72}
+            shadow={'lg'}
+            bg={'#262626'}
+            textColor={'#ebebeb'}
+          >
+            <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }} gap={'16px'}>
+              <span onClick={CopyLink} className="flex flex-row">
+                <BiSolidShare size={20} />
+                Compartilhar publicação
+              </span>
+            </MenuItem>
 
-                  return
-                }
+            {!isOwner ? (
+              <MenuItem bg={'#262626'} _hover={{ bg: '#202020' }} gap={'16px'}>
+                <AiFillWarning size={20} />
+                Denunciar publicação
+              </MenuItem>
+            ) : null}
 
-                router.replace(`${pathName}?delete=${project.id}`, {
-                  scroll: false,
-                })
-              }}
-            >
-              deletar
-            </button>
-          }
-        />
+            {isOwner || session?.user.position === $Enums.Positions.Admin ? (
+              <>
+                <MenuItem
+                  bg={'#262626'}
+                  _hover={{ bg: '#202020' }}
+                  onClick={async () => {
+                    const { error } = await deleteProject(project.id)
+
+                    if (error) {
+                      toast.error('Falha ao deleter projeto 😔')
+
+                      return
+                    }
+
+                    router.replace(`${pathName}?delete=${project.id}`, {
+                      scroll: false,
+                    })
+                  }}
+                >
+                  Deletar publicação
+                </MenuItem>
+              </>
+            ) : null}
+          </MenuList>
+        </Menu>
 
         <LikeProjectButton
           params={{
@@ -76,6 +130,10 @@ export default function ProjectPost({ project, currentUserId }: Props) {
           />
         </div>
       </section>
+      <ProjectImagesCarousel
+        imagesSrc={project.images}
+        projectOwner={project.authorId}
+      />
     </section>
   )
 }
