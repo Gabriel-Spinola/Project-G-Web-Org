@@ -35,7 +35,11 @@ export default function ProfileFeed({
       <div id="selectors" className="w-full flex p-4 text-xl">
         <button
           onClick={() => setSelectedFeed('posts')}
-          className={`w-full ${styles.underScore}`}
+          className={`w-full ${styles.underScore} ${
+            selectedFeed === 'posts'
+              ? 'text-darker-primary font-semibold'
+              : ' text-medium-gray'
+          }`}
         >
           POSTS
           <div></div>
@@ -43,7 +47,11 @@ export default function ProfileFeed({
 
         <button
           onClick={() => setSelectedFeed('projects')}
-          className={`w-full ${styles.underScore}`}
+          className={`w-full ${styles.underScore} ${
+            selectedFeed === 'projects'
+              ? 'text-darker-primary font-semibold'
+              : ' text-medium-gray'
+          }`}
         >
           PROJETOS
           <div></div>
