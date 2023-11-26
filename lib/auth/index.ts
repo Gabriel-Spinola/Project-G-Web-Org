@@ -66,8 +66,11 @@ function html(params: { url: string; host: string }) {
               color.buttonBackground
             }"><a href="${
               process.env.NODE_ENV === 'production'
-                ? 'https://projectg2.vercel.app/'
-                : 'http://localhost:3000/'
+                ? url.replace(
+                    'http://localhost:3000',
+                    'https://projectg2.vercel.app',
+                  )
+                : url
             }"
                 target="_blank"
                 style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${
