@@ -103,6 +103,7 @@ export default function RecoverPage() {
                 isVerified={isVerified}
                 buttonText={'ENVIAR E-MAIL DE RECUPERAÇÃO'}
               />
+
               <p className="text-center">
                 Já possui Conta?{' '}
                 <Link
