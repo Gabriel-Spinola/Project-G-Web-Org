@@ -155,7 +155,7 @@ export default function EditUserInfo({ user }: Params) {
                   defaultValue={user.siteUrl?.toString() || 'Seu website'}
                   isPreviewFocusable={true}
                 >
-                  <EditableInput type="url" name="site-url" id="site-url" />
+                  <EditableInput type="text" name="site-url" id="site-url" />
                   <EditablePreview />
                 </Editable>
               </div>
