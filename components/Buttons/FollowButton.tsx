@@ -1,7 +1,7 @@
 'use client'
 
 import { follow, unfollow } from '@/app/(client)/profile/_server-actions'
-import { Button, background } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'

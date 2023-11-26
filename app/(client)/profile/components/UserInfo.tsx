@@ -8,10 +8,11 @@ import { PiSunHorizonFill } from 'react-icons/pi'
 import { RiGraduationCapFill } from 'react-icons/ri'
 import EditUserInfo from './EditUserInfo'
 import Graduations from './Graduations'
+import { IoMailUnread } from 'react-icons/io5'
+import { TbWorldCode } from 'react-icons/tb'
 
 interface Params {
   isOwner: boolean
-
   user: Partial<UserData>
 }
 
@@ -40,7 +41,8 @@ export default function UserInfo({ isOwner, user }: Params) {
       >
         <div className="flex flex-row justify-evenly items-center m-4">
           <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
-          <EditUserInfo isOwner={isOwner} user={user} />
+
+          {isOwner && <EditUserInfo user={user} />}
         </div>
 
         <div className="flex flex-col h-full py-2 gap-2">
@@ -73,12 +75,12 @@ export default function UserInfo({ isOwner, user }: Params) {
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2`}
       >
         <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Site:{' '}
+          <Icon as={TbWorldCode} w={6} h={6} /> Site:{' '}
           <span className="font-bold">{user.siteUrl?.toString() ?? ''}</span>
         </span>
 
         <span className="py-2">
-          <Icon as={BsFillTelephoneFill} w={6} h={6} /> Email:{' '}
+          <Icon as={IoMailUnread} w={6} h={6} /> Email:{' '}
           <span className="font-bold">{user.email?.toString() ?? ''}</span>
         </span>
 

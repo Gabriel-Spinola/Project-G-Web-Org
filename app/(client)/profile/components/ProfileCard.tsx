@@ -50,9 +50,9 @@ export type DefaultFormValuesType = {
   title: string
 }
 
-const defaultEditFormValues = {
+const defaultEditFormValues: DefaultFormValuesType = {
   title: 'Insira seu titulo',
-}
+} as const
 
 interface Props {
   isOwner: boolean
@@ -120,22 +120,24 @@ export default function ProfileCard({
 
           <div className="flex flex-row gap-2">
             {!isOwner && (
-              <FollowButton
-                authorId={currentUserId}
-                isFollowing={isFollowing}
-                targetId={user.id as string}
-              />
-            )}
+              <>
+                <FollowButton
+                  authorId={currentUserId}
+                  isFollowing={isFollowing}
+                  targetId={user.id as string}
+                />
 
-            <Button
-              marginY={4}
-              color="#FF7452"
-              bg="white"
-              _hover={{ background: '#FF7452', color: 'white' }}
-              className="rounded-[8px] font-normal"
-            >
-              Enviar mensagem
-            </Button>
+                <Button
+                  marginY={4}
+                  color="#FF7452"
+                  bg="white"
+                  _hover={{ background: '#FF7452', color: 'white' }}
+                  className="rounded-[8px] font-normal"
+                >
+                  Enviar mensagem
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

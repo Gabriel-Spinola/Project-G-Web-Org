@@ -23,7 +23,7 @@ export default function ProjectPost({ project, currentUserId }: Props) {
   const pathName = usePathname()
 
   const isOwner = currentUserId === project.authorId
-  console.log(currentUserId)
+
   const isLiked: boolean = project.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )

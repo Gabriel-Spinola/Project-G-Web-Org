@@ -2,6 +2,7 @@ import { prisma } from '@/lib/database/prisma'
 import { storeFile } from '@/lib/storage/actions'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 async function updateUser(
@@ -51,5 +52,6 @@ export default async function handlePut(id: string, req: Request) {
     )
   }
 
+  revalidateTag('user-data')
   return NextResponse.json({ data }, { status: 200 })
 }
