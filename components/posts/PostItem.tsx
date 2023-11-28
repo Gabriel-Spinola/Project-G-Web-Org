@@ -36,8 +36,6 @@ export default function PostItem() {
 
   console.log(publicationCtx.pinnedBy?.id)
 
-  console.log(isPinned)
-
   return (
     <div className={`w-full ${styles.post}`}>
       <PostHeader post={publicationCtx} isOwner={isOwner} />

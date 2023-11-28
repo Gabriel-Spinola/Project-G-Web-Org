@@ -89,15 +89,15 @@ export async function increaseLikeCount(
 }
 
 export async function unpinPublication(
-  selectedType: LikeOptions,
-  targetId: string | number,
+  selectedType: PinOptions,
+  targetId: string,
 ): Promise<void> {
   try {
-    const deleteLike = await prisma.like.deleteMany({
-      where: { [selectedType]: targetId },
+    const pin = await prisma.user.deleteMany({
+      where: { pinnedPosts: { some: { id: targetId } } },
     })
 
-    console.log('DELETE? ' + JSON.stringify(deleteLike))
+    console.log('DELETE? ' + JSON.stringify(pin))
   } catch (error: unknown) {
     console.error('Like Failed ' + error)
   }
@@ -108,12 +108,15 @@ export async function pinPublication(
   authorId: string,
   targetId: string,
 ): Promise<void> {
-  async function getQuery() {
+  function getQuery() {
     switch (selectedType) {
       case 'postId': {
         return prisma.user.update({
           where: { id: authorId },
           data: { pinnedPosts: { connect: { id: targetId } } },
+          select: {
+            pinnedPosts: true,
+          },
         })
       }
 
@@ -125,6 +128,10 @@ export async function pinPublication(
               connect: { id: targetId },
             },
           },
+          select: {
+            pinnedPosts: true,
+            pinnedProjects: true,
+          },
         })
     }
   }
@@ -132,7 +139,7 @@ export async function pinPublication(
   try {
     const pin = await getQuery()
 
-    console.log('works' + pin.id)
+    console.log('works' + pin.pinnedPosts)
   } catch (error: unknown) {
     // REVIEW - check of possible optimizations for this solution
     if (error instanceof PrismaClientKnownRequestError) {
