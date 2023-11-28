@@ -38,7 +38,7 @@ export function PostSubmitForm() {
       {/* Form Section */}
       <section
         id="post-form"
-        className="notClose z-1 drop-shadow-sm text-xl p-8 rounded-[8px]"
+        className="notClose z-1 drop-shadow-sm text-xl rounded-[8px]"
       >
         <form method="POST" onSubmit={onFormSubmit} className="notClose">
           {/* Content */}

@@ -7,6 +7,7 @@ import {
   ModalCloseButton,
   ModalBody,
   Button,
+  ModalHeader,
 } from '@chakra-ui/react'
 import { signIn, useSession } from 'next-auth/react'
 import React, { useContext } from 'react'
@@ -26,7 +27,9 @@ export default function NewPostModal() {
       >
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
-          <ModalCloseButton />
+          <ModalHeader>
+            <ModalCloseButton />
+          </ModalHeader>
 
           <ModalBody height={'100%'}>
             {session?.user.id ? (
