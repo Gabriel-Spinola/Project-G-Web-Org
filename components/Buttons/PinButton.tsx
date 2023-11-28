@@ -28,9 +28,9 @@ export default function PinButton({
     setIsPinned(!isPinned)
 
     if (!isPinned) {
-      await pinPublication('postId', session.user.id, targetId)
+      await pinPublication('pinnedPosts', session.user.id, targetId)
     } else {
-      await unpinPublication('postId', targetId)
+      await unpinPublication('pinnedProjects', targetId)
     }
   }
 

@@ -108,36 +108,14 @@ export async function pinPublication(
   authorId: string,
   targetId: string,
 ): Promise<void> {
-  function getQuery() {
-    switch (selectedType) {
-      case 'postId': {
-        return prisma.user.update({
-          where: { id: authorId },
-          data: { pinnedPosts: { connect: { id: targetId } } },
-          select: {
-            pinnedPosts: true,
-          },
-        })
-      }
-
-      case 'projectId':
-        return prisma.user.update({
-          where: { id: authorId },
-          data: {
-            pinnedProjects: {
-              connect: { id: targetId },
-            },
-          },
-          select: {
-            pinnedPosts: true,
-            pinnedProjects: true,
-          },
-        })
-    }
-  }
-
   try {
-    const pin = await getQuery()
+    const pin = await prisma.user.update({
+      where: { id: authorId },
+      data: { [selectedType]: { connect: { id: targetId } } },
+      select: {
+        [selectedType]: true,
+      },
+    })
 
     console.log('works' + pin.pinnedPosts)
   } catch (error: unknown) {
