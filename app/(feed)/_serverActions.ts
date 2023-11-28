@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/database/prisma'
-import { LikeOptions } from './_constants'
+import { LikeOptions, PinOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -76,6 +76,63 @@ export async function increaseLikeCount(
     })
 
     console.log('POST? ' + JSON.stringify(updateUser))
+  } catch (error: unknown) {
+    // REVIEW - check of possible optimizations for this solution
+    if (error instanceof PrismaClientKnownRequestError) {
+      console.warn('cannot like the same post twice thrown\n', error)
+
+      return
+    }
+
+    console.error('Like Failed ' + error)
+  }
+}
+
+export async function unpinPublication(
+  selectedType: LikeOptions,
+  targetId: string | number,
+): Promise<void> {
+  try {
+    const deleteLike = await prisma.like.deleteMany({
+      where: { [selectedType]: targetId },
+    })
+
+    console.log('DELETE? ' + JSON.stringify(deleteLike))
+  } catch (error: unknown) {
+    console.error('Like Failed ' + error)
+  }
+}
+
+export async function pinPublication(
+  selectedType: PinOptions,
+  authorId: string,
+  targetId: string,
+): Promise<void> {
+  async function getQuery() {
+    switch (selectedType) {
+      case 'postId': {
+        return prisma.user.update({
+          where: { id: authorId },
+          data: { pinnedPosts: { connect: { id: targetId } } },
+        })
+      }
+
+      case 'projectId':
+        return prisma.user.update({
+          where: { id: authorId },
+          data: {
+            pinnedProjects: {
+              connect: { id: targetId },
+            },
+          },
+        })
+    }
+  }
+
+  try {
+    const pin = await getQuery()
+
+    console.log('works' + pin.id)
   } catch (error: unknown) {
     // REVIEW - check of possible optimizations for this solution
     if (error instanceof PrismaClientKnownRequestError) {

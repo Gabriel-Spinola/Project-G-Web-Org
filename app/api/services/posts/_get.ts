@@ -37,6 +37,7 @@ async function getPosts(
             },
           },
         },
+        pinnedBy: { select: { id: true } },
       },
     })
 

@@ -17,6 +17,7 @@ import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import { PublicationContext } from './InfiniteScrollPosts'
 import PostImagesCarousel from './images/PostImages'
+import PinButton from '../Buttons/PinButton'
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -31,6 +32,11 @@ export default function PostItem() {
   const isLiked: boolean = publicationCtx.likes.some(
     (like: Partial<Like>) => like.userId === publicationCtx.session,
   )
+  const isPinned: boolean = publicationCtx.pinnedById === publicationCtx.session
+
+  console.log(publicationCtx.pinnedBy?.id)
+
+  console.log(isPinned)
 
   return (
     <div className={`w-full ${styles.post}`}>
@@ -61,6 +67,8 @@ export default function PostItem() {
           publication={publicationCtx}
           targetType="postId"
         />
+
+        <PinButton isPinned={isPinned} targetId={publicationCtx.id} />
       </div>
     </div>
   )

@@ -81,6 +81,9 @@ export type PublicationsDefaultData = {
   contributor: Pick<User, 'name'>[]
   comments: TDisplayComment[]
   likes: Likes
+  pinnedBy?: {
+    id: string
+  } | null
 }
 
 /**
