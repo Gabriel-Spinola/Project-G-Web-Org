@@ -29,7 +29,7 @@ export default function ProjectImagesCarousel({
   }
 
   return (
-    <>
+    <aside className="relative flex flex-col w-full justify-end">
       {/* NOTE - Image and controllers Wrapper */}
       <section className="relative h-full w-full">
         <div className="absolute flex w-full h-full items-center">
@@ -70,7 +70,7 @@ export default function ProjectImagesCarousel({
       {imagesSrc.length > 1 ? (
         <section
           id="controllers"
-          className="flex w-full items-center justify-center max-h-full max-w-full p-1"
+          className="absolute flex w-full items-center justify-center max-h-full max-w-full p-2"
         >
           <div id="selectors" className="flex flex-row gap-8">
             {imagesSrc.map((_, index) => (
@@ -98,6 +98,6 @@ export default function ProjectImagesCarousel({
       ) : (
         ''
       )}
-    </>
+    </aside>
   )
 }

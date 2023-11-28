@@ -31,7 +31,7 @@ export default function NewPostModal() {
             <ModalCloseButton />
           </ModalHeader>
 
-          <ModalBody height={'100%'}>
+          <ModalBody height={'100%'} padding={8}>
             {session?.user.id ? (
               <PostSubmitForm />
             ) : (

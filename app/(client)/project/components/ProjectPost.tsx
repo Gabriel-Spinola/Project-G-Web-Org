@@ -130,6 +130,7 @@ export default function ProjectPost({ project, currentUserId }: Props) {
           />
         </div>
       </section>
+
       <ProjectImagesCarousel
         imagesSrc={project.images}
         projectOwner={project.authorId}
