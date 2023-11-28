@@ -45,7 +45,7 @@ export default function PostItem() {
       ) : undefined}
 
       {/* Likes */}
-      <div id="reacts" className="w-[100%] h-[48px] gap-4 mt-10 flex flex-row">
+      <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row">
         <LikeButton
           params={{
             option: 'postId',
