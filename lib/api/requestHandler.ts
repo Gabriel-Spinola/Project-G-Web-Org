@@ -1,5 +1,5 @@
-import { ESResponse } from './types/common'
-import { ESFailed, ESSucceed } from './types/helpers'
+import { ESResponse } from '../types/common'
+import { ESFailed, ESSucceed } from '../types/helpers'
 import { isAbortError } from 'next/dist/server/pipe-readable'
 
 type BaseRequest<Params> = (params: Params) => Promise<Response>

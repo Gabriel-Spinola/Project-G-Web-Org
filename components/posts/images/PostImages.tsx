@@ -1,6 +1,6 @@
 'use client'
 
-import { getPostImageUrl } from '@/lib/storage/supabase'
+import { getImageAbsoluteURLFromPubBucket } from '@/lib/storage/supabase'
 import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FaArrowAltCircleRight, FaArrowCircleLeft } from 'react-icons/fa'
@@ -36,6 +36,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
             </div>
           </button>
         )}
+
         {/* NOTE - Current Image */}
         {currentImageIndex + 1 < imagesSrc.length && (
           <button
@@ -46,12 +47,13 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
           </button>
         )}
       </div>
+
       {/* NOTE - Image Wrapper */}
       <div className="overflow-hidden flex items-center justify-center bg-darker-gray rounded-lg w-full h-full">
         {currentImage && (
           <Image
             alt=""
-            src={getPostImageUrl(currentImage)}
+            src={getImageAbsoluteURLFromPubBucket(currentImage)}
             className="overflow-hidden object-contain w-full max-h-full"
           />
         )}
@@ -65,9 +67,8 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
         >
           <div id="selectors" className="flex flex-row gap-8">
             {imagesSrc.map((_, index) => (
-              <>
+              <div key={index}>
                 <button
-                  key={index}
                   onClick={() => {
                     setCurrentImageIndex(index)
                   }}
@@ -82,7 +83,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
                     {' '}
                   </div>
                 </button>
-              </>
+              </div>
             ))}
           </div>
         </section>

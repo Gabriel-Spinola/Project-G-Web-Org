@@ -3,11 +3,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/utils/Providers'
 import { ToastContainer } from 'react-toastify'
-import { BiComment } from 'react-icons/bi'
 
 import './globals.css'
-import './styles/main.scss'
 import 'react-toastify/ReactToastify.css'
+import ChatButton from '@/components/Buttons/ChatButton'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -41,14 +40,7 @@ export default async function RootLayout({
 
           <Providers>
             <Navbar />
-            <div
-              id="comment-button"
-              className="fixed bottom-0 w-12 h-12 flex items-center justify-center right-14 text-pure-white bg-medium-primary p-5 rounded-full mb-6"
-            >
-              <button>
-                <BiComment size={24} />
-              </button>
-            </div>
+            <ChatButton />
 
             {children}
           </Providers>

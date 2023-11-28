@@ -15,6 +15,7 @@ import SubmitPostButton from '@/components/Buttons/SubmitPostButton'
 import { useSession } from 'next-auth/react'
 import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
 import { usePostSubmit } from '../hooks/usePostSubmit'
+import Image from 'next/image'
 
 export function PostSubmitForm() {
   const { data: session } = useSession()
@@ -74,7 +75,7 @@ export function PostSubmitForm() {
                   <span>X</span>
                 </button>
 
-                <img
+                <Image
                   src={URL.createObjectURL(image)}
                   width={300}
                   height={400}

@@ -30,10 +30,6 @@ import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import FollowButton from '@/components/Buttons/FollowButton'
 import { UserData } from '@/lib/types/common'
 
-export type DefaultFormValuesType = {
-  title: string
-}
-
 interface Props {
   isOwner: boolean
   isFollowing: boolean
@@ -119,7 +115,7 @@ export default function ProfileCard({
       <section className="h-full flex items-end flex-col-reverse justify-evenly">
         {user.graduations ?? (
           <Graduations
-            Graduation={
+            graduation={
               'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Harvard_University_logo.svg/800px-Harvard_University_logo.svg.png'
             }
           />

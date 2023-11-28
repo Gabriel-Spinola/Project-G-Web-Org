@@ -119,7 +119,7 @@ export default function UserInfo({ isOwner, user }: Params) {
         className={`${styles.cardShadow} flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray gap-2 items-center`}
       >
         <Graduations
-          Graduation={
+          graduation={
             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Harvard_University_logo.svg/800px-Harvard_University_logo.svg.png'
           }
         />

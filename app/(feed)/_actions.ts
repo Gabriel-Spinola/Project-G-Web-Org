@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { Post } from '@prisma/client'

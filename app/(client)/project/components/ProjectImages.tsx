@@ -1,6 +1,6 @@
 'use client'
 
-import { getProjectImageUrl } from '@/lib/storage/supabase'
+import { getImageAbsoluteURLFromPubBucket } from '@/lib/storage/supabase'
 import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FaArrowAltCircleRight, FaArrowCircleLeft } from 'react-icons/fa'
@@ -57,7 +57,7 @@ export default function ProjectImagesCarousel({
         {currentImage && (
           <Image
             alt=""
-            src={getProjectImageUrl(
+            src={getImageAbsoluteURLFromPubBucket(
               `projects/${projectOwner}/images/${currentImage}`,
             )}
             className="overflow-hidden object-contain w-full max-h-full"

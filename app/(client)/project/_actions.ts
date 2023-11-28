@@ -1,4 +1,5 @@
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
+import { requestHandler } from '@/lib/api/requestHandler'
 import { ESResponse, FullProject } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
@@ -124,6 +125,25 @@ export async function createNewProject(
     return ESFailed(error)
   }
 }
+
+type UpdateParams = {
+  id: string
+  formData: FormData
+}
+
+export const name = requestHandler<UpdateParams, string>(
+  async (params) =>
+    await fetch(
+      `${API_URL}${API_ENDPOINTS.services.projects}only/${params.id}`,
+      {
+        method: 'PATCH',
+        body: params.formData,
+        headers: {
+          'X-API-Key': process.env.API_SECRET as string,
+        },
+      },
+    ),
+)
 
 export async function updateProject(
   id: string,
