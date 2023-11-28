@@ -1,3 +1,5 @@
+import fs from 'fs'
+import sharp from 'sharp'
 import { ESResponse } from '../types/common'
 import { ESFailed } from '../types/helpers'
 import { FileBody, StorageResponse } from './storage'
@@ -8,9 +10,14 @@ export async function storeFile(
   file: FileBody,
 ): Promise<StorageResponse> {
   try {
+    const bufferImage = Buffer.from(await file.arrayBuffer())
+    const resized = await sharp(bufferImage).resize(100).toBuffer()
+
+    const image = new File([resized], file.name)
+
     const { data, error } = await supabase.storage
       .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(url, file, {
+      .upload(url, image, {
         cacheControl: '3600',
         upsert: true,
       })
