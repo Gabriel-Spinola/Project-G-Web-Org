@@ -116,6 +116,7 @@ export default function NewCommentDialog({
         id={`editable-container-${thisId}`}
         onInput={inputReplace}
         suppressContentEditableWarning={true}
+        autoFocus={true}
       >
         <span className="mention">
           {defaultValue ? `@${defaultValue} ` : null}
