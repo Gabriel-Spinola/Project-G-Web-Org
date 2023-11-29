@@ -92,14 +92,20 @@ export async function unpinPublication(
   selectedType: PinOptions,
   targetId: string,
 ): Promise<void> {
-  try {
-    const pin = await prisma.user.update({
-      where: { id: targetId },
-    })
+  const query = {
+    where: { id: targetId },
+    data: { pinnedBy: { disconnect: true } },
+  }
 
-    console.log('DELETE? ' + JSON.stringify(pin))
+  try {
+    const pin =
+      selectedType === 'pinnedPosts'
+        ? await prisma.post.update(query)
+        : await prisma.project.update(query)
+
+    console.log('Removed pin from ' + JSON.stringify(pin.authorId))
   } catch (error: unknown) {
-    console.error('Like Failed ' + error)
+    console.error('pin Failed ' + error)
   }
 }
 
@@ -108,23 +114,18 @@ export async function pinPublication(
   authorId: string,
   targetId: string,
 ): Promise<void> {
+  const query = {
+    where: { id: targetId },
+    data: { pinnedBy: { connect: { id: authorId } } },
+  }
+
   try {
-    // const pin = await prisma.post.findFirst({
-    //   where: { id: targetId },
-    //   select: {
-    //     pinnedById: true,
-    //   },
-    // })
+    const pin =
+      selectedType === 'pinnedPosts'
+        ? await prisma.post.update(query)
+        : await prisma.project.update(query)
 
-    const pin = await prisma.user.update({
-      where: { id: authorId },
-      data: { pinnedPosts: { connect: [{ id: targetId }] } },
-      select: {
-        pinnedPosts: true,
-      },
-    })
-
-    console.log('works' + JSON.stringify(pin?.pinnedPosts ?? ''))
+    console.log('Pinned by: ' + JSON.stringify(pin?.authorId ?? ''))
   } catch (error: unknown) {
     if (error instanceof PrismaClientKnownRequestError) {
       // REVIEW - check of possible optimizations for this solution
