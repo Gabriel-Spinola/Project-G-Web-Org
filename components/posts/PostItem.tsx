@@ -33,7 +33,7 @@ export default function PostItem() {
     (like: Partial<Like>) => like.userId === publicationCtx.session,
   )
 
-  function getCommentsCount() {
+  function getCommentsCount(): number {
     if (!publicationCtx?.comments) {
       return 0
     }

@@ -11,39 +11,40 @@ import CommentReply from './CommentReply'
 import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
 import { deleteComment } from '@/app/(feed)/_serverActions'
-import { CommentContext } from './CommentModal'
+import { CommentCallbacks } from './CommentModal'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
 import { FaTrash } from 'react-icons/fa'
-import { delay } from 'framer-motion'
 
 type Props = {
   comment: Partial<TDisplayComment>
 }
 
-type ReplyFunctionType = {
-  replySubmit: (data: Partial<TDisplayComment>) => void
-  replyDeletion: (id: number) => void
+type ReplyCallbacksType = {
+  onReply: (data: Partial<TDisplayComment>) => void
+  onReplyDeletion: (id: number) => void
 }
 
-export const ReplyFunctions = createContext<ReplyFunctionType | undefined>(
+export const ReplyCallbacks = createContext<ReplyCallbacksType | undefined>(
   undefined,
 )
 
 export default function Comment({ comment }: Props) {
   const { data: session } = useSession()
   const [openReplies, setOpenReplies] = useState<boolean>(false)
-  const context = useContext(CommentContext)
+  const context = useContext(CommentCallbacks)
 
   const [replies, setReplies] = useState<Partial<TDisplayComment>[]>(
     comment.replies ?? [],
   )
 
   function handleFacadeReplySubmit(commentData: Partial<TDisplayComment>) {
+    context?.onAddCommentsCount()
     setReplies((prev) => [...prev, commentData])
   }
 
   function handleFacadeCommentDeletion(id: number) {
-    setReplies((prev) => prev?.filter((prevComment) => prevComment?.id !== id))
+    context?.onSubtractCommentsCount()
+    setReplies((prev) => prev?.filter((prevReply) => prevReply?.id !== id))
   }
 
   function openCommentReplies() {
@@ -90,7 +91,7 @@ export default function Comment({ comment }: Props) {
                   variant={'ghost'}
                   type="button"
                   onClick={async () => {
-                    context?.handleFacadeCommentDeletion(comment.id as number)
+                    context?.onFacadeCommentDeletion(comment.id as number)
 
                     await deleteComment(comment.id as number)
                   }}
@@ -132,16 +133,17 @@ export default function Comment({ comment }: Props) {
             ) : (
               <BiSolidComment size={24} />
             )}
-            <span>{comment.replies?.length ?? 0}</span>
+
+            <span>{replies?.length ?? 0}</span>
           </button>
         </section>
       </section>
 
       {openReplies ? (
-        <ReplyFunctions.Provider
+        <ReplyCallbacks.Provider
           value={{
-            replySubmit: handleFacadeReplySubmit,
-            replyDeletion: handleFacadeCommentDeletion,
+            onReply: handleFacadeReplySubmit,
+            onReplyDeletion: handleFacadeCommentDeletion,
           }}
         >
           <div className="w-full">
@@ -162,7 +164,7 @@ export default function Comment({ comment }: Props) {
               ))}
             </div>
           </section>
-        </ReplyFunctions.Provider>
+        </ReplyCallbacks.Provider>
       ) : null}
     </div>
   )

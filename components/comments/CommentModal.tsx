@@ -16,10 +16,12 @@ import {
 import Comment from '../comments/Comment'
 import NewCommentDialog from './NewCommentDialog'
 
-export const CommentContext = createContext<
+export const CommentCallbacks = createContext<
   | {
-      handleFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
-      handleFacadeCommentDeletion: (id: number) => void
+      onFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
+      onFacadeCommentDeletion: (id: number) => void
+      onAddCommentsCount: () => void
+      onSubtractCommentsCount: () => void
     }
   | undefined
 >(undefined)
@@ -46,22 +48,30 @@ export default function CommentModal({
   )
   const [commentsCount, setCommentsCount] = useState(commentNumber)
 
-  function handleFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
-    setCommentsCount((prev) => prev + 1)
+  const onAddCommentsCount = () => setCommentsCount((prev) => prev + 1)
+  const onSubtractCommentsCount = () => setCommentsCount((prev) => prev - 1)
+
+  function onFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
+    onAddCommentsCount()
     setComments((prev) => {
       return [...prev, commentData]
     })
   }
 
-  function handleFacadeCommentDeletion(id: number) {
+  function onFacadeCommentDeletion(id: number) {
+    onSubtractCommentsCount()
     setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
-    setCommentsCount((prev) => prev - 1)
   }
 
   return (
     <div>
-      <CommentContext.Provider
-        value={{ handleFacadeCommentDeletion, handleFacadeCommentSubmit }}
+      <CommentCallbacks.Provider
+        value={{
+          onFacadeCommentDeletion,
+          onFacadeCommentSubmit,
+          onAddCommentsCount,
+          onSubtractCommentsCount,
+        }}
       >
         <button
           className="flex flex-col justify-center items-center hover:text-medium-primary"
@@ -103,13 +113,13 @@ export default function CommentModal({
                 <NewCommentDialog
                   target={{ id: publication.id, type: targetType }}
                   thisId={publication.id}
-                  onSubmit={handleFacadeCommentSubmit}
+                  onSubmit={onFacadeCommentSubmit}
                 />
               </div>
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </CommentContext.Provider>
+      </CommentCallbacks.Provider>
     </div>
   )
 }
