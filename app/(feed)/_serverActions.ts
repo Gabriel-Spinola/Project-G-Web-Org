@@ -6,6 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 /**
  * Helper function to control the feed revalidation in client components.
@@ -91,7 +92,7 @@ export async function increaseLikeCount(
 export async function unpinPublication(
   selectedType: PinOptions,
   targetId: string,
-): Promise<void> {
+): Promise<ESResponse<never, string>> {
   const query = {
     where: { id: targetId },
     data: { pinnedBy: { disconnect: true } },
@@ -104,8 +105,12 @@ export async function unpinPublication(
         : await prisma.project.update(query)
 
     console.log('Removed pin from ' + JSON.stringify(pin.authorId))
+
+    return ESSucceed({} as never)
   } catch (error: unknown) {
     console.error('pin Failed ' + error)
+
+    return ESFailed('Pin Failed')
   }
 }
 
@@ -113,7 +118,7 @@ export async function pinPublication(
   selectedType: PinOptions,
   authorId: string,
   targetId: string,
-): Promise<void> {
+): Promise<ESResponse<never, string>> {
   const query = {
     where: { id: targetId },
     data: { pinnedBy: { connect: { id: authorId } } },
@@ -126,15 +131,15 @@ export async function pinPublication(
         : await prisma.project.update(query)
 
     console.log('Pinned by: ' + JSON.stringify(pin?.authorId ?? ''))
+    return ESSucceed({} as never)
   } catch (error: unknown) {
     if (error instanceof PrismaClientKnownRequestError) {
       // REVIEW - check of possible optimizations for this solution
-      console.warn('cannot like the same post twice thrown\n', error)
-
-      return
+      console.warn('Prisma client error\n', error)
     }
 
     console.error('Like Failed ' + error)
+    return ESFailed('Failed to unpin')
   }
 }
 

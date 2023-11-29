@@ -4,6 +4,7 @@ import { pinPublication, unpinPublication } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { MdOutlinePushPin, MdPushPin } from 'react-icons/md'
+import { toast } from 'react-toastify'
 
 type Params = {
   isPinned: boolean
@@ -28,9 +29,21 @@ export default function PinButton({
     setIsPinned(!isPinned)
 
     if (!isPinned) {
-      await pinPublication('pinnedPosts', session.user.id, targetId)
+      const { error } = await pinPublication(
+        'pinnedPosts',
+        session.user.id,
+        targetId,
+      )
+
+      if (error) {
+        toast.error('Houve um erro ao favoritar a publicação')
+      }
     } else {
-      await unpinPublication('pinnedProjects', targetId)
+      const { error } = await unpinPublication('pinnedProjects', targetId)
+
+      if (error) {
+        toast.error('Houve um erro ao desfavoritar a publicação')
+      }
     }
   }
 
