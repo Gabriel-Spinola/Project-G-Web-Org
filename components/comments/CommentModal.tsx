@@ -16,7 +16,7 @@ import {
 import Comment from '../comments/Comment'
 import NewCommentDialog from './NewCommentDialog'
 
-export const CommentCallbacks = createContext<
+type CommentsCallbacksType =
   | {
       onFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
       onFacadeCommentDeletion: (id: number) => void
@@ -24,8 +24,8 @@ export const CommentCallbacks = createContext<
       onSubtractCommentsCount: () => void
     }
   | undefined
->(undefined)
 
+export const CommentCallbacks = createContext<CommentsCallbacksType>(undefined)
 export const CommentIdContext = createContext<number | undefined>(undefined)
 
 interface Props {
@@ -59,8 +59,8 @@ export default function CommentModal({
   }
 
   function onFacadeCommentDeletion(id: number) {
-    onSubtractCommentsCount()
     setComments((prev) => prev?.filter((prevComment) => prevComment.id !== id))
+    onSubtractCommentsCount()
   }
 
   return (
