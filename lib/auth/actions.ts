@@ -9,26 +9,11 @@
 
 import { $Enums, User } from '@prisma/client'
 import { compare } from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
 import { Session, getServerSession } from 'next-auth'
 import { AuthOptions } from '.'
 import { prisma } from '../database/prisma'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
-
-export function generateJwtToken(user: User): string {
-  const payload = {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-  }
-
-  const token = sign(payload, process.env.JWT_SECRET as string, {
-    expiresIn: 30 * 24 * 60 * 60,
-  })
-
-  return token
-}
 
 /**
  *

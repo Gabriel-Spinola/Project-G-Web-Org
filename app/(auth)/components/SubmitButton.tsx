@@ -7,6 +7,8 @@
  * @license GPL 3.0
  */
 
+import { toast } from 'react-toastify'
+
 export function SubmitButton({
   isVerified,
   buttonText,
@@ -18,7 +20,20 @@ export function SubmitButton({
     <button
       type="submit"
       aria-disabled={!isVerified}
-      disabled={!isVerified}
+      onClick={(event) => {
+        event.preventDefault()
+
+        if (!isVerified) {
+          toast('Favor preencher o Captcha')
+
+          return
+        }
+
+        // NOTE - triggers form submission
+        ;(
+          document.getElementById('auth-form') as HTMLFormElement
+        )?.requestSubmit()
+      }}
       className={`text-pure-white text-2xl font-bold p-4 cursor-pointer w-full rounded-lg bg-gradient-to-tl from-medium-tertiary to-medium-primary hover:brightness-90 hover:scale-[101%]`}
     >
       {buttonText}

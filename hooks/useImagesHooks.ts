@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { toast } from 'react-toastify'
 
 export type ImageStateObj = {
   images: File[] | undefined
@@ -54,7 +55,7 @@ export function useImages(paths?: string[], ownerId?: string): ImageState {
     } catch (error: unknown) {
       console.error('Failed to fetch images' + error)
 
-      // TODO - Add error handling
+      toast.error('Houve uma falha ao carregar as imagens 😔')
     }
   }, [])
 
@@ -91,7 +92,7 @@ export function useImagesCallbacks(
     )
 
     if (error) {
-      alert(error)
+      toast.warn(error)
 
       return
     }

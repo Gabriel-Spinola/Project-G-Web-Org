@@ -10,18 +10,16 @@
 'use client'
 
 import React, { ReactNode, createContext } from 'react'
-
 import styles from './PostSubmitFragment.module.scss'
-
 import { useDisclosure } from '@chakra-ui/react'
-
-type Props = {
-  modal: ReactNode
-}
 
 type Disclosure = {
   isOpen?: boolean
   onClose?: () => void
+}
+
+type Props = {
+  modal: ReactNode
 }
 
 export const NewPostContext = createContext<Disclosure>({})

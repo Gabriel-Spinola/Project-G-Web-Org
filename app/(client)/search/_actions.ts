@@ -1,4 +1,4 @@
-import { API_URL } from '@/lib/apiConfig'
+import { API_URL } from '@/lib/api/apiConfig'
 import { ESResponse } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { User } from '@prisma/client'
@@ -12,7 +12,6 @@ export async function searchForUser(
       {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           'X-API-Key': process.env.API_SECRET as string,
         },
         next: { tags: ['user-data'] },

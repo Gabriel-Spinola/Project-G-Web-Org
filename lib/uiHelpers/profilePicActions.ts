@@ -1,5 +1,5 @@
 import { User } from '@prisma/client'
-import { getProfilePicImageUrl } from '../storage/supabase'
+import { getImageAbsoluteURLFromPubBucket } from '../storage/supabase'
 
 export function getProfilePicURL(
   user: Pick<User, 'profilePic' | 'image'>,
@@ -7,7 +7,7 @@ export function getProfilePicURL(
   const profilePicture = user?.profilePic ?? user?.image ?? undefined
 
   if (profilePicture !== null && profilePicture !== undefined) {
-    return getProfilePicImageUrl(profilePicture)
+    return getImageAbsoluteURLFromPubBucket(profilePicture)
   }
 
   return undefined

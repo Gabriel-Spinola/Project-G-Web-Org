@@ -1,36 +1,39 @@
-import { fetchPosts } from '@/app/(feed)/_actions'
-import { ESResponse, FullPost } from '@/lib/types/common'
-import { useInView } from 'react-intersection-observer'
+import { ESResponse, FullPost, FullProject } from '@/lib/types/common'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 import { useState, useCallback, useEffect } from 'react'
 
-// TODO: Generalize Feed - Incomplete
-export function useFeed(
-  initialPublication: FullPost[] | undefined,
+export function useFeed<Publication extends FullPost | FullProject>(
+  initialPublication: Publication[] | undefined,
+  shouldLoadMore: boolean,
+  fetchFunction: (
+    page: number,
+    signal?: AbortSignal,
+    authorId?: string,
+  ) => Promise<ESResponse<Publication[]>>,
   profileId?: string,
 ): {
-  posts: FullPost[] | undefined
-  noPostFound: boolean
-  ref: (node?: Element | null | undefined) => void
+  publications: Publication[] | undefined
+  noPublicationFound: boolean
 } {
-  const [posts, setPosts] = useState<FullPost[] | undefined>(initialPublication)
+  const [publications, setPublications] = useState<Publication[] | undefined>(
+    initialPublication,
+  )
   const [page, setPages] = useState<number>(1)
-  const [noPostFound, setNoPostFound] = useState<boolean>(false)
-  const [ref, inView] = useInView()
+  const [noPublicationFound, setNoPublicationFound] = useState<boolean>(false)
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
 
-  const deletedPost = searchParams.get('delete')
-  const createdPost = searchParams.get('create')
+  const deletedPublication = searchParams.get('delete')
+  const createdPublication = searchParams.get('create')
 
-  // NOTE - Memoize all loaded posts
-  const loadMorePosts = useCallback(
+  // NOTE - Memoize all loaded publications
+  const loadMorePublications = useCallback(
     async function (signal: AbortSignal) {
       const next = page + 1
-      const { data, error }: ESResponse<FullPost[]> = await fetchPosts(
+      const { data, error }: ESResponse<Publication[]> = await fetchFunction(
         next,
         signal,
         profileId,
@@ -43,18 +46,18 @@ export function useFeed(
       }
 
       if (!data?.length || data?.length <= 0) {
-        setNoPostFound(true)
+        setNoPublicationFound(true)
 
         return
       }
 
       setPages((prevPage) => prevPage + 1)
-      setPosts((prevPost: FullPost[] | undefined) => [
-        ...(prevPost?.length ? prevPost : []),
+      setPublications((prevPublication) => [
+        ...(prevPublication?.length ? prevPublication : []),
         ...data,
       ])
     },
-    [page, profileId],
+    [fetchFunction, page, profileId],
   )
 
   // NOTE - Handles feed data fetching
@@ -62,17 +65,17 @@ export function useFeed(
     const controller = new AbortController()
     const signal = controller.signal
 
-    // If the spinner is in the client view load more posts.
-    if (inView) {
-      loadMorePosts(signal)
+    // If the spinner is in the client view load more publications.
+    if (shouldLoadMore) {
+      loadMorePublications(signal)
     }
 
-    if (createdPost) {
+    if (createdPublication) {
       setPages(0)
-      setPosts([])
-      setNoPostFound(false)
+      setPublications([])
+      setNoPublicationFound(false)
 
-      loadMorePosts(signal)
+      loadMorePublications(signal)
 
       router.replace(pathname, { scroll: false })
     }
@@ -81,16 +84,25 @@ export function useFeed(
     return (): void => {
       controller.abort()
     }
-  }, [createdPost, inView, loadMorePosts, pathname, router])
+  }, [
+    createdPublication,
+    shouldLoadMore,
+    loadMorePublications,
+    pathname,
+    router,
+  ])
 
   // NOTE - Handles url callbacks for any non-api-related feed update
   useEffect(() => {
-    if (deletedPost) {
-      setPosts((prev) => prev?.filter((post) => post.id !== deletedPost))
+    if (deletedPublication) {
+      setPublications(
+        (prev) =>
+          prev?.filter((publication) => publication.id !== deletedPublication),
+      )
 
       router.replace(pathname, { scroll: false })
     }
-  }, [deletedPost, router, pathname])
+  }, [deletedPublication, router, pathname])
 
-  return { posts, noPostFound, ref }
+  return { publications, noPublicationFound }
 }

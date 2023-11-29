@@ -14,10 +14,6 @@ export const API_ENDPOINTS = {
     users: 'api/services/users/',
     comments: 'api/services/comments/',
   },
-  handlers: {
-    createProject: 'api/handlers/CreateProjectFormHandler/',
-    updateUser: 'api/handlers/update-user/',
-  },
 }
 
 export const SUPABASE_STORAGE_URL = `https://${process.env.SUPABASE_PROJECT_ID}.supabase.co/storage/v1/upload/resumable`

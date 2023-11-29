@@ -19,7 +19,6 @@ async function tryUpdatePost(
       },
     })
 
-    // TODO - Image stuff
     // if (postData.images.length > 0) {
     //   const { data, error } = supabase.storage
     //     .from(SUPABASE_PUBLIC_BUCKET_NAME)

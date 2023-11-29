@@ -16,6 +16,8 @@ import Image from 'next/image'
 import { useImages, useImagesCallbacks } from '@/hooks/useImagesHooks'
 import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
+import { IoDocumentAttachOutline } from 'react-icons/io5'
+import { toast } from 'react-toastify'
 
 interface ProjectFormState {
   title: string
@@ -94,7 +96,7 @@ export default function CreateProjectForm({
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Algo no fomulário é invalido no campo: ' + errorMessage)
 
       return
     }
@@ -105,7 +107,7 @@ export default function CreateProjectForm({
       : await updateProject(projectId, validatedForm.data)
 
     if (error) {
-      alert('Failed to create post')
+      toast.error('Houve uma falha ao criar seu projeto! 😔')
 
       return
     }
@@ -114,81 +116,101 @@ export default function CreateProjectForm({
   }
 
   return (
-    <>
-      <section id="form-section">
-        <form method="POST" onSubmit={handleFormSubmission}>
+    <section id="form-section">
+      <form
+        method="POST"
+        onSubmit={handleFormSubmission}
+        className="flex flex-col items-center justify-center gap-4 mt-16 p-4 rounded-xl bg-medium-gray"
+      >
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={form?.title}
+          placeholder="Título"
+          content="po"
+          className="w-full p-2 rounded-md"
+          onChange={(event) => handleStateChange('title', event.target.value)}
+          required
+        />
+
+        <textarea
+          name="description"
+          id="description"
+          cols={30}
+          rows={10}
+          value={form?.description ?? undefined}
+          placeholder="Descrição"
+          className="w-full p-2 rounded-md"
+          onChange={(event) =>
+            handleStateChange('description', event.target.value)
+          }
+          required
+        />
+        <div className="flex gap-8">
           <input
-            type="text"
-            id="title"
-            name="title"
-            value={form?.title}
-            placeholder="input"
-            onChange={(event) => handleStateChange('title', event.target.value)}
-            required
+            type="file"
+            accept=".pdf"
+            id="file"
+            name="file"
+            className="hidden"
           />
+          <label
+            htmlFor="file"
+            className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
+          >
+            <IoDocumentAttachOutline size={28} />
+            Envie um Documento
+          </label>
+          <input
+            type="file"
+            name="display-images"
+            id="images"
+            accept=".png, .jpg, .jpeg, .webp"
+            className="hidden"
+            onChange={onImageChanges}
+          />
+          <label
+            htmlFor="images"
+            className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
+          >
+            <AiOutlineFileImage size={28} />
+            Envie uma Imagem
+          </label>
+        </div>
 
-          <textarea
-            name="description"
-            id="description"
-            cols={30}
-            rows={10}
-            value={form?.description ?? undefined}
-            placeholder="textare"
-            onChange={(event) =>
-              handleStateChange('description', event.target.value)
-            }
-            required
-          ></textarea>
+        {/* Images Preview Section */}
+        <section id="images-preview">
+          {images && (
+            <div className="flex gap-2">
+              {images.map((image, index) => (
+                <div key={index}>
+                  {/* Remove Img Button */}
+                  <button
+                    onClick={() => onImageRemovedFromPreview(index)}
+                    type="button"
+                  >
+                    <span>X</span>
+                  </button>
 
-          <input type="file" accept="application/pdf" id="file" name="file" />
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    width={300}
+                    height={400}
+                    alt="Image Sent"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
-          <div className="img-btn hover:cursor-pointer z-50">
-            <input
-              type="file"
-              name="display-images"
-              id="images"
-              accept=".png, .jpg, .jpeg, .webp"
-              className="hidden"
-              onChange={onImageChanges}
-            />
-            <label
-              htmlFor="images"
-              className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
-            >
-              <AiOutlineFileImage size={28} />
-              Envie uma Imagem
-            </label>
-          </div>
-
-          <input type="submit" value={isEditing ? 'update' : 'create'} />
-        </form>
-      </section>
-
-      {/* Images Preview Section */}
-      <section id="images-preview">
-        {images && (
-          <>
-            {images.map((image, index) => (
-              <div key={index}>
-                {/* Remove Img Button */}
-                <button
-                  onClick={() => onImageRemovedFromPreview(index)}
-                  type="button"
-                >
-                  <span>X</span>
-                </button>
-
-                <Image
-                  src={URL.createObjectURL(image)}
-                  width={300}
-                  height={400}
-                  alt="Image Sent"
-                />
-              </div>
-            ))}
-          </>
-        )}
-      </section>
-    </>
+        <input
+          type="submit"
+          value={isEditing ? 'Editar Projeto' : 'Criar projeto'}
+          className="hover:cursor-pointer px-16 py-2 rounded-sm text-medium-primary hover:text-darker-white bg-darker-white hover:bg-medium-primary"
+        />
+      </form>
+    </section>
   )
 }

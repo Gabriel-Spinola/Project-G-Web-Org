@@ -21,6 +21,7 @@ import TextBox from '../components/TextBox'
 import { FcGoogle } from 'react-icons/fc'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 export default function RegisterPage() {
   const [isVerified, setIsVerified] = useState<boolean>(false)
@@ -32,11 +33,14 @@ export default function RegisterPage() {
     // Server function to verify captcha
     await verifyCaptcha(token)
       .then(() => setIsVerified(true))
-      .catch(() => setIsVerified(false))
+      .catch(() => {
+        setIsVerified(false)
+
+        toast.warn('Por favor, preencha o captcha corretamente')
+      })
   }
 
   /**
-   * TODO - Instead of alerts add customized error messages for the user
    *
    * @param formData
    * @returns If something wrong happens: alert the user & reset the form. Otherwise resets the form
@@ -54,18 +58,22 @@ export default function RegisterPage() {
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Preencha o formulário corretamente.\n' + errorMessage + '\n')
 
       return
     }
 
     // NOTE - 2. Error/Success Pattern for standardized error handling implementation
-    const { error }: ESResponse<string> = await registerNewUser(
-      validatedForm.data,
+    const { error }: ESResponse<string> = await toast.promise(
+      registerNewUser(validatedForm.data),
+      {
+        pending: 'Estamos te registando... 🥱',
+        success: 'Registrado com sucesso. 🤙',
+      },
     )
 
     if (error) {
-      alert('user creation failed')
+      toast.error('Houve um erro no cadastro, por favor tente novamente 😔')
 
       formRef.current?.reset()
       return
@@ -88,12 +96,14 @@ export default function RegisterPage() {
           url="https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/wolfgang-hasselmann-eSLZXmnw0e8-unsplash.jpg"
           alt="House Image"
         />
+
         {/* Background Image darker overlay */}
         <div className="absolute w-full h-full bg-gradient-to-r from-black via-black/60 via-50% to-black/25 rounded-xl">
           {/* Form Container */}
           <div className="absolute w-full md:w-[65%] x1:w-[45%] 2x1:w-[35%] float-left h-full rounded-xl text-darker-white">
             <form
               ref={formRef}
+              id="auth-form"
               action={handleFormSubmission}
               className={`flex flex-col justify-evenly w-full h-full gap-4 items-center px-8 md:px-16`}
             >
@@ -139,6 +149,7 @@ export default function RegisterPage() {
                   isVerified={isVerified}
                   buttonText={'REGISTRAR'}
                 />
+
                 <button
                   type="button"
                   onClick={() => signIn('google')}

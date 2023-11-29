@@ -15,9 +15,14 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import GoogleProvider from 'next-auth/providers/google'
 import { Credentials, validateCredentials } from './actions'
+import { createTransport } from 'nodemailer'
+import { text, html } from './mailerConf'
+
+// NOTE - Enables and Disable all logs from next-ath
+const debug = false
 
 export const AuthOptions: NextAuthOptions = {
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === 'development' && debug,
   session: {
     strategy: 'jwt',
   },
@@ -71,12 +76,41 @@ export const AuthOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM as string,
+      async sendVerificationRequest(params) {
+        const { identifier, url, provider } = params
+
+        const newUrl =
+          process.env.NODE_ENV === 'production'
+            ? url.replace(
+                'http://localhost:3000',
+                'https://projectg2.vercel.app',
+              )
+            : url
+
+        const { host } = new URL(newUrl)
+
+        const transport = createTransport(provider.server)
+        const result = await transport.sendMail({
+          to: identifier,
+          from: provider.from,
+          subject: `Sign in to ${host}`,
+          text: text({ url: newUrl, host }),
+          html: html({ url: newUrl, host }),
+        })
+
+        const failed = result.rejected.concat(result.pending).filter(Boolean)
+
+        if (failed.length) {
+          throw new Error(`Email (${failed.join(', ')}) could not be sent`)
+        }
+      },
     }),
   ],
   callbacks: {
     session: ({ session, token }) => {
-      // NOTE: Debugging
-      // console.debug('Session Callback ' + { session, token })
+      if (debug) {
+        console.debug('Session Callback ' + { session, token })
+      }
 
       return {
         ...session,
@@ -88,8 +122,9 @@ export const AuthOptions: NextAuthOptions = {
       }
     },
     jwt: ({ token, user }) => {
-      // NOTE: Debugging
-      // console.debug('JWT Callback', { token, user })
+      if (debug) {
+        console.debug('JWT Callback', { token, user })
+      }
 
       if (user) {
         const $user = user as unknown as Partial<User>
@@ -106,15 +141,28 @@ export const AuthOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
+  // NOTE - logger disabled
   logger: {
     error: (code, metadata) => {
-      console.error(code, metadata)
+      if (!debug) {
+        return
+      }
+
+      console.error('Auth Error:\n' + code, metadata)
     },
     warn: (code) => {
-      console.warn(code)
+      if (!debug) {
+        return
+      }
+
+      console.warn('Auth Warn:\n' + code)
     },
     debug: (code, metadata) => {
-      console.debug(code, metadata)
+      if (!debug) {
+        return
+      }
+
+      console.debug('Auth Debug:\n' + code, metadata)
     },
   },
   //   Only for custom signin/login pages

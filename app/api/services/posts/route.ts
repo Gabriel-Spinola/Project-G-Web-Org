@@ -48,7 +48,6 @@ async function handler(req: Request): Promise<NextResponse> {
       return handlePatch(id, bodyData)
     }
 
-    // TODO: (accept only full posts)
     case 'PUT': {
       if (!id) return idIsNullErrorResponse
 

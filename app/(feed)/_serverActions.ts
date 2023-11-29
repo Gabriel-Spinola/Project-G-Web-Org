@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/database/prisma'
 import { LikeOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { Comment, Post } from '@prisma/client'
+import { Comment } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
 
@@ -17,7 +17,7 @@ export async function postComment(
   content: string | undefined,
   replyTarget: {
     id: string | number
-    type: 'postId' | 'parentCommentId'
+    type: 'postId' | 'parentCommentId' | 'projectId'
   },
   fromPost: string,
   authorId: string,
@@ -45,18 +45,7 @@ export async function postComment(
       },
     })
 
-    const updateTarget: Post = await prisma.post.update({
-      where: { id: fromPost },
-      // NOTE - Push new comment into post
-      data: { comments: { connect: { id: newComment.id } } },
-    })
-
-    console.log(
-      'sucess' +
-        JSON.stringify(newComment) +
-        '\n' +
-        JSON.stringify(updateTarget),
-    )
+    console.log('sucess' + JSON.stringify(newComment) + '\n')
 
     return {
       data: newComment,
@@ -104,7 +93,6 @@ export async function decreaseLikeCount(
   targetId: string | number,
 ): Promise<void> {
   try {
-    // REVIEW - Best solution found till now, is to make all Like fields unique
     const deleteLike = await prisma.like.deleteMany({
       where: { [selectedType]: targetId },
     })

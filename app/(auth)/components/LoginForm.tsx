@@ -18,11 +18,16 @@ import { verifyCaptcha } from '@/server/serverActions'
 import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
 import { validateForm } from '@/lib/schemas/login.schema'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
+  const router = useRouter()
+
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const email = useRef('')
   const password = useRef('')
+
   const [isVerified, setIsVerified] = useState<boolean>(false)
 
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
@@ -42,17 +47,33 @@ export default function LoginForm() {
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Por favor preencha o fomulário corretamente\n' + errorMessage)
 
       return
     }
 
-    signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: true,
-      callbackUrl: '/',
-    })
+    const signInResponse = await toast.promise(
+      signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      }),
+      { pending: 'Fazendo login....🥱' },
+    )
+
+    if (signInResponse) {
+      if (signInResponse.error) {
+        toast.error(
+          'Falha ao fazer login, certifique-se de que suas informações estão corretas.',
+        )
+
+        return
+      }
+    }
+
+    toast.success('🤙')
+
+    router.push('/')
   }
 
   async function handleCaptchaSubmission(token: string | null): Promise<void> {
@@ -65,7 +86,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleLoginForm}
-      id="loginForm"
+      id="auth-form"
       className="flex flex-col items-center justify-evenly w-full h-full p-8 md:p-16"
     >
       <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-center">
@@ -106,6 +127,7 @@ export default function LoginForm() {
 
       <div id="submitLogin" className="flex w-full gap-4">
         <SubmitButton isVerified={isVerified} buttonText={'ENTRAR'} />
+
         <button
           type="button"
           onClick={() => signIn('google')}

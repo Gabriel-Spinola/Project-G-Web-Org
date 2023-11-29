@@ -6,6 +6,7 @@ import { useContext, useState } from 'react'
 import { NewPostContext } from '../postSubmit/PostSubmitFragment'
 import { Session } from 'next-auth'
 import { ImageStateObj } from '@/hooks/useImagesHooks'
+import { toast } from 'react-toastify'
 
 interface PostFormState {
   content: string
@@ -72,7 +73,7 @@ export function usePostSubmit(
           errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
       })
 
-      alert('Algo no fomulário é invalido no campo: ' + errorMessage)
+      toast.warn('Algo no fomulário é invalido no(s) campo(s): ' + errorMessage)
 
       return
     }
@@ -81,7 +82,7 @@ export function usePostSubmit(
     const { error } = await createNewPost(session.user.id, validatedForm.data)
 
     if (error) {
-      alert('Failed to create post')
+      toast.error('Houve algum erro ao enviar seu post 😔')
 
       return
     }

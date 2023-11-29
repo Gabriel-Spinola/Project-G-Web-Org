@@ -7,5 +7,5 @@ type Props = {
 export default function SearchProject({ params }: Props) {
   const { query } = params
 
-  return <div>SearchProject</div>
+  return <div>{query}</div>
 }

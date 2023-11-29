@@ -1,8 +1,9 @@
-import { API_ENDPOINTS, API_URL } from '@/lib/apiConfig'
+import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
 import { ESResponse, FullPost } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
+import { toast } from 'react-toastify'
 
 export async function handlePostDeletion(
   postId: string,
@@ -28,6 +29,8 @@ export async function handlePostDeletion(
     routeCallback()
   } catch (error: unknown) {
     console.error(error)
+
+    toast.error('Houve um erro ao deletar seu post! 🤯')
   }
 }
 
@@ -38,11 +41,11 @@ export async function handlePostDeletion(
  * @param authorId
  * @returns array of posts
  */
-export async function fetchPosts<T extends FullPost = FullPost>(
+export async function fetchPosts(
   page = 1,
   signal?: AbortSignal,
   authorId?: string,
-): Promise<ESResponse<T[]>> {
+): Promise<ESResponse<FullPost[]>> {
   try {
     const apiRequestURL = !authorId
       ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
@@ -64,7 +67,7 @@ export async function fetchPosts<T extends FullPost = FullPost>(
       throw new Error("Response's not okay " + data)
     }
 
-    const { data }: { data: T[] } = await response.json()
+    const { data }: { data: FullPost[] } = await response.json()
 
     return {
       data,

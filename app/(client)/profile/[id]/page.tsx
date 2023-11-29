@@ -7,7 +7,6 @@
  * @license i.e. MIT
  */
 
-import UserPosts from '@/app/(client)/profile/components/UserPosts'
 import ProfileCard from '@/app/(client)/profile/components/ProfileCard'
 import React, { Suspense } from 'react'
 import UserInfo from '@/app/(client)/profile/components/UserInfo'
@@ -17,17 +16,20 @@ import { getUserData, handleFollowingCheckage } from '../_actions'
 import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
 import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
 import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
-import UserProjects from '../components/UserProjects'
+import ProfileFeedController from '../components/ProfileFeedController'
 
 type Props = {
   params: { id: string }
 }
 
 export default async function Profile({ params }: Props) {
-  const userData = getUserData(params.id)
+  const { id: userId } = params
+
+  const userData = getUserData(userId)
   const sessionData = getServerSession(AuthOptions)
 
   const [user, session] = await Promise.all([userData, sessionData])
+
   const isOwner = session?.user.id === user?.id
   const isFollowing = await handleFollowingCheckage(
     session?.user.id as string,
@@ -35,11 +37,22 @@ export default async function Profile({ params }: Props) {
     isOwner,
   )
 
+  if (!user) {
+    return <>User not found!</>
+  }
+
   return (
-    <>
+    <main>
       {/* NOTE - Profile Card Skeleton */}
       <Suspense fallback={<ProfileCardSkeleton />}>
-        {user && <ProfileCard user={user} isOwner={isOwner} />}
+        {user && (
+          <ProfileCard
+            isOwner={isOwner}
+            currentUserId={session?.user.id}
+            user={user}
+            isFollowing={isFollowing}
+          />
+        )}
       </Suspense>
 
       <div className="flex justify-around bg-darker-white">
@@ -49,31 +62,19 @@ export default async function Profile({ params }: Props) {
             {user && (
               // NOTE - This wrapper div prevents UserInfo container expansion
               <div className="flex flex-col gap-8">
-                <UserInfo
-                  isOwner={isOwner}
-                  isFollowing={isFollowing}
-                  currentUserId={session?.user.id}
-                  user={user}
-                />
-                <UserProjects />
+                <UserInfo isOwner={isOwner} user={user} />
               </div>
             )}
           </Suspense>
 
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
-            {session ? (
-              <UserPosts
-                isOwner={isOwner}
-                authorID={params.id}
-                currentUserId={session.user.id}
-              />
-            ) : (
-              <UserPostsSkeleton />
-            )}
+            <Suspense fallback={<UserPostsSkeleton />}>
+              <ProfileFeedController authorId={userId} isOwner={isOwner} />
+            </Suspense>
           </div>
         </div>
       </div>
-    </>
+    </main>
   )
 }
