@@ -90,6 +90,11 @@ export default function NewCommentDialog({
 
     if (onSubmit) {
       onSubmit(data)
+      ;(
+        document.getElementById(
+          `editable-container-${thisId}`,
+        ) as HTMLDivElement
+      ).innerText = ''
     }
   }
 

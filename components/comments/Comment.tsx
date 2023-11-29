@@ -14,6 +14,7 @@ import { deleteComment } from '@/app/(feed)/_serverActions'
 import { CommentContext } from './CommentModal'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
 import { FaTrash } from 'react-icons/fa'
+import { delay } from 'framer-motion'
 
 type Props = {
   comment: Partial<TDisplayComment>
