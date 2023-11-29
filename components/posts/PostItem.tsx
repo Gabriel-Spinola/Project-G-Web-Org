@@ -17,6 +17,7 @@ import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import { PublicationContext } from './InfiniteScrollPosts'
 import PostImagesCarousel from './images/PostImages'
+import { TDisplayComment } from '@/lib/types/common'
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -31,6 +32,20 @@ export default function PostItem() {
   const isLiked: boolean = publicationCtx.likes.some(
     (like: Partial<Like>) => like.userId === publicationCtx.session,
   )
+
+  function getCommentsCount(): number {
+    if (!publicationCtx?.comments) {
+      return 0
+    }
+
+    let count = 0
+
+    for (const comment of publicationCtx.comments) {
+      count += comment.replies?.length ?? 0
+    }
+
+    return publicationCtx.comments.length + count
+  }
 
   return (
     <div className={`w-full ${styles.post}`}>
@@ -57,7 +72,7 @@ export default function PostItem() {
 
         {/* Comments */}
         <CommentModal
-          commentNumber={publicationCtx.comments?.length ?? 0}
+          commentNumber={getCommentsCount()}
           publication={publicationCtx}
           targetType="postId"
         />
