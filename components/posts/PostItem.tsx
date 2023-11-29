@@ -26,6 +26,8 @@ export default function PostItem() {
     return <></>
   }
 
+  console.log(JSON.stringify(publicationCtx.pinnedBy))
+
   const isOwner = publicationCtx.session === publicationCtx.authorId
 
   // Check if the current user liked the post
