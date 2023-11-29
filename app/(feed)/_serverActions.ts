@@ -93,8 +93,8 @@ export async function unpinPublication(
   targetId: string,
 ): Promise<void> {
   try {
-    const pin = await prisma.user.deleteMany({
-      where: { pinnedPosts: { some: { id: targetId } } },
+    const pin = await prisma.user.update({
+      where: { id: targetId },
     })
 
     console.log('DELETE? ' + JSON.stringify(pin))
@@ -109,18 +109,25 @@ export async function pinPublication(
   targetId: string,
 ): Promise<void> {
   try {
+    // const pin = await prisma.post.findFirst({
+    //   where: { id: targetId },
+    //   select: {
+    //     pinnedById: true,
+    //   },
+    // })
+
     const pin = await prisma.user.update({
       where: { id: authorId },
-      data: { [selectedType]: { connect: { id: targetId } } },
+      data: { pinnedPosts: { connect: [{ id: targetId }] } },
       select: {
-        [selectedType]: true,
+        pinnedPosts: true,
       },
     })
 
-    console.log('works' + pin.pinnedPosts)
+    console.log('works' + JSON.stringify(pin?.pinnedPosts ?? ''))
   } catch (error: unknown) {
-    // REVIEW - check of possible optimizations for this solution
     if (error instanceof PrismaClientKnownRequestError) {
+      // REVIEW - check of possible optimizations for this solution
       console.warn('cannot like the same post twice thrown\n', error)
 
       return

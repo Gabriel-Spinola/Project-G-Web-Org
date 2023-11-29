@@ -45,7 +45,7 @@ model Post {
   contributor User[]    @relation("PostContributor")
   comments    Comment[] 
   pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id], onDelete: Cascade)
-  pinnedById  String?   @unique
+  pinnedById  String?
 }
 
 enum ProjectType {
@@ -74,7 +74,7 @@ model Project {
   contributor User[]    @relation("ProjectContributor")
   comments    Comment[]
   pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id], onDelete: Cascade)
-  pinnedById  String?   @unique
+  pinnedById  String?   
 }
 
 model Account {
