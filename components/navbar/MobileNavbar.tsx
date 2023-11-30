@@ -18,7 +18,7 @@ export default function MobileNavbar() {
 
   return (
     <nav id="navMobile">
-      <section className="flex h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl">
+      <section className="flex h-[88px] max-h-[88px] w-full shadow-darker-white/40 shadow-2xl bg-medium-gray text-darker-white items-center text-xl">
         <button
           type="button"
           onClick={ToggleMenu}
@@ -44,7 +44,7 @@ export default function MobileNavbar() {
         </section>
       </section>
       {/* NOTE MOBILE NAVBAR MENU OPTIONS */}
-      <section className="h-screen">
+      <section className="h-[calc(100vh-88px)]">
         <ul
           id="mobileMenuItems"
           className={`${

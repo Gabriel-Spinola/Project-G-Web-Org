@@ -9,16 +9,7 @@
 
 'use client'
 
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Button,
-  Box,
-  IconButton,
-  Avatar,
-} from '@chakra-ui/react'
+import { Button, Box, Avatar } from '@chakra-ui/react'
 
 import { BsFillGearFill } from 'react-icons/bs'
 
@@ -29,6 +20,8 @@ import Graduations from './Graduations'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import FollowButton from '@/components/Buttons/FollowButton'
 import { UserData } from '@/lib/types/common'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 interface Props {
   isOwner: boolean
@@ -43,6 +36,7 @@ export default function ProfileCard({
   currentUserId,
   user,
 }: Props) {
+  const { data: session } = useSession()
   return (
     <section
       id="Wrapper"
@@ -112,34 +106,17 @@ export default function ProfileCard({
       </div>
 
       {/* NOTE - Card info editing and Graduation card */}
-      <section className="h-full flex items-end flex-col-reverse justify-evenly">
-        {user.graduations ?? (
-          <Graduations
-            graduation={
-              'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Harvard_University_logo.svg/800px-Harvard_University_logo.svg.png'
-            }
-          />
-        )}
-
+      <section className="h-full flex items-end flex-col-reverse justify-evenly z-0">
         {isOwner && (
-          <div>
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                aria-label="Options"
-                icon={<BsFillGearFill />}
-                variant="outline"
-                color={'white'}
-                className="bg-pure-white bg-opacity-25 absolute hover:text-darker-gray"
-              />
-
-              <MenuList>
-                <MenuItem icon={<BsFillGearFill color="black" />}>
-                  Configurações
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </div>
+          <>
+            <Link
+              href={`/profile/${session?.user.id}/settingsPage`}
+              className="w-12 h-12 flex items-center justify-center bg-medium-gray/75 border-2 border-darker-white rounded-lg hover:brightness-75"
+            >
+              {' '}
+              <BsFillGearFill size={24} color={'ebebeb'} />
+            </Link>
+          </>
         )}
       </section>
     </section>

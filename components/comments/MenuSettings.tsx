@@ -12,14 +12,14 @@ import {
 } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { BsThreeDots } from 'react-icons/bs'
-import { CommentContext } from './CommentModal'
+import { CommentCallbacks } from './CommentModal'
 
 type Props = {
   comment: Partial<TDisplayComment>
 }
 
 export default function MenuSettings({ comment }: Props) {
-  const context = useContext(CommentContext)
+  const context = useContext(CommentCallbacks)
 
   return (
     <Menu>
@@ -38,7 +38,7 @@ export default function MenuSettings({ comment }: Props) {
             className="w-full"
             type="button"
             onClick={async () => {
-              context?.handleFacadeCommentDeletion(comment.id as number)
+              context?.onFacadeCommentDeletion(comment.id as number)
 
               await deleteComment(comment.id as number)
             }}

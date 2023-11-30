@@ -36,6 +36,20 @@ export default function PostItem() {
   )
   const isPinned: boolean = publicationCtx.pinnedById === publicationCtx.session
 
+  function getCommentsCount(): number {
+    if (!publicationCtx?.comments) {
+      return 0
+    }
+
+    let count = 0
+
+    for (const comment of publicationCtx.comments) {
+      count += comment.replies?.length ?? 0
+    }
+
+    return publicationCtx.comments.length + count
+  }
+
   return (
     <div className={`w-full ${styles.post}`}>
       <PostHeader post={publicationCtx} isOwner={isOwner} />
@@ -49,7 +63,7 @@ export default function PostItem() {
       ) : undefined}
 
       {/* Likes */}
-      <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row">
+      <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row mt-4">
         <LikeButton
           params={{
             option: 'postId',
@@ -61,7 +75,7 @@ export default function PostItem() {
 
         {/* Comments */}
         <CommentModal
-          commentNumber={publicationCtx.comments?.length ?? 0}
+          commentNumber={getCommentsCount()}
           publication={publicationCtx}
           targetType="postId"
         />
