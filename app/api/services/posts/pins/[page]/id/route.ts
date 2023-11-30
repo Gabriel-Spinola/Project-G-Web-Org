@@ -14,7 +14,7 @@ async function getPins(
     const publication: FullPost[] = await prisma.post.findMany({
       where: { pins: { some: { user: { id: authorId } } } },
       skip,
-      // take,
+      take,
       include: {
         author: {
           select: { name: true, image: true, profilePic: true },
@@ -39,6 +39,8 @@ async function getPins(
       },
     })
 
+    console.log(publication)
+
     return ESSucceed(publication)
   } catch (error: unknown) {
     return ESFailed(error)
@@ -47,9 +49,12 @@ async function getPins(
 
 export async function GET(
   req: Request,
-  { params }: { params: { page: string; userId: string } },
+  { params }: { params: { page: string; id: string } },
 ) {
-  const { page, userId } = params
+  const { page, id: userId } = params
+
+  console.log('API DATA: ' + page + ' ' + userId)
+
   const { data, error } = await getPins(Number(page), userId)
 
   if (error) {
