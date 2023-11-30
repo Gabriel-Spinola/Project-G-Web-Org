@@ -65,6 +65,7 @@ export default function RecoverPage() {
       <div
         className={`absolute flex flex-col items-center rounded-xl w-[90vw] h-[90vh]`}
       >
+        <p>oi</p>
         {/* Background Image for Login Container */}
         <StaticImage
           className="w-[90vw] h-[90vh] rounded-xl scale-x-[-1] object-cover"
