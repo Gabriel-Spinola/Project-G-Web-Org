@@ -44,11 +44,11 @@ export default function RecoverForm() {
   return (
     <form
       id="auth-form"
-      className={`flex flex-col w-full h-full gap-4 items-center px-8 md:px-16`}
+      className={`flex flex-col items-center justify-center w-full h-full gap-4`}
       onSubmit={handleRecoverySubmission}
     >
       <TextBox
-        className="w-full"
+        className="w-full text-pure-white"
         labelText="E-mail"
         type={'email'}
         onChange={(e) => (email.current = e.target.value)}
@@ -66,7 +66,7 @@ export default function RecoverForm() {
         buttonText={'ENVIAR E-MAIL DE RECUPERAÇÃO'}
       />
 
-      <p className="text-center">
+      <p className="text-center text-pure-white drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]">
         Já possui Conta?{' '}
         <Link
           href="/login"

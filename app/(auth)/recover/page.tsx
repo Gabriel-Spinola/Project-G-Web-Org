@@ -7,21 +7,25 @@
  * @license GPL 3.0
  */
 
-'use client'
-
+import { StaticImage } from '@/components/Image'
 import RecoverForm from '../components/RecoverForm'
 
-export default function RecoverPage() {
+export default async function LoginPage() {
   return (
-    <main className="min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
-      {/* Form Container */}
-      <div className="w-full md:w-[45%] lg:w-[30%] max-h-[60%] flex flex-col items-center justify-center rounded-xl text-medium-primary bg-black/75 border-4 border-medium-gray p-4">
-        <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
-          {' '}
-          RECUPERAR SENHA{' '}
+    // First Wrapper Component
+    <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
+      <StaticImage
+        className="absolute w-full h-full object-cover"
+        url="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
+        alt="imagem"
+      />
+
+      <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
+        <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
+          RECUPERAR SENHA
         </h1>
         <RecoverForm />
-      </div>
+      </section>
     </main>
   )
 }

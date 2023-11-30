@@ -24,7 +24,7 @@ const TextBox = React.forwardRef<HTMLInputElement, Props>(
       <div className={className + ' relative'}>
         {labelText && (
           <label
-            className="block mb-2 text-darker-white text-xs md:text-base x1:text-xl underline underline-offset-4"
+            className="block mb-2 text-xs md:text-base x1:text-xl font-bold drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]"
             htmlFor={htmlForId}
           >
             {labelText}
