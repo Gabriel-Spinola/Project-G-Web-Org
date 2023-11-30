@@ -29,12 +29,6 @@ export default function RegisterPage() {
 
   const { ref: captchaRef, isVerified, handleCaptchaSubmission } = useCaptcha()
 
-  /**
-   *
-   * @param formData
-   * @returns If something wrong happens: alert the user & reset the form. Otherwise resets the form
-   * and redirect the user tho the signIn page
-   */
   async function handleFormSubmission(formData: FormData): Promise<void> {
     const validatedForm = validateRegisterForm(formData)
 
@@ -49,7 +43,7 @@ export default function RegisterPage() {
     const { error }: ESResponse<string> = await toast.promise(
       registerNewUser(validatedForm.data),
       {
-        pending: 'Estamos te registando... 🥱',
+        pending: 'Estamos te registrando... 🥱',
         success: 'Registrado com sucesso. 🤙',
       },
     )
