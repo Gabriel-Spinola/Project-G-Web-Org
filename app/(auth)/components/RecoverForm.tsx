@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import React, { useRef } from 'react'
-import { SubmitButton } from './SubmitButton'
+import { SubmitButton } from './buttons/SubmitButton'
 import TextBox from './TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { toast } from 'react-toastify'

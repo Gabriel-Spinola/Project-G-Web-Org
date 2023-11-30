@@ -3,7 +3,7 @@
 import React, { useRef } from 'react'
 import TextBox from './TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { SubmitButton } from './SubmitButton'
+import { SubmitButton } from './buttons/SubmitButton'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { FcGoogle } from 'react-icons/fc'
