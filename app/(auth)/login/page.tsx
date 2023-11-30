@@ -15,6 +15,7 @@ import { StaticImage } from '@/components/Image'
 
 export default async function LoginPage() {
   const session = await getServerSession(AuthOptions)
+
   return (
     // First Wrapper Component
     <main className="min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">

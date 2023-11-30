@@ -11,9 +11,8 @@
 
 import { registerNewUser } from '../_actions'
 import { ESResponse } from '@/lib/types/common'
-import { verifyCaptcha } from '@/server/serverActions'
 import { signIn } from 'next-auth/react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validateRegisterForm } from '@/lib/schemas/userRegistering.schema'
 import { SubmitButton } from '../components/SubmitButton'
@@ -22,23 +21,13 @@ import { FcGoogle } from 'react-icons/fc'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
+import { buildValidationErrorMessage } from '@/lib/schemas/actions'
+import { useCaptcha } from '@/hooks/useCaptcha'
 
 export default function RegisterPage() {
-  const [isVerified, setIsVerified] = useState<boolean>(false)
-
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
-  async function handleCaptchaSubmission(token: string | null): Promise<void> {
-    // Server function to verify captcha
-    await verifyCaptcha(token)
-      .then(() => setIsVerified(true))
-      .catch(() => {
-        setIsVerified(false)
-
-        toast.warn('Por favor, preencha o captcha corretamente')
-      })
-  }
+  const { ref: captchaRef, isVerified, handleCaptchaSubmission } = useCaptcha()
 
   /**
    *
@@ -47,23 +36,16 @@ export default function RegisterPage() {
    * and redirect the user tho the signIn page
    */
   async function handleFormSubmission(formData: FormData): Promise<void> {
-    // NOTE - 1. Error/Success Pattern for standardized error handling implementation
     const validatedForm = validateRegisterForm(formData)
 
     if (validatedForm.error) {
-      let errorMessage = ''
-
-      validatedForm.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      toast.warn('Preencha o formulário corretamente.\n' + errorMessage + '\n')
-
-      return
+      return buildValidationErrorMessage(validatedForm.error, (errorMessage) =>
+        toast.warn(
+          'Preencha o formulário corretamente.\n' + errorMessage + '\n',
+        ),
+      )
     }
 
-    // NOTE - 2. Error/Success Pattern for standardized error handling implementation
     const { error }: ESResponse<string> = await toast.promise(
       registerNewUser(validatedForm.data),
       {
@@ -140,7 +122,7 @@ export default function RegisterPage() {
 
               <ReCAPTCHA
                 sitekey={process.env.RECAPTCHA_SITE_KEY as string}
-                ref={recaptchaRef}
+                ref={captchaRef}
                 onChange={handleCaptchaSubmission}
               />
 
