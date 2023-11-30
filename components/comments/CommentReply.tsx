@@ -14,7 +14,7 @@ import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
 import { FaTrash } from 'react-icons/fa'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
-import { ReplyFunctions } from './Comment'
+import { ReplyCallbacks } from './Comment'
 
 type Props = {
   comment: Partial<TDisplayComment>
@@ -23,7 +23,7 @@ type Props = {
 export default function CommentReply({ comment }: Props) {
   const { data: session } = useSession()
   const firstCommentId = useContext(CommentIdContext)
-  const replyCtx = useContext(ReplyFunctions)
+  const replyCtx = useContext(ReplyCallbacks)
   const [openReplies, setOpenReplies] = useState<boolean>(false)
 
   async function handleComment() {
@@ -66,7 +66,7 @@ export default function CommentReply({ comment }: Props) {
                   variant={'ghost'}
                   type="button"
                   onClick={async () => {
-                    replyCtx?.replyDeletion(comment.id as number)
+                    replyCtx?.onReplyDeletion(comment.id as number)
 
                     await deleteComment(comment.id as number)
                   }}
@@ -121,7 +121,7 @@ export default function CommentReply({ comment }: Props) {
             }}
             thisId={comment.id as number}
             defaultValue={comment.author?.name}
-            onSubmit={replyCtx?.replySubmit}
+            onSubmit={replyCtx?.onReply}
           />
         </div>
       ) : null}
