@@ -16,6 +16,8 @@ import { Suspense } from 'react'
 import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import Link from 'next/link'
+import { MdPushPin } from 'react-icons/md'
 
 export default async function Home() {
   const posts = await fetchPosts()
@@ -25,6 +27,12 @@ export default async function Home() {
     <main className="flex min-h-screen justify-around flex-row bg-darker-white">
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <PostSubmitFragment modal={<NewPostModal />} />
+
+        <aside>
+          <Link href={`/profile/${session?.user.id}/pins/`}>
+            Veja seus posts salvos <MdPushPin size={16} />
+          </Link>
+        </aside>
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (

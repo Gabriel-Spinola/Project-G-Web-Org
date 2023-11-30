@@ -3,7 +3,7 @@ import { ESResponse, UserData } from '@/lib/types/common'
 import { User } from '@prisma/client'
 import { isFollowing } from './_server-actions'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
-import { requestHandler } from '@/lib/api/requestHandler'
+import { requestFactory } from '@/lib/api/requestHandler'
 
 export type UserSelectedData = { [key in keyof Partial<User>]: boolean }
 
@@ -97,7 +97,7 @@ export async function handleFollowingCheckage(
   return data ?? false
 }
 
-export const updateUserInfo = requestHandler<Partial<UserData>, string>(
+export const updateUserInfo = requestFactory<Partial<UserData>, string>(
   (params) =>
     fetch(`${API_URL}${API_ENDPOINTS.services.users}/only/${params.id}/`, {
       method: 'PATCH',

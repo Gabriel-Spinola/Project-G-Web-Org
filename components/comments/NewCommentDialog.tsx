@@ -72,7 +72,6 @@ export default function NewCommentDialog({
         convertedData.get('content')?.toString(),
         target,
         post?.id as string,
-        session?.user.id,
       ),
       {
         pending: 'Enviando seu comentario...',

@@ -30,13 +30,14 @@ export default function PostItem() {
 
   const isOwner = publicationCtx.session === publicationCtx.authorId
 
-  const isLiked: boolean = publicationCtx.likes.some(
+  const isLiked: boolean = publicationCtx?.likes.some(
     (like: Partial<Like>) => like.userId === publicationCtx.session,
   )
 
-  const isPinned: boolean = publicationCtx.pins.some(
-    (pin: Partial<Pin>) => pin.userId === publicationCtx.session,
-  )
+  const isPinned: boolean =
+    publicationCtx?.pins?.some(
+      (pin: Partial<Pin>) => pin.userId === publicationCtx.session,
+    ) ?? false
 
   function getCommentsCount(): number {
     if (!publicationCtx?.comments) {

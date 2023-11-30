@@ -4,15 +4,8 @@ import { prisma } from '@/lib/database/prisma'
 import { LikeOptions, PinOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
-
-/**
- * Helper function to control the feed revalidation in client components.
- * @returns Feed Revalidation
- */
-export const revalidateFeed = (): void => revalidatePath('/')
 
 export async function postComment(
   content: string | undefined,
@@ -20,7 +13,6 @@ export async function postComment(
     id: string | number
     type: 'postId' | 'parentCommentId' | 'projectId'
   },
-  fromPost: string,
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
   if (!content || !authorId) {
@@ -143,13 +135,11 @@ export async function pinPublication(
   targetId: string,
 ): Promise<ESResponse<never, string>> {
   try {
-    const pin = await prisma.user.update({
-      where: {
-        id: authorId,
-        NOT: { pins: { some: { [selectedType]: targetId } } },
+    const pin = await prisma.pin.create({
+      data: {
+        userId: authorId,
+        [selectedType]: targetId,
       },
-      select: { id: true },
-      data: { pins: { create: { [selectedType]: targetId } } },
     })
 
     console.log('Pinned by: ' + JSON.stringify(pin.id))

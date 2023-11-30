@@ -30,7 +30,7 @@ export default function PinButton({
 
     if (!isPinned) {
       const { error } = await pinPublication(
-        'pinnedPosts',
+        'postId',
         session.user.id,
         targetId,
       )
@@ -39,7 +39,7 @@ export default function PinButton({
         toast.error('Houve um erro ao favoritar a publicação')
       }
     } else {
-      const { error } = await unpinPublication('pinnedProjects', targetId)
+      const { error } = await unpinPublication('postId', targetId)
 
       if (error) {
         toast.error('Houve um erro ao desfavoritar a publicação')
