@@ -1,5 +1,12 @@
 import { supabase } from '@/lib/storage/supabase'
+import { ESResponse } from '@/lib/types/common'
+import { NextResponse } from 'next/server'
 
+export type APIResponse<T> = NextResponse<Record<'data', T>>
+
+/**
+ * @summary Handmade re-creation of the FileObject API from supabase.
+ */
 interface CustomFileObject {
   name: string
   bucket_id: string
@@ -11,22 +18,11 @@ interface CustomFileObject {
   metadata: Record<string, unknown>
 }
 
-type ErrorMessage = string
-
 export async function getFileIfExistsInStorage(
   bucketName: string,
   filePath: string,
   folderPath: string,
-): Promise<
-  | {
-      data: CustomFileObject
-      error: null
-    }
-  | {
-      data: null
-      error: ErrorMessage
-    }
-> {
+): Promise<ESResponse<CustomFileObject>> {
   const { data, error } = await supabase.storage
     .from(bucketName)
     .list(folderPath)

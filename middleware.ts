@@ -7,45 +7,53 @@
  * @license i.e. MIT
  */
 
-
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
-// import { get, set } from 'lodash'
 
-// NOTE: Not Scalable
+// TODO - add all paths that need authentication
+const onlyAuthenticatedPages = [
+  '/admin/',
+  '/(client)/profile/',
+  '/(client)/temp/',
+  '/api/handlers/',
+  '/api/session/',
+]
 
 // allowed requests per minute
-const rateLimit = 40
-const rateLimiter = {}
+const rateLimit = 100
+const rateLimiter: Record<string, number[]> = {}
 
-// FIXME - Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime
-// LINK - Learn More: https://nextjs.org/docs/messages/edge-dynamic-code-evaluation
-// function rateLimiterMiddleware(ip: string) {
-//   const now = Date.now()
-//   const windowStart = now - 60 * 1000 // 1 minute ago
+// NOTE: Not Scalable
+function rateLimiterMiddleware(ip: string): boolean {
+  const now = Date.now()
+  const windowStart = now - 60 * 1000 // 1 minute ago
 
-//   const requestTimestamps: number[] = get(rateLimiter, ip, []).filter(
-//     (timestamp) => timestamp > windowStart,
-//   )
+  if (!rateLimiter[ip]) {
+    rateLimiter[ip] = []
+  }
 
-//   requestTimestamps.push(now)
+  const requestTimestamps: number[] = rateLimiter[ip].filter(
+    (timestamp) => timestamp > windowStart,
+  )
 
-//   set(rateLimiter, ip, requestTimestamps)
+  requestTimestamps.push(now)
 
-//   return requestTimestamps.length <= rateLimit
-// }
+  rateLimiter[ip] = requestTimestamps
+
+  return requestTimestamps.length <= rateLimit
+}
 
 async function middleware(req: NextRequestWithAuth) {
-  if (req.nextUrl.pathname.startsWith('/api/')) {
-    // SECTION - Rate Limiter
+  const pathName = req.nextUrl.pathname
+
+  if (pathName.startsWith('/api/')) {
+    // NOTE - Rate Limiter
     const ip =
       req.headers.get('x-forwarded-for') ||
       req.ip ||
       req.headers.get('x-real-ip')
 
-    // FIXME
-    // const passedRateLimiter = rateLimiterMiddleware(ip as string)
-    const passedRateLimiter = true
+    const passedRateLimiter = rateLimiterMiddleware(ip as string)
 
     if (!passedRateLimiter) {
       return NextResponse.json(
@@ -54,12 +62,24 @@ async function middleware(req: NextRequestWithAuth) {
       )
     }
 
-    // SECTION - Storage management
+    // NOTE - API secret
+    if (!pathName.startsWith('/api/auth/')) {
+      const secret = req.headers.get('X-API-Key')
+
+      if (secret !== (process.env.NEXTAUTH_SECRET as string)) {
+        return NextResponse.json({ message: 'Invalid Secret' }, { status: 401 })
+      }
+    }
+
+    // NOTE - Storage management
     // TODO: Storage Cleanup
   }
 
-  // TODO - add paths that need authentication
-  if (req.nextUrl.pathname.startsWith('/admin/')) {
+  const isEnteringOnAuthPage = onlyAuthenticatedPages.some(
+    (pageUrl: string): boolean => pathName.startsWith(pageUrl),
+  )
+
+  if (isEnteringOnAuthPage) {
     return withAuth(req)
   }
 }

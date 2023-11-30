@@ -1,35 +1,38 @@
-import { prisma } from '@/lib/database/prisma'
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
+import handlePatch from './_patch'
+import handleGet from './_get'
 
-type SelectedData = Record<string, boolean>
-
-async function handler(req: Request) {
+async function handler(
+  req: Request,
+): Promise<NextResponse<Record<'data', unknown>>> {
   const url = new URL(req.url)
-
   const id = url.searchParams.get('id')?.toString()
-  const selectedData: SelectedData = await req.json()
 
-  if (!id) {
-    return NextResponse.json({ data: "Id can't be null" }, { status: 400 })
+  if (req.method === 'GET') {
+    return handleGet()
   }
 
-  try {
-    const data: Partial<User> | null = await prisma.user.findUnique({
-      where: { id },
-      select: selectedData,
-    })
-
-    if (data) {
-      return NextResponse.json({ data }, { status: 200 })
+  // ANCHOR - Patch request **will not** handle image updating
+  if (req.method === 'PATCH') {
+    if (!id) {
+      return NextResponse.json(
+        {
+          data: `FAILED:SERVICES/${req.method}-User: id Can't be null`,
+        },
+        { status: 400 },
+      )
     }
 
-    throw new Error('Failed to fetch data')
-  } catch (e: unknown) {
-    console.error(e)
+    const newUserData: Partial<User> = await req.json()
 
-    return NextResponse.json({ data: 'failed' }, { status: 400 })
+    return handlePatch(id, newUserData)
   }
+
+  return NextResponse.json(
+    { data: { message: 'Invalid method' } },
+    { status: 401 },
+  )
 }
 
-export { handler as POST }
+export { handler as POST, handler as PATCH, handler as GET }

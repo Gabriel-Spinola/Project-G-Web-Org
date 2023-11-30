@@ -40,11 +40,11 @@ model Post {
 
   likes Like[] @relation("LikedPost")
 
-  author      User?     @relation("PostAuthor", fields: [authorId], references: [id])
+  author      User?     @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String?
   contributor User[]    @relation("PostContributor")
-  comments    Comment[]
-  pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
+  comments    Comment[] 
+  pinnedBy    User?     @relation("PinnedPost", fields: [pinnedById], references: [id], onDelete: Cascade)
   pinnedById  String?   @unique
 }
 
@@ -59,6 +59,7 @@ model Project {
   title       String
   description String?
   images      String[]
+  files       String[]
 
   projectType ProjectType
   tags        String[]
@@ -68,11 +69,11 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  author      User?     @relation("ProjectAuthor", fields: [authorId], references: [id])
+  author      User?     @relation("ProjectAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String?
   contributor User[]    @relation("ProjectContributor")
   comments    Comment[]
-  pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id])
+  pinnedBy    User?     @relation("PinnedProject", fields: [pinnedById], references: [id], onDelete: Cascade)
   pinnedById  String?   @unique
 }
 
@@ -114,8 +115,9 @@ enum Positions {
 
 model User {
   id       String  @id @default(cuid())
-  name     String?
+  name     String
   password String?
+  image String?
 
   followers Follows[] @relation("Follower")
   following Follows[] @relation("Following")
@@ -133,7 +135,7 @@ model User {
   contactPhone Int?
   profilePic   String?
 
-  email         String?   @unique
+  email         String    @unique
   emailVerified DateTime?
 
   createdAt DateTime @default(now())
@@ -159,9 +161,9 @@ model User {
 
 // LINK: https://stackoverflow.com/questions/72330381/prisma-not-liked-posts-from-followed-users
 model Follows {
-  follower    User   @relation("Following", fields: [followerId], references: [id])
+  follower    User   @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
-  following   User   @relation("Follower", fields: [followingId], references: [id])
+  following   User   @relation("Follower", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
 
   @@id([followerId, followingId])
@@ -189,28 +191,33 @@ model Comment {
 
   likes Like[] @relation("LikedComment")
 
-  author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
+  author   User   @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
-  post   Post?   @relation(fields: [postId], references: [id])
-  postId String? @unique
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
 
-  project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?  @unique
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String? 
+
+  replies Comment[] @relation("Replies")
+
+  parentComment Comment? @relation("Replies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  parentCommentId Int?
 }
 
 model Like {
   id Int @id @default(autoincrement())
 
-  user   User   @relation("LikedBy", fields: [userId], references: [id])
+  user   User   @relation("LikedBy", fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  post   Post?   @relation("LikedPost", fields: [postId], references: [id])
+  post   Post?   @relation("LikedPost", fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 
-  project   Project? @relation("LikedProject", fields: [projectId], references: [id])
+  project   Project? @relation("LikedProject", fields: [projectId], references: [id], onDelete: Cascade)
   projectId String?
 
-  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id])
+  comment   Comment? @relation("LikedComment", fields: [commentId], references: [id], onDelete: Cascade)
   commentId Int?
 }

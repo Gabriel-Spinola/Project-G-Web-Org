@@ -1,74 +1,85 @@
+import { FullPost } from '@/lib/types/common'
 import { prisma } from '@/lib/database/prisma'
-import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-type FullPost = {
-  author: {
-    name: string | null
-    title: string | null
-  } | null
-} & Post
-
-async function tryGetPostsFromUser(
-  take: number | null,
-  authorId: string,
+async function getPosts(
+  where: { authorId?: string; published?: boolean },
+  page = 1,
+  take = 3,
 ): Promise<FullPost[] | null> {
   try {
-    const data = await prisma.post.findMany({
-      take: take ?? 3,
-      where: { authorId, published: true },
+    const skip = (page - 1) * take
+
+    const data: FullPost[] = await prisma.post.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      where,
+      skip,
+      take,
       include: {
-        author: { select: { name: true, title: true } },
+        author: {
+          select: { name: true, image: true, profilePic: true },
+        },
+        contributor: { select: { name: true } },
+        likes: { select: { id: true, userId: true } },
+        comments: {
+          include: {
+            author: { select: { name: true, profilePic: true, image: true } },
+            likes: { select: { id: true, userId: true } },
+            replies: {
+              include: {
+                author: {
+                  select: { name: true, profilePic: true, image: true },
+                },
+                likes: { select: { id: true, userId: true } },
+              },
+            },
+          },
+        },
       },
     })
 
     return data
-  } catch (e: unknown) {
-    console.error(
-      'SERVICES/GET-POSTS::failed to get posts from user (database level): ',
-      e,
-    )
+  } catch (error) {
+    console.error('Error occurred:', error)
 
-    return null
+    throw new Error('Failed to fetch posts from the database.')
   }
 }
 
-async function tryGetOnlyPosts(
-  take: number | null,
+async function getPostsFromUser(
+  authorId: string,
+  page?: number,
+  take?: number,
 ): Promise<FullPost[] | null> {
-  try {
-    const data = await prisma.post.findMany({
-      take: take ?? 3,
-      include: {
-        author: { select: { name: true, title: true } },
-      },
-    })
+  return getPosts({ authorId }, page, take)
+}
 
-    return data
-  } catch (e: unknown) {
-    console.error(
-      'SERVICES/GET-POSTS::failed to get posts (database level):',
-      e,
-    )
-
-    return null
-  }
+async function getPostsFromAllUsers(
+  page?: number,
+  take?: number,
+): Promise<FullPost[] | null> {
+  return getPosts({ published: true }, page, take)
 }
 
 export async function handleGet(
-  take: string | null,
+  page: string | null,
   authorId: string | null,
 ): Promise<NextResponse> {
   const data: FullPost[] | null = !authorId
-    ? await tryGetOnlyPosts(take ? parseInt(take) : null)
-    : await tryGetPostsFromUser(take ? parseInt(take) : null, authorId)
+    ? await getPostsFromAllUsers(page ? parseInt(page) : undefined)
+    : await getPostsFromUser(authorId, page ? parseInt(page) : undefined)
 
-  if (data) {
-    return NextResponse.json({ data }, { status: 200 })
+  if (!data) {
+    return NextResponse.json(
+      { data: 'FAILED:SERVICES/GET-POSTS::failed to get posts (API level)' },
+      { status: 400 },
+    )
   }
 
   return NextResponse.json(
-    { data: 'FAILED:SERVICES/GET-POSTS::failed to get posts (API level)' },
-    { status: 400 },
+    { data: JSON.parse(JSON.stringify(data)) },
+    { status: 200 },
   )
 }

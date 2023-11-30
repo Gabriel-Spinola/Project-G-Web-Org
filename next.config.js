@@ -2,10 +2,20 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
-    serverActions: true,
   },
   env: {
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+    API_SECRET: process.env.NEXTAUTH_SECRET,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ebqqbabyixbmiwalviko.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/Vampeta-Images-Public/**',
+      },
+    ],
   },
   async headers() {
     return [

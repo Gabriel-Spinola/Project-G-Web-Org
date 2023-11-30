@@ -9,60 +9,27 @@
  
 @import '../../app/styles/variables.module.scss';
 
-.postado {
+.post {
     display: flex;
-    flex-direction: column;
-    width: 45vw;
+    flex-direction: column; 
+
     background-color: $pure-white;
-    padding: 0;
     border-radius: 12px;
     padding: 16px;
+    margin-top: 32px;
     color: $darker-gray;
-    margin-bottom: 32px;   
     -webkit-box-shadow: 0 0 8px #00000065;
             box-shadow: 0 0 8px #00000065;
 
-    .autor {
-        display: flex;
-        flex-direction: row;
-        font-family: $nav-font;
-        margin-bottom: 16px;
-
-        .foto {
-            background-color: lightblue;
-            border-radius: 50%;
-            height: 48px;
-            width: 48px;
-        }
-
-        .nomeLocalizacao {
-            display: flex;
-            flex-direction: column;
-            margin-left: 16px;
-
-            .nome {
+    .authorContainer {
+        .userInfo {
+            .userName {
                 color: $light-primary;
                 font-size: 24px;
                 font-weight: 400;
             }
 
-            .localizacao {
-                color: #000;
-                font-size: 16px;
-                font-weight: 400px;
-                margin-top: -8px;
-            }
         }
-    }
-
-    .p1 {
-        color: #242424;
-        font-family: $nav-font;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 300;
-        line-height: 30px;
-        margin-bottom: 10px;
     }
 
     .oneImg {
@@ -72,7 +39,7 @@
 }
 
 @media (max-width: 1024px) {
-    .postado{
+    .post{
         width: 100%;
     }
 }

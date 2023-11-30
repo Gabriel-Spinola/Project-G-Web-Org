@@ -1,0 +1,66 @@
+ #navDesktop ul li {
+  margin: 0 88px;
+  padding: 8px 16px;
+}
+
+#navDesktop ul li a div {
+  background-color: #ebebeb; /* $darker-white */
+  height: 2px;
+  width: 16px;
+}
+
+#navDesktop ul li:hover {
+  color: #F06D4D; /* $medium-primary */
+  cursor: pointer;
+}
+
+#navDesktop ul li:hover a div {
+  background-color: #F06D4D; /* $medium-primary */
+  height: 2px;
+  width: 100%;
+  animation-name: sub-expand;
+  animation-duration: 0.5s;
+}
+
+
+#navDesktop ul li:not(:hover) a div {
+  background-color: #F06D4D; /* $medium-primary */
+  height: 2px;
+  width: 16px;
+  animation-name: sub-shrink;
+  animation-duration: 0.5s;
+}
+
+@media (max-width: 1536px) {
+  #navDesktop ul li {
+    margin: 0 48px;
+  }
+}
+
+@media (max-width: 1280px) {
+  #navDesktop ul li {
+    margin: 0 48px;
+    animation-name: sub-expand;
+    animation-duration: 0.5s;
+  }
+}
+
+@keyframes sub-expand {
+  0% {
+    width: 16px;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes sub-shrink {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 16px;
+  }
+}

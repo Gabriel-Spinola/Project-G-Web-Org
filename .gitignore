@@ -40,3 +40,10 @@ next-env.d.ts
 setnode.bat
 .env
 .env
+Project-G-Web.code-workspace
+.vscode/settings.json
+poke.exe
+
+.git-old/*
+/.git-old/
+.git-old/

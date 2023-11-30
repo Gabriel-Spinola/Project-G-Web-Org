@@ -35,8 +35,19 @@ async function handlePost(req: Request): Promise<RegisterResponse> {
       },
     })
 
+    if (!user) {
+      console.error('not user')
+
+      return NextResponse.json(
+        {
+          data: 'User Not created for some reason',
+        },
+        { status: 500 },
+      )
+    }
+
     return NextResponse.json({
-      user: {
+      data: {
         name: user.name,
         email: user.email,
       },
@@ -44,8 +55,7 @@ async function handlePost(req: Request): Promise<RegisterResponse> {
   } catch (error: unknown) {
     return NextResponse.json(
       {
-        status: 'error',
-        message: error,
+        data: 'failed' + error,
       },
       { status: 500 },
     )
@@ -57,5 +67,5 @@ export async function POST(req: Request): Promise<RegisterResponse> {
     return await handlePost(req)
   }
 
-  return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
+  return NextResponse.json({ data: 'Method not allowed' }, { status: 405 })
 }

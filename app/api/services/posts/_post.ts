@@ -1,34 +1,10 @@
 import { prisma } from '@/lib/database/prisma'
-import { FileBody, StorageResponse } from '@/lib/storage/storage'
-import { SUPABASE_PUBLIC_BUCKET_NAME, supabase } from '@/lib/storage/supabase'
+import { storeFile } from '@/lib/storage/actions'
 import { Post } from '@prisma/client'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // export const config = { runtime: 'experimental-edge' }
-
-async function storeImage(
-  authorId: string,
-  images: FileBody,
-): Promise<StorageResponse> {
-  try {
-    // FIXME - failing at certain types of images
-    const { data, error } = await supabase.storage
-      .from(SUPABASE_PUBLIC_BUCKET_NAME)
-      .upload(`posts/${authorId}/${images.name}`, images, {
-        cacheControl: '3600',
-        upsert: true, // NOTE - TEMP
-      })
-
-    if (error) {
-      throw error
-    }
-
-    return data
-  } catch (e: unknown) {
-    console.error('failed at image storage ' + e)
-    throw e
-  }
-}
 
 async function createPost(
   newPost: Partial<Post>,
@@ -57,15 +33,6 @@ async function createPost(
   }
 }
 
-// TODO: Add real requirements
-function checkRequiredFields(
-  title: string | null | undefined,
-  content: string | null | undefined,
-  images: string | null | undefined,
-): boolean {
-  return !!(title && content && images)
-}
-
 export async function handlePost(
   authorId: string,
   req: Request,
@@ -73,11 +40,20 @@ export async function handlePost(
   try {
     const formData = await req.formData()
 
-    const title = formData.get('title')?.toString()
     const content = formData.get('content')?.toString()
-    const postImages = formData.getAll('images') as FileBody[] | null
+    const postImages = formData.getAll('images') as File[] | null
 
-    if (!checkRequiredFields(title, content, 'aa')) {
+    // REVIEW - Usage of buffers and base64
+    // const bufferImages: Promise<Buffer>[] | undefined = postImages?.map(
+    //   async (image: File): Promise<Buffer> =>
+    //     Buffer.from(await image.arrayBuffer()),
+    // )
+
+    // const bytes = await postImages?.at(0)?.arrayBuffer()
+    // // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // const buffer = Buffer.from(bytes!)
+
+    if (!content) {
       return NextResponse.json(
         {
           data: 'Failed to create post: missing or invalid request data',
@@ -98,7 +74,9 @@ export async function handlePost(
 
     if (postImages) {
       const storedImages = await Promise.all(
-        postImages.map((image) => storeImage(authorId, image)),
+        postImages.map((image: File) =>
+          storeFile(`posts/${authorId}/${image.name}`, image),
+        ),
       )
 
       if (storedImages.some((image) => !image)) {
@@ -121,7 +99,8 @@ export async function handlePost(
     }
 
     if (data) {
-      return NextResponse.json({ data }, { status: 200 })
+      revalidateTag('revalidate-feed')
+      return NextResponse.json({ data: 'sent' }, { status: 200 })
     }
 
     return NextResponse.json(
