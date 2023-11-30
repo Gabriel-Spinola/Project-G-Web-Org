@@ -9,107 +9,18 @@
 
 'use client'
 
-import TextBox from '../components/TextBox'
-import { SubmitButton } from '../components/SubmitButton'
-import { useRef } from 'react'
-import ReCAPTCHA from 'react-google-recaptcha'
-import { signIn } from 'next-auth/react'
-import { StaticImage } from '@/components/Image'
-import Link from 'next/link'
-import { toast } from 'react-toastify'
-import { useCaptcha } from '@/hooks/useCaptcha'
+import RecoverForm from '../components/RecoverForm'
 
 export default function RecoverPage() {
-  const email = useRef('')
-
-  const { ref: captchaRef, isVerified, handleCaptchaSubmission } = useCaptcha()
-
-  async function handleRecoverySubmission(
-    event: React.FormEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault()
-
-    const signInResponse = await toast.promise(
-      signIn('email', {
-        email: email.current,
-        redirect: false,
-      }),
-      { pending: 'Enviando email....🥱' },
-    )
-
-    if (signInResponse) {
-      if (signInResponse.error) {
-        toast.error(
-          'Falha ao enviar email, certifique-se de que suas informações estão corretas.',
-        )
-
-        console.error(signInResponse.error)
-
-        return
-      }
-    }
-
-    toast('Email enviado faça login por ele!')
-  }
-
   return (
     <main className="min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
-      {/* Login Container with Background Image */}
-      <div
-        className={`absolute flex flex-col items-center rounded-xl w-[90vw] h-[90vh]`}
-      >
-        {/* Background Image for Login Container */}
-        <StaticImage
-          className="w-[90vw] h-[90vh] rounded-xl scale-x-[-1] object-cover"
-          url="https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/wolfgang-hasselmann-eSLZXmnw0e8-unsplash.jpg"
-          alt="House Image"
-        />
-        {/* Background Image darker overlay */}
-        <div className="absolute w-full h-full bg-gradient-to-r from-black via-black/60 via-50% to-black/25 rounded-xl">
-          {/* Form Container */}
-          <div className="absolute w-full md:w-[65%] x1:w-[45%] 2x1:w-[35%] float-left h-full rounded-xl text-darker-white">
-            <form
-              id="auth-form"
-              className={`flex flex-col justify-evenly w-full h-full gap-4 items-center px-8 md:px-16`}
-              onSubmit={handleRecoverySubmission}
-            >
-              <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
-                {' '}
-                RECUPERAR SENHA{' '}
-              </h1>
-
-              <TextBox
-                className="w-full"
-                labelText="E-mail"
-                type={'email'}
-                onChange={(e) => (email.current = e.target.value)}
-              />
-
-              <ReCAPTCHA
-                sitekey={process.env.RECAPTCHA_SITE_KEY as string}
-                ref={captchaRef}
-                onChange={handleCaptchaSubmission}
-                className="my-4"
-              />
-
-              <SubmitButton
-                isVerified={isVerified}
-                buttonText={'ENVIAR E-MAIL DE RECUPERAÇÃO'}
-              />
-
-              <p className="text-center">
-                Já possui Conta?{' '}
-                <Link
-                  href="/login"
-                  id="formButton"
-                  className="text-light-primary underline hover:text-darker-primary font-bold"
-                >
-                  Voltar
-                </Link>{' '}
-              </p>
-            </form>
-          </div>
-        </div>
+      {/* Form Container */}
+      <div className="w-full md:w-[45%] lg:w-[30%] max-h-[60%] flex flex-col items-center justify-center rounded-xl text-medium-primary bg-black/75 border-4 border-medium-gray p-4">
+        <h1 className="md:text-base lg:text-lg x1:text-3xl mb-8 font-bold">
+          {' '}
+          RECUPERAR SENHA{' '}
+        </h1>
+        <RecoverForm />
       </div>
     </main>
   )
