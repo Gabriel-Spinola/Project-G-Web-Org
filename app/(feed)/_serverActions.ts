@@ -89,60 +89,6 @@ export async function increaseLikeCount(
   }
 }
 
-export async function unpinPublication(
-  selectedType: PinOptions,
-  targetId: string,
-): Promise<ESResponse<never, string>> {
-  const query = {
-    where: { id: targetId },
-    data: { pinnedBy: { disconnect: true } },
-  }
-
-  try {
-    const pin =
-      selectedType === 'pinnedPosts'
-        ? await prisma.post.update(query)
-        : await prisma.project.update(query)
-
-    console.log('Removed pin from ' + JSON.stringify(pin.authorId))
-
-    return ESSucceed({} as never)
-  } catch (error: unknown) {
-    console.error('pin Failed ' + error)
-
-    return ESFailed('Pin Failed')
-  }
-}
-
-export async function pinPublication(
-  selectedType: PinOptions,
-  authorId: string,
-  targetId: string,
-): Promise<ESResponse<never, string>> {
-  const query = {
-    where: { id: targetId },
-    data: { pinnedBy: { connect: { id: authorId } } },
-  }
-
-  try {
-    const pin =
-      selectedType === 'pinnedPosts'
-        ? await prisma.post.update(query)
-        : await prisma.project.update(query)
-
-    console.log('Pinned by: ' + JSON.stringify(pin?.authorId ?? ''))
-    return ESSucceed({} as never)
-  } catch (error: unknown) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      // REVIEW - check of possible optimizations for this solution
-      console.warn('Prisma client error\n', error)
-    }
-
-    console.error('Like Failed ' + error)
-    return ESFailed('Failed to unpin')
-  }
-}
-
 export async function decreaseLikeCount(
   selectedType: LikeOptions,
   targetId: string | number,
@@ -169,5 +115,52 @@ export async function deleteComment(id: number): Promise<void | null> {
     console.error('Failed to delete comment' + error)
 
     return null
+  }
+}
+
+export async function unpinPublication(
+  selectedType: PinOptions,
+  targetId: string,
+): Promise<ESResponse<never, string>> {
+  try {
+    const pin = await prisma.pin.deleteMany({
+      where: { [selectedType]: targetId },
+    })
+
+    console.log('Removed pin from ' + JSON.stringify(pin))
+
+    return ESSucceed({} as never)
+  } catch (error: unknown) {
+    console.error('pin Failed ' + error)
+
+    return ESFailed('Pin Failed')
+  }
+}
+
+export async function pinPublication(
+  selectedType: PinOptions,
+  authorId: string,
+  targetId: string,
+): Promise<ESResponse<never, string>> {
+  try {
+    const pin = await prisma.user.update({
+      where: {
+        id: authorId,
+        NOT: { pins: { some: { [selectedType]: targetId } } },
+      },
+      select: { id: true },
+      data: { pins: { create: { [selectedType]: targetId } } },
+    })
+
+    console.log('Pinned by: ' + JSON.stringify(pin.id))
+    return ESSucceed({} as never)
+  } catch (error: unknown) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      // REVIEW - check of possible optimizations for this solution
+      console.warn('Prisma client error\n', error)
+    }
+
+    console.error('Like Failed ' + error)
+    return ESFailed('Failed to unpin')
   }
 }
