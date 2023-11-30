@@ -11,25 +11,18 @@
 
 import TextBox from '../components/TextBox'
 import { SubmitButton } from '../components/SubmitButton'
-import { verifyCaptcha } from '@/server/serverActions'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { signIn } from 'next-auth/react'
 import { StaticImage } from '@/components/Image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
+import { useCaptcha } from '@/hooks/useCaptcha'
 
 export default function RecoverPage() {
   const email = useRef('')
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
-  const [isVerified, setIsVerified] = useState<boolean>(false)
 
-  async function handleCaptchaSubmission(token: string | null): Promise<void> {
-    // Server function to verify captcha
-    await verifyCaptcha(token)
-      .then(() => setIsVerified(true))
-      .catch(() => setIsVerified(false))
-  }
+  const { ref: captchaRef, isVerified, handleCaptchaSubmission } = useCaptcha()
 
   async function handleRecoverySubmission(
     event: React.FormEvent<HTMLFormElement>,
@@ -94,7 +87,7 @@ export default function RecoverPage() {
 
               <ReCAPTCHA
                 sitekey={process.env.RECAPTCHA_SITE_KEY as string}
-                ref={recaptchaRef}
+                ref={captchaRef}
                 onChange={handleCaptchaSubmission}
                 className="my-4"
               />
