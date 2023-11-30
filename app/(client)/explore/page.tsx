@@ -9,7 +9,7 @@
  * @license i.e. MIT
  */
 
-import { BgImage } from '@/components/BgImage'
+import { BgImage } from '@/components/bgImage'
 import BottomSection from './components/BottomSection'
 import ExploreSearchBar from './components/FindObject'
 import CarouselItems from './components/Carousel'
