@@ -10,7 +10,7 @@
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
-import { Credentials, validateCredentials } from './actions'
+import { Credentials, generateJwtToken, validateCredentials } from './actions'
 import { User } from '@prisma/client'
 
 /* NOTE
