@@ -8,7 +8,7 @@
  */
 
 import React from 'react'
-import { BgImage } from '@/components/bgImage'
+import { BgImage } from '@/components/BgImage'
 import { StaticImage } from '@/components/Image'
 import TextBox from '../components/elements/textBox'
 import Button from '../components/elements/button'
