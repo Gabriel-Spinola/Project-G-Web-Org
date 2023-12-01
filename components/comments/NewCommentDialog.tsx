@@ -1,11 +1,10 @@
 'use client'
 
-import React, { FormEvent, useContext, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
-import { PublicationContext } from '../posts/InfiniteScrollPosts'
 import { TDisplayComment } from '@/lib/types/common'
 import { toast } from 'react-toastify'
 
