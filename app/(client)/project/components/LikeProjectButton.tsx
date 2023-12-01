@@ -2,13 +2,10 @@
 
 import React, { useState } from 'react'
 import { signIn, useSession } from 'next-auth/react'
-import {
-  decreaseLikeCount,
-  increaseLikeCount,
-} from '@/app/(feed)/_serverActions'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import styles from '../../../../components/Buttons/buttons.module.scss'
 import { LikeOptions } from '@/app/(feed)/_constants'
+import { decreaseLikeCount, increaseLikeCount } from '@/server/likeActions'
 
 type LikeButtonParams = {
   params: {

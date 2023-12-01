@@ -1,6 +1,6 @@
 'use client'
 
-import { pinPublication, unpinPublication } from '@/app/(feed)/_serverActions'
+import { pinPublication, unpinPublication } from '@/server/pinActions'
 import { signIn, useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { MdOutlinePushPin, MdPushPin } from 'react-icons/md'

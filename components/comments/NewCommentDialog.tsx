@@ -2,11 +2,11 @@
 
 import React, { FormEvent, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
-import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
 import { TDisplayComment } from '@/lib/types/common'
 import { toast } from 'react-toastify'
+import { postComment } from '@/server/commentActions'
 
 type Props = {
   target: {

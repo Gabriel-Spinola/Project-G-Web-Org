@@ -1,4 +1,4 @@
-import { verifyCaptcha } from '@/server/serverActions'
+import { verifyCaptcha } from '@/server/captchaActions'
 import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { toast } from 'react-toastify'
