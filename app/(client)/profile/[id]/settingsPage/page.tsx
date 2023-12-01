@@ -21,9 +21,9 @@ export default async function ProfileSettings({ params }: Props) {
 
   if (isOwner) {
     return (
-      <main className="w-full h-[calc(100vh-88px)] bg-darker-white flex flex-col">
-        <aside className="w-full md:w-[35%] h-full max-h-[calc(100vh-88px)] bg-darker-primary p-4 lg:p-0 lg:px-8 lg:py-16">
-          <section id="user-info" className="flex">
+      <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex flex-col">
+        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] px-4 py-16 lg:px-8 shadow-xl">
+          <section id="user-info" className="flex items-center gap-4">
             <Avatar
               size={'xl'}
               src={getProfilePicURL({
@@ -31,12 +31,20 @@ export default async function ProfileSettings({ params }: Props) {
                 image: user?.image as string | null,
               })}
             />
-            <h1 className="text-xl">{user?.name}</h1>
+            <h1 className="text-xl lg:text-2xl text-medium-primary font-semibold">
+              {user?.name}
+            </h1>
           </section>
-          <ul className="flex flex-col gap-4 py-16">
-            <li>Exibição</li>
-            <li>Privacidade</li>
-            <li>Segurança</li>
+          <ul className="flex flex-col gap-4 py-16 text-xl">
+            <li>
+              <button className="hover:text-medium-primary">Exibição</button>
+            </li>
+            <li className="hover:text-medium-primary">
+              <button className="hover:text-medium-primary">Privacidade</button>
+            </li>
+            <li className="hover:text-medium-primary">
+              <button className="hover:text-medium-primary">Segurança</button>
+            </li>
           </ul>
         </aside>
         <section></section>

@@ -14,7 +14,7 @@ import CarouselItems from './components/Carousel'
 
 export default function ExplorePage() {
   return (
-    <main className="flex flex-col align-top bg-darker-white justify-center items-center">
+    <main className="mt-[88px] flex flex-col align-top bg-darker-white justify-center items-center">
       {/* NOTE - Upper Section of page */}
       <section className="h-[95vh] w-[100%] first-letter:items-center">
         {/* NOTE - Background of Upper Section */}

@@ -35,7 +35,7 @@ export default async function CreateProject({ params }: Props) {
   }
 
   return (
-    <main>
+    <main className="mt-[88px]">
       <Suspense fallback={<CreateProjectFormSkeleton />}>
         <CreateProjectForm
           projectId={id}
