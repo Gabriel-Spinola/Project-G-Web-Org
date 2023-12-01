@@ -26,8 +26,6 @@ export default function PostItem() {
     return <></>
   }
 
-  console.log(JSON.stringify(publicationCtx.pins))
-
   const isOwner = publicationCtx.session === publicationCtx.authorId
 
   const isLiked: boolean = publicationCtx?.likes.some(
