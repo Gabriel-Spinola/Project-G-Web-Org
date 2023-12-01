@@ -11,13 +11,21 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import LoginForm from '../components/LoginForm'
 import LogoutButton from '../components/buttons/LogoutButton'
+import { StaticImage } from '@/components/Image'
 
 export default async function LoginPage() {
   const session = await getServerSession(AuthOptions)
+
   return (
     // First Wrapper Component
-    <main className="min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
-      <section className="w-full md:w-[45%] lg:w-[30%]">
+    <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
+      <StaticImage
+        className="absolute w-full h-full object-cover"
+        url="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
+        alt="imagem"
+      />
+
+      <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
         {/* Verifies if use is logged */}
         {session ? (
           <>
@@ -25,6 +33,9 @@ export default async function LoginPage() {
           </>
         ) : (
           <>
+            <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
+              LOGIN
+            </h1>
             <LoginForm />
           </>
         )}

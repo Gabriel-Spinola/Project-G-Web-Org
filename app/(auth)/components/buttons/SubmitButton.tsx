@@ -7,6 +7,8 @@
  * @license GPL 3.0
  */
 
+'use client'
+
 import { toast } from 'react-toastify'
 
 export function SubmitButton({

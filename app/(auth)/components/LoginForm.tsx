@@ -11,24 +11,23 @@
 
 import TextBox from './TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { SubmitButton } from './SubmitButton'
-import { useRef, useState } from 'react'
+import { SubmitButton } from './buttons/SubmitButton'
+import { useRef } from 'react'
 import { signIn } from 'next-auth/react'
-import { verifyCaptcha } from '@/server/serverActions'
 import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
 import { validateForm } from '@/lib/schemas/login.schema'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import { useCaptcha } from '@/hooks/useCaptcha'
+import { buildValidationErrorMessage } from '@/lib/schemas/actions'
 
 export default function LoginForm() {
   const router = useRouter()
 
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const { ref: captchaRef, isVerified, handleCaptchaSubmission } = useCaptcha()
   const email = useRef('')
   const password = useRef('')
-
-  const [isVerified, setIsVerified] = useState<boolean>(false)
 
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -40,16 +39,11 @@ export default function LoginForm() {
     const { data, error } = validateForm(formData)
 
     if (error) {
-      let errorMessage = ''
-
-      error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      toast.warn('Por favor preencha o fomulário corretamente\n' + errorMessage)
-
-      return
+      return buildValidationErrorMessage(error, (errorMessage) =>
+        toast.warn(
+          'Por favor preencha o fomulário corretamente\n' + errorMessage,
+        ),
+      )
     }
 
     const signInResponse = await toast.promise(
@@ -76,38 +70,26 @@ export default function LoginForm() {
     router.push('/')
   }
 
-  async function handleCaptchaSubmission(token: string | null): Promise<void> {
-    // Server function to verify captcha
-    await verifyCaptcha(token)
-      .then(() => setIsVerified(true))
-      .catch(() => setIsVerified(false))
-  }
-
   return (
     <form
       onSubmit={handleLoginForm}
       id="auth-form"
-      className="flex flex-col items-center justify-evenly w-full h-full p-8 md:p-16"
+      className="flex flex-col items-center justify-evenly w-full h-full"
     >
-      <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-center">
-        {' '}
-        LOGIN{' '}
-      </h1>
-
       <TextBox
-        className="w-full"
+        className="w-full text-pure-white pb-4"
         labelText="E-mail"
         type={'email'}
         onChange={(e) => (email.current = e.target.value)}
       />
       <TextBox
-        className="w-full"
+        className="w-full text-pure-white"
         labelText="Senha"
         type={'password'}
         onChange={(e) => (password.current = e.target.value)}
       />
 
-      <p className="text-center">
+      <p className="text-center pt-4 text-pure-white drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]">
         Esqueceu a senha?{' '}
         <Link
           href="/recover"
@@ -120,9 +102,9 @@ export default function LoginForm() {
 
       <ReCAPTCHA
         sitekey={process.env.RECAPTCHA_SITE_KEY as string}
-        ref={recaptchaRef}
+        ref={captchaRef}
         onChange={handleCaptchaSubmission}
-        className="my-4"
+        className="p-4"
       />
 
       <div id="submitLogin" className="flex w-full gap-4">
@@ -131,13 +113,13 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => signIn('google')}
-          className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
+          className="flex justify-around items-center text-xl w-24 bg-pure-white rounded-lg hover:scale-[101%]"
         >
           <FcGoogle size={36} />
         </button>
       </div>
 
-      <p className="text-center">
+      <p className="text-center p-4 text-pure-white drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]">
         Precisa criar uma conta?{' '}
         <Link
           href="/register"

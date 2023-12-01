@@ -1,17 +1,11 @@
 'use server'
 
 import { prisma } from '@/lib/database/prisma'
-import { LikeOptions } from './_constants'
+import { LikeOptions, PinOptions } from './_constants'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { Comment } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
 import { ESResponse, TDisplayComment } from '@/lib/types/common'
-
-/**
- * Helper function to control the feed revalidation in client components.
- * @returns Feed Revalidation
- */
-export const revalidateFeed = (): void => revalidatePath('/')
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 export async function postComment(
   content: string | undefined,
@@ -19,7 +13,6 @@ export async function postComment(
     id: string | number
     type: 'postId' | 'parentCommentId' | 'projectId'
   },
-  fromPost: string,
   authorId: string,
 ): Promise<ESResponse<Partial<TDisplayComment>>> {
   if (!content || !authorId) {
@@ -114,5 +107,50 @@ export async function deleteComment(id: number): Promise<void | null> {
     console.error('Failed to delete comment' + error)
 
     return null
+  }
+}
+
+export async function unpinPublication(
+  selectedType: PinOptions,
+  targetId: string,
+): Promise<ESResponse<never, string>> {
+  try {
+    const pin = await prisma.pin.deleteMany({
+      where: { [selectedType]: targetId },
+    })
+
+    console.log('Removed pin from ' + JSON.stringify(pin))
+
+    return ESSucceed({} as never)
+  } catch (error: unknown) {
+    console.error('pin Failed ' + error)
+
+    return ESFailed('Pin Failed')
+  }
+}
+
+export async function pinPublication(
+  selectedType: PinOptions,
+  authorId: string,
+  targetId: string,
+): Promise<ESResponse<never, string>> {
+  try {
+    const pin = await prisma.pin.create({
+      data: {
+        userId: authorId,
+        [selectedType]: targetId,
+      },
+    })
+
+    console.log('Pinned by: ' + JSON.stringify(pin.id))
+    return ESSucceed({} as never)
+  } catch (error: unknown) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      // REVIEW - check of possible optimizations for this solution
+      console.warn('Prisma client error\n', error)
+    }
+
+    console.error('Like Failed ' + error)
+    return ESFailed('Failed to unpin')
   }
 }
