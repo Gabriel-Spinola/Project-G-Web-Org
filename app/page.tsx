@@ -24,24 +24,24 @@ export default async function Home() {
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main className="flex min-h-screen justify-around flex-row bg-darker-white">
-      <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
-        <PostSubmitFragment modal={<NewPostModal />} />
+    <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
+      <aside className="fixed left-0">
+        <Link href={`/profile/${session?.user.id}/pins/`}>
+          Veja seus posts salvos <MdPushPin size={16} />
+        </Link>
+      </aside>
 
-        <aside>
-          <Link href={`/profile/${session?.user.id}/pins/`}>
-            Veja seus posts salvos <MdPushPin size={16} />
-          </Link>
-        </aside>
+      <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
+        <PostSubmitFragment modal={<NewPostModal />} />
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (
-            <div className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
+            <section className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts
                 initialPublication={posts.data ?? undefined}
                 session={session?.user.id as string}
               />
-            </div>
+            </section>
           ) : (
             <h1>Feed Failed to load</h1>
           )}

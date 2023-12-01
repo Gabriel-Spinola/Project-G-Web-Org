@@ -20,7 +20,7 @@ export default async function Pins({ params }: Props) {
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main className="flex min-h-screen justify-around flex-row bg-darker-white">
+    <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <Suspense fallback={<span>loading feed...</span>}>
           {!error ? (

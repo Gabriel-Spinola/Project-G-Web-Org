@@ -20,7 +20,7 @@ export default function Navbar() {
   })
 
   return (
-    <section id="navbar" className="max-h-[88px]">
+    <section id="navbar" className="max-h-[88px] w-full fixed top-0 z-[999999]">
       {windowWidth !== null && windowWidth < 1024 ? (
         <MobileNavbar />
       ) : (
