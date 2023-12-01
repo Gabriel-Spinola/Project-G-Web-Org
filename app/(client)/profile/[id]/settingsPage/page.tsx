@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { getUserData } from '../../_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
