@@ -26,7 +26,6 @@ export default function NewCommentDialog({
   onSubmit,
 }: Props) {
   const { data: session } = useSession()
-  const post = useContext(PublicationContext)
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {

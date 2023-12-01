@@ -20,12 +20,10 @@ export default function ProjectImagesCarousel({
 
   function handleImageChangeAdd() {
     setCurrentImageIndex((current) => current + 1)
-    console.log(currentImage)
   }
 
   function handleImageChangeSubtract() {
     setCurrentImageIndex((current) => current - 1)
-    console.log(currentImage)
   }
 
   return (
@@ -75,9 +73,8 @@ export default function ProjectImagesCarousel({
           >
             <div id="selectors" className="flex flex-row gap-8">
               {imagesSrc.map((_, index) => (
-                <>
+                <div key={index}>
                   <button
-                    key={index}
                     onClick={() => {
                       setCurrentImageIndex(index)
                     }}
@@ -92,7 +89,7 @@ export default function ProjectImagesCarousel({
                       {' '}
                     </div>
                   </button>
-                </>
+                </div>
               ))}
             </div>
           </section>
