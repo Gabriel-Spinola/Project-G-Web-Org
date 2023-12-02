@@ -57,7 +57,7 @@ Example in json
    ...
   },
   {
-   "id": "I'm taking care",
+   "id": "I'm a cuid",
    ...
    },
 ]
