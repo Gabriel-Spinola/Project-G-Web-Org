@@ -4,7 +4,7 @@ import { isAbortError } from 'next/dist/server/pipe-readable'
 
 type BaseRequest<Params> = (params: Params) => Promise<Response>
 
-export function requestHandler<Params, Value, Error = unknown>(
+export function requestFactory<Params, Value, Error = unknown>(
   request: BaseRequest<Params>,
 ) {
   return async (params: Params): Promise<ESResponse<Value, Error>> => {

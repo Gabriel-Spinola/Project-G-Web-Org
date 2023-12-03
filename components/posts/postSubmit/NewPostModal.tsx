@@ -24,6 +24,7 @@ export default function NewPostModal() {
         isOpen={isOpen as boolean}
         onClose={onClose as () => void}
         size={'4xl'}
+        isCentered
       >
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>

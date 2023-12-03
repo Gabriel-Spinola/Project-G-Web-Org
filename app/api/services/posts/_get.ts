@@ -7,9 +7,9 @@ async function getPosts(
   page = 1,
   take = 3,
 ): Promise<FullPost[] | null> {
-  try {
-    const skip = (page - 1) * take
+  const skip = (page - 1) * take
 
+  try {
     const data: FullPost[] = await prisma.post.findMany({
       orderBy: {
         createdAt: 'desc',
@@ -23,6 +23,7 @@ async function getPosts(
         },
         contributor: { select: { name: true } },
         likes: { select: { id: true, userId: true } },
+        pins: { select: { id: true, userId: true } },
         comments: {
           include: {
             author: { select: { name: true, profilePic: true, image: true } },
@@ -44,7 +45,7 @@ async function getPosts(
   } catch (error) {
     console.error('Error occurred:', error)
 
-    throw new Error('Failed to fetch posts from the database.')
+    return null
   }
 }
 

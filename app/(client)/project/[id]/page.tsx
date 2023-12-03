@@ -32,7 +32,7 @@ export default async function Project({ params }: Props) {
   const isOwner = session?.user.id === data.authorId
 
   return (
-    <main>
+    <main className="mt-[88px]">
       <h1>{data.title}</h1>
 
       {isOwner ? (

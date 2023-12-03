@@ -5,6 +5,7 @@ export const tempIncludeForUser = {
     },
     contributor: { select: { name: true } },
     likes: { select: { id: true, userId: true } },
+    pins: { select: { id: true, userId: true } },
     comments: {
       include: {
         author: { select: { name: true, profilePic: true, image: true } },

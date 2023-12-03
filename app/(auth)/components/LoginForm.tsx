@@ -11,7 +11,7 @@
 
 import TextBox from './TextBox'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { SubmitButton } from './SubmitButton'
+import { SubmitButton } from './buttons/SubmitButton'
 import { useRef } from 'react'
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
@@ -74,27 +74,22 @@ export default function LoginForm() {
     <form
       onSubmit={handleLoginForm}
       id="auth-form"
-      className="flex flex-col items-center justify-evenly w-full h-full p-8 md:p-16"
+      className="flex flex-col items-center justify-evenly w-full h-full"
     >
-      <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-center">
-        {' '}
-        LOGIN{' '}
-      </h1>
-
       <TextBox
-        className="w-full"
+        className="w-full text-pure-white pb-4"
         labelText="E-mail"
         type={'email'}
         onChange={(e) => (email.current = e.target.value)}
       />
       <TextBox
-        className="w-full"
+        className="w-full text-pure-white"
         labelText="Senha"
         type={'password'}
         onChange={(e) => (password.current = e.target.value)}
       />
 
-      <p className="text-center">
+      <p className="text-center pt-4 text-pure-white drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]">
         Esqueceu a senha?{' '}
         <Link
           href="/recover"
@@ -109,7 +104,7 @@ export default function LoginForm() {
         sitekey={process.env.RECAPTCHA_SITE_KEY as string}
         ref={captchaRef}
         onChange={handleCaptchaSubmission}
-        className="my-4"
+        className="p-4"
       />
 
       <div id="submitLogin" className="flex w-full gap-4">
@@ -118,13 +113,13 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => signIn('google')}
-          className="flex justify-around items-center text-xl bg-pure-white rounded-lg p-2 hover:scale-[101%]"
+          className="flex justify-around items-center text-xl w-24 bg-pure-white rounded-lg hover:scale-[101%]"
         >
           <FcGoogle size={36} />
         </button>
       </div>
 
-      <p className="text-center">
+      <p className="text-center p-4 text-pure-white drop-shadow-[0_01px_01px_rgba(0,0,0,0.35)]">
         Precisa criar uma conta?{' '}
         <Link
           href="/register"

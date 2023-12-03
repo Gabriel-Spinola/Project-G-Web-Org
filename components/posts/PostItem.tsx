@@ -12,12 +12,12 @@
 import React, { useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { LikeButton } from '../Buttons/LikeButton'
-import { Like } from '@prisma/client'
+import { Like, Pin } from '@prisma/client'
 import PostHeader from './PostHeader'
 import CommentModal from '../comments/CommentModal'
 import { PublicationContext } from './InfiniteScrollPosts'
 import PostImagesCarousel from './images/PostImages'
-import { TDisplayComment } from '@/lib/types/common'
+import PinButton from '../Buttons/PinButton'
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -28,10 +28,14 @@ export default function PostItem() {
 
   const isOwner = publicationCtx.session === publicationCtx.authorId
 
-  // Check if the current user liked the post
-  const isLiked: boolean = publicationCtx.likes.some(
+  const isLiked: boolean = publicationCtx?.likes.some(
     (like: Partial<Like>) => like.userId === publicationCtx.session,
   )
+
+  const isPinned: boolean =
+    publicationCtx?.pins?.some(
+      (pin: Partial<Pin>) => pin.userId === publicationCtx.session,
+    ) ?? false
 
   function getCommentsCount(): number {
     if (!publicationCtx?.comments) {
@@ -76,6 +80,8 @@ export default function PostItem() {
           publication={publicationCtx}
           targetType="postId"
         />
+
+        <PinButton isPinned={isPinned} targetId={publicationCtx.id} />
       </div>
     </div>
   )

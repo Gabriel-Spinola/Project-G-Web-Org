@@ -1,4 +1,4 @@
-import { Comment, Like, Post, Project, User } from '@prisma/client'
+import { Comment, Like, Pin, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -60,6 +60,7 @@ export type UserData = Partial<User> & {
 }
 
 export type Likes = Pick<Like, 'id' | 'userId'>[]
+export type Pins = Pick<Pin, 'id' | 'userId'>[]
 
 export type PublicationComment = Comment & {
   author: PublicationAuthor
@@ -81,6 +82,7 @@ export type PublicationsDefaultData = {
   contributor: Pick<User, 'name'>[]
   comments: TDisplayComment[]
   likes: Likes
+  pins: Pins
 }
 
 /**

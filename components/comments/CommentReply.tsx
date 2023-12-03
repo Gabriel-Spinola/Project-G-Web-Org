@@ -6,7 +6,7 @@ import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
 import { Avatar, Button } from '@chakra-ui/react'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { deleteComment } from '@/app/(feed)/_serverActions'
+import { deleteComment } from '@/server/likeActions'
 import Link from 'next/link'
 
 import { CommentIdContext } from './CommentModal'

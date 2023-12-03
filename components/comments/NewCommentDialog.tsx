@@ -1,13 +1,12 @@
 'use client'
 
-import React, { FormEvent, useContext, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
-import { postComment } from '@/app/(feed)/_serverActions'
 import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
-import { PublicationContext } from '../posts/InfiniteScrollPosts'
 import { TDisplayComment } from '@/lib/types/common'
 import { toast } from 'react-toastify'
+import { postComment } from '@/server/commentActions'
 
 type Props = {
   target: {
@@ -26,7 +25,6 @@ export default function NewCommentDialog({
   onSubmit,
 }: Props) {
   const { data: session } = useSession()
-  const post = useContext(PublicationContext)
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
@@ -71,8 +69,7 @@ export default function NewCommentDialog({
       postComment(
         convertedData.get('content')?.toString(),
         target,
-        post?.id as string,
-        session?.user.id,
+        session.user.id,
       ),
       {
         pending: 'Enviando seu comentario...',
