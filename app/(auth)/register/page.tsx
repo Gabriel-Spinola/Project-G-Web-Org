@@ -9,8 +9,13 @@
 
 import { StaticImage } from '@/components/Image'
 import RegisterForm from '../components/RegisterForm'
+import LogoutButton from '../components/buttons/LogoutButton'
+import { getServerSession } from 'next-auth'
+import { AuthOptions } from '@/lib/auth'
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const session = await getServerSession(AuthOptions)
+
   return (
     // First Wrapper Component
     <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
@@ -21,10 +26,18 @@ export default function RegisterPage() {
       />
 
       <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
-        <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
-          CRIE SUA CONTA
-        </h1>
-        <RegisterForm />
+        {session ? (
+          <>
+            <LogoutButton />
+          </>
+        ) : (
+          <>
+            <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
+              CRIE UMA CONTTA
+            </h1>
+            <RegisterForm />
+          </>
+        )}
       </section>
     </main>
   )
