@@ -10,10 +10,10 @@ import Link from 'next/link'
 import CommentReply from './CommentReply'
 import { signIn, useSession } from 'next-auth/react'
 import NewCommentDialog from './NewCommentDialog'
-import { deleteComment } from '@/app/(feed)/_serverActions'
 import { CommentCallbacks } from './CommentModal'
 import { BiComment, BiSolidComment } from 'react-icons/bi'
 import { FaTrash } from 'react-icons/fa'
+import { deleteComment } from '@/server/likeActions'
 
 type Props = {
   comment: Partial<TDisplayComment>

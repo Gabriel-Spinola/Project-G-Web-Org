@@ -87,6 +87,7 @@ export default function CommentModal({
           onClose={onClose}
           size={'2xl'}
           scrollBehavior="inside"
+          isCentered
         >
           <ModalOverlay />
           <ModalContent>

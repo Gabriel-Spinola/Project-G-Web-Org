@@ -42,7 +42,7 @@ export default async function Profile({ params }: Props) {
   }
 
   return (
-    <main>
+    <main className="mt-[88px]">
       {/* NOTE - Profile Card Skeleton */}
       <Suspense fallback={<ProfileCardSkeleton />}>
         {user && (

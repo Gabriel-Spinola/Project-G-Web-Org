@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
-import { requestHandler } from '@/lib/api/requestHandler'
+import { requestFactory } from '@/lib/api/requestHandler'
 import { ESResponse, FullProject } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
@@ -131,7 +131,7 @@ type UpdateParams = {
   formData: FormData
 }
 
-export const name = requestHandler<UpdateParams, string>(
+export const name = requestFactory<UpdateParams, string>(
   async (params) =>
     await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${params.id}`,

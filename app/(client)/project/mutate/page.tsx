@@ -22,7 +22,7 @@ export default async function CreateProject() {
   }
 
   return (
-    <main className="w-full max-w-[100vw] min-h-[calc(100vh-88px)] bg-darker-white flex justify-center">
+    <main className="w-full max-w-[100vw] min-h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex justify-center">
       <Suspense fallback={<CreateProjectFormSkeleton />}>
         <div className="w-full lg:w-[70%] h-full flex flex-col">
           <CreateProjectForm />

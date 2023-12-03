@@ -18,7 +18,7 @@ export default async function RegisterPage() {
 
   return (
     // First Wrapper Component
-    <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] items-center justify-center bg-darker-white">
+    <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] mt-[88px] items-center justify-center bg-darker-white">
       <StaticImage
         className="absolute w-full h-full object-cover"
         url="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"

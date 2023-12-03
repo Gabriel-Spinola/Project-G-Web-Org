@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteComment } from '@/app/(feed)/_serverActions'
+import { deleteComment } from '@/server/likeActions'
 import { TDisplayComment } from '@/lib/types/common'
 import {
   Button,
