@@ -30,6 +30,7 @@ export default async function Pins({ params }: Props) {
             <div className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <PinsController
                 initialPosts={posts ?? undefined}
+                initialProjects={projects ?? undefined}
                 session={session?.user.id as string}
               />
             </div>
