@@ -4,13 +4,13 @@ import { User } from '@prisma/client'
 import Link from 'next/link'
 import React from 'react'
 
-export default function DisplayUsers({ users }: { users: User[] }) {
+export default function DisplayUsers({ users }: { users: User[] | null }) {
   return (
     <section
       id="users-container"
       className="w-full flex flex-col items-center justify-center pt-12 gap-4"
     >
-      {users.map((user) => (
+      {users?.map((user) => (
         // NOTE - USER CARD
         <section
           key={user.id}

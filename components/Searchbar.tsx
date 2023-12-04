@@ -9,7 +9,7 @@ export default function Searchbar() {
 
   return (
     <form
-      onSubmit={async function (event) {
+      onSubmit={function (event) {
         event.preventDefault()
 
         const formData = new FormData(event.currentTarget)

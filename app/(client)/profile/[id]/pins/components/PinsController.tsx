@@ -3,20 +3,21 @@
 import { PublicationContext } from '@/components/posts/InfiniteScrollPosts'
 import PostItem from '@/components/posts/PostItem'
 import { useFeed } from '@/hooks/useFeed'
-import { FullPost } from '@/lib/types/common'
+import { FullPost, FullProject } from '@/lib/types/common'
 import { CircularProgress } from '@chakra-ui/react'
 import React from 'react'
 import { fetchPinnedPosts } from '../../_actions'
 import { useInView } from 'react-intersection-observer'
 
 type Props = {
-  initialPublication: FullPost[] | undefined
+  initialPosts: FullPost[] | undefined
+  initialProjects: FullProject[] | undefined
   session: string
   profileId?: string
 }
 
 export default function PinsController({
-  initialPublication,
+  initialPosts: initialPublication,
   session,
   profileId,
 }: Props) {
