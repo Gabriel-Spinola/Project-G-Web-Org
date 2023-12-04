@@ -53,8 +53,6 @@ export async function GET(
 ) {
   const { page, id: userId } = params
 
-  console.log('API DATA: ' + page + ' ' + userId)
-
   const { data, error } = await getPins(Number(page), userId)
 
   if (error) {
