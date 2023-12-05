@@ -81,7 +81,12 @@ export default function PostItem() {
           targetType="postId"
         />
 
-        <PinButton isPinned={isPinned} targetId={publicationCtx.id} />
+        <PinButton
+          isPinned={isPinned}
+          targetId={publicationCtx.id}
+          option="postId"
+          iconColor="light-gray"
+        />
       </div>
     </div>
   )

@@ -22,9 +22,6 @@ export default async function Projects() {
           />
         </Suspense>
       </div>
-
-      {/* <Searchbar /> */}
-      {/* <InfiniteScrollPosts> */}
     </main>
   )
 }

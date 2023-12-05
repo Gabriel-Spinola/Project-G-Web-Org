@@ -2,7 +2,7 @@ import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import React, { Suspense } from 'react'
 import { fetchPinnedPosts, fetchPinnedProjects } from '../_actions'
-import PinsController from './components/PinsController'
+import PinsFeed from './components/PinsFeed'
 
 type Props = {
   params: { id: string }
@@ -26,12 +26,14 @@ export default async function Pins({ params }: Props) {
     <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <Suspense fallback={<span>loading feed...</span>}>
-          {!postError ? (
+          {!postError && !projectError ? (
             <div className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
-              <PinsController
-                initialPosts={posts ?? undefined}
-                initialProjects={projects ?? undefined}
-                session={session?.user.id as string}
+              <PinsFeed
+                startupPosts={posts ?? undefined}
+                startupProjects={projects ?? undefined}
+                currentUserId={session?.user.id as string}
+                authorId={id}
+                isOwner={true}
               />
             </div>
           ) : (
