@@ -9,15 +9,17 @@
 
 'use client'
 
-import React, { useContext } from 'react'
+import React, { Suspense, useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like, Pin } from '@prisma/client'
 import PostHeader from './PostHeader'
-import CommentModal from '../comments/CommentModal'
 import { PublicationContext } from './InfiniteScrollPosts'
 import PostImagesCarousel from './images/PostImages'
 import PinButton from '../Buttons/PinButton'
+import dynamic from 'next/dynamic'
+
+const CommentModal = dynamic(() => import('../comments/CommentModal'))
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -59,9 +61,11 @@ export default function PostItem() {
         {publicationCtx?.content}
       </article>
 
-      {publicationCtx.images && publicationCtx.images.length > 0 ? (
-        <PostImagesCarousel imagesSrc={publicationCtx.images} />
-      ) : undefined}
+      <Suspense fallback={<>Carregando imagens</>}>
+        {publicationCtx.images && publicationCtx.images.length > 0 ? (
+          <PostImagesCarousel imagesSrc={publicationCtx.images} />
+        ) : undefined}
+      </Suspense>
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row mt-4">

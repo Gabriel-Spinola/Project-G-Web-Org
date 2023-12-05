@@ -8,16 +8,23 @@
  */
 
 // REVIEW - Chakra Modals may be adding too much memory cost.
-
+// import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
-import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { fetchPosts } from './(feed)/_actions'
 import { Suspense } from 'react'
-import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import Link from 'next/link'
 import { MdPushPin } from 'react-icons/md'
+import dynamic from 'next/dynamic'
+
+const PostSubmitFragment = dynamic(
+  () => import('@/components/posts/postSubmit/PostSubmitFragment'),
+)
+
+const NewPostModal = dynamic(
+  () => import('@/components/posts/postSubmit/NewPostModal'),
+)
 
 export default async function Home() {
   const posts = await fetchPosts()
