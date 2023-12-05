@@ -33,7 +33,7 @@ export default function PinsController({
   )
 
   return (
-    <section>
+    <section className="flex flex-col mt-8 gap-8">
       {posts?.map((post: FullPost) => (
         <div key={post.id} className="max-w-full">
           <PublicationContext.Provider value={{ ...post, session }}>

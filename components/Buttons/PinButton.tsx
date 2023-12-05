@@ -3,7 +3,7 @@
 import { pinPublication, unpinPublication } from '@/server/pinActions'
 import { signIn, useSession } from 'next-auth/react'
 import React, { useState } from 'react'
-import { MdOutlinePushPin, MdPushPin } from 'react-icons/md'
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs'
 import { toast } from 'react-toastify'
 
 type Params = {
@@ -50,11 +50,11 @@ export default function PinButton({
   return (
     <button
       onClick={handlePin}
-      className={`like flex flex-col hover:text-medium-primary justify-center items-center w-[48px] ${
+      className={`like flex items-center justify-center hover:text-medium-primary w-[48px] ${
         isPinned ? 'text-medium-primary' : 'text-light-gray'
       }`}
     >
-      {!isPinned ? <MdOutlinePushPin size={28} /> : <MdPushPin size={28} />}
+      {!isPinned ? <BsBookmark size={24} /> : <BsBookmarkFill size={24} />}
     </button>
   )
 }

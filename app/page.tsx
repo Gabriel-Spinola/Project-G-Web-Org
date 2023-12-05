@@ -24,19 +24,23 @@ export default async function Home() {
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
-      <aside className="fixed left-0">
-        <Link href={`/profile/${session?.user.id}/pins/`}>
-          Veja seus posts salvos <MdPushPin size={16} />
-        </Link>
-      </aside>
-
-      <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
-        <PostSubmitFragment modal={<NewPostModal />} />
+    <main className="relative flex min-h-[calc(100vh-88px)] justify-around flex-row bg-darker-white mt-[88px]">
+      <div className="flex mt-8 flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
+        <div className="w-full">
+          <PostSubmitFragment modal={<NewPostModal />} />
+          <div className="flex justify-evenly my-4">
+            <Link
+              className="w-full flex px-8 py-4 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
+              href={`/profile/${session?.user.id}/pins/`}
+            >
+              Veja seus posts salvos <MdPushPin size={16} />
+            </Link>
+          </div>
+        </div>
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (
-            <section className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
+            <section className="relative sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
               <InfiniteScrollPosts
                 initialPublication={posts.data ?? undefined}
                 session={session?.user.id as string}
