@@ -3,7 +3,6 @@
 import React from 'react'
 import { LikeProjectButton } from './LikeProjectButton'
 import { Avatar } from '@chakra-ui/avatar'
-import CommentModal from '@/components/comments/CommentModal'
 import { FullProject } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { $Enums, Like, Pin, User } from '@prisma/client'
@@ -25,6 +24,9 @@ import { useSession } from 'next-auth/react'
 import ProjectImagesCarousel from './ProjectImages'
 import PinButton from '@/components/Buttons/PinButton'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const CommentModal = dynamic(() => import('@/components/comments/CommentModal'))
 
 type Props = {
   project: FullProject
