@@ -5,6 +5,9 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     const data: FullProject[] = await prisma.project.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         author: {
           select: { name: true, image: true, profilePic: true },

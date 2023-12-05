@@ -7,7 +7,7 @@
  * @license i.e. MIT
  */
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import Searchbar from '@/components/Searchbar'
 import DisplayUsers from '../components/DisplayUsers'
 import { searchForUser } from '../_actions'
@@ -19,9 +19,6 @@ type Props = {
 export default async function SearchPage({ params }: Props) {
   const { query } = params
   const { data, error } = await searchForUser(query)
-  if (error || !data) {
-    console.error(error, 'Failed to fetch users')
-  }
 
   return (
     <main className="bg-darker-white min-h-[calc(100vh-88px)] mt-[88px]">
@@ -31,11 +28,13 @@ export default async function SearchPage({ params }: Props) {
         </div>
       </section>
 
-      {!error && data ? (
-        <DisplayUsers users={data} />
-      ) : (
-        <>Houve um erro ao pesquisar</>
-      )}
+      <Suspense fallback={<h2>Carregando usuários...</h2>}>
+        {!error ? (
+          <DisplayUsers users={data} />
+        ) : (
+          <>Houve um erro ao pesquisar</>
+        )}
+      </Suspense>
     </main>
   )
 }

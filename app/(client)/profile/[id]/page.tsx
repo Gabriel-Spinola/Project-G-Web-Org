@@ -37,10 +37,6 @@ export default async function Profile({ params }: Props) {
     isOwner,
   )
 
-  if (!user) {
-    return <>User not found!</>
-  }
-
   return (
     <main className="mt-[88px]">
       {/* NOTE - Profile Card Skeleton */}
