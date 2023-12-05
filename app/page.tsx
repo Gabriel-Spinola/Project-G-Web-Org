@@ -18,6 +18,9 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import Link from 'next/link'
 import { MdPushPin } from 'react-icons/md'
+import { Avatar } from '@chakra-ui/avatar'
+import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import { User } from '@prisma/client'
 
 export default async function Home() {
   const posts = await fetchPosts()
@@ -25,17 +28,26 @@ export default async function Home() {
 
   return (
     <main className="relative flex min-h-[calc(100vh-88px)] justify-around flex-row bg-darker-white mt-[88px]">
-      <div className="flex mt-8 flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
+      <section className="hidden x1:block x1:fixed x1:left-0]">
+        <article className="flex flex-col">
+          <div>
+            <Avatar
+              size={'2xl'}
+              src={getProfilePicURL(session?.user as User)}
+            />
+          </div>
+          <Link
+            className="w-full flex px-8 py-4 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
+            href={`/profile/${session?.user.id}/pins/`}
+          >
+            Veja seus posts salvos <MdPushPin size={16} />
+          </Link>
+        </article>
+      </section>
+
+      <section className="flex gap-8 mt-8 flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
         <div className="w-full">
           <PostSubmitFragment modal={<NewPostModal />} />
-          <div className="flex justify-evenly my-4">
-            <Link
-              className="w-full flex px-8 py-4 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
-              href={`/profile/${session?.user.id}/pins/`}
-            >
-              Veja seus posts salvos <MdPushPin size={16} />
-            </Link>
-          </div>
         </div>
 
         <Suspense fallback={<span>loading feed...</span>}>
@@ -50,7 +62,7 @@ export default async function Home() {
             <h1>Feed Failed to load</h1>
           )}
         </Suspense>
-      </div>
+      </section>
     </main>
   )
 }
