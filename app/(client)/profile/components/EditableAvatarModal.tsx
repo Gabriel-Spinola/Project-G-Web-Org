@@ -46,7 +46,6 @@ export default function EditableAvatarModal({
     const formData = new FormData(event.currentTarget)
     const toast = (await import('react-toastify')).toast
 
-
     setIsLoading(true)
 
     const { error } = await toast.promise(
