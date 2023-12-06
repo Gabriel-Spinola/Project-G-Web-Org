@@ -16,24 +16,27 @@ import { Suspense } from 'react'
 import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import FeedSideBar from '@/components/feed/FeedSideBar'
+import Link from 'next/link'
+import { MdPushPin } from 'react-icons/md'
 
 export default async function Home() {
   const posts = await fetchPosts()
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main className="relative flex min-h-[calc(100vh-88px)] justify-around flex-row bg-darker-white mt-[88px]">
-      {session && <FeedSideBar />}
+    <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
+      <aside className="fixed left-0">
+        <Link href={`/profile/${session?.user.id}/pins/`}>
+          Veja seus posts salvos <MdPushPin size={16} />
+        </Link>
+      </aside>
 
-      <section className="flex gap-8 mt-8 flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
-        <div className="w-full">
-          <PostSubmitFragment modal={<NewPostModal />} />
-        </div>
+      <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
+        <PostSubmitFragment modal={<NewPostModal />} />
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (
-            <section className="relative sm:min-w-[480px] md:min-w-[680px] md:max-w-[680px]">
+            <section className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts
                 initialPublication={posts.data ?? undefined}
                 session={session?.user.id as string}
@@ -43,7 +46,7 @@ export default async function Home() {
             <h1>Feed Failed to load</h1>
           )}
         </Suspense>
-      </section>
+      </div>
     </main>
   )
 }
