@@ -5,7 +5,6 @@ import { pinPublication, unpinPublication } from '@/server/pinActions'
 import { signIn, useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { MdOutlinePushPin, MdPushPin } from 'react-icons/md'
-import { toast } from 'react-toastify'
 
 type Params = {
   isPinned: boolean
@@ -31,6 +30,7 @@ export default function PinButton({
       return
     }
 
+    const toast = (await import('react-toastify')).toast
     setIsPinned(!isPinned)
 
     if (!isPinned) {

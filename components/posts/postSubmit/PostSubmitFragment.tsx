@@ -9,22 +9,24 @@
 
 'use client'
 
-import React, { ReactNode, createContext } from 'react'
+import React, { createContext } from 'react'
 import styles from './PostSubmitFragment.module.scss'
 import { useDisclosure } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
+
+const NewPostModal = dynamic(
+  () => import('@/components/posts/postSubmit/NewPostModal'),
+  { ssr: false },
+)
 
 type Disclosure = {
   isOpen?: boolean
   onClose?: () => void
 }
 
-type Props = {
-  modal: ReactNode
-}
-
 export const NewPostContext = createContext<Disclosure>({})
 
-export default function PostSubmitFragment({ modal }: Props) {
+export default function PostSubmitFragment() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -39,7 +41,7 @@ export default function PostSubmitFragment({ modal }: Props) {
       </button>
 
       <NewPostContext.Provider value={{ isOpen, onClose }}>
-        {modal}
+        <NewPostModal />
       </NewPostContext.Provider>
     </>
   )

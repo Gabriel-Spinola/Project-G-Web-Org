@@ -16,15 +16,7 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import Link from 'next/link'
 import { MdPushPin } from 'react-icons/md'
-import dynamic from 'next/dynamic'
-
-const PostSubmitFragment = dynamic(
-  () => import('@/components/posts/postSubmit/PostSubmitFragment'),
-)
-
-const NewPostModal = dynamic(
-  () => import('@/components/posts/postSubmit/NewPostModal'),
-)
+import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 
 export default async function Home() {
   const posts = await fetchPosts()
@@ -39,7 +31,7 @@ export default async function Home() {
       </aside>
 
       <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
-        <PostSubmitFragment modal={<NewPostModal />} />
+        <PostSubmitFragment />
 
         <Suspense fallback={<span>loading feed...</span>}>
           {!posts.error ? (

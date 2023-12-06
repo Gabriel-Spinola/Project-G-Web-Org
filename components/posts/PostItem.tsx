@@ -16,10 +16,12 @@ import { Like, Pin } from '@prisma/client'
 import PostHeader from './PostHeader'
 import { PublicationContext } from './InfiniteScrollPosts'
 import PostImagesCarousel from './images/PostImages'
-import PinButton from '../Buttons/PinButton'
 import dynamic from 'next/dynamic'
+import PinButton from '../Buttons/PinButton'
 
-const CommentModal = dynamic(() => import('../comments/CommentModal'))
+const DynamicCommentModal = dynamic(() => import('../comments/CommentModal'), {
+  ssr: false,
+})
 
 export default function PostItem() {
   const publicationCtx = useContext(PublicationContext)
@@ -79,7 +81,7 @@ export default function PostItem() {
         />
 
         {/* Comments */}
-        <CommentModal
+        <DynamicCommentModal
           commentNumber={getCommentsCount()}
           publication={publicationCtx}
           targetType="postId"

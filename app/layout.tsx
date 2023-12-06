@@ -2,11 +2,11 @@ import Navbar from '@/components/navbar/Navbar'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/utils/Providers'
-import { ToastContainer } from 'react-toastify'
 
 import './globals.css'
 import 'react-toastify/ReactToastify.css'
 import ChatButton from '@/components/Buttons/ChatButton'
+import { ToastContainer } from 'react-toastify'
 
 const inter = Inter({ subsets: ['latin'] })
 

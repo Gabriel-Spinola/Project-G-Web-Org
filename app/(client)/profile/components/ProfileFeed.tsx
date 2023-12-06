@@ -1,12 +1,16 @@
 'use client'
 
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
-import NewPostModal from '@/components/posts/postSubmit/NewPostModal'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import { FullPost, FullProject } from '@/lib/types/common'
 import React, { Suspense, useState } from 'react'
-import ProjectFeed from '../../project/components/ProjectFeed'
 import styles from './profile.module.scss'
+import dynamic from 'next/dynamic'
+
+const DynamicProjectFeed = dynamic(
+  () => import('../../project/components/ProjectFeed'),
+  { ssr: false },
+)
 
 type FeedSelectOptions = 'posts' | 'projects'
 
@@ -60,9 +64,7 @@ export default function ProfileFeed({
 
       {selectedFeed === 'posts' ? (
         <section id="PostWrapper" className="flex flex-col">
-          {isOwner ? (
-            <PostSubmitFragment modal={<NewPostModal />} />
-          ) : undefined}
+          {isOwner ? <PostSubmitFragment /> : undefined}
 
           <div className="flex flex-col justify-center">
             <InfiniteScrollPosts
@@ -74,7 +76,7 @@ export default function ProfileFeed({
         </section>
       ) : (
         <Suspense fallback={<span>Loading projects feed...</span>}>
-          <ProjectFeed
+          <DynamicProjectFeed
             initialPublication={startupProjects}
             profileId={authorId}
             currentUserId={currentUserId}
