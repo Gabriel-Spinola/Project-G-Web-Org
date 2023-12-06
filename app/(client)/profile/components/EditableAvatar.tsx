@@ -1,23 +1,15 @@
 'use client'
 
-import SendImageButton from '@/components/Buttons/SendImageButton'
-import { validateImageInput } from '@/lib/schemas/imageValidation.schema'
 import { Avatar } from '@chakra-ui/avatar'
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react'
-import Image from 'next/image'
-import React, { ChangeEvent, useState } from 'react'
-import { changeProfilePic } from '../_actions'
+import { useDisclosure } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
+import React, { useState } from 'react'
 import { AiFillCamera } from 'react-icons/ai'
-import { toast } from 'react-toastify'
+
+const DynamicEditableAvatarModal = dynamic(
+  () => import('./EditableAvatarModal'),
+  { ssr: false },
+)
 
 type Props = {
   profileId: string
@@ -31,52 +23,6 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
 
   const [shouldDisplayPreviewImage, setShouldDisplayPreviewImage] =
     useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  async function handleFormSubmission(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-
-    setIsLoading(true)
-
-    const { error } = await toast.promise(
-      changeProfilePic(profileId, formData),
-      { pending: 'Enviando nova imagem...' },
-    )
-
-    setIsLoading(false)
-
-    if (error) {
-      toast.error('Falha ao atualizar imagem 😔')
-      setImages(undefined)
-
-      return
-    }
-
-    toast.success('Imagem atualizada com sucesso! 👌')
-    setShouldDisplayPreviewImage(true)
-    onClose()
-  }
-
-  async function onImageChanges(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
-
-    if (!event.target.files || event.target.files.length <= 0) {
-      return
-    }
-
-    const { error } = validateImageInput(event.target.files[0], 1)
-
-    if (error) {
-      toast.warn(error)
-
-      return
-    }
-
-    const newImage = event.target.files[0]
-    setImages(newImage)
-  }
 
   return (
     <div>
@@ -98,41 +44,14 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-
-        <ModalContent>
-          <ModalHeader>
-            <ModalCloseButton />
-          </ModalHeader>
-
-          <ModalBody>
-            <form method="PUT" onSubmit={handleFormSubmission}>
-              <SendImageButton onChange={onImageChanges} />
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                aria-disabled={isLoading}
-                className="mt-3"
-              >
-                {isLoading ? 'Enviando...' : 'Enviar Imagem'}
-              </Button>
-            </form>
-
-            <div id="image-preview-container" className="mt-2">
-              {image && (
-                <Image
-                  src={URL.createObjectURL(image)}
-                  width={300}
-                  height={400}
-                  alt="profile-pic"
-                />
-              )}
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <DynamicEditableAvatarModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setImages={setImages}
+        setShouldDisplayPreviewImage={setShouldDisplayPreviewImage}
+        profileId={profileId}
+        image={image}
+      />
     </div>
   )
 }
