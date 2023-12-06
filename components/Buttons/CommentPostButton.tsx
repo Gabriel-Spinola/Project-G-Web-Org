@@ -6,7 +6,7 @@ import { MdComment } from 'react-icons/md'
 export function CommentButton() {
   return (
     <button
-      className={`like flex flex-col justify-center items-center w-[48px]`}
+      className={`like flex flex-col justify-center items-center w-[48px] text-light-gray`}
     >
       <MdComment />
     </button>
