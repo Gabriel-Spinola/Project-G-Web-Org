@@ -55,7 +55,7 @@ export default function PostItem() {
     <div className={`w-full ${styles.post}`}>
       <PostHeader post={publicationCtx} isOwner={isOwner} />
 
-      <article className="text-medium-gray text-lg font-light leading-8 whitespace-pre-wrap">
+      <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
         {publicationCtx?.content}
       </article>
 
@@ -64,27 +64,22 @@ export default function PostItem() {
       ) : undefined}
 
       {/* Likes */}
-      <div
-        id="reacts"
-        className="w-[100%] h-[48px] gap-4 flex flex-row justify-between mt-4"
-      >
-        <div className="flex">
-          <LikeButton
-            params={{
-              option: 'postId',
-              likes: publicationCtx.likes?.length ?? 0,
-              targetId: publicationCtx.id,
-              isLiked,
-            }}
-          />
+      <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row mt-4">
+        <LikeButton
+          params={{
+            option: 'postId',
+            likes: publicationCtx.likes?.length ?? 0,
+            targetId: publicationCtx.id,
+            isLiked,
+          }}
+        />
 
-          {/* Comments */}
-          <CommentModal
-            commentNumber={getCommentsCount()}
-            publication={publicationCtx}
-            targetType="postId"
-          />
-        </div>
+        {/* Comments */}
+        <CommentModal
+          commentNumber={getCommentsCount()}
+          publication={publicationCtx}
+          targetType="postId"
+        />
 
         <PinButton
           isPinned={isPinned}

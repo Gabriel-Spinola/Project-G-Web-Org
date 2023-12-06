@@ -30,7 +30,7 @@ export default function PostSubmitFragment({ modal }: Props) {
   return (
     <>
       <button
-        className={`w-full p-8 bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
+        className={`w-full mt-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
         id={styles.textAnimation}
         onClick={onOpen}
       >
