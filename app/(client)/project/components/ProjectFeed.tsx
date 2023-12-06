@@ -3,39 +3,38 @@
 import React from 'react'
 import { fetchProjects } from '../_actions'
 import { useInView } from 'react-intersection-observer'
-import { FullProject } from '@/lib/types/common'
+import { ESResponse, FullProject } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import ProjectPost from './ProjectPost'
 import { CircularProgress } from '@chakra-ui/react'
-import Link from 'next/link'
 
 type Props = {
   initialPublication: FullProject[] | undefined
   profileId?: string
   currentUserId?: string
+  customFetch?: (
+    page: number,
+    signal?: AbortSignal,
+    authorId?: string,
+  ) => Promise<ESResponse<FullProject[]>>
 }
 
 export default function ProjectFeed({
   initialPublication,
   profileId,
   currentUserId,
+  customFetch,
 }: Props) {
   const [ref, inView] = useInView()
 
   const { publications: projects, noPublicationFound: noProjectFound } =
-    useFeed(initialPublication, inView, fetchProjects, profileId)
+    useFeed(initialPublication, inView, customFetch ?? fetchProjects, profileId)
 
   return (
     <section
       id="feed"
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
-      <Link
-        className={`w-full mt-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
-        href="/project/mutate"
-      >
-        Adicione um projeto
-      </Link>
       {projects?.map((project: FullProject) => (
         <ProjectPost
           key={project.id}

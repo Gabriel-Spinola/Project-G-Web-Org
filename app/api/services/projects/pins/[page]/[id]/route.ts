@@ -1,13 +1,20 @@
 import { prisma } from '@/lib/database/prisma'
-import { FullProject } from '@/lib/types/common'
+import { ESResponse, FullProject } from '@/lib/types/common'
+import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
+async function getPins(
+  page: number,
+  authorId: string,
+): Promise<ESResponse<FullProject[]>> {
+  const take = 3
+  const skip = (page - 1) * take
+
   try {
-    const data: FullProject[] = await prisma.project.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+    const publication: FullProject[] = await prisma.project.findMany({
+      where: { pins: { some: { user: { id: authorId } } } },
+      skip,
+      take,
       include: {
         author: {
           select: { name: true, image: true, profilePic: true },
@@ -32,13 +39,28 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json({ data }, { status: 200 })
+    return ESSucceed(publication)
   } catch (error: unknown) {
-    console.error('Failed to fetch projects: ', error)
+    return ESFailed(error)
+  }
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: { page: string; id: string } },
+) {
+  const { page, id: userId } = params
+
+  const { data, error } = await getPins(Number(page), userId)
+
+  if (error) {
+    console.error(error)
 
     return NextResponse.json(
-      { data: 'Failed to fetch projects' },
+      { data: 'Failed to get pinned projects' },
       { status: 500 },
     )
   }
+
+  return NextResponse.json({ data }, { status: 200 })
 }

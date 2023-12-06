@@ -6,7 +6,7 @@ import { Avatar } from '@chakra-ui/avatar'
 import CommentModal from '@/components/comments/CommentModal'
 import { FullProject } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { $Enums, Like, User } from '@prisma/client'
+import { $Enums, Like, Pin, User } from '@prisma/client'
 import { MdComment } from 'react-icons/md'
 import { usePathname, useRouter } from 'next/navigation'
 import { deleteProject } from '../_actions'
@@ -23,6 +23,8 @@ import { BiSolidShare } from 'react-icons/bi'
 import { AiFillWarning } from 'react-icons/ai'
 import { useSession } from 'next-auth/react'
 import ProjectImagesCarousel from './ProjectImages'
+import PinButton from '@/components/Buttons/PinButton'
+import Link from 'next/link'
 
 type Props = {
   project: FullProject
@@ -40,6 +42,23 @@ export default function ProjectPost({ project, currentUserId }: Props) {
   const isLiked: boolean = project.likes.some(
     (like: Partial<Like>) => like.userId === currentUserId,
   )
+  const isPinned: boolean =
+    project?.pins?.some((pin: Partial<Pin>) => pin.userId === currentUserId) ??
+    false
+
+  function getCommentsCount(): number {
+    if (!project?.comments) {
+      return 0
+    }
+
+    let count = 0
+
+    for (const comment of project.comments) {
+      count += comment.replies?.length ?? 0
+    }
+
+    return project.comments.length + count
+  }
 
   function CopyLink() {
     const postUrl = `https://${window.location.hostname}/project/${project.id}`
@@ -119,18 +138,27 @@ export default function ProjectPost({ project, currentUserId }: Props) {
           }}
         />
 
-        <Avatar src={getProfilePicURL(project.author as User)} />
+        <Link href={`/profile/${project.author?.name}`}>
+          <Avatar src={getProfilePicURL(project.author as User)} />
+        </Link>
+
+        <PinButton
+          isPinned={isPinned}
+          targetId={project.id}
+          option="projectId"
+          iconColor="pure-white"
+        />
 
         <div className="text-pure-white hover:text-medium-primary">
           <CommentModal
-            commentNumber={project.comments.length}
+            commentNumber={getCommentsCount()}
             publication={project}
             targetType="projectId"
             icon={<MdComment size={24} />}
           />
         </div>
       </section>
-
+      <h2>asasasasa</h2>
       <ProjectImagesCarousel
         imagesSrc={project.images}
         projectOwner={project.authorId}

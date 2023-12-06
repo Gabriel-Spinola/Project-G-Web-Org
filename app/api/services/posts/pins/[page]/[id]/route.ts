@@ -39,8 +39,6 @@ async function getPins(
       },
     })
 
-    console.log(publication)
-
     return ESSucceed(publication)
   } catch (error: unknown) {
     return ESFailed(error)
@@ -52,8 +50,6 @@ export async function GET(
   { params }: { params: { page: string; id: string } },
 ) {
   const { page, id: userId } = params
-
-  console.log('API DATA: ' + page + ' ' + userId)
 
   const { data, error } = await getPins(Number(page), userId)
 
