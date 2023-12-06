@@ -23,9 +23,9 @@ type Props = {
 
 export default function UserInfoPreview({ params }: Props) {
   return (
-    <section className="flex flex-col w-full">
+    <section className="flex flex-col">
       <div
-        className={`flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 pb-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray`}
+        className={`flex flex-col w-full lg:w-[272px] x1:w-[400px] px-4 rounded-[12px] bg-pure-white text-darker-gray`}
       >
         <div className="flex flex-row justify-evenly items-center m-4">
           <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>

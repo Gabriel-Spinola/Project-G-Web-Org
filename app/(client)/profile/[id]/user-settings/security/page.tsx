@@ -5,6 +5,8 @@ import { AuthOptions } from '@/lib/auth'
 import { Avatar } from '@chakra-ui/avatar'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Link from 'next/link'
+import PrivacySettings from './components/ChangeEmailForm'
+import ChangePasswordForm from './components/ChangePasswordForm'
 
 type Props = {
   params: { id: string }
@@ -22,7 +24,7 @@ export default async function ProfileSettings({ params }: Props) {
 
   if (isOwner) {
     return (
-      <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex flex-col">
+      <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">
         <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
           <section
             id="user-info"
@@ -56,7 +58,11 @@ export default async function ProfileSettings({ params }: Props) {
             </li>
           </ul>
         </aside>
-        <section></section>
+        <section className="w-full p-8">
+          <PrivacySettings user={user} />
+          <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
+          <ChangePasswordForm user={user} />
+        </section>
       </main>
     )
   }
