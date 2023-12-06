@@ -27,14 +27,14 @@ export default async function FeedSideBar() {
         </article>
         <article className="flex flex-col w-full gap-4">
           <Link
-            className="w-full flex gap-4 justify-between items-center py-4 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
+            className="w-full flex gap-4 justify-between items-center py-4 px-2 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
             href={`/profile/${session.user.id}/pins/`}
           >
             Veja seus posts salvos <MdPushPin size={16} />
           </Link>
 
           <Link
-            className="w-full flex gap-4 justify-between items-center py-4 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
+            className="w-full flex gap-4 justify-between items-center py-4 px-2 bg-darker-white border-b-2 border-medium-primary hover:brightness-75"
             href={`/profile/${session.user.id}/user-settings/exhibition`}
           >
             Configurações <BsFillGearFill size={16} />
