@@ -1,9 +1,10 @@
 import React from 'react'
-import { getUserData } from '../../_actions'
+import { getUserData } from '../../../_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import { Avatar } from '@chakra-ui/avatar'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import Link from 'next/link'
 
 type Props = {
   params: { id: string }
@@ -22,8 +23,11 @@ export default async function ProfileSettings({ params }: Props) {
   if (isOwner) {
     return (
       <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex flex-col">
-        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] px-4 py-16 lg:px-8 shadow-xl">
-          <section id="user-info" className="flex items-center gap-4">
+        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
+          <section
+            id="user-info"
+            className="flex items-center gap-4 px-4 lg:px-8"
+          >
             <Avatar
               size={'xl'}
               src={getProfilePicURL({
@@ -35,15 +39,20 @@ export default async function ProfileSettings({ params }: Props) {
               {user?.name}
             </h1>
           </section>
-          <ul className="flex flex-col gap-4 py-16 text-xl">
+          <ul className="flex flex-col py-16 text-xl gap-1">
             <li>
-              <button className="hover:text-medium-primary">Exibição</button>
+              <Link
+                href={`/profile/${session?.user.id}/user-settings/exhibition`}
+                className="hover:text-medium-primary hover:bg-darker-white w-full flex justify-start  px-4 lg:px-8 py-4"
+              >
+                Exibição
+              </Link>
             </li>
-            <li className="hover:text-medium-primary">
-              <button className="hover:text-medium-primary">Privacidade</button>
-            </li>
-            <li className="hover:text-medium-primary">
-              <button className="hover:text-medium-primary">Segurança</button>
+            <hr />
+            <li>
+              <h1 className="text-medium-primary bg-darker-white w-full flex justify-start hover:cursor-pointer px-4 lg:px-8 py-4">
+                Segurança
+              </h1>
             </li>
           </ul>
         </aside>

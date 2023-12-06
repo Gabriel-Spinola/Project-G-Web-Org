@@ -82,7 +82,7 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
     <div>
       <div
         onClick={onOpen}
-        className="flex justify-end items-end hover:brightness-75 hover:cursor-pointer"
+        className="relative flex justify-end items-end hover:brightness-75 hover:cursor-pointer"
       >
         {shouldDisplayPreviewImage ? (
           <Avatar

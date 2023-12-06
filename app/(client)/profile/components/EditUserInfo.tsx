@@ -57,7 +57,7 @@ export default function EditUserInfo({ user }: Params) {
       linkedinUrl: newLinkedinUrl,
     }
 
-    setIsLoading(false)
+    setIsLoading(true)
 
     const { error } = await toast.promise(updateUserInfo(newUserInfo), {
       pending: 'Editando perfil',

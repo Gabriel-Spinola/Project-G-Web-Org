@@ -109,7 +109,7 @@ export default function ProfileCard({
         {isOwner && (
           <>
             <Link
-              href={`/profile/${session?.user.id}/settingsPage`}
+              href={`/profile/${session?.user.id}/user-settings/exhibition`}
               className="w-12 h-12 flex items-center justify-center bg-medium-gray/75 border-2 border-darker-white rounded-lg hover:brightness-75"
             >
               {' '}
