@@ -11,7 +11,6 @@ const sizes = {
 } as const
 
 interface Props {
-  // size: string
   size: keyof typeof sizes
   imageUrl?: string
 }
@@ -20,14 +19,17 @@ export default function Avatar({ size, imageUrl }: Props) {
   if (!imageUrl) {
     imageUrl = '/assets/avatar-icon.png'
   }
+
   return (
     <div className={`${size} relative overflow-hidden`}>
       <Image
         src={imageUrl}
-        objectFit="cover"
+        style={{ objectFit: 'cover' }}
         alt="Profile Pic"
         fill
         quality={75}
+        blurDataURL={imageUrl}
+        placeholder="blur"
       />
     </div>
   )

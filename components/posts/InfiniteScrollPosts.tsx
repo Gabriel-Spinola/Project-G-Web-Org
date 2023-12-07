@@ -11,10 +11,7 @@ import PostSkeleton from './skeleton/PostSkeleton'
 
 const DynamicPostItem = dynamic(() => import('./PostItem'), {
   ssr: false,
-  loading: () => (
-    // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
-    <PostSkeleton />
-  ),
+  loading: () => <PostSkeleton />,
 })
 
 export const PublicationContext = createContext<
@@ -60,13 +57,6 @@ export default function InfiniteScrollPosts({
           ref={ref}
           className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          {/* TODO: Implement custom CircularProgress (Using chakra -> 122kb, without chakra -> 96kb) */}
-          {/* <CircularProgress
-            isIndeterminate
-            color="black"
-            size={8}
-            marginBottom={8}
-          /> */}
           <Loader />
         </div>
       )}

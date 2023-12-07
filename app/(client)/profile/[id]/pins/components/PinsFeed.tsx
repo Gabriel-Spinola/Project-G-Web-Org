@@ -7,15 +7,15 @@ import { PublicationContext } from '@/components/posts/InfiniteScrollPosts'
 import { useInView } from 'react-intersection-observer'
 import { useFeed } from '@/hooks/useFeed'
 import { fetchPinnedPosts, fetchPinnedProjects } from '../../_actions'
-import PostItem from '@/components/posts/PostItem'
-import { CircularProgress } from '@chakra-ui/react'
 import ProjectFeed from '@/app/(client)/project/components/ProjectFeed'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import PostSkeleton from '@/components/posts/skeleton/PostSkeleton'
+import Loader from '@/components/Loader'
 
 const DynamicPostItem = dynamic(() => import('@/components/posts/PostItem'), {
   ssr: false,
-  loading: () => <></>,
+  loading: () => <PostSkeleton />,
 })
 
 type FeedSelectOptions = 'posts' | 'projects'
@@ -99,12 +99,7 @@ export default function PinsFeed({
                 ref={ref}
                 className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
               >
-                <CircularProgress
-                  isIndeterminate
-                  color="black"
-                  size={8}
-                  marginBottom={8}
-                />
+                <Loader />
               </div>
             )}
           </div>

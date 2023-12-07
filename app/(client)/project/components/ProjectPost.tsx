@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { LikeProjectButton } from './LikeProjectButton'
-import { Avatar } from '@chakra-ui/avatar'
 import { FullProject } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { Like, Pin, User } from '@prisma/client'
@@ -11,6 +10,7 @@ import ProjectImagesCarousel from './ProjectImages'
 import PinButton from '@/components/Buttons/PinButton'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import Avatar from '@/components/Avatar'
 
 const DynamicCommentModal = dynamic(
   () => import('@/components/comments/CommentModal'),
@@ -67,7 +67,10 @@ export default function ProjectPost({ project, currentUserId }: Props) {
         />
 
         <Link href={`/profile/${project.author?.name}`}>
-          <Avatar src={getProfilePicURL(project.author as User)} />
+          <Avatar
+            size="lg"
+            imageUrl={getProfilePicURL(project.author as User)}
+          />
         </Link>
 
         <PinButton

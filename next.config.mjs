@@ -21,11 +21,18 @@ const nextConfig = {
         port: '',
         pathname: '/storage/v1/object/public/Vampeta-Images-Public/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontent.com',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
   async headers() {
     return [
       {
+        // NOTE - Handle CORS policies
         // matching all API routes
         source: '/api/:path*',
         headers: [

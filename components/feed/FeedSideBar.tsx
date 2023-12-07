@@ -1,17 +1,17 @@
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { Avatar } from '@chakra-ui/avatar'
 import { User } from '@prisma/client'
 import { Session } from 'next-auth'
 import Link from 'next/link'
 import React from 'react'
 import { BsFillGearFill } from 'react-icons/bs'
 import { MdPushPin } from 'react-icons/md'
+import Avatar from '../Avatar'
 
 export default async function FeedSideBar({ session }: { session: Session }) {
   return (
     <section className="hidden x1:flex x1:flex-col gap-4 x1:fixed left-0 py-8 px-4">
       <article className="flex gap-4">
-        <Avatar size={'lg'} src={getProfilePicURL(session.user as User)} />
+        <Avatar size={'lg'} imageUrl={getProfilePicURL(session.user as User)} />
 
         <div className="flex flex-col justify-evenly">
           <h1 className="text-xl">{session.user.name}</h1>

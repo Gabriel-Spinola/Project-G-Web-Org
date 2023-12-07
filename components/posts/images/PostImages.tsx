@@ -17,6 +17,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
   function handleImageChangeAdd() {
     setCurrentImageIndex((current) => current + 1)
   }
+
   function handleImageChangeSubtract() {
     setCurrentImageIndex((current) => current - 1)
   }

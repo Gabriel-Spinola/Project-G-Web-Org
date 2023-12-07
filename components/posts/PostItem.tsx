@@ -15,12 +15,16 @@ import { LikeButton } from '../Buttons/LikeButton'
 import { Like, Pin } from '@prisma/client'
 import PostHeader from './PostHeader'
 import { PublicationContext } from './InfiniteScrollPosts'
-import PostImagesCarousel from './images/PostImages'
 import dynamic from 'next/dynamic'
 import PinButton from '../Buttons/PinButton'
 
 const DynamicCommentModal = dynamic(() => import('../comments/CommentModal'), {
   ssr: false,
+})
+
+const DynamicImagesCorousel = dynamic(() => import('./images/PostImages'), {
+  ssr: false,
+  loading: () => <>DYNAMIC LOADING</>,
 })
 
 export default function PostItem() {
@@ -66,7 +70,7 @@ export default function PostItem() {
       {/* TODO - Add image optimization */}
       <Suspense fallback={<>Carregando imagens</>}>
         {publicationCtx.images && publicationCtx.images.length > 0 ? (
-          <PostImagesCarousel imagesSrc={publicationCtx.images} />
+          <DynamicImagesCorousel imagesSrc={publicationCtx.images} />
         ) : undefined}
       </Suspense>
 

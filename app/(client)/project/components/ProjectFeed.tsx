@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer'
 import { ESResponse, FullProject } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import dynamic from 'next/dynamic'
+import Loader from '@/components/Loader'
 
 const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
   ssr: false,
@@ -60,14 +61,7 @@ export default function ProjectFeed({
           ref={ref}
           className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          {/* TODO: Implement custom CircularProgress (Using chakra -> 122kb, without chakra -> 96kb) */}
-          {/* <CircularProgress
-            isIndeterminate
-            color="black"
-            size={8}
-            marginBottom={8}
-          /> */}
-          <h2>Carregando...</h2>
+          <Loader />
         </div>
       )}
     </section>

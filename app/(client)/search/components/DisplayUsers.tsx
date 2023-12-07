@@ -1,5 +1,5 @@
+import Avatar from '@/components/Avatar'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { Avatar } from '@chakra-ui/avatar'
 import { User } from '@prisma/client'
 import Link from 'next/link'
 import React from 'react'
@@ -19,7 +19,7 @@ export default function DisplayUsers({ users }: { users: User[] | null }) {
           {/* USER INFO */}
           <div className="flex gap-4">
             <Link href={`/profile/${user.id}`} className="hover:brightness-75">
-              <Avatar size="lg" src={getProfilePicURL(user)} />
+              <Avatar size="lg" imageUrl={getProfilePicURL(user)} />
             </Link>
 
             <section className="flex flex-col justify-between">
