@@ -6,12 +6,14 @@ import { FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import dynamic from 'next/dynamic'
+import Loader from '../Loader'
+import PostSkeleton from './skeleton/PostSkeleton'
 
 const DynamicPostItem = dynamic(() => import('./PostItem'), {
   ssr: false,
   loading: () => (
     // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
-    <h2>Carregando...</h2>
+    <PostSkeleton />
   ),
 })
 
@@ -65,7 +67,7 @@ export default function InfiniteScrollPosts({
             size={8}
             marginBottom={8}
           /> */}
-          <h2>Carregando...</h2>
+          <Loader />
         </div>
       )}
     </section>
