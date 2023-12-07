@@ -14,9 +14,8 @@ import { fetchPosts } from './(feed)/_actions'
 import { Suspense } from 'react'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import Link from 'next/link'
-import { MdPushPin } from 'react-icons/md'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
+import FeedSideBar from '@/components/feed/FeedSideBar'
 
 export default async function Home() {
   const posts = await fetchPosts()
@@ -24,11 +23,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
-      <aside className="fixed left-0">
-        <Link href={`/profile/${session?.user.id}/pins/`}>
-          Veja seus posts salvos <MdPushPin size={16} />
-        </Link>
-      </aside>
+      {session && <FeedSideBar />}
 
       <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <PostSubmitFragment />
