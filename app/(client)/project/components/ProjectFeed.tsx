@@ -5,8 +5,15 @@ import { fetchProjects } from '../_actions'
 import { useInView } from 'react-intersection-observer'
 import { ESResponse, FullProject } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
-import ProjectPost from './ProjectPost'
-import { CircularProgress } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
+
+const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
+  ssr: false,
+  loading: () => (
+    // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
+    <h2>Carregando...</h2>
+  ),
+})
 
 type Props = {
   initialPublication: FullProject[] | undefined
@@ -36,7 +43,7 @@ export default function ProjectFeed({
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
       {projects?.map((project: FullProject) => (
-        <ProjectPost
+        <DynamicProjectPost
           key={project.id}
           project={project}
           currentUserId={currentUserId}
@@ -53,12 +60,13 @@ export default function ProjectFeed({
           ref={ref}
           className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          <CircularProgress
+          {/* <CircularProgress
             isIndeterminate
             color="black"
             size={8}
             marginBottom={8}
-          />
+          /> */}
+          <h2>Carregando...</h2>
         </div>
       )}
     </section>

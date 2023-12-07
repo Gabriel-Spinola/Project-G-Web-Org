@@ -28,9 +28,15 @@ export default async function SearchPage({ params }: Props) {
         </div>
       </section>
 
-      <Suspense fallback={<h2>Carregando usuários...</h2>}>
+      <Suspense fallback={<h2>Carregando...</h2>}>
         {!error ? (
-          <DisplayUsers users={data} />
+          <>
+            {data && data.length > 0 ? (
+              <DisplayUsers users={data} />
+            ) : (
+              <h2>Nenhum usuário encontrado</h2>
+            )}
+          </>
         ) : (
           <>Houve um erro ao pesquisar</>
         )}

@@ -1,12 +1,10 @@
+import { Suspense } from 'react'
 import { fetchUsers } from './_actions'
 import DisplayUsers from './components/DisplayUsers'
 import Searchbar from '@/components/Searchbar'
 
 export default async function SearchPage() {
   const { data, error } = await fetchUsers()
-  if (error || !data) {
-    console.error(error, 'Failed to fetch users')
-  }
 
   return (
     <main className="bg-darker-white min-h-[calc(100vh-88px)] mt-[88px]">
@@ -16,11 +14,19 @@ export default async function SearchPage() {
         </div>
       </section>
 
-      {!error && data ? (
-        <DisplayUsers users={data} />
-      ) : (
-        <>Houve um erro ao pesquisar</>
-      )}
+      <Suspense fallback={<h2>Carregando...</h2>}>
+        {!error ? (
+          <>
+            {data && data.length > 0 ? (
+              <DisplayUsers users={data} />
+            ) : (
+              <h2>Nenhum usuário encontrado</h2>
+            )}
+          </>
+        ) : (
+          <>Houve um erro ao pesquisar</>
+        )}
+      </Suspense>
     </main>
   )
 }
