@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar } from '@chakra-ui/avatar'
+import Avatar from '@/components/Avatar'
 import { useDisclosure } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
@@ -32,11 +32,11 @@ export default function EditableAvatar({ profileId, profilePicUrl }: Props) {
       >
         {shouldDisplayPreviewImage ? (
           <Avatar
-            size={'2xl'}
-            src={URL.createObjectURL(image as File)}
+            size="xl"
+            imageUrl={URL.createObjectURL(image as File)}
           ></Avatar>
         ) : (
-          <Avatar size={'2xl'} src={profilePicUrl}></Avatar>
+          <Avatar size="xl" imageUrl={profilePicUrl}></Avatar>
         )}
 
         <div className="absolute bg-darker-white p-2 rounded-full">

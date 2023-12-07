@@ -1,6 +1,6 @@
+import Avatar from '@/components/Avatar'
 import { UserData } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import { Avatar } from '@chakra-ui/avatar'
 import { User } from '@prisma/client'
 import dynamic from 'next/dynamic'
 import React from 'react'
@@ -27,7 +27,7 @@ export default function ProfileAvatar({ isOwner, user }: Props) {
         />
       ) : (
         <div>
-          <Avatar size={'2xl'} src={getProfilePicURL(user as User)} />
+          <Avatar size="xl" imageUrl={getProfilePicURL(user as User)} />
         </div>
       )}
     </>

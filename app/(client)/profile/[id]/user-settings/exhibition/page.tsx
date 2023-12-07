@@ -2,11 +2,11 @@ import React from 'react'
 import { getUserData } from '../../../_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import { Avatar } from '@chakra-ui/avatar'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Link from 'next/link'
 import UpdateNameImage from './components/UpdateNameImage'
 import { EditUserInfoForm } from './components/EditUserInfoForm'
+import Avatar from '@/components/Avatar'
 
 type Props = {
   params: { id: string }
@@ -34,8 +34,8 @@ export default async function ProfileSettings({ params }: Props) {
           className="flex items-center gap-4 px-4 lg:px-8"
         >
           <Avatar
-            size={'xl'}
-            src={getProfilePicURL({
+            size="xl"
+            imageUrl={getProfilePicURL({
               profilePic: user?.profilePic as string | null,
               image: user?.image as string | null,
             })}

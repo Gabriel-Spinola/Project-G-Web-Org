@@ -5,12 +5,15 @@
   border-radius: 100%;
   width: 60px;
   height: 60px;
-  animation: spinner 4s linear;
+  animation: spinner 2s linear;
   animation-iteration-count: infinite;
   margin-bottom: 32px;
 }
 
 @keyframes spinner {
   0% { transform: rotate(0deg);}
+  10% {transform: rotate(30deg)}
+  60% { transform: rotate(210deg);}
+  90% { transform: rotate(335deg);}
   100% { transform: rotate(365deg);}
 }

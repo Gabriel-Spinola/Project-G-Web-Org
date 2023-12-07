@@ -1,0 +1,30 @@
+.sm {
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+
+}
+.md {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+
+}
+.lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 100%;
+
+}
+.xl {
+  width: 128px;
+  height: 128px;
+  border-radius: 100%;
+
+}
+.xxl {
+  width: 256px;
+  height: 256px;
+  border-radius: 100%;
+
+}

@@ -3,10 +3,10 @@
 import React from 'react'
 import { User } from '@prisma/client'
 import { FullPost } from '@/lib/types/common'
-import UserPhoto from '@/components/profile/Avatar'
 import PostSettings from './PostSettings'
 import Link from 'next/link'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
+import Avatar from '../Avatar'
 
 interface Props {
   post: FullPost
@@ -18,7 +18,7 @@ export default function PostHeader({ post, isOwner }: Props) {
     <section className="flex flex-row justify-between mb-4">
       <div id="Author" className="flex gap-2">
         <Link href={`/profile/${post.authorId}`}>
-          <UserPhoto size={'lg'} src={getProfilePicURL(post.author as User)} />
+          <Avatar size="lg" imageUrl={getProfilePicURL(post.author as User)} />
         </Link>
 
         <Link href={`/profile/${post.authorId}`}>
