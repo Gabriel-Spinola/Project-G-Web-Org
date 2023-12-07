@@ -11,6 +11,12 @@ import PostItem from '@/components/posts/PostItem'
 import { CircularProgress } from '@chakra-ui/react'
 import ProjectFeed from '@/app/(client)/project/components/ProjectFeed'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const DynamicPostItem = dynamic(() => import('@/components/posts/PostItem'), {
+  ssr: false,
+  loading: () => <></>,
+})
 
 type FeedSelectOptions = 'posts' | 'projects'
 
@@ -78,7 +84,7 @@ export default function PinsFeed({
                 <PublicationContext.Provider
                   value={{ ...post, session: currentUserId as string }}
                 >
-                  <PostItem />
+                  <DynamicPostItem />
                 </PublicationContext.Provider>
               </div>
             ))}

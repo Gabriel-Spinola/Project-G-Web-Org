@@ -1,8 +1,6 @@
 'use client'
 
 import { UserData } from '@/lib/types/common'
-import { EditIcon } from '@chakra-ui/icons'
-import { Button, useDisclosure } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import React from 'react'
 
@@ -12,18 +10,17 @@ const DynamicEditUserModal = dynamic(() => import('./EditUserModal'), {
 
 interface Params {
   user: Partial<UserData>
+  isOwner: boolean
 }
 
-export default function EditUserInfo({ user }: Params) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+export default function EditUserInfo({ user, isOwner }: Params) {
   return (
     <div>
-      <Button onClick={onOpen} colorScheme="orange">
-        <EditIcon />
-      </Button>
-
-      <DynamicEditUserModal isOpen={isOpen} onClose={onClose} user={user} />
+      {isOwner && (
+        <>
+          <DynamicEditUserModal user={user} />
+        </>
+      )}
     </div>
   )
 }

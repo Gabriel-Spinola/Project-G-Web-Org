@@ -5,11 +5,13 @@ import { UserData } from '@/lib/types/common'
 import { Icon } from '@chakra-ui/react'
 import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { PiSunHorizonFill } from 'react-icons/pi'
-import EditUserInfo from './EditUserInfo'
 import Graduations from './Graduations'
 import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
 import { FaLinkedin } from 'react-icons/fa'
+import dynamic from 'next/dynamic'
+
+const DynamicEditUser = dynamic(() => import('./EditUserInfo'), { ssr: false })
 
 interface Params {
   isOwner: boolean
@@ -17,6 +19,10 @@ interface Params {
 }
 
 export default function UserInfo({ isOwner, user }: Params) {
+  function formatLinkedinProfile(url: string): string {
+    return url.substring(url.indexOf('in/') + 3, url.length - 1)
+  }
+
   return (
     <section className="flex flex-col w-full">
       {/* NOTE - Follows container */}
@@ -42,7 +48,7 @@ export default function UserInfo({ isOwner, user }: Params) {
         <div className="flex flex-row justify-evenly items-center m-4">
           <h1 className="text-center text-lg font-bold uppercase">Sobre mim</h1>
 
-          {isOwner && <EditUserInfo user={user} />}
+          <DynamicEditUser user={user} isOwner={isOwner} />
         </div>
 
         <div className="flex flex-col h-full py-2 gap-2">
@@ -75,10 +81,7 @@ export default function UserInfo({ isOwner, user }: Params) {
             {user.linkedinUrl ? (
               <a href={`${user.linkedinUrl.toString()}`}>
                 {/* displays only the lindekin username */}
-                {user.linkedinUrl.substring(
-                  user.linkedinUrl.indexOf('in/') + 3,
-                  user.linkedinUrl.length - 1,
-                )}
+                {formatLinkedinProfile(user.linkedinUrl.toString())}
               </a>
             ) : (
               ''

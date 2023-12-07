@@ -23,12 +23,15 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
-      {session && <FeedSideBar />}
+      {/* TODO - Loading Icon */}
+      <Suspense fallback={<>TODO: add loading icon</>}>
+        {session && <FeedSideBar session={session} />}
+      </Suspense>
 
       <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <PostSubmitFragment />
 
-        <Suspense fallback={<span>loading feed...</span>}>
+        <Suspense fallback={<span>Carregando o feed</span>}>
           {!posts.error ? (
             <section className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts

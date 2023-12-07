@@ -10,18 +10,24 @@
 'use client'
 
 // TODO - Framgent this into smaller parts (specially not owner specific stuff), and implement dynamic
-import { Button, Box, Avatar } from '@chakra-ui/react'
-
-import { BsFillGearFill } from 'react-icons/bs'
+import { Box } from '@chakra-ui/react'
 
 import React from 'react'
-import { User } from '@prisma/client'
-import EditableAvatar from './EditableAvatar'
-import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
-import FollowButton from '@/components/Buttons/FollowButton'
 import { UserData } from '@/lib/types/common'
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const DynamicProfileAvatar = dynamic(
+  () => import('./profileCard/ProfileAvatar'),
+  { ssr: false, loading: () => <>Carregndo Avatar</> },
+)
+
+const DynamicProfileCardButtons = dynamic(
+  () => import('./profileCard/ProfileCardButtons'),
+  {
+    ssr: false,
+    loading: () => <>Carregndo Botões</>,
+  },
+)
 
 interface Props {
   isOwner: boolean
@@ -36,12 +42,12 @@ export default function ProfileCard({
   currentUserId,
   user,
 }: Props) {
-  const { data: session } = useSession()
   return (
     <section
       id="Wrapper"
       className="flex h-[208px] min-w-full max-w-full items-center gap-[32px] py-0 px-[64px]"
     >
+      {/* TODO - Swap Chrakra Box to Next Image */}
       {/* NOTE - Card BG */}
       <Box
         className="absolute w-[100%] h-[208px] overflow-visible ml-[-64px] z-99"
@@ -54,21 +60,7 @@ export default function ProfileCard({
 
       {/* NOTE - Profile pic */}
       <div id="profile-avatar-wrapper">
-        {isOwner ? (
-          <EditableAvatar
-            profileId={user.id as string}
-            profilePicUrl={
-              getProfilePicURL({
-                profilePic: user.profilePic as string | null,
-                image: user.image as string | null,
-              }) ?? ''
-            }
-          />
-        ) : (
-          <div>
-            <Avatar size={'2xl'} src={getProfilePicURL(user as User)} />
-          </div>
-        )}
+        <DynamicProfileAvatar isOwner={isOwner} user={user} />
       </div>
 
       {/* NOTE - Card info */}
@@ -82,35 +74,22 @@ export default function ProfileCard({
           </h1>
 
           <div className="flex flex-row gap-2">
-            {!isOwner && (
-              <>
-                <FollowButton
-                  authorId={currentUserId}
-                  isFollowing={isFollowing}
-                  targetId={user.id as string}
-                />
-
-                <Button
-                  marginY={4}
-                  color="#FF7452"
-                  bg="white"
-                  _hover={{ background: '#FF7452', color: 'white' }}
-                  className="rounded-[8px] font-normal"
-                >
-                  Enviar mensagem
-                </Button>
-              </>
-            )}
+            <DynamicProfileCardButtons
+              isOwner={isOwner}
+              currentUserId={currentUserId}
+              isFollowing={isFollowing}
+              userId={user.id as string}
+            />
           </div>
         </div>
       </div>
 
       {/* NOTE - Card info editing and Graduation card */}
-      <section className="h-full flex items-end flex-col-reverse justify-evenly z-0">
+      {/* <section className="h-full flex items-end flex-col-reverse justify-evenly z-0">
         {isOwner && (
           <>
             <Link
-              href={`/profile/${session?.user.id}/user-settings/exhibition`}
+              href={`/profile/${currentUserId}/user-settings/exhibition`}
               className="w-12 h-12 flex items-center justify-center bg-medium-gray/75 border-2 border-darker-white rounded-lg hover:brightness-75"
             >
               {' '}
@@ -118,7 +97,7 @@ export default function ProfileCard({
             </Link>
           </>
         )}
-      </section>
+      </section> */}
     </section>
   )
 }

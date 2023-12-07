@@ -24,6 +24,7 @@ export default async function LoginPage() {
         <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
           RECUPERAR SENHA
         </h1>
+
         <RecoverForm />
       </section>
     </main>
