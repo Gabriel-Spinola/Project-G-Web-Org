@@ -57,6 +57,7 @@ export default function PostImagesCarousel({ imagesSrc }: ImagesData) {
               alt=""
               src={getImageAbsoluteURLFromPubBucket(currentImage)}
               className="overflow-hidden object-contain w-full h-full"
+              loading="lazy"
             />
           )}
         </div>

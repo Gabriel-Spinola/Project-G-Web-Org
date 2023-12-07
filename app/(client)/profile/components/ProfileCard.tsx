@@ -9,6 +9,7 @@
 
 'use client'
 
+// TODO - Framgent this into smaller parts (specially not owner specific stuff), and implement dynamic
 import { Button, Box, Avatar } from '@chakra-ui/react'
 
 import { BsFillGearFill } from 'react-icons/bs'

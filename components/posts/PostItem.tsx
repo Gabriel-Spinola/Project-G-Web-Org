@@ -63,6 +63,7 @@ export default function PostItem() {
         {publicationCtx?.content}
       </article>
 
+      {/* TODO - Add image optimization */}
       <Suspense fallback={<>Carregando imagens</>}>
         {publicationCtx.images && publicationCtx.images.length > 0 ? (
           <PostImagesCarousel imagesSrc={publicationCtx.images} />

@@ -1,12 +1,19 @@
 'use client'
 
 import React, { createContext } from 'react'
-import PostItem from './PostItem'
-import { CircularProgress } from '@chakra-ui/react'
 import { useFeed } from '@/hooks/useFeed'
 import { FullPost } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import { fetchPosts } from '@/app/(feed)/_actions'
+import dynamic from 'next/dynamic'
+
+const DynamicPostItem = dynamic(() => import('./PostItem'), {
+  ssr: false,
+  loading: () => (
+    // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
+    <h2>Carregando...</h2>
+  ),
+})
 
 export const PublicationContext = createContext<
   (FullPost & { session: string }) | null
@@ -36,7 +43,7 @@ export default function InfiniteScrollPosts({
       {posts?.map((post: FullPost) => (
         <div key={post.id} className="max-w-full">
           <PublicationContext.Provider value={{ ...post, session }}>
-            <PostItem />
+            <DynamicPostItem />
           </PublicationContext.Provider>
         </div>
       ))}
@@ -51,12 +58,14 @@ export default function InfiniteScrollPosts({
           ref={ref}
           className="col-span-1 mt-16 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4"
         >
-          <CircularProgress
+          {/* TODO: Implement custom CircularProgress (Using chakra -> 122kb, without chakra -> 96kb) */}
+          {/* <CircularProgress
             isIndeterminate
             color="black"
             size={8}
             marginBottom={8}
-          />
+          /> */}
+          <h2>Carregando...</h2>
         </div>
       )}
     </section>
