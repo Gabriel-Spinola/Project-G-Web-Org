@@ -1,0 +1,13 @@
+.skeleton {
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: bgfloater;
+  -webkit-box-shadow: 0 0 8px #00000065;
+            box-shadow: 0 0 8px #00000065;
+}
+
+@keyframes bgfloater {
+  0% {background-position: -800px 0 ;}
+  100% {background-position: 800px 0 ;}
+}
