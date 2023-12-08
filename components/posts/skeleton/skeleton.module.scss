@@ -1,8 +1,8 @@
+$randomNumber: random(5);
+
 .skeleton {
-  animation-duration: 4s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: bgfloater;
+  animation: bgfloater ease alternate infinite;
+  animation-duration: $randomNumber + s;
   -webkit-box-shadow: 0 0 8px #00000065;
             box-shadow: 0 0 8px #00000065;
 }

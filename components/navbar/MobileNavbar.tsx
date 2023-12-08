@@ -7,6 +7,7 @@ import StaticImage from '../Image'
 import Link from 'next/link'
 import './styles/mobileNavbar.css'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 export default function MobileNavbar() {
   const { data: session } = useSession()
@@ -33,12 +34,15 @@ export default function MobileNavbar() {
           id="mobileLogoContainer"
         >
           <a href="/" className="">
-            <StaticImage
-              url={
+            <Image
+              src={
                 'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/logo.png'
               }
               alt={'logo'}
-              className={''}
+              width={250}
+              height={72}
+              quality={100}
+              objectFit="contain"
             />
           </a>
         </section>

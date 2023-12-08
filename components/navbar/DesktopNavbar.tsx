@@ -3,9 +3,9 @@
 import React from 'react'
 import NavBarSettings from './NavBarSettings'
 import Link from 'next/link'
-import StaticImage from '../Image'
 import './styles/desktopNavbar.css'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 export default function DesktopNavbar() {
   const { data: session } = useSession()
@@ -30,14 +30,17 @@ export default function DesktopNavbar() {
             <div></div>
           </Link>
         </li>
-        <li>
+        <li className="w-[15%] h-[80%]">
           <Link href="/" prefetch={false}>
-            <StaticImage
-              url={
+            <Image
+              src={
                 'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/logo.png'
               }
-              alt={'logo'}
-              className={''}
+              alt="Logo"
+              width={250}
+              height={72}
+              objectFit="contain"
+              quality={100}
             />
           </Link>
         </li>
