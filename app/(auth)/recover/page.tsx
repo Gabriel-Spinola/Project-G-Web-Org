@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-import { StaticImage } from '@/components/Image'
+import StaticImage from '@/components/Image'
 import RecoverForm from '../components/RecoverForm'
 
 export default async function LoginPage() {

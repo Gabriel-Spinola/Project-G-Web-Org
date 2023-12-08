@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-import { StaticImage } from '@/components/Image'
+import StaticImage from '@/components/Image'
 import RegisterForm from '../components/RegisterForm'
 import LogoutButton from '../components/buttons/LogoutButton'
 import { getServerSession } from 'next-auth'

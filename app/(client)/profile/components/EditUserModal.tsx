@@ -25,7 +25,7 @@ import { BsFillPinMapFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { FaLinkedin } from 'react-icons/fa'
 import { TbWorldCode } from 'react-icons/tb'
 import { updateUserInfo } from '../_actions'
-import { EditIcon } from '@chakra-ui/icons'
+import { MdModeEditOutline } from 'react-icons/md'
 
 type Props = {
   user: Partial<UserData>
@@ -80,7 +80,7 @@ export default function EditUserModal({ user }: Props) {
   return (
     <>
       <Button onClick={onOpen} colorScheme="orange">
-        <EditIcon />
+        <MdModeEditOutline />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

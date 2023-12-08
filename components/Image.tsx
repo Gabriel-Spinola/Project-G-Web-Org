@@ -1,6 +1,4 @@
-'use client'
-
-import { Image } from '@chakra-ui/react'
+import Image from 'next/image'
 
 interface Params {
   url: string
@@ -8,13 +6,15 @@ interface Params {
   className?: string
 }
 
-export const StaticImage = (params: Params) => {
+export default function StaticImage(params: Params) {
   return (
     <Image
       className={params.className}
       src={params.url}
       alt={params.alt}
       loading="lazy"
+      blurDataURL={params.url}
+      placeholder="blur"
     />
   )
 }

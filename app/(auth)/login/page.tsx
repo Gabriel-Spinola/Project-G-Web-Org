@@ -7,7 +7,7 @@
  * @license GPL 3.0
  */
 
-import { StaticImage } from '@/components/Image'
+import StaticImage from '@/components/Image'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { Suspense } from 'react'
