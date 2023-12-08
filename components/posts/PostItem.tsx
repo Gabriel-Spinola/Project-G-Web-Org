@@ -17,6 +17,7 @@ import PostHeader from './PostHeader'
 import { PublicationContext } from './InfiniteScrollPosts'
 import dynamic from 'next/dynamic'
 import PinButton from '../Buttons/PinButton'
+import Loader from '../Loader'
 
 const DynamicCommentModal = dynamic(() => import('../comments/CommentModal'), {
   ssr: false,
@@ -24,7 +25,7 @@ const DynamicCommentModal = dynamic(() => import('../comments/CommentModal'), {
 
 const DynamicImagesCorousel = dynamic(() => import('./images/PostImages'), {
   ssr: false,
-  loading: () => <>DYNAMIC LOADING</>,
+  loading: () => <Loader />,
 })
 
 export default function PostItem() {
@@ -67,12 +68,9 @@ export default function PostItem() {
         {publicationCtx?.content}
       </article>
 
-      {/* TODO - Add image optimization */}
-      <Suspense fallback={<>Carregando imagens</>}>
-        {publicationCtx.images && publicationCtx.images.length > 0 ? (
-          <DynamicImagesCorousel imagesSrc={publicationCtx.images} />
-        ) : undefined}
-      </Suspense>
+      {publicationCtx.images && publicationCtx.images.length > 0 ? (
+        <DynamicImagesCorousel imagesSrc={publicationCtx.images} />
+      ) : undefined}
 
       {/* Likes */}
       <div id="reacts" className="w-[100%] h-[48px] gap-4 flex flex-row mt-4">

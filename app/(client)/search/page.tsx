@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { fetchUsers } from './_actions'
 import DisplayUsers from './components/DisplayUsers'
 import Searchbar from '@/components/Searchbar'
+import Loader from '@/components/Loader'
 
 export default async function SearchPage() {
   const { data, error } = await fetchUsers()
@@ -14,7 +15,8 @@ export default async function SearchPage() {
         </div>
       </section>
 
-      <Suspense fallback={<h2>Carregando...</h2>}>
+      {/* TODO - Add Skeleton */}
+      <Suspense fallback={<Loader />}>
         {!error ? (
           <>
             {data && data.length > 0 ? (

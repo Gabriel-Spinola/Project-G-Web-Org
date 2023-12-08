@@ -11,6 +11,7 @@ import React, { Suspense } from 'react'
 import Searchbar from '@/components/Searchbar'
 import DisplayUsers from '../components/DisplayUsers'
 import { searchForUser } from '../_actions'
+import Loader from '@/components/Loader'
 
 type Props = {
   params: { query: string }
@@ -28,7 +29,7 @@ export default async function SearchPage({ params }: Props) {
         </div>
       </section>
 
-      <Suspense fallback={<h2>Carregando...</h2>}>
+      <Suspense fallback={<Loader />}>
         {!error ? (
           <>
             {data && data.length > 0 ? (

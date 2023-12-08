@@ -13,7 +13,6 @@ export default function StaticImage(params: Params) {
       className={params.className}
       src={params.url}
       alt={params.alt}
-      loading="lazy"
       blurDataURL={params.url}
       placeholder="blur"
       width={!params.fill ? 100 : undefined}

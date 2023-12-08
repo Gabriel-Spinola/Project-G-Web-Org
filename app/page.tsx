@@ -16,6 +16,7 @@ import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
 import FeedSideBar from '@/components/feed/FeedSideBar'
+import Loader from '@/components/Loader'
 
 export default async function Home() {
   const posts = await fetchPosts()
@@ -24,7 +25,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen justify-around flex-row bg-darker-white mt-[88px]">
       {/* TODO - Loading Icon */}
-      <Suspense fallback={<>TODO: add loading icon</>}>
+      <Suspense fallback={<Loader />}>
         {session && <FeedSideBar session={session} />}
       </Suspense>
 

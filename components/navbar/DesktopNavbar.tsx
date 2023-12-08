@@ -31,7 +31,7 @@ export default function DesktopNavbar() {
           </Link>
         </li>
         <li>
-          <Link href="/">
+          <Link href="/" prefetch={false}>
             <StaticImage
               url={
                 'https://ebqqbabyixbmiwalviko.supabase.co/storage/v1/object/public/Vampeta-Images-Public/static-images/logo.png'
