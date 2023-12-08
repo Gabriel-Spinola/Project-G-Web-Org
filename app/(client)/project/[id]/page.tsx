@@ -8,11 +8,12 @@
  */
 
 import { Project } from '@prisma/client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { fetchProjectById } from '../_actions'
 import { DeleteProject, UpdateProject } from '../components/TempButtons'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import Loader from '@/components/Loader'
 
 type Props = {
   params: { id: string }
@@ -35,15 +36,15 @@ export default async function Project({ params }: Props) {
     <main className="mt-[88px]">
       <h1>{data.title}</h1>
 
-      {isOwner ? (
-        <>
-          <DeleteProject id={id} />
-          <br />
-          <UpdateProject id={id} />
-        </>
-      ) : (
-        <></>
-      )}
+      <Suspense fallback={<Loader />}>
+        {isOwner && (
+          <>
+            <DeleteProject id={id} />
+            <br />
+            <UpdateProject id={id} />
+          </>
+        )}
+      </Suspense>
     </main>
   )
 }

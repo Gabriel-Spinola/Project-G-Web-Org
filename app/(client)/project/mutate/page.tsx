@@ -13,12 +13,17 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import CreateProjectForm from '../components/CreateProjectForm'
 import CreateProjectFormSkeleton from '../components/skeletons/CreateProjectFormSkeleton'
+import Loader from '@/components/Loader'
 
 export default async function CreateProject() {
   const session = await getServerSession(AuthOptions)
 
   if (!session) {
-    return <Link href="/login">SignUp first</Link>
+    return (
+      <Suspense fallback={<Loader />}>
+        <Link href="/login">SignUp first</Link>
+      </Suspense>
+    )
   }
 
   return (

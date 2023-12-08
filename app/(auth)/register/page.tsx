@@ -12,13 +12,20 @@ import RegisterForm from '../components/RegisterForm'
 import LogoutButton from '../components/buttons/LogoutButton'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
+import Loader from '@/components/Loader'
 
 export default async function RegisterPage() {
   const session = await getServerSession(AuthOptions)
 
   return (
     <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
-      <Suspense fallback={<h2 className="text-pure-white">Carregando...</h2>}>
+      <Suspense
+        fallback={
+          <div className="flex align-middle items-center mt-8">
+            <Loader />
+          </div>
+        }
+      >
         {session ? (
           <>
             <LogoutButton />
