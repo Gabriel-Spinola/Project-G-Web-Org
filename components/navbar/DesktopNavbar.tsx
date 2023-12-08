@@ -3,7 +3,7 @@
 import React from 'react'
 import NavBarSettings from './NavBarSettings'
 import Link from 'next/link'
-import { StaticImage } from '../Image'
+import StaticImage from '../Image'
 import './styles/desktopNavbar.css'
 import { useSession } from 'next-auth/react'
 
