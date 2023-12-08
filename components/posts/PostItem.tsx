@@ -9,7 +9,7 @@
 
 'use client'
 
-import React, { Suspense, useContext } from 'react'
+import React, { useContext } from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like, Pin } from '@prisma/client'

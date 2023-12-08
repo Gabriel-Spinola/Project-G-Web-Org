@@ -11,7 +11,7 @@ export default function NotFound() {
         href="/"
         className="px-8 py-4 bg-medium-primary hover:brightness-75 rounded-lg text-base font-semibold"
       >
-        Return Home
+        Voltar
       </Link>{' '}
     </main>
   )
