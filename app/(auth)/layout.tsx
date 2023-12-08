@@ -1,4 +1,4 @@
-import StaticImage from '@/components/Image'
+import Image from 'next/image'
 
 export default function AuthPagesLayout({
   children, // will be a page or nested layout
@@ -7,11 +7,11 @@ export default function AuthPagesLayout({
 }) {
   return (
     <main className="relative min-w-full flex max-w-full h-[calc(100vh-88px)] mt-[88px] items-center justify-center bg-darker-white">
-      <StaticImage
+      <Image
         className="absolute w-full h-full object-cover"
-        url="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
+        src="/assets/explore/hin-bong-yeung-jF946mh5QrA-unsplash.jpg"
         alt="imagem"
-        fill={true}
+        fill
       />
 
       {children}

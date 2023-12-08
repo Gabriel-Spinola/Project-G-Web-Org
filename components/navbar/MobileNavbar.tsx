@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { MdClose } from 'react-icons/md'
 import { RxHamburgerMenu } from 'react-icons/rx'
-import StaticImage from '../Image'
 import Link from 'next/link'
 import './styles/mobileNavbar.css'
 import { useSession } from 'next-auth/react'
