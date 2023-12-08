@@ -1,4 +1,12 @@
-import { Comment, Like, Pin, Post, Project, User } from '@prisma/client'
+import {
+  Comment,
+  Follows,
+  Like,
+  Pin,
+  Post,
+  Project,
+  User,
+} from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.
@@ -57,6 +65,8 @@ export type UserData = Partial<User> & {
     followers: number
     following: number
   }
+  following: Follows[]
+  followers: Follows[]
 }
 
 export type Likes = Pick<Like, 'id' | 'userId'>[]

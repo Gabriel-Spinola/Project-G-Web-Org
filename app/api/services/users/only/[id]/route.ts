@@ -21,9 +21,13 @@ async function handleGet(id: string) {
         linkedinUrl: true,
         contactPhone: true,
         email: true,
+        followers: true,
+        following: true,
         _count: { select: { followers: true, following: true } },
       },
     })
+
+    console.log(JSON.stringify(data))
 
     if (!data) {
       throw new Error('Failed to fetch data')

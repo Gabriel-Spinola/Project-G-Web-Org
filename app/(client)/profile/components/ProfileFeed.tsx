@@ -15,23 +15,20 @@ const DynamicProjectFeed = dynamic(
 type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
-  mustServerFetched: {
-    startupProjects?: FullProject[]
-    startupPosts?: FullPost[]
-    currentUserId?: string
-  }
-
+  startupProjects?: FullProject[]
+  startupPosts?: FullPost[]
+  currentUserId?: string
   authorId: string
   isOwner: boolean
 }
 
 export default function ProfileFeed({
-  mustServerFetched,
+  startupProjects,
+  startupPosts,
+  currentUserId,
   authorId,
   isOwner,
 }: Props) {
-  const { startupPosts, startupProjects, currentUserId } = mustServerFetched
-
   const [selectedFeed, setSelectedFeed] = useState<FeedSelectOptions>('posts')
 
   return (

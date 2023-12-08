@@ -10,6 +10,7 @@ import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
 import { FaLinkedin } from 'react-icons/fa'
 import dynamic from 'next/dynamic'
+import FollowersModal from './modals/FollowersModal'
 
 const DynamicEditUser = dynamic(() => import('./EditUserInfo'), { ssr: false })
 
@@ -29,10 +30,16 @@ export default function UserInfo({ isOwner, user }: Params) {
       <div
         className={`${styles.cardShadow} flex flex-row w-full justify-around lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray`}
       >
-        <span className="text-center">
-          <span className="font-bold">{user._count?.followers ?? 0}</span>{' '}
-          Seguidores
-        </span>
+        <FollowersModal
+          users={{
+            id: user.id as string,
+            name: user.name as string,
+            title: user.title as string | null,
+            profilePic: user.profilePic as string | null,
+            image: user.image as string | null,
+          }}
+          followersCount={user._count?.followers ?? 0}
+        />
 
         <span className="font-bold  text-xl">|</span>
 

@@ -4,7 +4,11 @@ import { User } from '@prisma/client'
 import Link from 'next/link'
 import React from 'react'
 
-export default function DisplayUsers({ users }: { users: User[] | null }) {
+export default function DisplayUsers({
+  users,
+}: {
+  users: Pick<User, 'id' | 'name' | 'title' | 'profilePic' | 'image'>[] | null
+}) {
   return (
     <section
       id="users-container"
@@ -34,6 +38,7 @@ export default function DisplayUsers({ users }: { users: User[] | null }) {
               <span>{user.title}</span>
             </section>
           </div>
+
           <div className="flex items-center justify-center">
             <Link
               href={`/profile/${user.id}`}

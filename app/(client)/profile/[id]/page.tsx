@@ -66,7 +66,9 @@ export default async function Profile({ params }: Props) {
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
             <Suspense fallback={<UserPostsSkeleton />}>
-              <ProfileFeedController authorId={userId} isOwner={isOwner} />
+              {user && (
+                <ProfileFeedController authorId={userId} isOwner={isOwner} />
+              )}
             </Suspense>
           </div>
         </div>
