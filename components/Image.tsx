@@ -4,6 +4,7 @@ interface Params {
   url: string
   alt: string
   className?: string
+  fill?: boolean
 }
 
 export default function StaticImage(params: Params) {
@@ -15,6 +16,11 @@ export default function StaticImage(params: Params) {
       loading="lazy"
       blurDataURL={params.url}
       placeholder="blur"
+      width={!params.fill ? 100 : undefined}
+      height={!params.fill ? 100 : undefined}
+      fill={params.fill}
+      quality={100}
+      style={{ objectFit: 'fill' }} // The point is right there!
     />
   )
 }

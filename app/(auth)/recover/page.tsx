@@ -18,6 +18,7 @@ export default async function LoginPage() {
         className="absolute w-full h-full object-cover"
         url="/assets/explore/photo-1591874204276-1ebd20fb8db6.webp"
         alt="imagem"
+        fill={true}
       />
 
       <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
