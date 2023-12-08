@@ -7,28 +7,31 @@
  * @license GPL 3.0
  */
 
+import { Suspense } from 'react'
 import RegisterForm from '../components/RegisterForm'
 import LogoutButton from '../components/buttons/LogoutButton'
-import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import { getServerSession } from 'next-auth'
 
 export default async function RegisterPage() {
   const session = await getServerSession(AuthOptions)
 
   return (
     <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
-      {session ? (
-        <>
-          <LogoutButton />
-        </>
-      ) : (
-        <>
-          <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
-            CRIE UMA CONTTA
-          </h1>
-          <RegisterForm />
-        </>
-      )}
+      <Suspense fallback={<h2 className="text-pure-white">Carregando...</h2>}>
+        {session ? (
+          <>
+            <LogoutButton />
+          </>
+        ) : (
+          <>
+            <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
+              CRIE UMA CONTTA
+            </h1>
+            <RegisterForm />
+          </>
+        )}
+      </Suspense>
     </section>
   )
 }

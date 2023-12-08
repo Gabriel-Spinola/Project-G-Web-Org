@@ -18,7 +18,7 @@ export default async function LoginPage() {
 
   return (
     <section className="w-full md:w-auto lg:w-[30vw] h-full md:h-auto md:max-h-[80vh] rounded-lg drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)] bg-black/10 backdrop-blur-md p-8">
-      <Suspense fallback={<>Carregando...</>}>
+      <Suspense fallback={<h2 className="text-pure-white">Carregando...</h2>}>
         {session ? (
           <>
             <LogoutButton />

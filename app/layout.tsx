@@ -25,22 +25,24 @@ export default async function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <Providers>
-            <Navbar />
+            <header>
+              <Navbar />
 
-            <ToastContainer
-              className="fixed z-[15]"
-              position="top-center"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-            <ChatButton />
+              <ToastContainer
+                className="fixed z-[15]"
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
+              <ChatButton />
+            </header>
 
             {children}
           </Providers>
