@@ -7,19 +7,20 @@ import { ESResponse, FullProject } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import dynamic from 'next/dynamic'
 import Loader from '@/components/Loader'
+import ProjectPostSkeleton from './skeletons/ProjectPostSkeleton'
+import { Session } from 'next-auth'
+import Link from 'next/link'
 
 const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
   ssr: false,
-  loading: () => (
-    // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
-    <h2>Carregando...</h2>
-  ),
+  loading: () => <ProjectPostSkeleton />,
 })
 
 type Props = {
   initialPublication: FullProject[] | undefined
   profileId?: string
   currentUserId?: string
+  session: Session | null
   customFetch?: (
     page: number,
     signal?: AbortSignal,
@@ -32,6 +33,7 @@ export default function ProjectFeed({
   profileId,
   currentUserId,
   customFetch,
+  session,
 }: Props) {
   const [ref, inView] = useInView()
 
@@ -43,6 +45,20 @@ export default function ProjectFeed({
       id="feed"
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
+      {session?.user.position === 'Professional' ||
+      session?.user.position === 'Admin' ||
+      session?.user.position === 'Office' ? (
+        <Link
+          href={'/project/mutate'}
+          className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]"
+        >
+          Crie um Projeto
+        </Link>
+      ) : (
+        <h1 className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]">
+          Somente contas profissionais podem criar projetos
+        </h1>
+      )}
       {projects?.map((project: FullProject) => (
         <DynamicProjectPost
           key={project.id}

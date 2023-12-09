@@ -1,0 +1,11 @@
+
+.skeleton {
+  animation: bgfloater ease alternate infinite 2s;
+  -webkit-box-shadow: 0 0 8px #00000065;
+            box-shadow: 0 0 8px #00000065;
+}
+
+@keyframes bgfloater {
+  0% {background-position: -2000 0 ;}
+  100% {background-position: 2000px 0 ;}
+}
