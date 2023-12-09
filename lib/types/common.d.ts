@@ -1,12 +1,4 @@
-import {
-  Comment,
-  Follows,
-  Like,
-  Pin,
-  Post,
-  Project,
-  User,
-} from '@prisma/client'
+import { Comment, Like, Pin, Post, Project, User } from '@prisma/client'
 
 /**
  * @template DataType - The type of data that the response holds.

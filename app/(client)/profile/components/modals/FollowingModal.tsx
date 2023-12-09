@@ -31,7 +31,9 @@ export default function FollowingModal({ following, followingSpan }: Props) {
 
   return (
     <div>
-      <div onClick={handleOpenModalCallback}>{followingSpan}</div>
+      <div className="hover:cursor-pointer" onClick={handleOpenModalCallback}>
+        {followingSpan}
+      </div>
 
       {following && (
         <Modal

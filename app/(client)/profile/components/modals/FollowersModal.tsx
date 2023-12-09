@@ -30,8 +30,10 @@ export default function FollowersModal({ followers, followersSpan }: Props) {
   }
 
   return (
-    <div>
-      <div onClick={handleOpenModalCallback}>{followersSpan}</div>
+    <div className="flex flex-col">
+      <div className="hover:cursor-pointer" onClick={handleOpenModalCallback}>
+        {followersSpan}
+      </div>
 
       {followers && (
         <Modal
