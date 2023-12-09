@@ -59,15 +59,16 @@ export type ESResponse<DataType, CustomError = string | unknown> =
     }
 
 export type PublicationAuthor = Pick<User, 'name' | 'image' | 'profilePic'>
+export type Follower = User
+export type Following = User
 
-export type UserData = Partial<User> & {
-  _count: {
-    followers: number
-    following: number
-  }
-  following: Follows[]
-  followers: Follows[]
-}
+export type UserData = Omit<
+  Partial<User> & {
+    following: { following: Following }[]
+    followers: { follower: Follower }[]
+  },
+  'password' | 'CREA'
+>
 
 export type Likes = Pick<Like, 'id' | 'userId'>[]
 export type Pins = Pick<Pin, 'id' | 'userId'>[]

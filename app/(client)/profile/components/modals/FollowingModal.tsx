@@ -14,15 +14,15 @@ import {
 import React, { ReactNode } from 'react'
 
 type Props = {
-  followers?: { follower: Partial<UserData> }[]
-  followersSpan: ReactNode
+  following?: { following: Partial<UserData> }[]
+  followingSpan: ReactNode
 }
 
-export default function FollowersModal({ followers, followersSpan }: Props) {
+export default function FollowingModal({ following, followingSpan }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   function handleOpenModalCallback() {
-    if (!followers || followers?.length <= 0) {
+    if (!following || following?.length <= 0) {
       return
     }
 
@@ -31,9 +31,9 @@ export default function FollowersModal({ followers, followersSpan }: Props) {
 
   return (
     <div>
-      <div onClick={handleOpenModalCallback}>{followersSpan}</div>
+      <div onClick={handleOpenModalCallback}>{followingSpan}</div>
 
-      {followers && (
+      {following && (
         <Modal
           isOpen={isOpen as boolean}
           onClose={onClose as () => void}
@@ -44,13 +44,13 @@ export default function FollowersModal({ followers, followersSpan }: Props) {
 
           <ModalContent>
             <ModalHeader>
-              <h2>Seguidores:</h2>
+              <h2>Seguindo:</h2>
               <ModalCloseButton />
             </ModalHeader>
 
             <ModalBody height={'100%'} padding={8}>
               <DisplayUsers
-                users={followers.map((follower) => follower.follower)}
+                users={following.map((following) => following.following)}
               />
             </ModalBody>
           </ModalContent>

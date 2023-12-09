@@ -10,16 +10,33 @@ import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
 import { FaLinkedin } from 'react-icons/fa'
 import dynamic from 'next/dynamic'
-import FollowersModal from './modals/FollowersModal'
 
 const DynamicEditUser = dynamic(() => import('./EditUserInfo'), { ssr: false })
 
-interface Params {
+const DynamicFollowersModal = dynamic(() => import('./modals/FollowersModal'), {
+  ssr: false,
+  loading: () => (
+    <span className="text-center">
+      <span className="font-bold">...</span> Seguidores
+    </span>
+  ),
+})
+
+const DynamicFollowingModal = dynamic(() => import('./modals/FollowingModal'), {
+  ssr: false,
+  loading: () => (
+    <span className="text-center">
+      Seguindo <span className="font-bold">...</span>
+    </span>
+  ),
+})
+
+interface Props {
   isOwner: boolean
   user: Partial<UserData>
 }
 
-export default function UserInfo({ isOwner, user }: Params) {
+export default function UserInfo({ isOwner, user }: Props) {
   function formatLinkedinProfile(url: string): string {
     return url.substring(url.indexOf('in/') + 3, url.length - 1)
   }
@@ -30,23 +47,27 @@ export default function UserInfo({ isOwner, user }: Params) {
       <div
         className={`${styles.cardShadow} flex flex-row w-full justify-around lg:w-[272px] x1:w-[400px] px-4 py-4 mt-8 rounded-[12px] bg-pure-white text-darker-gray`}
       >
-        <FollowersModal
-          users={{
-            id: user.id as string,
-            name: user.name as string,
-            title: user.title as string | null,
-            profilePic: user.profilePic as string | null,
-            image: user.image as string | null,
-          }}
-          followersCount={user._count?.followers ?? 0}
+        <DynamicFollowersModal
+          followers={user.followers}
+          followersSpan={
+            <span className="text-center">
+              <span className="font-bold">{user.followers?.length ?? 0}</span>{' '}
+              Seguidores
+            </span>
+          }
         />
 
         <span className="font-bold  text-xl">|</span>
 
-        <span className="text-center">
-          Seguindo{' '}
-          <span className="font-bold">{user._count?.following ?? 0}</span>
-        </span>
+        <DynamicFollowingModal
+          following={user.following}
+          followingSpan={
+            <span className="text-center">
+              Seguindo{' '}
+              <span className="font-bold">{user.following?.length ?? 0}</span>
+            </span>
+          }
+        />
       </div>
 
       <div
