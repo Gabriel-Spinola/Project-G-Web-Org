@@ -50,40 +50,33 @@ export type ESResponse<DataType, CustomError = string | unknown> =
       error: CustomError
     }
 
+export type SafeUser = Omit<User, 'password' | 'CREA'>
 export type PublicationAuthor = Pick<User, 'name' | 'image' | 'profilePic'>
-export type Follower = User
-export type Following = User
 
-export type UserData = Omit<
-  Partial<User> & {
-    following: { following: Following }[]
-    followers: { follower: Follower }[]
-  },
-  'password' | 'CREA'
->
+export type Follower = SafeUser
+export type Following = SafeUser
+
+export type UserData = Partial<SafeUser> & {
+  following: { following: Following }[]
+  followers: { follower: Follower }[]
+}
 
 export type Likes = Pick<Like, 'id' | 'userId'>[]
 export type Pins = Pick<Pin, 'id' | 'userId'>[]
 
-export type PublicationComment = Comment & {
+type PublicationComment = Comment & {
   author: PublicationAuthor
+  likes: Likes
   replies?: PublicationComment[]
 }
 
-type TDisplayComment = Comment & {
-  author: PublicationAuthor
-  likes: Likes
-  replies?: TDisplayComment[]
-}
-
 /**
- * REVIEW - usage of _count for comments
  * @summary Describes the data that is recurrent in publications
  */
 export type PublicationsDefaultData = {
   author: PublicationAuthor | null
   contributor: Pick<User, 'name'>[]
-  comments: TDisplayComment[]
+  comments: PublicationComment[]
   likes: Likes
   pins: Pins
 }
@@ -91,9 +84,9 @@ export type PublicationsDefaultData = {
 /**
  * @summary Describes the content of a Post including its author generic data.
  */
-export type FullPost = Post & PublicationsDefaultData
+export type PostType = Post & PublicationsDefaultData
 
 /**
  * @summary Describes the content of a Project including its author generic data.
  */
-export type FullProject = Project & PublicationsDefaultData
+export type ProjectType = Project & PublicationsDefaultData

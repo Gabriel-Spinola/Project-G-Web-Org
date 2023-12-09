@@ -3,13 +3,15 @@
 import React from 'react'
 import { fetchProjects } from '../_actions'
 import { useInView } from 'react-intersection-observer'
-import { ESResponse, FullProject } from '@/lib/types/common'
+import { ESResponse, ProjectType } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import dynamic from 'next/dynamic'
 import Loader from '@/components/Loader'
 import ProjectPostSkeleton from './skeletons/ProjectPostSkeleton'
 import { Session } from 'next-auth'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { isProfissionalAccount } from '@/lib/auth/actions'
 
 const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
   ssr: false,
@@ -17,15 +19,15 @@ const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
 })
 
 type Props = {
-  initialPublication: FullProject[] | undefined
+  initialPublication: ProjectType[] | undefined
   profileId?: string
   currentUserId?: string
-  session: Session | null
+  session?: Session | null
   customFetch?: (
     page: number,
     signal?: AbortSignal,
     authorId?: string,
-  ) => Promise<ESResponse<FullProject[]>>
+  ) => Promise<ESResponse<ProjectType[]>>
 }
 
 export default function ProjectFeed({
@@ -33,8 +35,8 @@ export default function ProjectFeed({
   profileId,
   currentUserId,
   customFetch,
-  session,
 }: Props) {
+  const { data: session } = useSession()
   const [ref, inView] = useInView()
 
   const { publications: projects, noPublicationFound: noProjectFound } =
@@ -45,21 +47,16 @@ export default function ProjectFeed({
       id="feed"
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
-      {session?.user.position === 'Professional' ||
-      session?.user.position === 'Admin' ||
-      session?.user.position === 'Office' ? (
+      {isProfissionalAccount(session) && (
         <Link
           href={'/project/mutate'}
           className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]"
         >
           Crie um Projeto
         </Link>
-      ) : (
-        <h1 className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]">
-          Somente contas profissionais podem criar projetos
-        </h1>
       )}
-      {projects?.map((project: FullProject) => (
+
+      {projects?.map((project: ProjectType) => (
         <DynamicProjectPost
           key={project.id}
           project={project}

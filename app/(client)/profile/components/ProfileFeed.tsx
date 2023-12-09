@@ -2,7 +2,7 @@
 
 import InfiniteScrollPosts from '@/components/posts/InfiniteScrollPosts'
 import PostSubmitFragment from '@/components/posts/postSubmit/PostSubmitFragment'
-import { FullPost, FullProject } from '@/lib/types/common'
+import { PostType, ProjectType } from '@/lib/types/common'
 import React, { Suspense, useState } from 'react'
 import styles from './profile.module.scss'
 import dynamic from 'next/dynamic'
@@ -15,8 +15,8 @@ const DynamicProjectFeed = dynamic(
 type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
-  startupProjects?: FullProject[]
-  startupPosts?: FullPost[]
+  startupProjects?: ProjectType[]
+  startupPosts?: PostType[]
   currentUserId?: string
   authorId: string
   isOwner: boolean

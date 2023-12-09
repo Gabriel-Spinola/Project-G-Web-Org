@@ -4,7 +4,7 @@ import React, { FormEvent, useState } from 'react'
 import { validateForm } from '@/lib/schemas/comment.schema'
 import { signIn, useSession } from 'next-auth/react'
 import CreateCommentButton from '../Buttons/CreateCommentButton'
-import { TDisplayComment } from '@/lib/types/common'
+import { PublicationComment } from '@/lib/types/common'
 import { toast } from 'react-toastify'
 import { postComment } from '@/server/commentActions'
 
@@ -14,7 +14,7 @@ type Props = {
     type: 'postId' | 'parentCommentId' | 'projectId'
   }
   thisId: number | string
-  onSubmit?: (data: Partial<TDisplayComment>) => void
+  onSubmit?: (data: Partial<PublicationComment>) => void
   defaultValue?: string
 }
 

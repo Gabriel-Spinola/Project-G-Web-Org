@@ -1,9 +1,9 @@
-import { ESResponse, FullPost, FullProject } from '@/lib/types/common'
+import { ESResponse, PostType, ProjectType } from '@/lib/types/common'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 import { useState, useCallback, useEffect } from 'react'
 
-export function useFeed<Publication extends FullPost | FullProject>(
+export function useFeed<Publication extends PostType | ProjectType>(
   initialPublication: Publication[] | undefined,
   shouldLoadMore: boolean,
   fetchFunction: (

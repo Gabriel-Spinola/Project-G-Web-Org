@@ -9,8 +9,7 @@
 
 import { $Enums, User } from '@prisma/client'
 import { compare } from 'bcryptjs'
-import { Session, getServerSession } from 'next-auth'
-import { AuthOptions } from '.'
+import { Session } from 'next-auth'
 import { prisma } from '../database/prisma'
 
 export type Credentials = Record<'email' | 'password', string> | undefined
@@ -48,12 +47,21 @@ export async function validateCredentials(
   }
 }
 
-export async function checkIfAuthorized(positionRequired: $Enums.Positions) {
-  const session: Session | null = await getServerSession(AuthOptions)
+export function checkIfAuthorized(
+  session: Session | null,
+  positionRequired: $Enums.Positions,
+) {
+  return session?.user.position === positionRequired
+}
 
+export function isProfissionalAccount(session: Session | null) {
   if (!session) {
     return false
   }
 
-  return session?.user.position === positionRequired
+  return (
+    checkIfAuthorized(session, $Enums.Positions.Professional) ||
+    checkIfAuthorized(session, $Enums.Positions.Admin) ||
+    checkIfAuthorized(session, $Enums.Positions.Office)
+  )
 }
