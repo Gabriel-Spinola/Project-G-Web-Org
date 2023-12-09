@@ -9,10 +9,14 @@ import Avatar from '../Avatar'
 
 export default async function FeedSideBar({ session }: { session: Session }) {
   return (
-    <section className="hidden x1:flex x1:flex-col gap-4 x1:fixed left-0 py-8 px-4">
+    <section className="hidden x1:max-w-[200px] x1:flex x1:flex-col gap-4 x1:fixed left-0 py-8 px-4">
       <article className="flex gap-4">
-        <Avatar size={'lg'} imageUrl={getProfilePicURL(session.user as User)} />
-
+        <div className="w-16 h-16">
+          <Avatar
+            size={'lg'}
+            imageUrl={getProfilePicURL(session.user as User)}
+          />
+        </div>
         <div className="flex flex-col justify-evenly">
           <h1 className="text-xl">{session.user.name}</h1>
           <Link
