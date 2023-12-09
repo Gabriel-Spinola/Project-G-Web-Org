@@ -16,6 +16,7 @@ export default async function Pins({ params }: Props) {
     page: 1,
     authorId: id,
   })
+
   const { data: projects, error: projectError } = await fetchPinnedProjects({
     page: 1,
     authorId: id,

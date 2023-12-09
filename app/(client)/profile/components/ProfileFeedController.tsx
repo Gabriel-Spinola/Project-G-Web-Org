@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { fetchProjects } from '../../project/_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
@@ -28,14 +28,14 @@ export default async function ProfileFeedController({
   }
 
   return (
-    <ProfileFeed
-      mustServerFetched={{
-        startupProjects: projects ?? undefined,
-        startupPosts: posts ?? undefined,
-        currentUserId: session?.user.id,
-      }}
-      authorId={authorId}
-      isOwner={isOwner}
-    />
+    <Suspense fallback={<>loading feed</>}>
+      <ProfileFeed
+        startupProjects={projects ?? undefined}
+        startupPosts={posts ?? undefined}
+        currentUserId={session?.user.id}
+        authorId={authorId}
+        isOwner={isOwner}
+      />
+    </Suspense>
   )
 }
