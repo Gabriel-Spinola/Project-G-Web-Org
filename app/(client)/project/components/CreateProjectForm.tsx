@@ -27,7 +27,6 @@ interface ProjectFormState {
 type Props = {
   projectId?: string
   content?: ProjectFormState
-  files?: string[]
   projectImages?: string[]
 }
 
@@ -148,13 +147,7 @@ export default function CreateProjectForm({
           required
         />
         <div className="flex gap-8">
-          <input
-            type="file"
-            accept=".pdf"
-            id="file"
-            name="file"
-            className="hidden"
-          />
+          <input type="file" accept=".pdf" className="hidden" />
           <label
             htmlFor="file"
             className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"

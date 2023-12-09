@@ -14,7 +14,7 @@ import styles from './PostSubmitFragment.module.scss'
 import { useDisclosure } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 
-const NewPostModal = dynamic(
+const DynamicNewPostModal = dynamic(
   () => import('@/components/posts/postSubmit/NewPostModal'),
   { ssr: false },
 )
@@ -41,7 +41,7 @@ export default function PostSubmitFragment() {
       </button>
 
       <NewPostContext.Provider value={{ isOpen, onClose }}>
-        <NewPostModal />
+        <DynamicNewPostModal />
       </NewPostContext.Provider>
     </>
   )
