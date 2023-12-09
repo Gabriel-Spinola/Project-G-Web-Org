@@ -33,7 +33,7 @@ export default async function RegisterPage() {
         ) : (
           <>
             <h1 className="text-xl md:text-xl lg:text-4xl font-bold text-center text-pure-white pb-4">
-              CRIE UMA CONTTA
+              CRIE UMA CONTA
             </h1>
             <RegisterForm />
           </>
