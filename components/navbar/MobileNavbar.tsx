@@ -41,7 +41,7 @@ export default function MobileNavbar() {
               width={250}
               height={72}
               quality={100}
-              objectFit="contain"
+              style={{ objectFit: 'contain' }}
             />
           </a>
         </section>

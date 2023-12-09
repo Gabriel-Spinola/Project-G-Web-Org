@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/database/prisma'
-import { UserData } from '@/lib/types/common'
 import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
 

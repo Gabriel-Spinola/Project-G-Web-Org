@@ -18,7 +18,7 @@ import dynamic from 'next/dynamic'
 
 const DynamicProfileAvatar = dynamic(
   () => import('./profileCard/ProfileAvatar'),
-  { ssr: false, loading: () => <>Carregndo Avatar</> },
+  { ssr: false, loading: () => <>Carregando Avatar</> },
 )
 
 const DynamicProfileCardButtons = dynamic(
