@@ -1,12 +1,12 @@
 import Loader from '@/components/Loader'
 import { ProjectType } from '@/lib/types/common'
 import React, { Suspense } from 'react'
-import { DeleteProject } from '../components/DeleteProjectButton'
-import { UpdateProject } from '../components/UpdateProjectButton'
+import { DeleteProject } from '../../components/DeleteProjectButton'
+import { UpdateProject } from '../../components/UpdateProjectButton'
 import dynamic from 'next/dynamic'
 
 const DynamicImagesCarousel = dynamic(
-  () => import('../components/ProjectImages'),
+  () => import('../../components/ProjectImages'),
 )
 
 export default function ProjectSection({

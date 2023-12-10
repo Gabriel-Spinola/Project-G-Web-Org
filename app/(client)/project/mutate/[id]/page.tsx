@@ -14,6 +14,8 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { fetchProjectById } from '../../_actions'
 import CreateProjectFormSkeleton from '../../components/skeletons/CreateProjectFormSkeleton'
+import { isProfissionalAccount } from '@/lib/auth/actions'
+import { RedirectType, redirect } from 'next/navigation'
 
 type Props = {
   params: { id: string }
@@ -25,6 +27,10 @@ export default async function CreateProject({ params }: Props) {
 
   if (!session) {
     return <Link href="/login">SignUp first</Link>
+  }
+
+  if (!isProfissionalAccount(session)) {
+    redirect('/project', RedirectType.replace)
   }
 
   const { data, error } = await fetchProjectById(id)

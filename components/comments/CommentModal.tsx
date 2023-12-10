@@ -74,10 +74,10 @@ export default function CommentModal({
         }}
       >
         <button
-          className="flex flex-col justify-center items-center hover:text-medium-primary"
+          className="flex flex-col mt-[2px] justify-center items-center hover:text-medium-primary"
           onClick={onOpen}
         >
-          {icon ?? <BiComment size={24} />}
+          {icon ?? <BiComment size={23} />}
 
           <span>{commentsCount}</span>
         </button>

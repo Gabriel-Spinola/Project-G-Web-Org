@@ -11,7 +11,7 @@ import React, { Suspense } from 'react'
 import { fetchProjectById } from '../_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import ProjectSection from '../_components/ProjectSection'
+import ProjectSection from './_components/ProjectSection'
 import Loader from '@/components/Loader'
 
 type Props = {
