@@ -7,13 +7,14 @@
  * @license i.e. MIT
  */
 
-import { Project } from '@prisma/client'
 import React, { Suspense } from 'react'
 import { fetchProjectById } from '../_actions'
-import { DeleteProject, UpdateProject } from '../components/TempButtons'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import Loader from '@/components/Loader'
+import { DeleteProject } from '../components/DeleteProjectButton'
+import { UpdateProject } from '../components/UpdateProjectButton'
+import ProjectImagesCarousel from '../components/ProjectImages'
 
 type Props = {
   params: { id: string }
@@ -33,18 +34,27 @@ export default async function Project({ params }: Props) {
   const isOwner = session?.user.id === data.authorId
 
   return (
-    <main className="mt-[88px]">
-      <h1>{data.title}</h1>
+    <main className="mt-[88px] min-h-[calc(100vh-88px)] w-full flex justify-center bg-darker-white">
+      <section className="w-full md:w-[90%] x1:w-[60%] flex flex-col md:px-8">
+        <h1 className="w-full flex text-2xl md:text-4xl font-semibold justify-between p-8 md:px-0">
+          {data.title}
+          <Suspense fallback={<Loader />}>
+            {isOwner && (
+              <section className="flex w-[10%]">
+                <UpdateProject id={id} />
+                <DeleteProject id={id} />
+              </section>
+            )}
+          </Suspense>
+        </h1>
 
-      <Suspense fallback={<Loader />}>
-        {isOwner && (
-          <>
-            <DeleteProject id={id} />
-            <br />
-            <UpdateProject id={id} />
-          </>
-        )}
-      </Suspense>
+        <ProjectImagesCarousel
+          imagesSrc={data.images}
+          projectOwner={data.authorId}
+        />
+
+        <article className="pt-16 text-lg">{data.description}</article>
+      </section>
     </main>
   )
 }

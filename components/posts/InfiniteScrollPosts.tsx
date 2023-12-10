@@ -49,7 +49,7 @@ export default function InfiniteScrollPosts({
 
       {/* loading spinner */}
       {noPostFound ? (
-        <span className="col-span-1 mt-8 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4">
+        <span className="col-span-1 mt-8 mb-8 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4">
           Ops, parece que você chegou ao fim!
         </span>
       ) : (
