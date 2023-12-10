@@ -8,7 +8,8 @@ Atualmente, no Brasil, nos deparamos com a elitização da arquitetura, engenhar
 - Também aberto para empresas
 
 ## API
-[Documentação](https://www.notion.so/API-Fun-es-Serverless-Vercel-4d09ee1c74804fc99a6c9fe47a0b4266#a3ab116fd3724bc58e9e486b0406552f)
+- [Local Documentation](https://github.com/Gabriel-Spinola/Project-G-Web-Org/blob/main/documentation/api.doc.md)
+- [Notion Documentation](https://suave-methane-780.notion.site/API-Fun-es-Serverless-Vercel-4d09ee1c74804fc99a6c9fe47a0b4266?pvs=4)
 
 ## Repositórios Relacionados:
 - ### [ORG](https://github.com/orgs/Project-G-Org/repositories)
