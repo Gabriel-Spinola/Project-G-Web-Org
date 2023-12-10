@@ -7,6 +7,9 @@ Atualmente, no Brasil, nos deparamos com a elitização da arquitetura, engenhar
 - Espaço de colaboração
 - Também aberto para empresas
 
+## API
+[Documentação](https://www.notion.so/API-Fun-es-Serverless-Vercel-4d09ee1c74804fc99a6c9fe47a0b4266#a3ab116fd3724bc58e9e486b0406552f)
+
 ## Repositórios Relacionados:
 - ### [ORG](https://github.com/orgs/Project-G-Org/repositories)
 
