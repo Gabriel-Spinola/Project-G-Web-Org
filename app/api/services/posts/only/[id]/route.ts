@@ -1,12 +1,12 @@
 import { prisma } from '@/lib/database/prisma'
-import { ESResponse, FullPost } from '@/lib/types/common'
+import { ESResponse, PostType } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { NextResponse } from 'next/server'
 import { tempIncludeForUser } from '../../_utils'
 
-async function getPost(id: string): Promise<ESResponse<FullPost>> {
+async function getPost(id: string): Promise<ESResponse<PostType>> {
   try {
-    const data: FullPost = await prisma.post.findUniqueOrThrow({
+    const data: PostType = await prisma.post.findUniqueOrThrow({
       where: { id },
       ...tempIncludeForUser,
     })

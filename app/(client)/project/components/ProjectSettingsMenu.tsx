@@ -13,11 +13,11 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { deleteProject } from '../_actions'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { FullProject } from '@/lib/types/common'
+import { ProjectType } from '@/lib/types/common'
 
 type Props = {
   currentUserId?: string
-  project: Pick<FullProject, 'authorId' | 'id'>
+  project: Pick<ProjectType, 'authorId' | 'id'>
 }
 
 export default function ProjectSettingsMenu({ currentUserId, project }: Props) {

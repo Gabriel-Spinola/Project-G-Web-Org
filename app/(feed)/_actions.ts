@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
-import { ESResponse, FullPost } from '@/lib/types/common'
+import { ESResponse, PostType } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { Post } from '@prisma/client'
 import { isAbortError } from 'next/dist/server/pipe-readable'
@@ -45,7 +45,7 @@ export async function fetchPosts(
   page = 1,
   signal?: AbortSignal,
   authorId?: string,
-): Promise<ESResponse<FullPost[]>> {
+): Promise<ESResponse<PostType[]>> {
   try {
     const apiRequestURL = !authorId
       ? `${API_URL}${API_ENDPOINTS.services.posts}?page=${page}`
@@ -67,7 +67,7 @@ export async function fetchPosts(
       throw new Error("Response's not okay " + data)
     }
 
-    const { data }: { data: FullPost[] } = await response.json()
+    const { data }: { data: PostType[] } = await response.json()
 
     return {
       data,
@@ -95,7 +95,7 @@ export async function fetchPosts(
  * @param postId
  * @returns post
  */
-export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
+export async function fetchPost(postId: string): Promise<ESResponse<PostType>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.users}/only/${postId}`,
@@ -113,7 +113,7 @@ export async function fetchPost(postId: string): Promise<ESResponse<FullPost>> {
       throw new Error("Response's not okay")
     }
 
-    const { data }: { data: FullPost } = await response.json()
+    const { data }: { data: PostType } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { LikeProjectButton } from './LikeProjectButton'
-import { FullProject } from '@/lib/types/common'
+import { ProjectType } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { Like, Pin, User } from '@prisma/client'
 import { MdComment } from 'react-icons/md'
@@ -22,7 +22,7 @@ const DynamicProjectSettings = dynamic(() => import('./ProjectSettingsMenu'), {
 })
 
 type Props = {
-  project: FullProject
+  project: ProjectType
   currentUserId?: string
 }
 

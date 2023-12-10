@@ -17,7 +17,6 @@ export default async function Projects() {
       <div className="w-full md:w-[70%]">
         <Suspense fallback={<span>Loading feed...</span>}>
           <ProjectFeed
-            session={session}
             initialPublication={projects ?? undefined}
             currentUserId={session?.user.id}
           />

@@ -1,6 +1,6 @@
 'use client'
 
-import { FullPost, FullProject } from '@/lib/types/common'
+import { PostType, ProjectType } from '@/lib/types/common'
 import React, { Suspense, useState } from 'react'
 import styles from '@/app/(client)/profile/components/profile.module.scss'
 import { PublicationContext } from '@/components/posts/InfiniteScrollPosts'
@@ -21,8 +21,8 @@ const DynamicPostItem = dynamic(() => import('@/components/posts/PostItem'), {
 type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
-  startupPosts?: FullPost[]
-  startupProjects?: FullProject[]
+  startupPosts?: PostType[]
+  startupProjects?: ProjectType[]
   currentUserId?: string
 
   authorId: string
@@ -79,7 +79,7 @@ export default function PinsFeed({
       {selectedFeed === 'posts' ? (
         <section id="PostWrapper" className="flex flex-col">
           <div className="flex flex-col justify-center">
-            {posts?.map((post: FullPost) => (
+            {posts?.map((post: PostType) => (
               <div key={post.id} className="max-w-full">
                 <PublicationContext.Provider
                   value={{ ...post, session: currentUserId as string }}

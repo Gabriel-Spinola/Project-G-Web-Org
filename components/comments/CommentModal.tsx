@@ -2,7 +2,7 @@
 
 import React, { ReactNode, createContext, useState } from 'react'
 import { BiComment } from 'react-icons/bi'
-import { FullPost, FullProject, TDisplayComment } from '@/lib/types/common'
+import { PostType, ProjectType, PublicationComment } from '@/lib/types/common'
 import {
   Modal,
   ModalBody,
@@ -18,7 +18,7 @@ import NewCommentDialog from './NewCommentDialog'
 
 type CommentsCallbacksType =
   | {
-      onFacadeCommentSubmit: (commentData: Partial<TDisplayComment>) => void
+      onFacadeCommentSubmit: (commentData: Partial<PublicationComment>) => void
       onFacadeCommentDeletion: (id: number) => void
       onAddCommentsCount: () => void
       onSubtractCommentsCount: () => void
@@ -30,7 +30,7 @@ export const CommentIdContext = createContext<number | undefined>(undefined)
 
 interface Props {
   commentNumber: number
-  publication: FullPost | FullProject
+  publication: PostType | ProjectType
   targetType: 'projectId' | 'postId'
   icon?: ReactNode
 }
@@ -43,7 +43,7 @@ export default function CommentModal({
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [comments, setComments] = useState<Partial<TDisplayComment>[]>(
+  const [comments, setComments] = useState<Partial<PublicationComment>[]>(
     publication.comments,
   )
   const [commentsCount, setCommentsCount] = useState(commentNumber)
@@ -51,7 +51,7 @@ export default function CommentModal({
   const onAddCommentsCount = () => setCommentsCount((prev) => prev + 1)
   const onSubtractCommentsCount = () => setCommentsCount((prev) => prev - 1)
 
-  function onFacadeCommentSubmit(commentData: Partial<TDisplayComment>) {
+  function onFacadeCommentSubmit(commentData: Partial<PublicationComment>) {
     onAddCommentsCount()
     setComments((prev) => {
       return [...prev, commentData]

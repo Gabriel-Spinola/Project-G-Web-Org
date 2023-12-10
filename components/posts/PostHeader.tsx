@@ -2,14 +2,14 @@
 
 import React from 'react'
 import { User } from '@prisma/client'
-import { FullPost } from '@/lib/types/common'
+import { PostType } from '@/lib/types/common'
 import PostSettings from './PostSettings'
 import Link from 'next/link'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import Avatar from '../Avatar'
 
 interface Props {
-  post: FullPost
+  post: PostType
   isOwner: boolean
 }
 

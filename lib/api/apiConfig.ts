@@ -12,7 +12,6 @@ export const API_ENDPOINTS = {
     posts: 'api/services/posts/',
     projects: 'api/services/projects/',
     users: 'api/services/users/',
-    comments: 'api/services/comments/',
   },
 }
 
