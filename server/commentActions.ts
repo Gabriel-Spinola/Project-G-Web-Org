@@ -21,18 +21,20 @@ export async function postComment(
   try {
     const target = { [replyTarget.type]: replyTarget.id }
 
-    const newComment: Partial<PublicationComment> = await prisma.comment.create({
-      data: {
-        content,
-        authorId,
-        ...target,
-        isEdited: false,
-        createdAt: new Date(Date.now()),
+    const newComment: Partial<PublicationComment> = await prisma.comment.create(
+      {
+        data: {
+          content,
+          authorId,
+          ...target,
+          isEdited: false,
+          createdAt: new Date(Date.now()),
+        },
+        include: {
+          author: { select: { name: true, profilePic: true, image: true } },
+        },
       },
-      include: {
-        author: { select: { name: true, profilePic: true, image: true } },
-      },
-    })
+    )
 
     console.log('Comment (succeeded): ' + JSON.stringify(newComment) + '\n')
 
