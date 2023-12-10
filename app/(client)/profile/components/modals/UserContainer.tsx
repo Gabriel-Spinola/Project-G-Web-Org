@@ -27,7 +27,7 @@ export default function UserContainer({ user }: Props) {
         </Link>
 
         <section className="flex flex-col justify-between align-middle mt-2">
-          <Link href={`/profileuserfollower.id}`} className=" decoration-">
+          <Link href={`/profile/${user.id}`} className=" decoration-">
             <span key={user.id} className="hover:text-medium-primary text-lg">
               {user.name}
             </span>
