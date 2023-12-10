@@ -18,6 +18,8 @@ import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import { IoDocumentAttachOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import { buildValidationErrorMessage } from '@/lib/schemas/actions'
 
 interface ProjectFormState {
   title: string
@@ -35,7 +37,9 @@ export default function CreateProjectForm({
   content,
   projectImages,
 }: Props) {
+  const router = useRouter()
   const { data: session } = useSession()
+  const [isLoading, setIsLoading] = useState(false)
 
   const isEditing = !!content
 
@@ -77,6 +81,8 @@ export default function CreateProjectForm({
 
     const formData = new FormData(event.currentTarget)
 
+    setIsLoading(true)
+
     if (images && images?.length > 0) {
       images.forEach((img: File) => {
         formData.append('images', img)
@@ -88,22 +94,17 @@ export default function CreateProjectForm({
     const validatedForm = validateForm(formData)
 
     if (validatedForm.error) {
-      let errorMessage = ''
-
-      validatedForm.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      toast.warn('Algo no fomulário é invalido no campo: ' + errorMessage)
-
-      return
+      return buildValidationErrorMessage(validatedForm.error, (error) =>
+        toast.warn('Algo no fomulário é invalido no campo: ' + error),
+      )
     }
 
     // NOTE - if projectId exist create new project otherwise we're updating a project
-    const { error } = !projectId
+    const { data, error } = !projectId
       ? await createNewProject(session?.user.id as string, validatedForm.data)
       : await updateProject(projectId, validatedForm.data)
+
+    setIsLoading(false)
 
     if (error) {
       toast.error('Houve uma falha ao criar seu projeto! 😔')
@@ -111,7 +112,9 @@ export default function CreateProjectForm({
       return
     }
 
+    toast.success(() => 'Enviado!')
     setImages(undefined)
+    router.push(`/project/${data}`)
   }
 
   return (
@@ -200,7 +203,13 @@ export default function CreateProjectForm({
 
         <input
           type="submit"
-          value={isEditing ? 'Editar Projeto' : 'Criar projeto'}
+          value={
+            !isLoading
+              ? isEditing
+                ? 'Editar Projeto'
+                : 'Criar projeto'
+              : 'Enviando...'
+          }
           className="hover:cursor-pointer px-16 py-2 rounded-sm text-medium-primary hover:text-darker-white bg-darker-white hover:bg-medium-primary"
         />
       </form>

@@ -14,7 +14,6 @@ export default function UserContainer({ user }: Props) {
       key={user.id}
       className="w-full flex justify-between md:w-[80%] lg:w-[65%] x1:w-[90%] px-2 py-4 border-light-gray/50 rounded-md border-[1px]"
     >
-      {/* USER INFO */}
       <div className="flex gap-4">
         <Link href={`/profile/${user.id}`} className="hover:brightness-75">
           <Avatar
