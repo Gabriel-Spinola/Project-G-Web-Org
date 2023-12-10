@@ -51,13 +51,14 @@ export default function ProjectPost({ project, currentUserId }: Props) {
 
   return (
     // NOTE - PROJECT POST
-    <section className="projectContainer flex flex-col w-full rounded-xl bg-medium-gray">
+    <section className="projectContainer flex flex-col w-full rounded-xl bg-medium-gray mt-2">
       <Link
         href={`/project/${project.id}`}
-        className="p-4 text-lg flex text-darker-white font-medium hover:cursor-pointer hover:underline hover:brightness-75"
+        className="p-4 flex text-2xl text-darker-white text-center items-center font-medium hover:cursor-pointer hover:underline hover:brightness-75"
       >
-        {project.title}
+        <h1 className="text-center items-center w-[100%]">{project.title}</h1>
       </Link>
+
       <section className="w-full flex flex-row-reverse rounded-xl">
         <article className="w-16 flex flex-col items-center h-[480px] md:h-[612px] justify-evenly bg-medium-gray rounded-r-xl">
           <DynamicProjectSettings
