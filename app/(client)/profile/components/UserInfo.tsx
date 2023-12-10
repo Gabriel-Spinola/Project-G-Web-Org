@@ -9,6 +9,7 @@ import Graduations from './Graduations'
 import { IoMailUnread } from 'react-icons/io5'
 import { TbWorldCode } from 'react-icons/tb'
 import { FaLinkedin } from 'react-icons/fa'
+
 import dynamic from 'next/dynamic'
 
 const DynamicEditUser = dynamic(() => import('./EditUserInfo'), { ssr: false })

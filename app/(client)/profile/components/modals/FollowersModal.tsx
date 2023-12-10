@@ -1,8 +1,8 @@
 'use client'
 
-import DisplayUsers from '@/app/(client)/search/_components/DisplayUsers'
 import { UserData } from '@/lib/types/common'
 import {
+  Divider,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
+import UserContainer from './UserContainer'
 
 type Props = {
   followers?: { follower: Partial<UserData> }[]
@@ -39,21 +40,30 @@ export default function FollowersModal({ followers, followersSpan }: Props) {
         <Modal
           isOpen={isOpen as boolean}
           onClose={onClose as () => void}
-          size={'4xl'}
+          size={'xl'}
           isCentered
         >
           <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
 
-          <ModalContent>
+          <ModalContent className="flex flex-col items-center">
             <ModalHeader>
               <h2>Seguidores:</h2>
               <ModalCloseButton />
             </ModalHeader>
 
-            <ModalBody height={'100%'} padding={8}>
-              <DisplayUsers
-                users={followers.map((follower) => follower.follower)}
-              />
+            <Divider />
+
+            <ModalBody
+              className="flex flex-col items-center w-full"
+              height={'100%'}
+              padding={8}
+            >
+              {followers.map((follow) => (
+                <UserContainer
+                  key={follow.follower.id}
+                  user={follow.follower}
+                />
+              ))}
             </ModalBody>
           </ModalContent>
         </Modal>

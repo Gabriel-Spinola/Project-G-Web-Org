@@ -1,8 +1,8 @@
 'use client'
 
-import DisplayUsers from '@/app/(client)/search/_components/DisplayUsers'
 import { UserData } from '@/lib/types/common'
 import {
+  Divider,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
+import UserContainer from './UserContainer'
 
 type Props = {
   following?: { following: Partial<UserData> }[]
@@ -30,7 +31,7 @@ export default function FollowingModal({ following, followingSpan }: Props) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="hover:cursor-pointer" onClick={handleOpenModalCallback}>
         {followingSpan}
       </div>
@@ -39,21 +40,30 @@ export default function FollowingModal({ following, followingSpan }: Props) {
         <Modal
           isOpen={isOpen as boolean}
           onClose={onClose as () => void}
-          size={'4xl'}
+          size={'xl'}
           isCentered
         >
           <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
 
-          <ModalContent>
+          <ModalContent className="flex flex-col items-center">
             <ModalHeader>
-              <h2>Seguindo:</h2>
+              <h2>Seguidores:</h2>
               <ModalCloseButton />
             </ModalHeader>
 
-            <ModalBody height={'100%'} padding={8}>
-              <DisplayUsers
-                users={following.map((following) => following.following)}
-              />
+            <Divider />
+
+            <ModalBody
+              className="flex flex-col items-center w-full"
+              height={'100%'}
+              padding={8}
+            >
+              {following.map((follow) => (
+                <UserContainer
+                  key={follow.following.id}
+                  user={follow.following}
+                />
+              ))}
             </ModalBody>
           </ModalContent>
         </Modal>
