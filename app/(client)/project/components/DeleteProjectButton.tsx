@@ -2,12 +2,13 @@
 
 import React from 'react'
 import { deleteProject } from '../_actions'
-import { useRouter } from 'next/navigation'
+import { FaTrash } from 'react-icons/fa'
 
 export function DeleteProject({ id }: { id: string }) {
   return (
     <button
       type="button"
+      className="w-full h-8 flex justify-center items-center"
       onClick={async () => {
         const { data, error } = await deleteProject(id)
 
@@ -18,24 +19,7 @@ export function DeleteProject({ id }: { id: string }) {
         console.log(data)
       }}
     >
-      Delete project
+      <FaTrash size={20} />
     </button>
-  )
-}
-
-export function UpdateProject({ id }: { id: string }) {
-  const router = useRouter()
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => {
-          router.push(`/project/mutate/${id}`)
-        }}
-      >
-        Update Project
-      </button>
-    </>
   )
 }
