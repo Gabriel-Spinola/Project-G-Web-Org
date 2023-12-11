@@ -55,6 +55,7 @@ export type PublicationAuthor = Pick<User, 'name' | 'image' | 'profilePic'>
 
 export type Follower = SafeUser
 export type Following = SafeUser
+//
 
 export type UserData = Partial<SafeUser> & {
   following: { following: Following }[]
