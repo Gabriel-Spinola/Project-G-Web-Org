@@ -39,7 +39,7 @@ export default function DesktopNavbar() {
               alt="Logo"
               width={250}
               height={72}
-              objectFit="contain"
+              style={{ objectFit: 'contain' }}
               quality={100}
             />
           </Link>

@@ -18,6 +18,7 @@ import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import { IoDocumentAttachOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
+import { MdClose } from 'react-icons/md'
 
 interface ProjectFormState {
   title: string
@@ -27,7 +28,6 @@ interface ProjectFormState {
 type Props = {
   projectId?: string
   content?: ProjectFormState
-  files?: string[]
   projectImages?: string[]
 }
 
@@ -148,13 +148,7 @@ export default function CreateProjectForm({
           required
         />
         <div className="flex gap-8">
-          <input
-            type="file"
-            accept=".pdf"
-            id="file"
-            name="file"
-            className="hidden"
-          />
+          <input type="file" accept=".pdf" className="hidden" />
           <label
             htmlFor="file"
             className="p-2 flex w-[240px] bg-darker-white text-medium-primary hover:bg-medium-primary hover:text-darker-white cursor-pointer rounded-sm"
@@ -184,13 +178,17 @@ export default function CreateProjectForm({
           {images && (
             <div className="flex gap-2">
               {images.map((image, index) => (
-                <div key={index}>
+                <div
+                  key={index}
+                  className="p-2 flex flex-col justify-end bg-darker-white rounded-md"
+                >
                   {/* Remove Img Button */}
                   <button
                     onClick={() => onImageRemovedFromPreview(index)}
                     type="button"
+                    className="flex justify-end"
                   >
-                    <span>X</span>
+                    <MdClose size={24} />
                   </button>
 
                   <Image

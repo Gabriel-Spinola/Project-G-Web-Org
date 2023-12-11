@@ -16,6 +16,7 @@ export default async function Pins({ params }: Props) {
     page: 1,
     authorId: id,
   })
+
   const { data: projects, error: projectError } = await fetchPinnedProjects({
     page: 1,
     authorId: id,
@@ -24,8 +25,10 @@ export default async function Pins({ params }: Props) {
   const session = await getServerSession(AuthOptions)
 
   return (
-    <main className="flex min-h-screen justify-around flex-col w-full items-center bg-darker-white mt-[88px]">
-      <Link href={`/profile/${id}/`}>Retornar ao perfil</Link>
+    <main className="flex min-h-screen justify-start flex-col w-full items-center bg-darker-white mt-[88px]">
+      <Link className="mt-8" href={`/profile/${id}/`}>
+        Retornar ao perfil
+      </Link>
 
       <div className="feed flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
         <Suspense fallback={<span>loading feed...</span>}>

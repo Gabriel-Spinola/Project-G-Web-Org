@@ -30,9 +30,11 @@ export default async function Home() {
       </Suspense>
 
       <div className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
-        <PostSubmitFragment />
+        <Suspense fallback={<Loader />}>
+          <PostSubmitFragment />
+        </Suspense>
 
-        <Suspense fallback={<span>Carregando o feed</span>}>
+        <Suspense fallback={<Loader />}>
           {!posts.error ? (
             <section className="relative sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px]">
               <InfiniteScrollPosts

@@ -1,6 +1,6 @@
 'use client'
 
-import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
+import { PublicationAuthor, PublicationComment } from '@/lib/types/common'
 import React, { useContext, useState } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
@@ -17,7 +17,7 @@ import { BiComment, BiSolidComment } from 'react-icons/bi'
 import { ReplyCallbacks } from './Comment'
 
 type Props = {
-  comment: Partial<TDisplayComment>
+  comment: Partial<PublicationComment>
 }
 
 export default function CommentReply({ comment }: Props) {

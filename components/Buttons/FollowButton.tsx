@@ -34,6 +34,8 @@ export default function FollowButton({
       if (error) {
         console.error(error)
         toast.error('Ouve ulguma falha ao seguir o usuário 😔')
+
+        setIsFollowing(false)
       }
     } else {
       const { error } = await unfollow(authorId, targetId)
@@ -42,6 +44,7 @@ export default function FollowButton({
         console.error(error)
 
         toast.error('Ouve ulguma falha ao deixar de seguir o usuário 😔')
+        setIsFollowing(true)
       }
     }
   }

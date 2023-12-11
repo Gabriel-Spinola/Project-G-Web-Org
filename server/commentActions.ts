@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/database/prisma'
-import { ESResponse, TDisplayComment } from '@/lib/types/common'
+import { ESResponse, PublicationComment } from '@/lib/types/common'
 
 export async function postComment(
   content: string | undefined,
@@ -10,7 +10,7 @@ export async function postComment(
     type: 'postId' | 'parentCommentId' | 'projectId'
   },
   authorId: string,
-): Promise<ESResponse<Partial<TDisplayComment>>> {
+): Promise<ESResponse<Partial<PublicationComment>>> {
   if (!content || !authorId) {
     return {
       data: null,
@@ -21,18 +21,20 @@ export async function postComment(
   try {
     const target = { [replyTarget.type]: replyTarget.id }
 
-    const newComment: Partial<TDisplayComment> = await prisma.comment.create({
-      data: {
-        content,
-        authorId,
-        ...target,
-        isEdited: false,
-        createdAt: new Date(Date.now()),
+    const newComment: Partial<PublicationComment> = await prisma.comment.create(
+      {
+        data: {
+          content,
+          authorId,
+          ...target,
+          isEdited: false,
+          createdAt: new Date(Date.now()),
+        },
+        include: {
+          author: { select: { name: true, profilePic: true, image: true } },
+        },
       },
-      include: {
-        author: { select: { name: true, profilePic: true, image: true } },
-      },
-    })
+    )
 
     console.log('Comment (succeeded): ' + JSON.stringify(newComment) + '\n')
 

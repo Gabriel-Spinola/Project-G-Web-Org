@@ -8,20 +8,9 @@ async function handleGet(id: string) {
   try {
     const data: UserData | null = await prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        title: true,
-        description: true,
-        graduations: true,
-        profilePic: true,
-        location: true,
-        image: true,
-        siteUrl: true,
-        linkedinUrl: true,
-        contactPhone: true,
-        email: true,
-        _count: { select: { followers: true, following: true } },
+      include: {
+        followers: { select: { follower: true } },
+        following: { select: { following: true } },
       },
     })
 
@@ -30,8 +19,8 @@ async function handleGet(id: string) {
     }
 
     return NextResponse.json({ data }, { status: 200 })
-  } catch (e: unknown) {
-    console.error(e)
+  } catch (error: unknown) {
+    console.error(error)
 
     return NextResponse.json({ data: 'failed' }, { status: 400 })
   }

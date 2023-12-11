@@ -1,0 +1,40 @@
+.gridcontainer {
+  justify-content: space-evenly;
+  width: 100%;
+  columns: 1;
+  gap: 32px;
+}
+@media (min-width: 640px) {
+  .gridcontainer{
+    columns: 2;
+    padding: 16px;
+  }
+}
+@media (min-width: 768px) {
+  .gridcontainer{
+    columns: 3;
+    padding: 16px;
+  }
+}
+@media (min-width: 1280px) {
+  .gridcontainer{
+    columns: 4;
+    padding: 32px;
+  }
+
+}
+
+.gridcontainer div{
+  position: relative;
+  background: #000;
+  width: 100%;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+@media (min-width: 1280px) {
+  .gridcontainer div {
+    margin-bottom: 32px;
+  }
+}

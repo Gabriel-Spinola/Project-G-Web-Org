@@ -18,9 +18,11 @@ import { PublicationContext } from './InfiniteScrollPosts'
 import dynamic from 'next/dynamic'
 import PinButton from '../Buttons/PinButton'
 import Loader from '../Loader'
+import { BiComment } from 'react-icons/bi'
 
 const DynamicCommentModal = dynamic(() => import('../comments/CommentModal'), {
   ssr: false,
+  loading: () => <BiComment className="mt-[2px]" size={23} />,
 })
 
 const DynamicImagesCorousel = dynamic(() => import('./images/PostImages'), {

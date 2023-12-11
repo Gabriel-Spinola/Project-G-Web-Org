@@ -14,6 +14,8 @@ import Link from 'next/link'
 import CreateProjectForm from '../components/CreateProjectForm'
 import CreateProjectFormSkeleton from '../components/skeletons/CreateProjectFormSkeleton'
 import Loader from '@/components/Loader'
+import { isProfissionalAccount } from '@/lib/auth/actions'
+import { notFound } from 'next/navigation'
 
 export default async function CreateProject() {
   const session = await getServerSession(AuthOptions)
@@ -24,6 +26,10 @@ export default async function CreateProject() {
         <Link href="/login">SignUp first</Link>
       </Suspense>
     )
+  }
+
+  if (!isProfissionalAccount(session)) {
+    return notFound()
   }
 
   return (

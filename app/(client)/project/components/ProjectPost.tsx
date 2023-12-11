@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { LikeProjectButton } from './LikeProjectButton'
-import { FullProject } from '@/lib/types/common'
+import { ProjectType } from '@/lib/types/common'
 import { getProfilePicURL } from '@/lib/uiHelpers/profilePicActions'
 import { Like, Pin, User } from '@prisma/client'
 import { MdComment } from 'react-icons/md'
@@ -11,6 +11,7 @@ import PinButton from '@/components/Buttons/PinButton'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import Avatar from '@/components/Avatar'
+import './project.css'
 
 const DynamicCommentModal = dynamic(
   () => import('@/components/comments/CommentModal'),
@@ -22,7 +23,7 @@ const DynamicProjectSettings = dynamic(() => import('./ProjectSettingsMenu'), {
 })
 
 type Props = {
-  project: FullProject
+  project: ProjectType
   currentUserId?: string
 }
 
@@ -50,50 +51,51 @@ export default function ProjectPost({ project, currentUserId }: Props) {
 
   return (
     // NOTE - PROJECT POST
-    <section className="w-full flex flex-row-reverse h-[480px] md:h-[612px] rounded-xl">
-      <section className="w-16 h-full flex flex-col items-center justify-evenly bg-medium-gray rounded-r-xl">
-        <DynamicProjectSettings
-          currentUserId={currentUserId}
-          project={project}
-        />
-
-        <LikeProjectButton
-          params={{
-            option: 'projectId',
-            targetId: project.id,
-            likes: project.likes.length,
-            isLiked,
-          }}
-        />
-
-        <Link href={`/profile/${project.author?.name}`}>
-          <Avatar
-            size="lg"
-            imageUrl={getProfilePicURL(project.author as User)}
+    <section className="projectContainer flex flex-col w-full rounded-xl bg-medium-gray mt-2">
+      <section className="w-full flex flex-row-reverse rounded-xl">
+        <article className="w-16 flex flex-col items-center h-[480px] md:h-[612px] justify-evenly bg-medium-gray rounded-r-xl">
+          <DynamicProjectSettings
+            currentUserId={currentUserId}
+            project={project}
           />
-        </Link>
 
-        <PinButton
-          isPinned={isPinned}
-          targetId={project.id}
-          option="projectId"
-          iconColor="pure-white"
-        />
-
-        <div className="text-pure-white hover:text-medium-primary">
-          <DynamicCommentModal
-            commentNumber={getCommentsCount()}
-            publication={project}
-            targetType="projectId"
-            icon={<MdComment size={24} />}
+          <LikeProjectButton
+            params={{
+              option: 'projectId',
+              targetId: project.id,
+              likes: project.likes.length,
+              isLiked,
+            }}
           />
-        </div>
+
+          <Link href={`/profile/${project.author?.name}`}>
+            <Avatar
+              size="lg"
+              imageUrl={getProfilePicURL(project.author as User)}
+            />
+          </Link>
+
+          <PinButton
+            isPinned={isPinned}
+            targetId={project.id}
+            option="projectId"
+            iconColor="pure-white"
+          />
+
+          <div className="text-pure-white hover:text-medium-primary">
+            <DynamicCommentModal
+              commentNumber={getCommentsCount()}
+              publication={project}
+              targetType="projectId"
+              icon={<MdComment size={24} />}
+            />
+          </div>
+        </article>
+        <ProjectImagesCarousel
+          imagesSrc={project.images}
+          projectOwner={project.authorId}
+        />
       </section>
-
-      <ProjectImagesCarousel
-        imagesSrc={project.images}
-        projectOwner={project.authorId}
-      />
     </section>
   )
 }

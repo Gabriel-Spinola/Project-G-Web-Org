@@ -28,7 +28,7 @@ export default function ProjectImagesCarousel({
 
   return (
     <>
-      <aside className="relative flex flex-col w-full justify-end">
+      <aside className="relative flex flex-col w-full justify-end h-[480px] md:h-[612px]">
         {/* NOTE - Image and controllers Wrapper */}
         <section className="relative h-full w-full">
           <div className="absolute flex w-full h-full items-center">
@@ -53,7 +53,7 @@ export default function ProjectImagesCarousel({
             )}
           </div>
           {/* NOTE - Image Wrapper */}
-          <div className="overflow-hidden flex items-center justify-center bg-darker-gray rounded-l-lg w-full h-full">
+          <div className="overflow-hidden flex items-center justify-center bg-darker-gray rounded-lg w-full h-full">
             {currentImage && (
               <Image
                 alt=""

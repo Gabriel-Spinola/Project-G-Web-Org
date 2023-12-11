@@ -1,13 +1,13 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
 import { requestFactory } from '@/lib/api/requestHandler'
-import { ESResponse, FullProject } from '@/lib/types/common'
+import { ESResponse, ProjectType } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 
 export async function fetchProjects(
   page = 1,
   signal?: AbortSignal,
   profileId?: string,
-): Promise<ESResponse<FullProject[]>> {
+): Promise<ESResponse<ProjectType[]>> {
   const endpoint = profileId
     ? `${API_URL}${API_ENDPOINTS.services.projects}${page}/${profileId}`
     : `${API_URL}${API_ENDPOINTS.services.projects}${page}/`
@@ -29,7 +29,7 @@ export async function fetchProjects(
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: FullProject[] } = await response.json()
+    const { data }: { data: ProjectType[] } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {
@@ -39,7 +39,7 @@ export async function fetchProjects(
 
 export async function fetchProjectById(
   id: string,
-): Promise<ESResponse<FullProject>> {
+): Promise<ESResponse<ProjectType>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,
@@ -59,7 +59,7 @@ export async function fetchProjectById(
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: FullProject } = await response.json()
+    const { data }: { data: ProjectType } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {
@@ -69,7 +69,7 @@ export async function fetchProjectById(
 
 export async function deleteProject(
   id: string,
-): Promise<ESResponse<FullProject>> {
+): Promise<ESResponse<ProjectType>> {
   try {
     const response = await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}only/${id}`,
@@ -88,7 +88,7 @@ export async function deleteProject(
       throw new Error("Response's not ok: " + data)
     }
 
-    const { data }: { data: FullProject } = await response.json()
+    const { data }: { data: ProjectType } = await response.json()
 
     return ESSucceed(data)
   } catch (error: unknown) {

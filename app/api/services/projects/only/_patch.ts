@@ -73,5 +73,5 @@ export async function handlePatch(
     }
   }
 
-  return NextResponse.json({ data: data as Project }, { status: 200 })
+  return NextResponse.json({ data: data?.id as string }, { status: 200 })
 }
