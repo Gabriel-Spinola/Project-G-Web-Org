@@ -3,6 +3,8 @@ import { fetchProjects } from './_actions'
 import ProjectFeed from './components/ProjectFeed'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import { isProfissionalAccount } from '@/lib/auth/actions'
+import Link from 'next/link'
 
 export default async function Projects() {
   const { data: projects, error } = await fetchProjects()
@@ -19,6 +21,18 @@ export default async function Projects() {
           <ProjectFeed
             initialPublication={projects ?? undefined}
             currentUserId={session?.user.id}
+            newProjectLink={
+              <>
+                {isProfissionalAccount(session) && (
+                  <Link
+                    href={'/project/mutate'}
+                    className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]"
+                  >
+                    Crie um Projeto
+                  </Link>
+                )}
+              </>
+            }
           />
         </Suspense>
       </div>

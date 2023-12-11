@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { fetchProjects } from '../_actions'
 import { useInView } from 'react-intersection-observer'
 import { ESResponse, ProjectType } from '@/lib/types/common'
@@ -9,9 +9,6 @@ import dynamic from 'next/dynamic'
 import Loader from '@/components/Loader'
 import ProjectPostSkeleton from './skeletons/ProjectPostSkeleton'
 import { Session } from 'next-auth'
-import Link from 'next/link'
-import { useSession } from 'next-auth/react'
-import { isProfissionalAccount } from '@/lib/auth/actions'
 
 const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
   ssr: false,
@@ -28,6 +25,7 @@ type Props = {
     signal?: AbortSignal,
     authorId?: string,
   ) => Promise<ESResponse<ProjectType[]>>
+  newProjectLink?: ReactNode
 }
 
 export default function ProjectFeed({
@@ -35,8 +33,8 @@ export default function ProjectFeed({
   profileId,
   currentUserId,
   customFetch,
+  newProjectLink,
 }: Props) {
-  const { data: session } = useSession()
   const [ref, inView] = useInView()
 
   const { publications: projects, noPublicationFound: noProjectFound } =
@@ -47,14 +45,7 @@ export default function ProjectFeed({
       id="feed"
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
-      {isProfissionalAccount(session) && (
-        <Link
-          href={'/project/mutate'}
-          className="mt-8 w-full bg-darker-gray px-8 py-8 rounded-lg text-darker-white text-xl hover:scale-[101%]"
-        >
-          Crie um Projeto
-        </Link>
-      )}
+      {newProjectLink}
 
       {projects?.map((project: ProjectType) => (
         <DynamicProjectPost
