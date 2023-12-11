@@ -8,7 +8,6 @@ import { useInView } from 'react-intersection-observer'
 import { useFeed } from '@/hooks/useFeed'
 import { fetchPinnedPosts, fetchPinnedProjects } from '../../_actions'
 import ProjectFeed from '@/app/(client)/project/components/ProjectFeed'
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import PostSkeleton from '@/components/posts/skeleton/PostSkeleton'
 import Loader from '@/components/Loader'
@@ -105,14 +104,7 @@ export default function PinsFeed({
           </div>
         </section>
       ) : (
-        <div className="w-full flex flex-col items-center justify-center gap-8 ">
-          <Link
-            className={`w-full mt-8 p-8 bg-gradient-to-tl bg-medium-gray text-darker-white hover:font-semibold rounded-xl hover:scale-[101%] text-start text-lg`}
-            href="/project/mutate"
-          >
-            Adicione um projeto
-          </Link>
-
+        <div className="w-full flex flex-col">
           <Suspense fallback={<span>Loading projects feed...</span>}>
             <ProjectFeed
               initialPublication={startupProjects}
