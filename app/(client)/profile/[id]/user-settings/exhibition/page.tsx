@@ -7,6 +7,7 @@ import Link from 'next/link'
 import UpdateNameImage from './components/UpdateNameImage'
 import { EditUserInfoForm } from './components/EditUserInfoForm'
 import Avatar from '@/components/Avatar'
+import { notFound } from 'next/navigation'
 
 type Props = {
   params: { id: string }
@@ -22,9 +23,9 @@ export default async function ProfileSettings({ params }: Props) {
 
   const isOwner = session?.user.id === user?.id
 
-  if (!user) return
-
-  if (!isOwner) return
+  if (!isOwner || !session) {
+    return notFound()
+  }
 
   return (
     <main className="relative w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">

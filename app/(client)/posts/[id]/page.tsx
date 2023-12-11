@@ -11,8 +11,6 @@ type Params = { params: { id: string } }
 export default async function PostPage({ params }: Params) {
   const { id } = params
 
-  // console.log(id)
-
   const session = await getServerSession(AuthOptions)
   const { data, error } = await fetchPost(id)
 
@@ -26,8 +24,6 @@ export default async function PostPage({ params }: Params) {
   const isPinned: boolean =
     data?.pins?.some((pin: Partial<Pin>) => pin.userId === session?.user.id) ??
     false
-
-  console.error(error)
 
   return (
     <main className="mt-[88px] h-[calc(100vh-88px)] flex bg-darker-white items-center justify-center p-8">

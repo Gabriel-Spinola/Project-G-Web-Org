@@ -18,6 +18,7 @@ import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
 import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
 import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
 import ProfileFeedController from '../components/ProfileFeedController'
+import { notFound } from 'next/navigation'
 
 type Props = {
   params: { id: string }
@@ -37,6 +38,10 @@ export default async function Profile({ params }: Props) {
     user?.id as string,
     isOwner,
   )
+
+  if (!isOwner || !session) {
+    return notFound()
+  }
 
   return (
     <main className="mt-[88px]">

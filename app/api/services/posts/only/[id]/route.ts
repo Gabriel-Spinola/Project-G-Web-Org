@@ -46,8 +46,6 @@ async function handler(req: Request, { params }: { params: { id: string } }) {
 
   const { id } = params
 
-  console.log(id)
-
   if (!id) {
     return NextResponse.json(
       { data: "FAILED:SERVICES/only GET: Id can't be null" },

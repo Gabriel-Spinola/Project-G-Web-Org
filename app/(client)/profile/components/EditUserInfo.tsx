@@ -14,13 +14,5 @@ interface Params {
 }
 
 export default function EditUserInfo({ user, isOwner }: Params) {
-  return (
-    <div>
-      {isOwner && (
-        <>
-          <DynamicEditUserModal user={user} />
-        </>
-      )}
-    </div>
-  )
+  return <div>{isOwner && <DynamicEditUserModal user={user} />}</div>
 }
