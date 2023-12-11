@@ -7,7 +7,7 @@ import Link from 'next/link'
 import PrivacySettings from './components/ChangeEmailForm'
 import ChangePasswordForm from './components/ChangePasswordForm'
 import Avatar from '@/components/Avatar'
-import ChangePostition from './components/ChangePostition'
+import ChangePosition from './components/ChangePostition'
 import { notFound } from 'next/navigation'
 
 type Props = {
@@ -68,7 +68,7 @@ export default async function ProfileSettings({ params }: Props) {
         <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
         <ChangePasswordForm user={user} />
         <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
-        {/* <ChangePostition /> */}
+        <ChangePosition id={user?.id as string} />
       </section>
     </main>
   )

@@ -1,35 +1,64 @@
+import { prisma } from '@/lib/database/prisma'
+import { $Enums } from '@prisma/client'
 import React from 'react'
 
-export default function ChangePostition() {
+type Props = { id: string }
+
+export default function ChangePosition({ id }: Props) {
+  async function handleChange(formData: FormData) {
+    'use server'
+
+    const userPos = formData.get('userPosition')?.toString()
+    console.log(userPos)
+
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: { position: userPos as $Enums.Positions },
+      })
+
+      console.log(updatedUser)
+    } catch (error: unknown) {
+      console.error(error)
+    }
+  }
+
   return (
-    <form className="flex w-full justify-start items-end gap-8">
-      <aside className="flex">
+    <form
+      action={handleChange}
+      className="flex w-full justify-start items-end gap-8"
+    >
+      <div className="flex">
         <input
           type="radio"
           id="defaultUser"
           name="userPosition"
-          value="defaultUser"
+          value={$Enums.Positions.DefaultUser}
         />
         <label htmlFor="defaultUser">Usuário Padrão</label>
-      </aside>
-      <aside className="flex">
+      </div>
+
+      <div className="flex">
         <input
           type="radio"
           id="professionalUser"
           name="userPosition"
-          value="professionalUser"
+          value={$Enums.Positions.Professional}
         />
         <label htmlFor="defaultUser">Usuário Profissional</label>
-      </aside>
-      <aside className="flex">
+      </div>
+
+      <div className="flex">
         <input
           type="radio"
-          id="defaultUser"
+          id="office"
           name="userPosition"
-          value="defaultUser"
+          value={$Enums.Positions.Office}
         />
         <label htmlFor="defaultUser">Conta de escritório</label>
-      </aside>
+      </div>
+
+      <input type="submit" value="submit" />
     </form>
   )
 }
