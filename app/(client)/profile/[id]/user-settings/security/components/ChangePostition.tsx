@@ -2,9 +2,9 @@ import { prisma } from '@/lib/database/prisma'
 import { $Enums } from '@prisma/client'
 import React from 'react'
 
-type Props = { id: string }
+type Props = { id: string; currentPosition: $Enums.Positions }
 
-export default function ChangePosition({ id }: Props) {
+export default function ChangePosition({ id, currentPosition }: Props) {
   async function handleChange(formData: FormData) {
     'use server'
 
@@ -34,6 +34,7 @@ export default function ChangePosition({ id }: Props) {
           id="defaultUser"
           name="userPosition"
           value={$Enums.Positions.DefaultUser}
+          checked={currentPosition === $Enums.Positions.DefaultUser}
         />
         <label htmlFor="defaultUser">Usuário Padrão</label>
       </div>
@@ -44,6 +45,7 @@ export default function ChangePosition({ id }: Props) {
           id="professionalUser"
           name="userPosition"
           value={$Enums.Positions.Professional}
+          checked={currentPosition === $Enums.Positions.Professional}
         />
         <label htmlFor="defaultUser">Usuário Profissional</label>
       </div>
@@ -54,6 +56,7 @@ export default function ChangePosition({ id }: Props) {
           id="office"
           name="userPosition"
           value={$Enums.Positions.Office}
+          checked={currentPosition === $Enums.Positions.Office}
         />
         <label htmlFor="defaultUser">Conta de escritório</label>
       </div>

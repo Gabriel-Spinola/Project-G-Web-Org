@@ -65,6 +65,7 @@ export default async function ProfileSettings({ params }: Props) {
           </li>
         </ul>
       </aside>
+
       <section className="w-full md:w-[65vw] x1:w-[70vw] p-4 lg:p-8 overflow-auto">
         <UpdateNameImage user={user} />
         <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
