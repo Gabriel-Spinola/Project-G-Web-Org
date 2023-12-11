@@ -39,6 +39,7 @@ export default function ChangePosition({ id, currentPosition }: Props) {
           <FaUser />
         </label>
       </aside>
+
       <aside className="flex gap-4">
         <label htmlFor="defaultUser">
           <input
@@ -51,6 +52,7 @@ export default function ChangePosition({ id, currentPosition }: Props) {
           <FaSuitcase />
         </label>
       </aside>
+
       <aside className="flex gap-4">
         <label htmlFor="officeUser">
           <input

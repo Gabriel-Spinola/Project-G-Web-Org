@@ -70,7 +70,7 @@ export default function SelectedPostItem({
   }
 
   return (
-    <div className={`${styles.post}`}>
+    <div className={`${styles.post} lg:min-w-[800px]`}>
       <PostHeader post={post} isOwner={isOwner} />
 
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
