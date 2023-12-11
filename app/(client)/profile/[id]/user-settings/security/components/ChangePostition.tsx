@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/prisma'
 import { $Enums } from '@prisma/client'
 import React from 'react'
+import { FaBuilding, FaSuitcase, FaUser } from 'react-icons/fa'
+import styles from './changePositions.module.scss'
 
 type Props = { id: string; currentPosition: $Enums.Positions }
 
@@ -24,44 +26,43 @@ export default function ChangePosition({ id, currentPosition }: Props) {
   }
 
   return (
-    <form
-      action={handleChange}
-      className="flex w-full justify-start items-end gap-8"
-    >
-      <div className="flex">
-        <input
-          type="radio"
-          id="defaultUser"
-          name="userPosition"
-          value={$Enums.Positions.DefaultUser}
-          checked={currentPosition === $Enums.Positions.DefaultUser}
-        />
-        <label htmlFor="defaultUser">Usuário Padrão</label>
-      </div>
-
-      <div className="flex">
-        <input
-          type="radio"
-          id="professionalUser"
-          name="userPosition"
-          value={$Enums.Positions.Professional}
-          checked={currentPosition === $Enums.Positions.Professional}
-        />
-        <label htmlFor="defaultUser">Usuário Profissional</label>
-      </div>
-
-      <div className="flex">
-        <input
-          type="radio"
-          id="office"
-          name="userPosition"
-          value={$Enums.Positions.Office}
-          checked={currentPosition === $Enums.Positions.Office}
-        />
-        <label htmlFor="defaultUser">Conta de escritório</label>
-      </div>
-
-      <input type="submit" value="submit" />
+    <form action={handleChange} className={styles.positionForm}>
+      <aside className="flex gap-4">
+        <label htmlFor="defaultUser">
+          <input
+            type="radio"
+            id="defaultUser"
+            name="userPosition"
+            value={$Enums.Positions.DefaultUser}
+            checked={currentPosition === $Enums.Positions.DefaultUser}
+          />
+          <FaUser />
+        </label>
+      </aside>
+      <aside className="flex gap-4">
+        <label htmlFor="defaultUser">
+          <input
+            type="radio"
+            id="professionalUser"
+            name="userPosition"
+            value={$Enums.Positions.Professional}
+            checked={currentPosition === $Enums.Positions.Professional}
+          />
+          <FaSuitcase />
+        </label>
+      </aside>
+      <aside className="flex gap-4">
+        <label htmlFor="officeUser">
+          <input
+            type="radio"
+            id="officeUser"
+            name="userPosition"
+            value={$Enums.Positions.Office}
+            checked={currentPosition === $Enums.Positions.Office}
+          />
+          <FaBuilding />
+        </label>
+      </aside>
     </form>
   )
 }
