@@ -27,8 +27,6 @@ export default async function PostPage({ params }: Params) {
     data?.pins?.some((pin: Partial<Pin>) => pin.userId === session?.user.id) ??
     false
 
-  console.error(error)
-
   return (
     <main className="mt-[88px] h-[calc(100vh-88px)] bg-darker-white">
       <Suspense fallback={<Loader />}>
