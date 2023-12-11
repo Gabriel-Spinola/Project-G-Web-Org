@@ -42,7 +42,7 @@ export default function SelectedPostItem() {
   if (!publicationCtx) {
     return (
       <section>
-        <p>Este post não foi achado</p>
+        <p>Este post não foi encontrado</p>
         <></>
       </section>
     )
