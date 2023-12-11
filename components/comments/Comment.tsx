@@ -1,6 +1,6 @@
 'use client'
 
-import { PublicationAuthor, TDisplayComment } from '@/lib/types/common'
+import { PublicationAuthor, PublicationComment } from '@/lib/types/common'
 import React, { createContext, useContext, useState } from 'react'
 import { LikeButton } from '../Buttons/LikeButton'
 import { Like } from '@prisma/client'
@@ -16,11 +16,11 @@ import { FaTrash } from 'react-icons/fa'
 import { deleteComment } from '@/server/likeActions'
 
 type Props = {
-  comment: Partial<TDisplayComment>
+  comment: Partial<PublicationComment>
 }
 
 type ReplyCallbacksType = {
-  onReply: (data: Partial<TDisplayComment>) => void
+  onReply: (data: Partial<PublicationComment>) => void
   onReplyDeletion: (id: number) => void
 }
 
@@ -33,11 +33,11 @@ export default function Comment({ comment }: Props) {
   const [openReplies, setOpenReplies] = useState<boolean>(false)
   const context = useContext(CommentCallbacks)
 
-  const [replies, setReplies] = useState<Partial<TDisplayComment>[]>(
+  const [replies, setReplies] = useState<Partial<PublicationComment>[]>(
     comment.replies ?? [],
   )
 
-  function handleFacadeReplySubmit(commentData: Partial<TDisplayComment>) {
+  function handleFacadeReplySubmit(commentData: Partial<PublicationComment>) {
     context?.onAddCommentsCount()
     setReplies((prev) => [...prev, commentData])
   }

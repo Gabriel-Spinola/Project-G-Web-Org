@@ -1,7 +1,7 @@
 'use client'
 
 import { GiExpand } from 'react-icons/gi'
-import { FullPost, FullProject } from '@/lib/types/common'
+import { PostType, ProjectType } from '@/lib/types/common'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
@@ -10,7 +10,7 @@ const DynamicSettingsMenu = dynamic(() => import('./PostSettingsMenu'), {
 })
 
 interface Props {
-  publication: FullPost | FullProject
+  publication: PostType | ProjectType
   isOwner: boolean
 }
 

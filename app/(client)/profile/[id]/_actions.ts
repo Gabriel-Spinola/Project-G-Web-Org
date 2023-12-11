@@ -1,6 +1,6 @@
 import { API_ENDPOINTS, API_URL } from '@/lib/api/apiConfig'
 import { requestFactory } from '@/lib/api/requestHandler'
-import { FullPost, FullProject } from '@/lib/types/common'
+import { PostType, ProjectType } from '@/lib/types/common'
 
 type FetchParams = {
   page: number
@@ -8,7 +8,7 @@ type FetchParams = {
   signal?: AbortSignal
 }
 
-export const fetchPinnedPosts = requestFactory<FetchParams, FullPost[]>(
+export const fetchPinnedPosts = requestFactory<FetchParams, PostType[]>(
   async (params) =>
     await fetch(
       `${API_URL}${API_ENDPOINTS.services.posts}pins/${params.page}/${params.authorId}/`,
@@ -24,7 +24,7 @@ export const fetchPinnedPosts = requestFactory<FetchParams, FullPost[]>(
     ),
 )
 
-export const fetchPinnedProjects = requestFactory<FetchParams, FullProject[]>(
+export const fetchPinnedProjects = requestFactory<FetchParams, ProjectType[]>(
   async (params) =>
     await fetch(
       `${API_URL}${API_ENDPOINTS.services.projects}pins/${params.page}/${params.authorId}/`,

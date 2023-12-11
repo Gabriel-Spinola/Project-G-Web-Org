@@ -2,6 +2,7 @@ import { User } from '@prisma/client'
 import { NextResponse } from 'next/server'
 import handlePatch from './_patch'
 import handleGet from './_get'
+import { handlePost } from './_post'
 
 async function handler(
   req: Request,
@@ -11,6 +12,12 @@ async function handler(
 
   if (req.method === 'GET') {
     return handleGet()
+  }
+
+  if (req.method === 'POST') {
+    const data: Pick<User, 'name' | 'email' | 'password'> = await req.json()
+
+    return handlePost(data)
   }
 
   // ANCHOR - Patch request **will not** handle image updating

@@ -1,17 +1,17 @@
 import { prisma } from '@/lib/database/prisma'
-import { ESResponse, FullProject } from '@/lib/types/common'
+import { ESResponse, ProjectType } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { NextResponse } from 'next/server'
 
 async function getPins(
   page: number,
   authorId: string,
-): Promise<ESResponse<FullProject[]>> {
+): Promise<ESResponse<ProjectType[]>> {
   const take = 3
   const skip = (page - 1) * take
 
   try {
-    const publication: FullProject[] = await prisma.project.findMany({
+    const publication: ProjectType[] = await prisma.project.findMany({
       where: { pins: { some: { user: { id: authorId } } } },
       skip,
       take,

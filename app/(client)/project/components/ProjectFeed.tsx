@@ -1,30 +1,31 @@
 'use client'
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { fetchProjects } from '../_actions'
 import { useInView } from 'react-intersection-observer'
-import { ESResponse, FullProject } from '@/lib/types/common'
+import { ESResponse, ProjectType } from '@/lib/types/common'
 import { useFeed } from '@/hooks/useFeed'
 import dynamic from 'next/dynamic'
 import Loader from '@/components/Loader'
+import ProjectPostSkeleton from './skeletons/ProjectPostSkeleton'
+import { Session } from 'next-auth'
 
 const DynamicProjectPost = dynamic(() => import('./ProjectPost'), {
   ssr: false,
-  loading: () => (
-    // TODO - SKELETON POST Progess for optimization (Using chakra -> 122kb, without chakra -> 96kb)
-    <h2>Carregando...</h2>
-  ),
+  loading: () => <ProjectPostSkeleton />,
 })
 
 type Props = {
-  initialPublication: FullProject[] | undefined
+  initialPublication: ProjectType[] | undefined
   profileId?: string
   currentUserId?: string
+  session?: Session | null
   customFetch?: (
     page: number,
     signal?: AbortSignal,
     authorId?: string,
-  ) => Promise<ESResponse<FullProject[]>>
+  ) => Promise<ESResponse<ProjectType[]>>
+  newProjectLink?: ReactNode
 }
 
 export default function ProjectFeed({
@@ -32,6 +33,7 @@ export default function ProjectFeed({
   profileId,
   currentUserId,
   customFetch,
+  newProjectLink,
 }: Props) {
   const [ref, inView] = useInView()
 
@@ -43,7 +45,9 @@ export default function ProjectFeed({
       id="feed"
       className="w-full flex flex-col items-center justify-center gap-8 "
     >
-      {projects?.map((project: FullProject) => (
+      {newProjectLink}
+
+      {projects?.map((project: ProjectType) => (
         <DynamicProjectPost
           key={project.id}
           project={project}

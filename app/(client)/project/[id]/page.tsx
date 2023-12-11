@@ -7,12 +7,11 @@
  * @license i.e. MIT
  */
 
-import { Project } from '@prisma/client'
 import React, { Suspense } from 'react'
 import { fetchProjectById } from '../_actions'
-import { DeleteProject, UpdateProject } from '../components/TempButtons'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
+import ProjectSection from './_components/ProjectSection'
 import Loader from '@/components/Loader'
 
 type Props = {
@@ -24,25 +23,16 @@ export default async function Project({ params }: Props) {
 
   const session = await getServerSession(AuthOptions)
   const { data, error } = await fetchProjectById(id)
-  if (error || !data) {
-    console.error(error)
 
-    return <h1>Failed to fetch data</h1>
-  }
-
-  const isOwner = session?.user.id === data.authorId
+  const isOwner = session?.user.id === data?.authorId
 
   return (
-    <main className="mt-[88px]">
-      <h1>{data.title}</h1>
-
+    <main className="mt-[88px] min-h-[calc(100vh-88px)] w-full flex justify-center bg-darker-white">
       <Suspense fallback={<Loader />}>
-        {isOwner && (
-          <>
-            <DeleteProject id={id} />
-            <br />
-            <UpdateProject id={id} />
-          </>
+        {!error ? (
+          <ProjectSection data={data} isOwner={isOwner} id={id} />
+        ) : (
+          <h2>Houve um erro ao carregar o projeto.</h2>
         )}
       </Suspense>
     </main>

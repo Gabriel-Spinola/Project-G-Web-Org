@@ -7,17 +7,8 @@
  * @license i.e. MIT
  */
 
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
+import { NextRequestWithAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
-
-// TODO - add all paths that need authentication
-const onlyAuthenticatedPages = [
-  '/admin/',
-  '/(client)/profile/',
-  '/(client)/temp/',
-  '/api/handlers/',
-  '/api/session/',
-]
 
 // allowed requests per minute
 const rateLimit = 100
@@ -70,17 +61,6 @@ async function middleware(req: NextRequestWithAuth) {
         return NextResponse.json({ message: 'Invalid Secret' }, { status: 401 })
       }
     }
-
-    // NOTE - Storage management
-    // TODO: Storage Cleanup
-  }
-
-  const isEnteringOnAuthPage = onlyAuthenticatedPages.some(
-    (pageUrl: string): boolean => pathName.startsWith(pageUrl),
-  )
-
-  if (isEnteringOnAuthPage) {
-    return withAuth(req)
   }
 }
 

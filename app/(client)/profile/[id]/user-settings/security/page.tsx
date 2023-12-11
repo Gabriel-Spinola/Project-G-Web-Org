@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { getUserData } from '../../../_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
@@ -7,6 +7,10 @@ import Link from 'next/link'
 import PrivacySettings from './components/ChangeEmailForm'
 import ChangePasswordForm from './components/ChangePasswordForm'
 import Avatar from '@/components/Avatar'
+import ChangePosition from './components/ChangePostition'
+import { notFound } from 'next/navigation'
+import { $Enums } from '@prisma/client'
+import Loader from '@/components/Loader'
 
 type Props = {
   params: { id: string }
@@ -22,10 +26,14 @@ export default async function ProfileSettings({ params }: Props) {
 
   const isOwner = session?.user.id === user?.id
 
-  if (isOwner) {
-    return (
-      <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">
-        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
+  if (!isOwner || !session) {
+    return notFound()
+  }
+
+  return (
+    <main className="w-full min-h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">
+      <aside className="w-full md:w-[35vw] x1:w-[30vw] h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
+        <Suspense fallback={<Loader />}>
           <section
             id="user-info"
             className="flex items-center gap-4 px-4 lg:px-8"
@@ -57,13 +65,21 @@ export default async function ProfileSettings({ params }: Props) {
               </h1>
             </li>
           </ul>
-        </aside>
-        <section className="w-full p-8">
+        </Suspense>
+      </aside>
+
+      <section className="w-full p-8 bg-darker-white overflow-auto">
+        <Suspense fallback={<Loader />}>
           <PrivacySettings user={user} />
           <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
           <ChangePasswordForm user={user} />
-        </section>
-      </main>
-    )
-  }
+          <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
+          <ChangePosition
+            id={user?.id as string}
+            currentPosition={user?.position as $Enums.Positions}
+          />
+        </Suspense>
+      </section>
+    </main>
+  )
 }

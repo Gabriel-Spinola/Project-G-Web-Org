@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/database/prisma'
-import { FullProject } from '@/lib/types/common'
+import { ProjectType } from '@/lib/types/common'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const data: FullProject[] = await prisma.project.findMany({
+    const data: ProjectType[] = await prisma.project.findMany({
       orderBy: {
         createdAt: 'desc',
       },

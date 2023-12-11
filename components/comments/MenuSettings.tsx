@@ -1,7 +1,7 @@
 'use client'
 
 import { deleteComment } from '@/server/likeActions'
-import { TDisplayComment } from '@/lib/types/common'
+import { PublicationComment } from '@/lib/types/common'
 import {
   Button,
   IconButton,
@@ -15,7 +15,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import { CommentCallbacks } from './CommentModal'
 
 type Props = {
-  comment: Partial<TDisplayComment>
+  comment: Partial<PublicationComment>
 }
 
 export default function MenuSettings({ comment }: Props) {

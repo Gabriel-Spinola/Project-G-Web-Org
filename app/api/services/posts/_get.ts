@@ -1,4 +1,4 @@
-import { FullPost } from '@/lib/types/common'
+import { PostType } from '@/lib/types/common'
 import { prisma } from '@/lib/database/prisma'
 import { NextResponse } from 'next/server'
 
@@ -6,11 +6,11 @@ async function getPosts(
   where: { authorId?: string; published?: boolean },
   page = 1,
   take = 3,
-): Promise<FullPost[] | null> {
+): Promise<PostType[] | null> {
   const skip = (page - 1) * take
 
   try {
-    const data: FullPost[] = await prisma.post.findMany({
+    const data: PostType[] = await prisma.post.findMany({
       orderBy: {
         createdAt: 'desc',
       },
@@ -53,14 +53,14 @@ async function getPostsFromUser(
   authorId: string,
   page?: number,
   take?: number,
-): Promise<FullPost[] | null> {
+): Promise<PostType[] | null> {
   return getPosts({ authorId }, page, take)
 }
 
 async function getPostsFromAllUsers(
   page?: number,
   take?: number,
-): Promise<FullPost[] | null> {
+): Promise<PostType[] | null> {
   return getPosts({ published: true }, page, take)
 }
 
@@ -68,7 +68,7 @@ export async function handleGet(
   page: string | null,
   authorId: string | null,
 ): Promise<NextResponse> {
-  const data: FullPost[] | null = !authorId
+  const data: PostType[] | null = !authorId
     ? await getPostsFromAllUsers(page ? parseInt(page) : undefined)
     : await getPostsFromUser(authorId, page ? parseInt(page) : undefined)
 

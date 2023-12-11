@@ -2,7 +2,7 @@
 
 import React, { createContext } from 'react'
 import { useFeed } from '@/hooks/useFeed'
-import { FullPost } from '@/lib/types/common'
+import { PostType } from '@/lib/types/common'
 import { useInView } from 'react-intersection-observer'
 import { fetchPosts } from '@/app/(feed)/_actions'
 import dynamic from 'next/dynamic'
@@ -15,11 +15,11 @@ const DynamicPostItem = dynamic(() => import('./PostItem'), {
 })
 
 export const PublicationContext = createContext<
-  (FullPost & { session: string }) | null
+  (PostType & { session: string }) | null
 >(null)
 
 type Params = {
-  initialPublication: FullPost[] | undefined
+  initialPublication: PostType[] | undefined
   session: string
   profileId?: string
 }
@@ -39,7 +39,7 @@ export default function InfiniteScrollPosts({
 
   return (
     <section id="feed">
-      {posts?.map((post: FullPost) => (
+      {posts?.map((post: PostType) => (
         <div key={post.id} className="max-w-full">
           <PublicationContext.Provider value={{ ...post, session }}>
             <DynamicPostItem />
@@ -49,7 +49,7 @@ export default function InfiniteScrollPosts({
 
       {/* loading spinner */}
       {noPostFound ? (
-        <span className="col-span-1 mt-8 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4">
+        <span className="col-span-1 mt-8 mb-8 flex items-center justify-center sm:col-span-2 md:col-span-3 lg:col-span-4">
           Ops, parece que você chegou ao fim!
         </span>
       ) : (

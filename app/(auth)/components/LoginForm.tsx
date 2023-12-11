@@ -74,7 +74,7 @@ export default function LoginForm() {
     <form
       onSubmit={handleLoginForm}
       id="auth-form"
-      className="flex flex-col items-center justify-evenly w-full h-full"
+      className="flex flex-col items-center justify-evenly w-full h-full max-h-[800px]"
     >
       <TextBox
         className="w-full text-pure-white pb-4"
