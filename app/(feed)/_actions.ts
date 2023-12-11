@@ -90,39 +90,6 @@ export async function fetchPosts(
   }
 }
 
-/**
- * Fetch single post
- * @param postId
- * @returns post
- */
-export async function fetchPost(postId: string): Promise<ESResponse<PostType>> {
-  try {
-    const response = await fetch(
-      `${API_URL}${API_ENDPOINTS.services.users}/only/${postId}`,
-      {
-        method: 'GET',
-        headers: {
-          'X-API-Key': process.env.API_SECRET as string,
-          'Content-Type': 'application/json',
-        },
-        next: { tags: ['revalidate-post'] },
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error("Response's not okay")
-    }
-
-    const { data }: { data: PostType } = await response.json()
-
-    return ESSucceed(data)
-  } catch (error: unknown) {
-    console.error(error)
-
-    return ESFailed(error)
-  }
-}
-
 export async function createNewPost(
   id: string,
   formData: FormData,

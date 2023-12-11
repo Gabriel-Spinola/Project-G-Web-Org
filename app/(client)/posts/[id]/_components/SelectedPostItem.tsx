@@ -7,18 +7,15 @@
  * @license GPL 3.0
  */
 
-'use client'
-
-import React, { useContext } from 'react'
+import React from 'react'
 import styles from '@/components/posts/PostItem.module.scss'
 import { LikeButton } from '@/components/Buttons/LikeButton'
-import { Like, Pin } from '@prisma/client'
 import PostHeader from '@/components/posts/PostHeader'
-import { PublicationContext } from '@/components/posts/InfiniteScrollPosts'
 import dynamic from 'next/dynamic'
 import PinButton from '@/components/Buttons/PinButton'
 import Loader from '@/components/Loader'
 import { BiComment } from 'react-icons/bi'
+import { PostType } from '@/lib/types/common'
 
 const DynamicCommentModal = dynamic(
   () => import('@/components/comments/CommentModal'),
@@ -36,53 +33,52 @@ const DynamicImagesCorousel = dynamic(
   },
 )
 
-export default function SelectedPostItem() {
-  const publicationCtx = useContext(PublicationContext)
+type Props = {
+  post: PostType | null
+  isOwner: boolean
+  isLiked: boolean
+  isPinned: boolean
+}
 
-  if (!publicationCtx) {
+export default function SelectedPostItem({
+  post,
+  isOwner,
+  isLiked,
+  isPinned,
+}: Props) {
+  if (!post) {
     return (
       <section>
-        <p>Este post não foi achado</p>
+        <p>Este post não foi encontrado!</p>
         <></>
       </section>
     )
   }
 
-  const isOwner = publicationCtx.session === publicationCtx.authorId
-
-  const isLiked: boolean = publicationCtx?.likes.some(
-    (like: Partial<Like>) => like.userId === publicationCtx.session,
-  )
-
-  const isPinned: boolean =
-    publicationCtx?.pins?.some(
-      (pin: Partial<Pin>) => pin.userId === publicationCtx.session,
-    ) ?? false
-
   function getCommentsCount(): number {
-    if (!publicationCtx?.comments) {
+    if (!post?.comments) {
       return 0
     }
 
     let count = 0
 
-    for (const comment of publicationCtx.comments) {
+    for (const comment of post.comments) {
       count += comment.replies?.length ?? 0
     }
 
-    return publicationCtx.comments.length + count
+    return post.comments.length + count
   }
 
   return (
     <div className={`w-full ${styles.post}`}>
-      <PostHeader post={publicationCtx} isOwner={isOwner} />
+      <PostHeader post={post} isOwner={isOwner} />
 
       <article className="text-medium-gray text-lg font-light leading-8 mb-3 whitespace-pre-wrap">
-        {publicationCtx?.content}
+        {post?.content}
       </article>
 
-      {publicationCtx.images && publicationCtx.images.length > 0 ? (
-        <DynamicImagesCorousel imagesSrc={publicationCtx.images} />
+      {post.images && post.images.length > 0 ? (
+        <DynamicImagesCorousel imagesSrc={post.images} />
       ) : undefined}
 
       {/* Likes */}
@@ -90,8 +86,8 @@ export default function SelectedPostItem() {
         <LikeButton
           params={{
             option: 'postId',
-            likes: publicationCtx.likes?.length ?? 0,
-            targetId: publicationCtx.id,
+            likes: post.likes?.length ?? 0,
+            targetId: post.id,
             isLiked,
           }}
         />
@@ -99,13 +95,13 @@ export default function SelectedPostItem() {
         {/* Comments */}
         <DynamicCommentModal
           commentNumber={getCommentsCount()}
-          publication={publicationCtx}
+          publication={post}
           targetType="postId"
         />
 
         <PinButton
           isPinned={isPinned}
-          targetId={publicationCtx.id}
+          targetId={post.id}
           option="postId"
           iconColor="light-gray"
         />

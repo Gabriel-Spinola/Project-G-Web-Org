@@ -2,13 +2,33 @@ import { prisma } from '@/lib/database/prisma'
 import { ESResponse, PostType } from '@/lib/types/common'
 import { ESFailed, ESSucceed } from '@/lib/types/helpers'
 import { NextResponse } from 'next/server'
-import { tempIncludeForUser } from '../../_utils'
 
 async function getPost(id: string): Promise<ESResponse<PostType>> {
   try {
     const data: PostType = await prisma.post.findUniqueOrThrow({
       where: { id },
-      ...tempIncludeForUser,
+      include: {
+        author: {
+          select: { name: true, image: true, profilePic: true },
+        },
+        contributor: { select: { name: true } },
+        likes: { select: { id: true, userId: true } },
+        pins: { select: { id: true, userId: true } },
+        comments: {
+          include: {
+            author: { select: { name: true, profilePic: true, image: true } },
+            likes: { select: { id: true, userId: true } },
+            replies: {
+              include: {
+                author: {
+                  select: { name: true, profilePic: true, image: true },
+                },
+                likes: { select: { id: true, userId: true } },
+              },
+            },
+          },
+        },
+      },
     })
 
     return ESSucceed(data)
@@ -25,6 +45,8 @@ async function handler(req: Request, { params }: { params: { id: string } }) {
   }
 
   const { id } = params
+
+  console.log(id)
 
   if (!id) {
     return NextResponse.json(
