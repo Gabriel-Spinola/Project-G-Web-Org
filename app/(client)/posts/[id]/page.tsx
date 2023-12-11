@@ -26,17 +26,19 @@ export default async function PostPage({ params }: Params) {
     false
 
   return (
-    <main className="mt-[88px] h-[calc(100vh-88px)] bg-darker-white">
-      <Suspense fallback={<Loader />}>
-        {!error && (
-          <SelectedPostItem
-            post={data}
-            isOwner={isOwner}
-            isLiked={isLiked}
-            isPinned={isPinned}
-          />
-        )}
-      </Suspense>
+    <main className="mt-[88px] h-[calc(100vh-88px)] flex bg-darker-white items-center justify-center p-8">
+      <section className="flex flex-col items-center min-w-full sm:min-w-[480px] md:min-w-[680px] lg:min-w-[800px] lg:max-w-[800px]">
+        <Suspense fallback={<Loader />}>
+          {!error && (
+            <SelectedPostItem
+              post={data}
+              isOwner={isOwner}
+              isLiked={isLiked}
+              isPinned={isPinned}
+            />
+          )}
+        </Suspense>
+      </section>
     </main>
   )
 }
