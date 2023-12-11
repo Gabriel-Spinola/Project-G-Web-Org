@@ -7,6 +7,7 @@ import Link from 'next/link'
 import PrivacySettings from './components/ChangeEmailForm'
 import ChangePasswordForm from './components/ChangePasswordForm'
 import Avatar from '@/components/Avatar'
+import ChangePostition from './components/ChangePostition'
 
 type Props = {
   params: { id: string }
@@ -24,8 +25,8 @@ export default async function ProfileSettings({ params }: Props) {
 
   if (isOwner) {
     return (
-      <main className="w-full h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">
-        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-full max-h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
+      <main className="w-full min-h-[calc(100vh-88px)] mt-[88px] bg-darker-white flex">
+        <aside className="w-full md:w-[35vw] x1:w-[30vw] h-[calc(100vh-88px)] py-16 shadow-xl bg-medium-white">
           <section
             id="user-info"
             className="flex items-center gap-4 px-4 lg:px-8"
@@ -58,10 +59,12 @@ export default async function ProfileSettings({ params }: Props) {
             </li>
           </ul>
         </aside>
-        <section className="w-full p-8">
+        <section className="w-full p-8 bg-darker-white overflow-auto">
           <PrivacySettings user={user} />
           <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
           <ChangePasswordForm user={user} />
+          <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
+          <ChangePostition />
         </section>
       </main>
     )
