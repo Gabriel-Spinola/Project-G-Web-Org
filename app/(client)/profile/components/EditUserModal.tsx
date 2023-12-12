@@ -39,7 +39,6 @@ export default function EditUserModal({ user }: Props) {
   async function handleFormSubmission(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const toast = (await import('react-toastify')).toast
     const formData = new FormData(event.currentTarget)
 
     const newName = formData.get('name')?.toString()
@@ -60,6 +59,7 @@ export default function EditUserModal({ user }: Props) {
     }
 
     setIsLoading(false)
+    const toast = (await import('react-toastify')).toast
 
     const { error } = await toast.promise(updateUserInfo(newUserInfo), {
       pending: 'Editando perfil',
