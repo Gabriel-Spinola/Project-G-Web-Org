@@ -34,7 +34,7 @@ export default function ChangePosition({ id, currentPosition }: Props) {
             id="defaultUser"
             name="userPosition"
             value={$Enums.Positions.DefaultUser}
-            checked={currentPosition === $Enums.Positions.DefaultUser}
+            defaultChecked={currentPosition === $Enums.Positions.Office}
           />
           <FaUser />
         </label>
@@ -47,7 +47,7 @@ export default function ChangePosition({ id, currentPosition }: Props) {
             id="professionalUser"
             name="userPosition"
             value={$Enums.Positions.Professional}
-            checked={currentPosition === $Enums.Positions.Professional}
+            defaultChecked={currentPosition === $Enums.Positions.Office}
           />
           <FaSuitcase />
         </label>
@@ -60,7 +60,7 @@ export default function ChangePosition({ id, currentPosition }: Props) {
             id="officeUser"
             name="userPosition"
             value={$Enums.Positions.Office}
-            checked={currentPosition === $Enums.Positions.Office}
+            defaultChecked={currentPosition === $Enums.Positions.Office}
           />
           <FaBuilding />
         </label>

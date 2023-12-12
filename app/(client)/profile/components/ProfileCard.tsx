@@ -9,12 +9,12 @@
 
 'use client'
 
-// TODO - Framgent this into smaller parts (specially not owner specific stuff), and implement dynamic
-
 import React from 'react'
 import { UserData } from '@/lib/types/common'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import Link from 'next/link'
+import { IoMdSettings } from 'react-icons/io'
 
 const DynamicProfileAvatar = dynamic(
   () => import('./profileCard/ProfileAvatar'),
@@ -80,6 +80,14 @@ export default function ProfileCard({
             />
           </div>
         </div>
+
+        <Link
+          className="float-right hover:text-light-primary p-2 border-2 border-medium-white hover:border-light-primary rounded-2xl"
+          href={`/profile/${user.id}/user-settings/exhibition/`}
+          prefetch={false}
+        >
+          <IoMdSettings size={32} />
+        </Link>
       </div>
     </section>
   )

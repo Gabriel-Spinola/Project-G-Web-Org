@@ -80,7 +80,7 @@ export default function EditUserModal({ user }: Props) {
   return (
     <>
       <Button onClick={onOpen} colorScheme="orange">
-        <MdModeEditOutline />
+        <MdModeEditOutline size={20} />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
