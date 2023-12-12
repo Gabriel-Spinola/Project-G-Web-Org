@@ -18,6 +18,8 @@ import { useSession } from 'next-auth/react'
 import { AiOutlineFileImage } from 'react-icons/ai'
 import { IoDocumentAttachOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import { buildValidationErrorMessage } from '@/lib/schemas/actions'
 import { MdClose } from 'react-icons/md'
 
 interface ProjectFormState {
@@ -36,7 +38,9 @@ export default function CreateProjectForm({
   content,
   projectImages,
 }: Props) {
+  const router = useRouter()
   const { data: session } = useSession()
+  const [isLoading, setIsLoading] = useState(false)
 
   const isEditing = !!content
 
@@ -78,6 +82,8 @@ export default function CreateProjectForm({
 
     const formData = new FormData(event.currentTarget)
 
+    setIsLoading(true)
+
     if (images && images?.length > 0) {
       images.forEach((img: File) => {
         formData.append('images', img)
@@ -89,30 +95,28 @@ export default function CreateProjectForm({
     const validatedForm = validateForm(formData)
 
     if (validatedForm.error) {
-      let errorMessage = ''
-
-      validatedForm.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ': ' + issue.message + '. \n'
-      })
-
-      toast.warn('Algo no fomulário é invalido no campo: ' + errorMessage)
-
-      return
+      setIsLoading(false)
+      return buildValidationErrorMessage(validatedForm.error, (error) =>
+        toast.warn('Algo no fomulário é invalido no campo: ' + error),
+      )
     }
 
     // NOTE - if projectId exist create new project otherwise we're updating a project
-    const { error } = !projectId
+    const { data, error } = !projectId
       ? await createNewProject(session?.user.id as string, validatedForm.data)
       : await updateProject(projectId, validatedForm.data)
 
     if (error) {
       toast.error('Houve uma falha ao criar seu projeto! 😔')
+      setIsLoading(false)
 
       return
     }
 
+    setIsLoading(false)
+    toast.success(() => 'Enviado!')
     setImages(undefined)
+    router.push(`/project/${data}`)
   }
 
   return (
@@ -147,6 +151,7 @@ export default function CreateProjectForm({
           }
           required
         />
+
         <div className="flex gap-8">
           <input type="file" accept=".pdf" className="hidden" />
           <label
@@ -186,7 +191,6 @@ export default function CreateProjectForm({
                   <button
                     onClick={() => onImageRemovedFromPreview(index)}
                     type="button"
-                    className="flex justify-end"
                   >
                     <MdClose size={24} />
                   </button>
@@ -205,7 +209,13 @@ export default function CreateProjectForm({
 
         <input
           type="submit"
-          value={isEditing ? 'Editar Projeto' : 'Criar projeto'}
+          value={
+            !isLoading
+              ? isEditing
+                ? 'Editar Projeto'
+                : 'Criar projeto'
+              : 'Enviando...'
+          }
           className="hover:cursor-pointer px-16 py-2 rounded-sm text-medium-primary hover:text-darker-white bg-darker-white hover:bg-medium-primary"
         />
       </form>
