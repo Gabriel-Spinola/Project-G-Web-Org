@@ -83,6 +83,7 @@ export function useFeed<Publication extends PostType | ProjectType>(
     // Abort api fetch when needed
     return (): void => {
       controller.abort()
+      router.replace(pathname, { scroll: false })
     }
   }, [
     createdPublication,
