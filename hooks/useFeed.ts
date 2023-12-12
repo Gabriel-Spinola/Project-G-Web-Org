@@ -27,7 +27,7 @@ export function useFeed<Publication extends PostType | ProjectType>(
   const router = useRouter()
 
   const deletedPublication = searchParams.get('delete')
-  let createdPublication = searchParams.get('create')
+  const createdPublication = searchParams.get('create')
 
   // NOTE - Memoize all loaded publications
   const loadMorePublications = useCallback(
@@ -76,7 +76,7 @@ export function useFeed<Publication extends PostType | ProjectType>(
       setNoPublicationFound(false)
 
       loadMorePublications(signal)
-      createdPublication = null
+
       router.replace(pathname, { scroll: false })
     }
 
@@ -85,7 +85,6 @@ export function useFeed<Publication extends PostType | ProjectType>(
       controller.abort()
 
       if (createdPublication) {
-        createdPublication = null
         router.replace(pathname, { scroll: false })
       }
     }
