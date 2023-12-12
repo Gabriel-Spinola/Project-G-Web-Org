@@ -85,6 +85,7 @@ export default function PostItem() {
           }}
         />
 
+        {/* FIXME - This's not really optimzed */}
         {/* Comments */}
         <DynamicCommentModal
           commentNumber={getCommentsCount()}

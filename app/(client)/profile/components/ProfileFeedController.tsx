@@ -3,6 +3,7 @@ import { fetchProjects } from '../../project/_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
 import { fetchPosts } from '@/app/(feed)/_actions'
+import Loader from '@/components/Loader'
 import ProfileFeed from './ProfileFeed'
 
 type Props = { authorId: string; isOwner: boolean }
@@ -23,19 +24,17 @@ export default async function ProfileFeedController({
   )
   const session = await getServerSession(AuthOptions)
 
-  if (projectError || postError) {
-    return <>Failed to load feed</>
-  }
-
   return (
-    <Suspense fallback={<>loading feed</>}>
-      <ProfileFeed
-        startupProjects={projects ?? undefined}
-        startupPosts={posts ?? undefined}
-        currentUserId={session?.user.id}
-        authorId={authorId}
-        isOwner={isOwner}
-      />
+    <Suspense fallback={<Loader />}>
+      {!projectError && !postError && (
+        <ProfileFeed
+          startupProjects={projects ?? undefined}
+          startupPosts={posts ?? undefined}
+          currentUserId={session?.user.id}
+          authorId={authorId}
+          isOwner={isOwner}
+        />
+      )}
     </Suspense>
   )
 }

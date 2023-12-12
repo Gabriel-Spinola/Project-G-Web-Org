@@ -12,7 +12,7 @@ const DynamicProjectFeed = dynamic(
   { ssr: false },
 )
 
-type FeedSelectOptions = 'posts' | 'projects'
+export type FeedSelectOptions = 'posts' | 'projects'
 
 type Props = {
   startupProjects?: ProjectType[]
@@ -39,7 +39,7 @@ export default function ProfileFeed({
           className={`w-full ${styles.underScore} ${
             selectedFeed === 'posts'
               ? 'text-darker-primary font-semibold'
-              : ' text-medium-gray'
+              : 'text-medium-gray'
           }`}
         >
           POSTS

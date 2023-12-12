@@ -92,6 +92,7 @@ export default function SelectedPostItem({
           }}
         />
 
+        {/* FIXME - This's not really optimzed */}
         {/* Comments */}
         <DynamicCommentModal
           commentNumber={getCommentsCount()}

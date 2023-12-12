@@ -7,7 +7,7 @@ import { User } from '@prisma/client'
 import { updateUserInfo } from '@/app/(client)/profile/_actions'
 import { toast } from 'react-toastify'
 
-interface Params {
+type Params = {
   user: Partial<UserData> | null
 }
 
@@ -42,6 +42,7 @@ export function EditUserInfoForm({ user }: Params) {
 
     toast.success('Suas informações foram atualizadas com sucesso! 👌')
   }
+
   return (
     <article className="w-full p-4 lg:p-8 flex justify-between gap-8">
       <form

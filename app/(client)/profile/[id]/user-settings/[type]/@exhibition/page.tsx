@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { getUserData } from '@/app/(client)/profile/_actions'
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from '@/lib/auth'
-import UpdateNameImage from './components/UpdateNameImage'
-import { EditUserInfoForm } from './components/EditUserInfoForm'
 import { notFound } from 'next/navigation'
+import Loader from '@/components/Loader'
+import dynamic from 'next/dynamic'
+import { EditUserInfoForm } from './components/EditUserInfoForm'
+
+const DynamicUpdateImage = dynamic(
+  () => import('./components/UpdateNameImage'),
+  { loading: () => <Loader /> },
+)
 
 type Props = {
   params: { id: string }
@@ -26,11 +32,15 @@ export default async function ProfileSettings({ params }: Props) {
 
   return (
     <section className="w-full p-8 bg-darker-white overflow-auto ">
-      <UpdateNameImage user={user} />
+      <Suspense fallback={<Loader />}>
+        <DynamicUpdateImage user={user} />
+      </Suspense>
 
       <div className="w-full h-1 bg-medium-primary rounded-xl my-8" />
 
-      <EditUserInfoForm user={user} />
+      <Suspense fallback={<Loader />}>
+        <EditUserInfoForm user={user} />
+      </Suspense>
     </section>
   )
 }

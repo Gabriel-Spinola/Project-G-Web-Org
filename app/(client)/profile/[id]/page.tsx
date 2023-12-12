@@ -7,17 +7,17 @@
  * @license i.e. MIT
  */
 
-import ProfileCard from '@/app/(client)/profile/components/ProfileCard'
 import React, { Suspense } from 'react'
 import UserInfo from '@/app/(client)/profile/components/UserInfo'
 import { AuthOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { getUserData, handleFollowingCheckage } from '../_actions'
 
-import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
 import UserInfoSkeleton from '../components/skeletons/UserInfoSkeleton'
 import UserPostsSkeleton from '../components/skeletons/UserPostsSkeleton'
 import ProfileFeedController from '../components/ProfileFeedController'
+import ProfileCard from '../components/ProfileCard'
+import ProfileCardSkeleton from '../components/skeletons/ProfileCardSkeleton'
 
 type Props = {
   params: { id: string }
@@ -67,9 +67,7 @@ export default async function Profile({ params }: Props) {
           {/*  NOTE - This Wrapper Div defines post width */}
           <div className="lg:w-[680px] x1:w-[800px]">
             <Suspense fallback={<UserPostsSkeleton />}>
-              {user && (
-                <ProfileFeedController authorId={userId} isOwner={isOwner} />
-              )}
+              <ProfileFeedController authorId={userId} isOwner={isOwner} />
             </Suspense>
           </div>
         </div>
