@@ -65,6 +65,8 @@ export default function ChangePosition({ id, currentPosition }: Props) {
           <FaBuilding />
         </label>
       </aside>
+
+      <input type="submit" value={'enviar'} />
     </form>
   )
 }
