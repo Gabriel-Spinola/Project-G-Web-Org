@@ -27,7 +27,7 @@ export function useFeed<Publication extends PostType | ProjectType>(
   const router = useRouter()
 
   const deletedPublication = searchParams.get('delete')
-  const createdPublication = searchParams.get('create')
+  let createdPublication = searchParams.get('create')
 
   // NOTE - Memoize all loaded publications
   const loadMorePublications = useCallback(
@@ -76,14 +76,18 @@ export function useFeed<Publication extends PostType | ProjectType>(
       setNoPublicationFound(false)
 
       loadMorePublications(signal)
-
+      createdPublication = null
       router.replace(pathname, { scroll: false })
     }
 
     // Abort api fetch when needed
     return (): void => {
       controller.abort()
-      router.replace(pathname, { scroll: false })
+
+      if (createdPublication) {
+        createdPublication = null
+        router.replace(pathname, { scroll: false })
+      }
     }
   }, [
     createdPublication,
