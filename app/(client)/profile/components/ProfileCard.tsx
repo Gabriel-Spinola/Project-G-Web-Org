@@ -81,13 +81,15 @@ export default function ProfileCard({
           </div>
         </div>
 
-        <Link
-          className="float-right hover:text-light-primary p-2 border-2 border-medium-white hover:border-light-primary rounded-2xl"
-          href={`/profile/${user.id}/user-settings/exhibition/`}
-          prefetch={false}
-        >
-          <IoMdSettings size={32} />
-        </Link>
+        {isOwner && (
+          <Link
+            className="float-right hover:text-light-primary p-2 border-2 border-medium-white hover:border-light-primary rounded-2xl"
+            href={`/profile/${user.id}/user-settings/exhibition/`}
+            prefetch={false}
+          >
+            <IoMdSettings size={32} />
+          </Link>
+        )}
       </div>
     </section>
   )
