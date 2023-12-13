@@ -38,7 +38,7 @@ export default function InfiniteScrollPosts({
   )
 
   return (
-    <section id="feed">
+    <section id="feed" className="w-full relative">
       {posts?.map((post: PostType) => (
         <div key={post.id} className="max-w-full">
           <PublicationContext.Provider value={{ ...post, session }}>

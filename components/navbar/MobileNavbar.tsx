@@ -47,7 +47,7 @@ export default function MobileNavbar() {
         </section>
       </section>
       {/* NOTE MOBILE NAVBAR MENU OPTIONS */}
-      <section className="h-[calc(100vh-88px)]">
+      <section className="relative h-[calc(100vh-88px)]">
         <ul
           id="mobileMenuItems"
           className={`${
